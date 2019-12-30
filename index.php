@@ -5,7 +5,7 @@ echo '<pre>' . json_encode($_SERVER, JSON_PRETTY_PRINT) . '</pre>';
 if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
 if ($_SERVER['REDIRECT_URL']=='') $_SERVER['REDIRECT_URL']='/';
 $path = $_SERVER['REDIRECT_URL'];
-
+echo 'path:'.$path;
 $getstr = substr(urldecode($_SERVER['REQUEST_URI']), strlen(urldecode($_SERVER['REDIRECT_URL'])));
     while (substr($getstr,0,1)=='/' || substr($getstr,0,1)=='?') $getstr = substr($getstr,1);
     $getstrarr = explode("&",$getstr);
