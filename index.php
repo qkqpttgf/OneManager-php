@@ -6,6 +6,10 @@ if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
 if ($_SERVER['REDIRECT_URL']=='') $_SERVER['REDIRECT_URL']='/';
 $path = $_SERVER['REDIRECT_URL'];
 echo 'path:'.$path;
+$_GET = getGET();
+
+function getGET()
+{
 $getstr = substr(urldecode($_SERVER['REQUEST_URI']), strlen(urldecode($_SERVER['REDIRECT_URL'])));
     while (substr($getstr,0,1)=='/' || substr($getstr,0,1)=='?') $getstr = substr($getstr,1);
     $getstrarr = explode("&",$getstr);
@@ -17,8 +21,8 @@ $getstr = substr(urldecode($_SERVER['REQUEST_URI']), strlen(urldecode($_SERVER['
         } else $getarry[urldecode($getvalues)] = true;
     }
     if (isset($getarry)) {
-        $_GET = $getarry;
-    } else $_GET = '';
-    
+        return $getarry;
+    } else return '';
+}
     echo '<pre>' . json_encode($_GET, JSON_PRETTY_PRINT) . '</pre>';
     
