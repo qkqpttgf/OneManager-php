@@ -1,7 +1,7 @@
 <?php
 include 'conststr.php';
 
-//echo '<pre>' . json_encode($_SERVER, JSON_PRETTY_PRINT) . '</pre>';
+echo '<pre>' . json_encode($_SERVER, JSON_PRETTY_PRINT) . '</pre>';
 if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
 if ($_SERVER['REDIRECT_URL']=='') $_SERVER['REDIRECT_URL']='/';
 $path = $_SERVER['REDIRECT_URL'];
