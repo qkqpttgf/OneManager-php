@@ -16,7 +16,7 @@ $sendHeaders = array();
 foreach ($re['headers'] as $headerName => $headerVal) {
     header($headerName . ': ' . $headerVal, true);
 }
-http_response_code($re['statusCode']);
+//http_response_code($re['statusCode']);
 echo $re['body'];
 
 function main()
