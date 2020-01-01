@@ -217,7 +217,7 @@ function get_refresh_token()
             }
             document.cookie=\'language=; path=/\';
         </script>';
-            setConfig($function_name, [ 'refresh_token' => $tmptoken ], getConfig('APIKey'));
+            setConfig([ 'refresh_token' => $tmptoken ]);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';
             return message($str, $constStr['WaitJumpIndex'][$constStr['language']]);
