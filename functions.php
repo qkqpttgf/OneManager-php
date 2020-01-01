@@ -439,6 +439,7 @@ function setConfig($arr)
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
+    echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     return file_put_contents('config.json', json_encode($envs, JSON_PRETTY_PRINT));
 }
 
