@@ -75,7 +75,7 @@ function main()
         $ret = json_decode(curl_request(
             $_SERVER['oauth_url'] . 'token',
             'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token
-        ), true);
+        )['body'], true);
         if (!isset($ret['access_token'])) {
             error_log('failed to get access_token. response' . json_encode($ret));
             throw new Exception('failed to get access_token.');
