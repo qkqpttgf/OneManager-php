@@ -434,6 +434,7 @@ function array_value_isnot_null($arr)
 
 function setConfig($arr)
 {
+    echo '<pre>'. json_encode($arr, JSON_PRETTY_PRINT).'</pre>';
     $envs = json_decode(file_get_contents('config.json'));
     if ($envs=='') $envs = [];
     foreach ($arr as $k1 => $v1) {
