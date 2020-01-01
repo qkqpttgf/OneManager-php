@@ -188,7 +188,7 @@ function gethiddenpass($path,$passfile)
     return '';
 }
 
-function get_refresh_token($function_name, $Region, $Namespace)
+function get_refresh_token()
 {
     global $constStr;
     $url = path_format($_SERVER['PHP_SELF'] . '/');
