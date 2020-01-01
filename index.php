@@ -466,7 +466,7 @@ function fetch_files($path = '/')
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
         $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime)';
-        $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+        $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
         // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
         if (isset($files['folder'])) {
             if ($files['folder']['childCount']>200) {
@@ -489,7 +489,7 @@ function fetch_files_children($files, $path, $page, $cache)
         // down cache file get jump info. 下载cache文件获取跳页链接
         $cachefile = fetch_files(path_format($path1 . '/' .$cachefilename));
         if ($cachefile['size']>0) {
-            $pageinfo = curl_request($cachefile['@microsoft.graph.downloadUrl']);
+            $pageinfo = curl_request($cachefile['@microsoft.graph.downloadUrl'])['body'];
             $pageinfo = json_decode($pageinfo,true);
             for ($page4=1;$page4<$maxpage;$page4++) {
                 $cache->save('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4], 60);
@@ -510,7 +510,7 @@ function fetch_files_children($files, $path, $page, $cache)
                     } else {
                         $url .= '/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime';
                     }
-                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
                     $cache->save('files_' . $path . '_page_' . $page1, $children['value'], 60);
                     $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page1);
@@ -523,7 +523,7 @@ function fetch_files_children($files, $path, $page, $cache)
                     $url = $children['@odata.nextLink'];
                     for ($page2=$page1+1;$page2<=$page;$page2++) {
                         sleep(1);
-                        $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+                        $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                         $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 60);
                         $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
                         if ($nextlink!=$children['@odata.nextLink']) {
@@ -547,7 +547,7 @@ function fetch_files_children($files, $path, $page, $cache)
             } else {
                 for ($page2=$page3+1;$page2<=$page;$page2++) {
                     sleep(1);
-                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 60);
                     $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
                     if ($nextlink!=$children['@odata.nextLink']) {
@@ -771,7 +771,7 @@ function render_list($path, $files)
                         <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
 ';
                     } elseif (in_array($ext, $exts['txt'])) {
-                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl']));
+                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl'])['body']);
 ?>
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
@@ -785,7 +785,7 @@ function render_list($path, $files)
 <?php               } elseif (in_array($ext, ['md'])) {
                         echo '
                         <div class="markdown-body" id="readme">
-                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl']) . '</textarea>
+                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
                         </div>
 ';
                     } else {
@@ -836,7 +836,7 @@ function render_list($path, $files)
                             if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getenv('passfile') ) ) {
                                 if (strtolower($file['name']) === 'readme.md') $readme = $file;
                                 if (strtolower($file['name']) === 'index.html') {
-                                    $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl']);
+                                    $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
                                     return output($html,200);
                                 }
                                 $filenum++; ?>
@@ -950,7 +950,7 @@ function render_list($path, $files)
                     <svg class="octicon octicon-book" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>
                     <span style="line-height: 16px;vertical-align: top;">'.$readme['name'].'</span>
                     <div class="markdown-body" id="readme">
-                        <textarea id="readme-md" style="display:none;">' . curl_request(fetch_files(spurlencode(path_format($path . '/' .$readme['name']),'/'))['@microsoft.graph.downloadUrl']). '
+                        <textarea id="readme-md" style="display:none;">' . curl_request(fetch_files(spurlencode(path_format($path . '/' .$readme['name']),'/'))['@microsoft.graph.downloadUrl'])['body'] . '
                         </textarea>
                     </div>
                 </div>
