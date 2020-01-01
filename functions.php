@@ -246,8 +246,9 @@ function get_refresh_token()
             $tmp['language'] = $_COOKIE['language'];
             if ($_POST['Onedrive_ver']=='MSC') {
                 $tmp['client_id'] = $_POST['client_id'];
-                $tmp['client_secret'] = equal_replace(base64_encode($_POST['client_secret']));
+                $tmp['client_secret'] = $_POST['client_secret'];
             }
+            echo '<pre>'. json_encode($tmp, JSON_PRETTY_PRINT).'</pre>';
             $response = setConfig($tmp);
             $title = $constStr['MayinEnv'][$constStr['language']];
             $html = $constStr['Wait'][$constStr['language']] . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install2">';
@@ -439,6 +440,7 @@ function setConfig($arr)
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
+    echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     return file_put_contents('config.json', json_encode($envs, JSON_PRETTY_PRINT));
 }
 
