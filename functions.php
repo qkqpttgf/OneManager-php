@@ -434,13 +434,14 @@ function array_value_isnot_null($arr)
 
 function setConfig($arr)
 {
-    echo '<pre>'. json_encode($arr, JSON_PRETTY_PRINT).'</pre>';
+    //echo '<pre>'. json_encode($arr, JSON_PRETTY_PRINT).'</pre>';
     $envs = json_decode(file_get_contents('config.json'));
     if ($envs=='') $envs = [];
     foreach ($arr as $k1 => $v1) {
-        $evns[$k1] = $v1;
+        echo $k1 . '=' . $v1 .'<br>';
+        $envs[$k1] = $v1;
     }
-    echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
+    //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
     echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
