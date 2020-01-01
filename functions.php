@@ -419,8 +419,11 @@ function time_format($ISO)
 
 function getConfig($str)
 {
-    $envs = json_decode(file_get_contents('config.json'));
-    return $envs[$str];
+    $s = file_get_contents('config.json');
+    if ($s!='') {
+        $envs = json_decode($s, true);
+        return $envs[$str];
+    } else return '';
 }
 
 function array_value_isnot_null($arr)
@@ -437,4 +440,19 @@ function setConfig($arr)
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
     return file_put_contents('config.json', json_encode($envs, JSON_PRETTY_PRINT));
+}
+
+function get_thumbnails_url($path = '/')
+{
+    $path1 = path_format($path);
+    $path = path_format($_SERVER['list_path'] . path_format($path));
+    $url = $_SERVER['api_url'];
+    if ($path !== '/') {
+        $url .= ':' . $path;
+        if (substr($url,-1)=='/') $url=substr($url,0,-1);
+    }
+    $url .= ':/thumbnails/0/medium';
+    $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+    if (isset($files['url'])) return output($files['url']);
+    return output('', 404);
 }
