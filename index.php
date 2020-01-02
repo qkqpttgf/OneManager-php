@@ -3,6 +3,10 @@ include 'vendor/autoload.php';
 include 'conststr.php';
 include 'functions.php';
 
+$theme = getConfig('theme');
+if ($theme=='') $theme = 'classic.php';
+include 'theme/'.$theme;
+
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
 if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
@@ -588,7 +592,3 @@ function fetch_files_children($files, $path, $page, $cache)
     }
     return $files;
 }
-
-$theme = getConfig('theme');
-if ($theme=='') $theme = 'classic.php';
-include 'theme/'.$theme;
