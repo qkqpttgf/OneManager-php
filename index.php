@@ -4,7 +4,7 @@ include 'conststr.php';
 include 'functions.php';
 
 $theme = getConfig('theme');
-if ($theme=='') $theme = 'classic.php';
+if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
 include 'theme/'.$theme;
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
