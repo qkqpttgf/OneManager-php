@@ -303,7 +303,7 @@ Can not write config to file.<br>
     }
     $html .= '
     <form action="?install0" method="post">
-    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '"></label><br>
+    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" style="width:' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . 'rem;"></label><br>
     language:<br>';
     foreach ($constStr['languages'] as $key1 => $value1) {
         $html .= '
