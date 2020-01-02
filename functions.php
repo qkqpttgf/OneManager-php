@@ -108,7 +108,7 @@ function spurlencode($str,$splite='')
 
 function is_guestup_path($path)
 {
-    if (path_format('/'.path_format(urldecode($_SERVER['list_path'].path_format($path))).'/')==path_format('/'.path_format(getConfig('imgup_path')).'/')&&getConfig('imgup_path')!='') return 1;
+    if (path_format('/'.path_format(urldecode($_SERVER['list_path'].path_format($path))).'/')==path_format('/'.path_format(getConfig('guestup_path')).'/')&&getConfig('guestup_path')!='') return 1;
     return 0;
 }
 
