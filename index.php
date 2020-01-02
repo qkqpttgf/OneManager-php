@@ -218,10 +218,11 @@ namespace:' . $namespace . '<br>
     if ($_POST['submit1']) {
         foreach ($_POST as $k => $v) {
             if (in_array($k, $constEnv)) {
-                if (!(getConfig($k)==''&&$v=='')) $tmp[$k] = $v;
+                //if (!(getConfig($k)==''&&$v=='')) 
+                $tmp[$k] = $v;
             }
         }
-        $response = json_decode(setHerokuConfig($function_name, $tmp, getConfig('APIKey')), true);
+        $response = setConfig($tmp);
         if (isset($response['id'])&&isset($response['message'])) {
             $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
@@ -684,7 +685,7 @@ function render_list($path, $files)
         <li><a onclick="showdiv(event,'create','');"><?php echo $constStr['Create'][$constStr['language']]; ?></a></li>
         <li><a onclick="showdiv(event,'encrypt','');"><?php echo $constStr['encrypt'][$constStr['language']]; ?></a></li>
 <?php   } ?>
-        <li><a <?php if (getConfig('APIKey')!='') { ?>href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"<?php } else { ?>onclick="alert('<?php echo $constStr['SetSecretsFirst'][$constStr['language']]; ?>');"<?php } ?>><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
+        <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
         <li><a onclick="logout()"><?php echo $constStr['Logout'][$constStr['language']]; ?></a></li>
     </ul></li>
 <?php
