@@ -223,8 +223,7 @@ function get_refresh_token()
             }
             document.cookie=\'language=; path=/\';
         </script>';
-            //setConfig([ 'refresh_token' => $tmptoken ]);
-            setConfig($ret);
+            setConfig([ 'refresh_token' => $tmptoken ]);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';
             return message($str, $constStr['WaitJumpIndex'][$constStr['language']]);
@@ -460,7 +459,7 @@ function get_thumbnails_url($path = '/')
         if (substr($url,-1)=='/') $url=substr($url,0,-1);
     }
     $url .= ':/thumbnails/0/medium';
-    $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]), true);
+    $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
     if (isset($files['url'])) return output($files['url']);
     return output('', 404);
 }
