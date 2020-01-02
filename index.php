@@ -149,7 +149,7 @@ function list_files($path)
     if ( isset($files['folder']) || isset($files['file']) || isset($files['error']) ) {
         return $files;
     } else {
-        echo 'Error $files' . json_encode($files, JSON_PRETTY_PRINT);
+        error_log( $files . ' Network Error<br>' );
         $_SERVER['retry']++;
         if ($_SERVER['retry'] < 3) {
             return list_files($path);
@@ -468,17 +468,22 @@ function fetch_files($path = '/')
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
         $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime)';
-        $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-        // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
-        if (isset($files['folder'])) {
-            if ($files['folder']['childCount']>200) {
+        $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
+        if ($arr['stat']==200) {
+            $files = json_decode($arr['body'], true);
+            // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
+            if (isset($files['folder'])) {
+                if ($files['folder']['childCount']>200) {
                 // files num > 200 , then get nextlink
-                $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                $files=fetch_files_children($files, $path, $page, $cache);
-            } else {
+                    $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
+                    $files=fetch_files_children($files, $path, $page, $cache);
+                } else {
                 // files num < 200 , then cache
-                $cache->save('path_' . $path, $files, 60);
+                    $cache->save('path_' . $path, $files, 60);
+                }
             }
+        } else {
+            $files = $arr['stat'];
         }
     }
     return $files;
