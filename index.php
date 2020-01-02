@@ -24,6 +24,7 @@ function main($path)
     global $exts;
     global $constStr;
     config_oauth();
+    if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
@@ -194,7 +195,7 @@ function EnvOpt($function_name, $needUpdate = 0)
     global $constStr;
     $constEnv = [
         //'admin',
-        'adminloginpage', 'domain_path', 'imgup_path', 'passfile', 'private_path', 'public_path', 'sitename', 'language'
+        'adminloginpage', 'domain_path', 'guestup_path', 'passfile', 'private_path', 'public_path', 'sitename', 'language'
     ];
     asort($constEnv);
     $html = '<title>Heroku '.$constStr['Setup'][$constStr['language']].'</title>';
@@ -728,7 +729,7 @@ function render_list($path, $files)
             </div>
             <div class="list-body-container">
 <?php
-    if ($_SERVER['is_imgup_path']&&!$_SERVER['admin']) { ?>
+    if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:10px">
                 <center>
                     <input id="upload_file" type="file" name="upload_filename">
@@ -1340,7 +1341,7 @@ function render_list($path, $files)
         document.getElementById('mask').style.display='none';
     }
 <?php }
-    if (isset($files['folder']) && ($_SERVER['is_imgup_path'] || $_SERVER['admin'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
+    if (isset($files['folder']) && ($_SERVER['is_guestup_path'] || $_SERVER['admin'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
     function uploadbuttonhide() {
         document.getElementById('upload_submit').disabled='disabled';
         document.getElementById('upload_file').disabled='disabled';
