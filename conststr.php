@@ -1,5 +1,4 @@
 <?php
-
 global $exts;
 global $constStr;
 
@@ -58,9 +57,9 @@ $constStr = [
             'en-us' => 'more custom domain, format is a1.com:/dirto/path1|b2.com:/path2',
             'zh-cn' => '使用多个自定义域名时，指定每个域名看到的目录。格式为a1.com:/dirto/path1|b1.com:/path2，比private_path优先。',
         ],
-        'imgup_path' => [
+        'guestup_path' => [
             'en-us' => 'Set guest upload dir, before set this, the files in this dir will show as normal.',
-            'zh-cn' => '设置图床路径，不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
+            'zh-cn' => '设置游客上传路径（图床路径），不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
         ],
         'passfile' => [
             'en-us' => 'The password of dir will save in this file.',
@@ -353,4 +352,3 @@ $constStr = [
     ],
 ];
 
-?>
