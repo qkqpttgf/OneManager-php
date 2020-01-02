@@ -249,7 +249,6 @@ function get_refresh_token()
         // echo $_POST['Onedrive_ver'];
         if ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC') {
             $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
-            $tmp['language'] = $_COOKIE['language'];
             if ($_POST['Onedrive_ver']=='MSC') {
                 $tmp['client_id'] = $_POST['client_id'];
                 $tmp['client_secret'] = $_POST['client_secret'];
@@ -258,15 +257,20 @@ function get_refresh_token()
             $title = $constStr['MayinEnv'][$constStr['language']];
             $html = $constStr['Wait'][$constStr['language']] . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install2">';
             if (!$response) {
-            $html = $response . '<br>
+                $html = $response . '<br>
 Can not write config to file.<br>
 <button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
-            $title = 'Error';
+                $title = 'Error';
             }
             return message($html, $title, 201);
         }
     }
     if ($_GET['install0']) {
+        if ($_POST['admin']!='') {
+        $tmp['admin'] = $_POST['admin'];
+        $tmp['language'] = $_POST['language'];
+        $response = setConfig($tmp);
+        if ($response) {
             if ($constStr['language']!='zh-cn') {
                 $linklang='en-us';
             } else $linklang='zh-cn';
@@ -288,10 +292,18 @@ Can not write config to file.<br>
         <input type="submit" value="'.$constStr['Submit'][$constStr['language']].'">
     </form>';
             $title = 'Install';
+        } else {
+            $html = $response . '<br>
+Can not write config to file.<br>
+<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+            $title = 'Error';
+        }
         return message($html, $title, 201);
+        }
     }
     $html .= '
     <form action="?install0" method="post">
+    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '"></label><br>
     language:<br>';
     foreach ($constStr['languages'] as $key1 => $value1) {
         $html .= '
