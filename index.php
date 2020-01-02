@@ -6,12 +6,12 @@ include 'functions.php';
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
 if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
-$path = $_SERVER['REDIRECT_URL'];
+$path = spurlencode($_SERVER['REDIRECT_URL'], '/');
 //echo 'path:'. $path;
 $_GET = getGET();
 //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
 
-$re = main();
+$re = main($path);
 $sendHeaders = array();
 foreach ($re['headers'] as $headerName => $headerVal) {
     header($headerName . ': ' . $headerVal, true);
@@ -19,7 +19,7 @@ foreach ($re['headers'] as $headerName => $headerVal) {
 http_response_code($re['statusCode']);
 echo $re['body'];
 
-function main()
+function main($path)
 {
     global $exts;
     global $constStr;
@@ -218,10 +218,10 @@ namespace:' . $namespace . '<br>
     if ($_POST['submit1']) {
         foreach ($_POST as $k => $v) {
             if (in_array($k, $constEnv)) {
-                if (!(getenv($k)==''&&$v=='')) $tmp[$k] = $v;
+                if (!(getConfig($k)==''&&$v=='')) $tmp[$k] = $v;
             }
         }
-        $response = json_decode(setHerokuConfig($function_name, $tmp, getenv('APIKey')), true);
+        $response = json_decode(setHerokuConfig($function_name, $tmp, getConfig('APIKey')), true);
         if (isset($response['id'])&&isset($response['message'])) {
             $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
@@ -260,7 +260,7 @@ function_name:' . $_SERVER['function_name'] . '<br>
                 <select name="' . $key .'">';
             foreach ($constStr['languages'] as $key1 => $value1) {
                 $html .= '
-                    <option value="'.$key1.'" '.($key1==getenv($key)?'selected="selected"':'').'>'.$value1.'</option>';
+                    <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
             }
             $html .= '
                 </select>
@@ -269,7 +269,7 @@ function_name:' . $_SERVER['function_name'] . '<br>
         } else $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . getenv($key) . '" placeholder="' . $constStr['EnvironmentsDescription'][$key][$constStr['language']] . '" style="width:100%"></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key) . '" placeholder="' . $constStr['EnvironmentsDescription'][$key][$constStr['language']] . '" style="width:100%"></td>
         </tr>';
     }
     $html .= '</table>
@@ -331,10 +331,10 @@ function adminoperate($path)
     }
     if ($_GET['operate_action']==$constStr['encrypt'][$constStr['language']]) {
         // encrypt 加密
-        if (getenv('passfile')=='') return message($constStr['SetpassfileBfEncrypt'][$constStr['language']],'',403);
+        if (getConfig('passfile')=='') return message($constStr['SetpassfileBfEncrypt'][$constStr['language']],'',403);
         if ($_GET['encrypt_folder']=='/') $_GET['encrypt_folder']=='';
         $foldername = spurlencode($_GET['encrypt_folder']);
-        $filename = path_format($path1 . '/' . $foldername . '/' . getenv('passfile'));
+        $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
         return output($result['body'], $result['stat']);
@@ -674,8 +674,8 @@ function render_list($path, $files)
 
 <body>
 <?php
-    if (getenv('admin')!='') if (!$_SERVER['admin']) {
-        if (getenv('adminloginpage')=='') { ?>
+    if (getConfig('admin')!='') if (!$_SERVER['admin']) {
+        if (getConfig('adminloginpage')=='') { ?>
     <a onclick="login();"><?php echo $constStr['Login'][$constStr['language']]; ?></a>
 <?php   }
     } else { ?>
@@ -684,7 +684,7 @@ function render_list($path, $files)
         <li><a onclick="showdiv(event,'create','');"><?php echo $constStr['Create'][$constStr['language']]; ?></a></li>
         <li><a onclick="showdiv(event,'encrypt','');"><?php echo $constStr['encrypt'][$constStr['language']]; ?></a></li>
 <?php   } ?>
-        <li><a <?php if (getenv('APIKey')!='') { ?>href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"<?php } else { ?>onclick="alert('<?php echo $constStr['SetSecretsFirst'][$constStr['language']]; ?>');"<?php } ?>><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
+        <li><a <?php if (getConfig('APIKey')!='') { ?>href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"<?php } else { ?>onclick="alert('<?php echo $constStr['SetSecretsFirst'][$constStr['language']]; ?>');"<?php } ?>><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
         <li><a onclick="logout()"><?php echo $constStr['Logout'][$constStr['language']]; ?></a></li>
     </ul></li>
 <?php
@@ -833,7 +833,7 @@ function render_list($path, $files)
                     foreach ($files['children'] as $file) {
                         // Files
                         if (isset($file['file'])) {
-                            if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getenv('passfile') ) ) {
+                            if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getConfig('passfile') ) ) {
                                 if (strtolower($file['name']) === 'readme.md') $readme = $file;
                                 if (strtolower($file['name']) === 'index.html') {
                                     $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
@@ -1008,7 +1008,7 @@ function render_list($path, $files)
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
                 <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<?php echo $constStr['InputPasswordUWant'][$constStr['language']]; ?>">
-                <?php if (getenv('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo $constStr['encrypt'][$constStr['language']]; ?>"><?php } else { ?><br><label><?php echo $constStr['SetpassfileBfEncrypt'][$constStr['language']]; ?></label><?php } ?>
+                <?php if (getConfig('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo $constStr['encrypt'][$constStr['language']]; ?>"><?php } else { ?><br><label><?php echo $constStr['SetpassfileBfEncrypt'][$constStr['language']]; ?></label><?php } ?>
                 </form>
             </div>
         </div>
@@ -1069,7 +1069,7 @@ function render_list($path, $files)
     </div>
 <?php   }
     } else {
-        if (getenv('admin')!='') if (getenv('adminloginpage')=='') { ?>
+        if (getConfig('admin')!='') if (getConfig('adminloginpage')=='') { ?>
     <div id="login_div" class="operatediv" style="display:none">
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
@@ -1088,7 +1088,7 @@ function render_list($path, $files)
 
 <link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script>
-<?php if (isset($files['folder']) && $_SERVER['is_imgup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
+<?php if (isset($files['folder']) && $_SERVER['is_guestup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
 <script type="text/javascript">
     var root = '<?php echo $_SERVER["base_path"]; ?>';
     function path_format(path) {
@@ -1333,7 +1333,7 @@ function render_list($path, $files)
         document.getElementById('nextpageform').submit();
     }
 <?php }
-    if (getenv('admin')!='') { // close div. 有登录或操作，需要关闭DIV时 ?>
+    if (getConfig('admin')!='') { // close div. 有登录或操作，需要关闭DIV时 ?>
     function operatediv_close(operate) {
         document.getElementById(operate+'_div').style.display='none';
         document.getElementById('mask').style.display='none';
@@ -1736,7 +1736,7 @@ function render_list($path, $files)
         return queryComponents.join('&');
     }
 <?php   }
-    } else if (getenv('admin')!='') if (getenv('adminloginpage')=='') { ?>
+    } else if (getConfig('admin')!='') if (getConfig('adminloginpage')=='') { ?>
     function login() {
         document.getElementById('mask').style.display='';
             //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
