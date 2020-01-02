@@ -487,7 +487,7 @@ function fetch_files($path = '/')
                 }
             }
         } else {
-            $files = $arr['stat'];
+            $files = $arr['stat'].$arr['body'];
         }
     }
     return $files;
