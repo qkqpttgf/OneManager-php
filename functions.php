@@ -173,10 +173,16 @@ function gethiddenpass($path,$passfile)
     $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
     if (isset($ispassfile['file'])) {
-        $passwordf=explode("\n",curl_request($ispassfile['@microsoft.graph.downloadUrl']));
-        $password=$passwordf[0];
-        $password=md5($password);
-        return $password;
+        $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
+        if ($arr['stat']==200) {
+            $passwordf=explode("\n",$arr['body']);
+            $password=$passwordf[0];
+            $password=md5($password);
+            return $password;
+        } else {
+            //return md5('DefaultP@sswordWhenNetworkError');
+            return md5( md5(time()).rand(1000,9999) );
+        }
     } else {
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
@@ -217,7 +223,8 @@ function get_refresh_token()
             }
             document.cookie=\'language=; path=/\';
         </script>';
-            setConfig([ 'refresh_token' => $tmptoken ]);
+            //setConfig([ 'refresh_token' => $tmptoken ]);
+            setConfig($ret);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';
             return message($str, $constStr['WaitJumpIndex'][$constStr['language']]);
