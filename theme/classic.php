@@ -529,6 +529,7 @@ function render_list($path, $files)
     });
     function changelanguage(str)
     {
+        if (str=='Language') str = 'en-us';
         document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
