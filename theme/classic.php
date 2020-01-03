@@ -110,7 +110,7 @@ function render_list($path, $files)
         <option>Language</option>
 <?php
     foreach ($constStr['languages'] as $key1 => $value1) { ?>
-        <option value="<?php echo $key1; ?>"><?php echo $value1; ?></option>
+        <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
 <?php
     } ?>
     </select>
