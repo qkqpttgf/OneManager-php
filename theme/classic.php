@@ -808,6 +808,7 @@ function render_list($path, $files)
             xhr1.onload = function(e){
                 td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
                 if (xhr1.status==200) {
+                    console.log(xhr1.responseText);
                     var html=JSON.parse(xhr1.responseText);
                     if (!html['uploadUrl']) {
                         td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
