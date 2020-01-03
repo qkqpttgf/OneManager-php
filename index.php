@@ -140,7 +140,7 @@ function main($path)
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
     } else {
-        return output('<div style="margin:8px;">' . $files['error']['message'] . '</div>', 404);
+        return message('<div style="margin:8px;">' . $files['error']['message'] . '</div>', $files['error']['code'], $files['error']['stat']);
     }
 }
 
@@ -161,7 +161,7 @@ function list_files($path)
         $_SERVER['retry']++;
         if ($_SERVER['retry'] < 3) {
             return list_files($path);
-        } else return '';
+        } else return $files;
     }
 }
 
@@ -505,9 +505,12 @@ function fetch_files($path = '/')
                     $cache->save('path_' . $path, $files, 3300);
                 }
             }
-        } else {//,"message":"'.$arr['body'].'"
+            if (isset($files['error'])) {
+                $files['error']['stat'] = $arr['stat'];
+            }
+        } else {
             error_log($arr['body']);
-            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].'}}', true);
+            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
         }
     }
     return $files;
