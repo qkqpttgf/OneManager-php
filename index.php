@@ -28,6 +28,7 @@ function main($path)
     global $exts;
     global $constStr;
     config_oauth();
+    if (!isset($_SERVER['base_path'])) $_SERVER['base_path'] = '/';
     if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
@@ -59,7 +60,7 @@ function main($path)
         }
     }
     if (getConfig('admin')!='')
-        if ($_COOKIE['admin']==md5(getConfig('admin')) || $_POST['password1']==getConfig('admin') ) {
+        if ( $_COOKIE['admin']==md5(getConfig('admin')) || $_POST['password1']==getConfig('admin') ) {
             $_SERVER['admin']=1;
             $_SERVER['needUpdate'] = needUpdate();
         } else {
