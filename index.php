@@ -93,6 +93,8 @@ function main($path)
         if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
             // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
             $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
+            $path1 = path_format($_SERVER['list_path'] . path_format($path));
+            $cache->save('path_' . $path1, json_decode('{}',true), 1);
             return output($tmp['body'],$tmp['stat']);
         }
         if ($_GET['action']=='uploaded_rename') {
@@ -106,6 +108,8 @@ function main($path)
             //echo $oldname .'<br>'. $data;
             $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
             if ($tmp['stat']==409) MSAPI('DELETE',$oldname,'',$_SERVER['access_token'])['body'];
+            $path1 = path_format($_SERVER['list_path'] . path_format($path));
+            $cache->save('path_' . $path1, json_decode('{}',true), 1);
             return output($tmp['body'],$tmp['stat']);
         }
         if ($_GET['action']=='upbigfile') return bigfileupload($path);
@@ -199,10 +203,12 @@ function EnvOpt($function_name, $needUpdate = 0)
     global $constStr;
     $constEnv = [
         //'admin',
-        'adminloginpage', 'domain_path', 'guestup_path', 'passfile', 'private_path', 'public_path', 'sitename', 'language'
+        'adminloginpage', 'domain_path', 'guestup_path', 'passfile',
+        //'private_path', 
+        'public_path', 'sitename', 'language', 'theme'
     ];
     asort($constEnv);
-    $html = '<title>Heroku '.$constStr['Setup'][$constStr['language']].'</title>';
+    $html = '<title>OneManager '.$constStr['Setup'][$constStr['language']].'</title>';
     /*if ($_POST['updateProgram']==$constStr['updateProgram'][$constStr['language']]) {
         $response = json_decode(updataProgram($function_name, $Region, $namespace), true)['Response'];
         if (isset($response['Error'])) {
@@ -228,10 +234,8 @@ namespace:' . $namespace . '<br>
             }
         }
         $response = setConfig($tmp);
-        if (isset($response['id'])&&isset($response['message'])) {
-            $html = $response['id'] . '<br>
-' . $response['message'] . '<br><br>
-function_name:' . $_SERVER['function_name'] . '<br>
+        if (!$response) {
+            $html = $response . '<br>
 <button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
             $title = 'Error';
         } else {
@@ -245,7 +249,7 @@ function_name:' . $_SERVER['function_name'] . '<br>
     }
     $html .= '
         <a href="'.$preurl.'">'.$constStr['Back'][$constStr['language']].'</a>&nbsp;&nbsp;&nbsp;
-        <a href="https://github.com/qkqpttgf/herokuOnedrive">Github</a><br>';
+        <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
     /*if ($needUpdate) {
         $html .= '<pre>' . $_SERVER['github_version'] . '</pre>
         <form action="" method="post">
@@ -267,6 +271,21 @@ function_name:' . $_SERVER['function_name'] . '<br>
             foreach ($constStr['languages'] as $key1 => $value1) {
                 $html .= '
                     <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
+            }
+            $html .= '
+                </select>
+            </td>
+        </tr>';
+        } elseif ($key=='theme') {
+            $theme_arr = scandir('theme');
+            $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%>
+                <select name="' . $key .'">';
+            foreach ($theme_arr as $v1) {
+                $html .= '
+                    <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
             }
             $html .= '
                 </select>
