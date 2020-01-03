@@ -305,7 +305,7 @@ Can not write config to file.<br>
         }
     }
     $html .= '
-    <form action="?install0" method="post">
+    <form action="?install0" method="post" onsubmit="return adminnotnull(this);">
     <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" size="' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . '"></label><br>
     language:<br>';
     foreach ($constStr['languages'] as $key1 => $value1) {
@@ -320,6 +320,14 @@ Can not write config to file.<br>
         {
             document.cookie=\'language=\'+str+\'; path=/\';
             location.href = location.href;
+        }
+        function adminnotnull(t)
+        {
+            if (t.admin.value==\'\') {
+                alert(\'input admin\');
+                return false;
+            }
+            return true;
         }
     </script>';
     $title = $constStr['SelectLanguage'][$constStr['language']];
