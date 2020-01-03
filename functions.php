@@ -224,6 +224,9 @@ function get_refresh_token()
             document.cookie=\'language=; path=/\';
         </script>';
             setConfig([ 'refresh_token' => $tmptoken ]);
+            $cache = null;
+            $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
+            $cache->save('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';
             return message($str, $constStr['WaitJumpIndex'][$constStr['language']]);
@@ -303,7 +306,7 @@ Can not write config to file.<br>
     }
     $html .= '
     <form action="?install0" method="post">
-    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" style="width:' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . 'rem;"></label><br>
+    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" size="' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . '"></label><br>
     language:<br>';
     foreach ($constStr['languages'] as $key1 => $value1) {
         $html .= '
