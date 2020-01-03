@@ -461,7 +461,7 @@ function fetch_files($path = '/')
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.qdrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
     if (!($files = $cache->fetch('path_' . $path))) {
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
@@ -483,7 +483,7 @@ function fetch_files($path = '/')
                     $files=fetch_files_children($files, $path, $page, $cache);
                 } else {
                 // files num < 200 , then cache
-                    $cache->save('path_' . $path, $files, 60);
+                    $cache->save('path_' . $path, $files, 3300);
                 }
             }
         } else {
@@ -503,7 +503,7 @@ function fetch_files_children($files, $path, $page, $cache)
             $pageinfo = curl_request($cachefile['@microsoft.graph.downloadUrl'])['body'];
             $pageinfo = json_decode($pageinfo,true);
             for ($page4=1;$page4<$maxpage;$page4++) {
-                $cache->save('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4], 60);
+                $cache->save('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4], 3300);
                 $pageinfocache['nextlink_' . $path . '_page_' . $page4] = $pageinfo['nextlink_' . $path . '_page_' . $page4];
             }
         }
@@ -523,10 +523,10 @@ function fetch_files_children($files, $path, $page, $cache)
                     }
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
-                    $cache->save('files_' . $path . '_page_' . $page1, $children['value'], 60);
+                    $cache->save('files_' . $path . '_page_' . $page1, $children['value'], 3300);
                     $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page1);
                     if ($nextlink!=$children['@odata.nextLink']) {
-                        $cache->save('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink'], 60);
+                        $cache->save('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink'], 3300);
                         $pageinfocache['nextlink_' . $path . '_page_' . $page1] = $children['@odata.nextLink'];
                         $pageinfocache = clearbehindvalue($path,$page1,$maxpage,$pageinfocache);
                         $pageinfochange = 1;
@@ -535,10 +535,10 @@ function fetch_files_children($files, $path, $page, $cache)
                     for ($page2=$page1+1;$page2<=$page;$page2++) {
                         sleep(1);
                         $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-                        $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 60);
+                        $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 3300);
                         $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
                         if ($nextlink!=$children['@odata.nextLink']) {
-                            $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 60);
+                            $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 3300);
                             $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
                             $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
                             $pageinfochange = 1;
@@ -559,10 +559,10 @@ function fetch_files_children($files, $path, $page, $cache)
                 for ($page2=$page3+1;$page2<=$page;$page2++) {
                     sleep(1);
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-                    $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 60);
+                    $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 3300);
                     $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
                     if ($nextlink!=$children['@odata.nextLink']) {
-                        $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 60);
+                        $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 3300);
                         $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
                         $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
                         $pageinfochange = 1;
@@ -584,7 +584,7 @@ function fetch_files_children($files, $path, $page, $cache)
         $files['folder']['page']=$page;
         for ($page4=1;$page4<=$maxpage;$page4++) {
             if (!($url = $cache->fetch('nextlink_' . $path . '_page_' . $page4))) {
-                if ($files['folder'][$path.'_'.$page4]!='') $cache->save('nextlink_' . $path . '_page_' . $page4, $files['folder'][$path.'_'.$page4], 60);
+                if ($files['folder'][$path.'_'.$page4]!='') $cache->save('nextlink_' . $path . '_page_' . $page4, $files['folder'][$path.'_'.$page4], 3300);
             } else {
                 $files['folder'][$path.'_'.$page4] = $url;
             }
