@@ -157,7 +157,7 @@ function list_files($path)
     if ( isset($files['folder']) || isset($files['file']) || isset($files['error']) ) {
         return $files;
     } else {
-        error_log( $files . ' Network Error<br>' );
+        error_log( json_encode($files) . ' Network Error<br>' );
         $_SERVER['retry']++;
         if ($_SERVER['retry'] < 3) {
             return list_files($path);
@@ -492,7 +492,7 @@ function fetch_files($path = '/')
         }
         $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime)';
         $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
-        if ($arr['stat']==200) {
+        if ($arr['stat']<500) {
             $files = json_decode($arr['body'], true);
             // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
             if (isset($files['folder'])) {
@@ -506,7 +506,7 @@ function fetch_files($path = '/')
                 }
             }
         } else {
-            $files = $arr['stat'].$arr['body'];
+            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
         }
     }
     return $files;
