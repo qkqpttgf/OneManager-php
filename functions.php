@@ -451,8 +451,37 @@ function getConfig($str)
     $s = file_get_contents('config.json');
     if ($s!='') {
         $envs = json_decode($s, true);
-        return $envs[$str];
-    } else return '';
+        if (isset($envs[$str])) return $envs[$str];
+    }
+    return '';
+    /*
+    if (!class_exists('mydbreader')) {
+        class mydbreader extends SQLite3
+        {
+            function __construct()
+            {
+                $this->open( __DIR__ .'/.ht.db');
+            }
+        }
+    }
+    $db = new mydbreader();
+    if(!$db){
+        echo $db->lastErrorMsg();
+    } else {
+        //echo "Opened database successfully<br>\n";
+        $id=rand(1,309);
+        $sql="select * from config where id=".$str.";";
+        $ret = $db->query($sql);
+        if(!$ret){
+            echo $db->lastErrorMsg();
+        } else {
+            $row = $ret->fetchArray(SQLITE3_ASSOC);
+            $value1 = $row['value'];
+        }
+        $db->close();
+    }
+    return $value1;
+    */
 }
 
 function array_value_isnot_null($arr)
