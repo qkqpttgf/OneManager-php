@@ -284,7 +284,7 @@ namespace:' . $namespace . '<br>
             <td width=100%>
                 <select name="' . $key .'">';
             foreach ($theme_arr as $v1) {
-                $html .= '
+                if ($v1!='.' && $v1!='..') $html .= '
                     <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
             }
             $html .= '
