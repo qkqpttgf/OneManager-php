@@ -505,8 +505,9 @@ function fetch_files($path = '/')
                     $cache->save('path_' . $path, $files, 3300);
                 }
             }
-        } else {
-            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
+        } else {//,"message":"'.$arr['body'].'"
+            error_log($arr['body']);
+            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].'}}', true);
         }
     }
     return $files;
