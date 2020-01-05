@@ -139,7 +139,7 @@ function main($path)
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
     } else {
-        return message('<div style="margin:8px;">' . $files['error']['message'] . '</div>', $files['error']['code'], $files['error']['stat']);
+        return message('<div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.$constStr['Back'][$constStr['language']].'</a>', $files['error']['code'], $files['error']['stat']);
     }
 }
 
