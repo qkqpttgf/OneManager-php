@@ -5,12 +5,13 @@ function getpath()
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
-    return spurlencode($path, '/');
+    return $path;
+    //return spurlencode($path, '/');
 }
 
 function getGET()
 {
-    $getstr = substr(urldecode($_SERVER['REQUEST_URI']), strpos($_SERVER['REQUEST_URI'],'?'));
+    $getstr = urldecode(substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'],'?')));
     while (substr($getstr, 0, 1) == '/' || substr($getstr, 0, 1) == '?') $getstr = substr($getstr, 1);
     $getstrarr = explode("&",$getstr);
     foreach ($getstrarr as $getvalues) {
