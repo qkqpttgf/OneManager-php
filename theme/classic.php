@@ -44,7 +44,7 @@ function render_list($path, $files)
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,herokuOneDrive,auth_by_逸笙">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
     <link rel="icon" href="<?php echo $_SERVER['base_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
@@ -107,7 +107,7 @@ function render_list($path, $files)
 <?php
     } ?>
     <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
-        <option>Language</option>
+        <option value="">Language</option>
 <?php
     foreach ($constStr['languages'] as $key1 => $value1) { ?>
         <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
@@ -529,7 +529,7 @@ function render_list($path, $files)
     });
     function changelanguage(str)
     {
-        if (str=='Language') str = 'en-us';
+        if (str=='Language') str = '';
         document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
