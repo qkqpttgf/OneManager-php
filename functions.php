@@ -448,9 +448,10 @@ function time_format($ISO)
 
 function getConfig($str)
 {
-    $s = file_get_contents('config.json');
-    if ($s!='') {
-        $envs = json_decode($s, true);
+    include 'config.php';
+    //$s = file_get_contents('config.json');
+    if ($configs!='') {
+        $envs = json_decode($configs, true);
         if (isset($envs[$str])) return $envs[$str];
     }
     return '';
@@ -491,14 +492,19 @@ function array_value_isnot_null($arr)
 
 function setConfig($arr)
 {
-    $envs = json_decode(file_get_contents('config.json'), true);
+    include 'config.php';
+    if ($configs!='') $envs = json_decode($configs, true);
     foreach ($arr as $k1 => $v1) {
         $envs[$k1] = $v1;
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
     //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
-    return file_put_contents('config.json', json_encode($envs, JSON_PRETTY_PRINT));
+    $prestr = '<?php $configs=\'
+';
+    $aftstr = '
+\';';
+    return file_put_contents('config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
 }
 
 function get_thumbnails_url($path = '/')
