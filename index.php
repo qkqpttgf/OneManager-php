@@ -28,8 +28,6 @@ function main($path)
     global $exts;
     global $constStr;
     config_oauth();
-    if (!isset($_SERVER['base_path'])) $_SERVER['base_path'] = '/';
-    if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
