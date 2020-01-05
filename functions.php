@@ -2,11 +2,11 @@
 
 function getpath()
 {
-    $_SERVER['base_path'] = substr($_SERVER['SCRIPT_NAME'], 0, -10);
-    if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
+    $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
+    $path = path_format(substr($path, strlen($_SERVER['base_path'])));
     return $path;
     //return spurlencode($path, '/');
 }
@@ -374,7 +374,7 @@ function ConfigWriteable()
 function RewriteEngineOn()
 {
     $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-    $tmpurl=$http_type . path_format($_SERVER['SERVER_NAME'] . $_SERVER['base_path'] . '/config.php');
+    $tmpurl=$http_type . $_SERVER['SERVER_NAME'] . path_format($_SERVER['base_path'] . '/config.php');
     $tmp = curl_request($tmpurl);
     if ($tmp['stat']==201) return true; //when install return 201, after installed return 404 or 200;
     return false;
