@@ -234,7 +234,7 @@ function get_refresh_token()
         return message('<pre>' . $tmp['body'] . '</pre>', $tmp['stat']);
         //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
     }
-    if ($_GET['install2']) {
+    if ($_GET['install3']) {
         if (getConfig('Onedrive_ver')=='MS' || getConfig('Onedrive_ver')=='CN' || getConfig('Onedrive_ver')=='MSC') {
             return message('
     <a href="" id="a1">'.$constStr['JumptoOffice'][$constStr['language']].'</a>
@@ -248,7 +248,7 @@ function get_refresh_token()
     ', $constStr['Wait'][$constStr['language']].' 1s', 201);
         }
     }
-    if ($_GET['install1']) {
+    if ($_GET['install2']) {
         // echo $_POST['Onedrive_ver'];
         if ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC') {
             $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
@@ -258,7 +258,7 @@ function get_refresh_token()
             }
             $response = setConfig($tmp);
             $title = $constStr['MayinEnv'][$constStr['language']];
-            $html = $constStr['Wait'][$constStr['language']] . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install2">';
+            $html = $constStr['Wait'][$constStr['language']] . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install3">';
             if (!$response) {
                 $html = $response . '<br>
 Can not write config to file.<br>
@@ -268,7 +268,7 @@ Can not write config to file.<br>
             return message($html, $title, 201);
         }
     }
-    if ($_GET['install0']) {
+    if ($_GET['install1']) {
         if ($_POST['admin']!='') {
         $tmp['admin'] = $_POST['admin'];
         $tmp['language'] = $_POST['language'];
@@ -281,7 +281,7 @@ Can not write config to file.<br>
             $deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
             $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
             $html = '
-    <form action="?install1" method="post">
+    <form action="?install2" method="post">
         Onedrive_Ver：<br>
         <label><input type="radio" name="Onedrive_ver" value="MS" checked>MS: '.$constStr['OndriveVerMS'][$constStr['language']].'</label><br>
         <label><input type="radio" name="Onedrive_ver" value="CN">CN: '.$constStr['OndriveVerCN'][$constStr['language']].'</label><br>
@@ -304,16 +304,28 @@ Can not write config to file.<br>
         return message($html, $title, 201);
         }
     }
-    $html .= '
-    <form action="?install0" method="post" onsubmit="return adminnotnull(this);">
-    <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" size="' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . '"></label><br>
-    language:<br>';
-    foreach ($constStr['languages'] as $key1 => $value1) {
+    if ($_GET['install0']) {
+        if (!ConfigWriteable()) {
+            $html .= 'Plase make sure the config.php is writeable.
+run Writeable.sh.';
+            $title = 'Error';
+            return message($html, $title, 201);
+        }
+        if (!RewriteEngineOn()) {
+            $html .= 'Plase make sure the RewriteEngine is On.';
+            $title = 'Error';
+            return message($html, $title, 201);
+        }
         $html .= '
-    <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
-    }
-    $html .= '<br>
-    <input type="submit" value="'.$constStr['Submit'][$constStr['language']].'">
+    <form action="?install1" method="post" onsubmit="return adminnotnull(this);">
+        <label>admin:<input name="admin" type="password" placeholder="' . $constStr['EnvironmentsDescription']['admin'][$constStr['language']] . '" size="' . strlen($constStr['EnvironmentsDescription']['admin'][$constStr['language']]) . '"></label><br>
+language:<br>';
+        foreach ($constStr['languages'] as $key1 => $value1) {
+            $html .= '
+        <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
+        }
+        $html .= '<br>
+        <input type="submit" value="'.$constStr['Submit'][$constStr['language']].'">
     </form>
     <script>
         function changelanguage(str)
@@ -330,8 +342,31 @@ Can not write config to file.<br>
             return true;
         }
     </script>';
-    $title = $constStr['SelectLanguage'][$constStr['language']];
+        $title = $constStr['SelectLanguage'][$constStr['language']];
+        return message($html, $title, 201);
+    }
+    $html .= 'refresh_token not exist, <a href="?install0">click to install.</a>';
+    $title = 'Error';
     return message($html, $title, 201);
+}
+
+function ConfigWriteable()
+{
+    $t = md5( md5(time()).rand(1000,9999) );
+    setConfig([ 'tmp' => $t ]);
+    $tmp = getConfig('tmp');
+    setConfig([ 'tmp' => '' ]);
+    if ($tmp == $t) return true;
+    return false;
+}
+
+function RewriteEngineOn()
+{
+    $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
+    $tmpurl=$http_type . $_SERVER['SERVER_NAME'] . '/config.php'; //.$_SERVER["REQUEST_URI"];
+    $tmp = curl_request($tmpurl);
+    if ($tmp['stat']==201) return true; //when install return 201, after installed return 404 or 200;
+    return false;
 }
 
 function get_timezone($timezone = '8')
@@ -500,7 +535,7 @@ function setConfig($arr)
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
     //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
-    $prestr = '<?php $configs=\'
+    $prestr = '<?php $configs = \'
 ';
     $aftstr = '
 \';';
