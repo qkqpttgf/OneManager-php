@@ -675,7 +675,7 @@ textarea{
 <?php
     } ?>
 	<select class="cs-select cs-skin-elastic" id="languageSelect" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
-			<option value="" disabled selected><?php echo $constStr['LanguageSetting'][$constStr['language']]; ?></option>
+			<option value="">Language</option>
 <?php
 	foreach ($constStr['languages'] as $key1 => $value1) { ?>
 		<option value="<?php echo $key1; ?>"><?php echo $value1; ?></option>
@@ -1154,6 +1154,7 @@ textarea{
     });
     function changelanguage(str)
     {
+        if (str=='Language') str='';
         document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
