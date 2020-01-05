@@ -761,7 +761,7 @@ textarea{
                         <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
 ';
                     } elseif (in_array($ext, $exts['txt'])) {
-                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl']));
+                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl'])['body']);
 ?>
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
@@ -775,7 +775,7 @@ textarea{
 <?php               } elseif (in_array($ext, ['md'])) {
                         echo '
                         <div class="markdown-body" id="readme">
-                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl']) . '</textarea>
+                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
                         </div>
 ';
                     } else {
@@ -839,7 +839,7 @@ textarea{
                             if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getConfig('passfile') ) ) {
                                 if (strtolower($file['name']) === 'readme.md') $readme = $file;
                                 if (strtolower($file['name']) === 'index.html') {
-                                    $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl']);
+                                    $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
                                     return output($html,200);
                                 }
                                 $filenum++; ?>
@@ -963,7 +963,7 @@ textarea{
                     <svg class="octicon octicon-book" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>
                     <span style="line-height: 16px;vertical-align: top;">'.$readme['name'].'</span>
                     <div class="markdown-body" id="readme">
-                        <textarea id="readme-md" style="display:none;">' . curl_request(fetch_files(spurlencode(path_format($path . '/' .$readme['name']),'/'))['@microsoft.graph.downloadUrl']). '
+                        <textarea id="readme-md" style="display:none;">' . curl_request(fetch_files(spurlencode(path_format($path . '/' .$readme['name']),'/'))['@microsoft.graph.downloadUrl'])['body'] . '
                         </textarea>
                     </div>
                 </div>
