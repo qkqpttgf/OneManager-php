@@ -374,7 +374,7 @@ function ConfigWriteable()
 function RewriteEngineOn()
 {
     $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-    $tmpurl=$http_type . $_SERVER['SERVER_NAME'] . '/config.php'; //.$_SERVER["REQUEST_URI"];
+    $tmpurl=$http_type . path_format($_SERVER['SERVER_NAME'] . $_SERVER['base_path'] . '/config.php');
     $tmp = curl_request($tmpurl);
     if ($tmp['stat']==201) return true; //when install return 201, after installed return 404 or 200;
     return false;
