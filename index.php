@@ -9,8 +9,8 @@ include 'theme/'.$theme;
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
-if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
-$path = spurlencode($_SERVER['REDIRECT_URL'], '/');
+//if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
+$path = getpath();
 //echo 'path:'. $path;
 $_GET = getGET();
 //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
