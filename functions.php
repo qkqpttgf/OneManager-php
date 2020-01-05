@@ -2,6 +2,8 @@
 
 function getpath()
 {
+    $_SERVER['base_path'] = substr($_SERVER['SCRIPT_NAME'], 0, -10);
+    if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
