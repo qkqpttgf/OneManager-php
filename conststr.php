@@ -307,7 +307,7 @@ $constStr = [
     'GetFileNameFail' => [
         'en-us' => 'Fail to Get File Name!',
         'zh-cn' => '获取文件名失败！',
-        'ja' => 'ファイル名を取得できませんでした！',,
+        'ja' => 'ファイル名を取得できませんでした！',
     ],
     'GetUploadLink' => [
         'en-us' => 'Get Upload Link',
