@@ -380,8 +380,8 @@ function adminoperate($path)
             $data = '{"parentReference":{"path": "/drive/root:'.$foldername.'"}}';
             $result = MSAPI('PATCH', $filename, $data, $_SERVER['access_token']);
             $cache->save('path_' . $path1, json_decode('{}',true), 1);
-            if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) );
-            else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] );
+            if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) . '/' );
+            else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] . '/' );
             $cache->save('path_' . $path2, json_decode('{}',true), 1);
             return output($result['body'], $result['stat']);
         } else {
