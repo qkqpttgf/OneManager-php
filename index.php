@@ -333,6 +333,8 @@ function bigfileupload($path)
 function adminoperate($path)
 {
     global $constStr;
+    $cache = null;
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     $tmparr['statusCode'] = 0;
