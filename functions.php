@@ -6,7 +6,7 @@ function getpath()
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
-    $path = path_format(substr($path, strlen($_SERVER['base_path'])));
+    $path = path_format(substr($path, strlen($_SERVER['base_path'])).'/');
     return $path;
     //return spurlencode($path, '/');
 }
