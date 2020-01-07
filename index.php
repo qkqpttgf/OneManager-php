@@ -232,6 +232,15 @@ namespace:' . $namespace . '<br>
                 $tmp[$k] = $v;
             }
         }
+        if ($tmp['domain_path']!='') {
+            $tmp1 = explode("|",$tmp['domain_path']);
+            $tmparr = [];
+            foreach ($tmp1 as $multidomain_paths){
+                $pos = strpos($multidomain_paths,":");
+                if ($pos>0) $tmparr[substr($multidomain_paths, 0, $pos)] = path_format(substr($multidomain_paths, $pos+1));
+            }
+            $tmp['domain_path'] = $tmparr;
+        }
         $response = setConfig($tmp);
         if (!$response) {
             $html = $response . '<br>
@@ -289,6 +298,18 @@ namespace:' . $namespace . '<br>
             $html .= '
                 </select>
             </td>
+        </tr>';
+        } elseif ($key=='domain_path') {
+            $tmp = getConfig($key);
+            $domain_path = '';
+            foreach ($tmp as $k1 => $v1) {
+                $domain_path .= $k1 . ':' . $v1 . '|';
+            }
+            $domain_path = substr($domain_path, 0, -1);
+            $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . $domain_path . '" placeholder="' . $constStr['EnvironmentsDescription'][$key][$constStr['language']] . '" style="width:100%"></td>
         </tr>';
         } else $html .= '
         <tr>
@@ -482,7 +503,6 @@ function MSAPI($method, $path, $data = '', $access_token)
 ');
     return $response;
 }
-
 
 function fetch_files($path = '/')
 {
