@@ -1,39 +1,4 @@
-<?php
 
-function render_list($path, $files)
-{
-    global $exts;
-    global $constStr;
-    @ob_start();
-    $path = str_replace('%20','%2520',$path);
-    $path = str_replace('+','%2B',$path);
-    $path = str_replace('&','&amp;',path_format(urldecode($path))) ;
-    $path = str_replace('%20',' ',$path);
-    $path = str_replace('#','%23',$path);
-    $p_path='';
-    if ($path !== '/') {
-        if (isset($files['file'])) {
-            $pretitle = str_replace('&','&amp;', $files['name']);
-            $n_path=$pretitle;
-        } else {
-            $pretitle = substr($path,-1)=='/'?substr($path,0,-1):$path;
-            $n_path=substr($pretitle,strrpos($pretitle,'/')+1);
-            $pretitle = substr($pretitle,1);
-        }
-        if (strrpos($path,'/')!=0) {
-            $p_path=substr($path,0,strrpos($path,'/'));
-            $p_path=substr($p_path,strrpos($p_path,'/')+1);
-        }
-    } else {
-      $pretitle = $constStr['Home'][$constStr['language']];
-      $n_path=$pretitle;
-    }
-    $n_path=str_replace('&amp;','&',$n_path);
-    $p_path=str_replace('&amp;','&',$p_path);
-    $pretitle = str_replace('%23','#',$pretitle);
-    $statusCode=200;
-    date_default_timezone_set(get_timezone($_COOKIE['timezone']));
-?>
 <!DOCTYPE html>
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
@@ -2065,8 +2030,3 @@ function binupfile(file,url,tdnum){
 	
 </script>
 </html>
-<?php
-    $html=ob_get_clean();
-    if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
-    return output($html,$statusCode);
-}
