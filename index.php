@@ -680,7 +680,9 @@ function render_list($path, $files)
 
     include 'theme/'.$theme;
 
-    $html=ob_get_clean();
+    $html = '<!--
+        github ： https://github.com/qkqpttgf/OneManager-php
+    -->' . ob_get_clean();
     if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
 }
