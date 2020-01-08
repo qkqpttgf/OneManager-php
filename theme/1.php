@@ -676,7 +676,7 @@ textarea{
             </div>
             <div class="list-body-container">
 <?php
-    if ($_SERVER['is_imgup_path']&&!$_SERVER['admin']) { ?>
+    if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:10px">
                 <center>
 			<input id="upload_file" type="file" name="upload_filename" onchange="document.getElementById('flieText').value = this.value" style="display:none">
@@ -1092,7 +1092,7 @@ textarea{
 </body>
 <link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script>
-<?php if (!$_SERVER['user'] && isset($files['folder']) && $_SERVER['is_imgup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
+<?php if (!$_SERVER['user'] && isset($files['folder']) && $_SERVER['is_guestup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
 <script type="text/javascript">
     var root = '<?php echo $_SERVER["base_path"]; ?>';
     function path_format(path) {
@@ -1343,7 +1343,7 @@ textarea{
         document.getElementById(operate+'_div').style.display='none';
     }
 <?php }
-    if (isset($files['folder']) && ($_SERVER['is_imgup_path'] || $_SERVER['admin'] || $_SERVER['user'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
+    if (isset($files['folder']) && ($_SERVER['is_guestup_path'] || $_SERVER['admin'] || $_SERVER['user'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
     function uploadbuttonhide() {
         document.getElementById('upload_submit').disabled='disabled';
         document.getElementById('upload_submit').style.display='none';
