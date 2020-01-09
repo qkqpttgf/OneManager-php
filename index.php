@@ -4,8 +4,6 @@ include 'conststr.php';
 include 'functions.php';
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
-//echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
-//if (!isset($_SERVER['REDIRECT_URL'])) $_SERVER['REDIRECT_URL'] = '/index.php';
 $path = getpath();
 //echo 'path:'. $path;
 $_GET = getGET();
@@ -69,9 +67,8 @@ function main($path)
             return output('<script>alert(\''.$constStr['SetSecretsFirst'][$constStr['language']].'\');</script>', 302, [ 'Location' => $url ]);
         }
     $_SERVER['retry'] = 0;
-    $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
-    if (!($_SERVER['access_token'] = $cache->fetch('access_token'))) {
+
+    if (!($_SERVER['access_token'] = getcache('access_token'))) {
         $ret = json_decode(curl_request(
             $_SERVER['oauth_url'] . 'token',
             'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token
@@ -81,7 +78,7 @@ function main($path)
             throw new Exception('failed to get access_token.');
         }
         $_SERVER['access_token'] = $ret['access_token'];
-        $cache->save('access_token', $_SERVER['access_token'], $ret['expires_in'] - 60);
+        savecache('access_token', $_SERVER['access_token']);
     }
 
     if ($_SERVER['ajax']) {
@@ -89,7 +86,7 @@ function main($path)
             // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
             $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            $cache->save('path_' . $path1, json_decode('{}',true), 1);
+            savecache('path_' . $path1, json_decode('{}',true), 1);
             return output($tmp['body'],$tmp['stat']);
         }
         if ($_GET['action']=='uploaded_rename') {
@@ -104,7 +101,7 @@ function main($path)
             $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
             if ($tmp['stat']==409) MSAPI('DELETE',$oldname,'',$_SERVER['access_token'])['body'];
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            $cache->save('path_' . $path1, json_decode('{}',true), 1);
+            savecache('path_' . $path1, json_decode('{}',true), 1);
             return output($tmp['body'],$tmp['stat']);
         }
         if ($_GET['action']=='upbigfile') return bigfileupload($path);
@@ -113,7 +110,7 @@ function main($path)
         $tmp = adminoperate($path);
         if ($tmp['statusCode'] > 0) {
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            $cache->save('path_' . $path1, json_decode('{}',true), 1);
+            savecache('path_' . $path1, json_decode('{}',true), 1);
             return $tmp;
         }
     } else {
@@ -350,8 +347,6 @@ function bigfileupload($path)
 function adminoperate($path)
 {
     global $constStr;
-    $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     $tmparr['statusCode'] = 0;
@@ -362,7 +357,7 @@ function adminoperate($path)
         $data = '{"name":"' . $_GET['rename_newname'] . '"}';
                 //echo $oldname;
         $result = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
-        $cache->save('path_' . $path1, json_decode('{}',true), 1);
+        savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['delete_name']!='') {
@@ -371,7 +366,7 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $filename);
                 //echo $filename;
         $result = MSAPI('DELETE', $filename, '', $_SERVER['access_token']);
-        $cache->save('path_' . $path1, json_decode('{}',true), 1);
+        savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['operate_action']==$constStr['encrypt'][$constStr['language']]) {
@@ -382,7 +377,7 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
-        $cache->save('path_' . $path1, json_decode('{}',true), 1);
+        savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['move_folder']!='') {
@@ -396,10 +391,10 @@ function adminoperate($path)
             $foldername = path_format('/'.urldecode($path1).'/'.$_GET['move_folder']);
             $data = '{"parentReference":{"path": "/drive/root:'.$foldername.'"}}';
             $result = MSAPI('PATCH', $filename, $data, $_SERVER['access_token']);
-            $cache->save('path_' . $path1, json_decode('{}',true), 1);
+            savecache('path_' . $path1, json_decode('{}',true), 1);
             if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) . '/' );
             else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] . '/' );
-            $cache->save('path_' . $path2, json_decode('{}',true), 1);
+            savecache('path_' . $path2, json_decode('{}',true), 1);
             return output($result['body'], $result['stat']);
         } else {
             return output('{"error":"Can not Move!"}', 403);
@@ -429,7 +424,7 @@ function adminoperate($path)
             $data = '{ "name": "' . $_GET['create_name'] . '",  "folder": { },  "@microsoft.graph.conflictBehavior": "rename" }';
             $result = MSAPI('children', $path1, $data, $_SERVER['access_token']);
         }
-        $cache->save('path_' . $path1, json_decode('{}',true), 1);
+        savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     return $tmparr;
@@ -504,9 +499,7 @@ function fetch_files($path = '/')
 {
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
-    $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
-    if (!($files = $cache->fetch('path_' . $path))) {
+    if (!($files = getcache('path_' . $path))) {
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
         // https://developer.microsoft.com/zh-cn/graph/graph-explorer
@@ -524,10 +517,10 @@ function fetch_files($path = '/')
                 if ($files['folder']['childCount']>200) {
                 // files num > 200 , then get nextlink
                     $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                    $files=fetch_files_children($files, $path, $page, $cache);
+                    $files=fetch_files_children($files, $path, $page);
                 } else {
                 // files num < 200 , then cache
-                    $cache->save('path_' . $path, $files, 3300);
+                    savecache('path_' . $path, $files);
                 }
             }
             if (isset($files['error'])) {
@@ -540,25 +533,25 @@ function fetch_files($path = '/')
     }
     return $files;
 }
-function fetch_files_children($files, $path, $page, $cache)
+function fetch_files_children($files, $path, $page)
 {
     $cachefilename = '.SCFcache_'.$_SERVER['function_name'];
     $maxpage = ceil($files['folder']['childCount']/200);
-    if (!($files['children'] = $cache->fetch('files_' . $path . '_page_' . $page))) {
+    if (!($files['children'] = getcache('files_' . $path . '_page_' . $page))) {
         // down cache file get jump info. 下载cache文件获取跳页链接
         $cachefile = fetch_files(path_format($path1 . '/' .$cachefilename));
         if ($cachefile['size']>0) {
             $pageinfo = curl_request($cachefile['@microsoft.graph.downloadUrl'])['body'];
             $pageinfo = json_decode($pageinfo,true);
             for ($page4=1;$page4<$maxpage;$page4++) {
-                $cache->save('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4], 3300);
+                savecache('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4]);
                 $pageinfocache['nextlink_' . $path . '_page_' . $page4] = $pageinfo['nextlink_' . $path . '_page_' . $page4];
             }
         }
         $pageinfochange=0;
         for ($page1=$page;$page1>=1;$page1--) {
             $page3=$page1-1;
-            $url = $cache->fetch('nextlink_' . $path . '_page_' . $page3);
+            $url = getcache('nextlink_' . $path . '_page_' . $page3);
             if ($url == '') {
                 if ($page1==1) {
                     $url = $_SERVER['api_url'];
@@ -571,10 +564,10 @@ function fetch_files_children($files, $path, $page, $cache)
                     }
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
-                    $cache->save('files_' . $path . '_page_' . $page1, $children['value'], 3300);
-                    $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page1);
+                    savecache('files_' . $path . '_page_' . $page1, $children['value']);
+                    $nextlink=getcache('nextlink_' . $path . '_page_' . $page1);
                     if ($nextlink!=$children['@odata.nextLink']) {
-                        $cache->save('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink'], 3300);
+                        savecache('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink']);
                         $pageinfocache['nextlink_' . $path . '_page_' . $page1] = $children['@odata.nextLink'];
                         $pageinfocache = clearbehindvalue($path,$page1,$maxpage,$pageinfocache);
                         $pageinfochange = 1;
@@ -583,10 +576,10 @@ function fetch_files_children($files, $path, $page, $cache)
                     for ($page2=$page1+1;$page2<=$page;$page2++) {
                         sleep(1);
                         $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-                        $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 3300);
-                        $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
+                        savecache('files_' . $path . '_page_' . $page2, $children['value']);
+                        $nextlink=getcache('nextlink_' . $path . '_page_' . $page2);
                         if ($nextlink!=$children['@odata.nextLink']) {
-                            $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 3300);
+                            savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink']);
                             $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
                             $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
                             $pageinfochange = 1;
@@ -607,10 +600,10 @@ function fetch_files_children($files, $path, $page, $cache)
                 for ($page2=$page3+1;$page2<=$page;$page2++) {
                     sleep(1);
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-                    $cache->save('files_' . $path . '_page_' . $page2, $children['value'], 3300);
-                    $nextlink=$cache->fetch('nextlink_' . $path . '_page_' . $page2);
+                    savecache('files_' . $path . '_page_' . $page2, $children['value'], 3300);
+                    $nextlink=getcache('nextlink_' . $path . '_page_' . $page2);
                     if ($nextlink!=$children['@odata.nextLink']) {
-                        $cache->save('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 3300);
+                        savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], 3300);
                         $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
                         $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
                         $pageinfochange = 1;
@@ -631,8 +624,8 @@ function fetch_files_children($files, $path, $page, $cache)
     } else {
         $files['folder']['page']=$page;
         for ($page4=1;$page4<=$maxpage;$page4++) {
-            if (!($url = $cache->fetch('nextlink_' . $path . '_page_' . $page4))) {
-                if ($files['folder'][$path.'_'.$page4]!='') $cache->save('nextlink_' . $path . '_page_' . $page4, $files['folder'][$path.'_'.$page4], 3300);
+            if (!($url = getcache('nextlink_' . $path . '_page_' . $page4))) {
+                if ($files['folder'][$path.'_'.$page4]!='') savecache('nextlink_' . $path . '_page_' . $page4, $files['folder'][$path.'_'.$page4]);
             } else {
                 $files['folder'][$path.'_'.$page4] = $url;
             }
