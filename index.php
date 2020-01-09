@@ -427,6 +427,10 @@ function adminoperate($path)
         savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
+    if ($_GET['RefreshCache']) {
+        savecache('path_' . $path1, json_decode('{}',true), 1);
+        return output('', 302, [ 'Location' => $_SERVER['PHP_SHELL'] ]);
+    }
     return $tmparr;
 }
 function MSAPI($method, $path, $data = '', $access_token)
