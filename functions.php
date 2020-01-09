@@ -34,6 +34,20 @@ function getGET()
     }
 }
 
+function getcache($str)
+{
+    $cache = null;
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
+    return $cache->fetch($str);
+}
+
+function savecache($key, $value, $exp = 3300)
+{
+    $cache = null;
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
+    $cache->save($key, $value, $exp);
+}
+
 function config_oauth()
 {
     global $constStr;
@@ -235,9 +249,7 @@ function get_refresh_token()
             document.cookie=\'language=; path=/\';
         </script>';
             setConfig([ 'refresh_token' => $tmptoken ]);
-            $cache = null;
-            $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
-            $cache->save('access_token', $ret['access_token'], $ret['expires_in'] - 60);
+            savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';
             return message($str, $constStr['WaitJumpIndex'][$constStr['language']]);
