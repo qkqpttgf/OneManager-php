@@ -429,4 +429,9 @@ $constStr = [
         'zh-cn' => '选择语言',
         'ja' => '言語を選択してください',
     ],
+    'RefreshCache' => [
+        'en-us' => 'RefreshCache',
+        'zh-cn' => '刷新缓存',
+        'ja' => 'キャッシュを再構築',
+    ],
 ];
