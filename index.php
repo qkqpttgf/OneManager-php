@@ -357,7 +357,7 @@ function adminoperate($path)
         $data = '{"name":"' . $_GET['rename_newname'] . '"}';
                 //echo $oldname;
         $result = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
-        savecache('path_' . $path1, json_decode('{}',true), 1);
+        //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['delete_name']!='') {
@@ -366,7 +366,7 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $filename);
                 //echo $filename;
         $result = MSAPI('DELETE', $filename, '', $_SERVER['access_token']);
-        savecache('path_' . $path1, json_decode('{}',true), 1);
+        //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['operate_action']==$constStr['encrypt'][$constStr['language']]) {
@@ -377,7 +377,7 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
-        savecache('path_' . $path1, json_decode('{}',true), 1);
+        //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['move_folder']!='') {
@@ -391,7 +391,7 @@ function adminoperate($path)
             $foldername = path_format('/'.urldecode($path1).'/'.$_GET['move_folder']);
             $data = '{"parentReference":{"path": "/drive/root:'.$foldername.'"}}';
             $result = MSAPI('PATCH', $filename, $data, $_SERVER['access_token']);
-            savecache('path_' . $path1, json_decode('{}',true), 1);
+            //savecache('path_' . $path1, json_decode('{}',true), 1);
             if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) . '/' );
             else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] . '/' );
             savecache('path_' . $path2, json_decode('{}',true), 1);
@@ -424,12 +424,12 @@ function adminoperate($path)
             $data = '{ "name": "' . $_GET['create_name'] . '",  "folder": { },  "@microsoft.graph.conflictBehavior": "rename" }';
             $result = MSAPI('children', $path1, $data, $_SERVER['access_token']);
         }
-        savecache('path_' . $path1, json_decode('{}',true), 1);
+        //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['RefreshCache']) {
-        savecache('path_' . $path1, json_decode('{}',true), 1);
-        return output('', 302, [ 'Location' => $_SERVER['PHP_SHELL'] ]);
+        //savecache('path_' . $path1, json_decode('{}',true), 1);
+        return output('<meta http-equiv="refresh" content="2;URL=./">', 302);
     }
     return $tmparr;
 }
