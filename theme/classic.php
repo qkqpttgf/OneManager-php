@@ -62,6 +62,7 @@
 <?php   if (isset($files['folder'])) { ?>
         <li><a onclick="showdiv(event,'create','');"><?php echo $constStr['Create'][$constStr['language']]; ?></a></li>
         <li><a onclick="showdiv(event,'encrypt','');"><?php echo $constStr['encrypt'][$constStr['language']]; ?></a></li>
+        <li><a href="?RefreshCache"><?php echo $constStr['RefreshCache'][$constStr['language']]; ?></a></li>
 <?php   } ?>
         <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
         <li><a onclick="logout()"><?php echo $constStr['Logout'][$constStr['language']]; ?></a></li>
