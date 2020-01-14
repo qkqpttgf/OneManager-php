@@ -3,19 +3,37 @@ include 'vendor/autoload.php';
 include 'conststr.php';
 include 'functions.php';
 
-//echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
-$path = getpath();
-//echo 'path:'. $path;
-$_GET = getGET();
-//echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
+if ($_SERVER['USER']!='qcloud') {
+    //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
+    $path = getpath();
+    //echo 'path:'. $path;
+    $_GET = getGET();
+    //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
 
-$re = main($path);
-$sendHeaders = array();
-foreach ($re['headers'] as $headerName => $headerVal) {
-    header($headerName . ': ' . $headerVal, true);
+    $re = main($path);
+    $sendHeaders = array();
+    foreach ($re['headers'] as $headerName => $headerVal) {
+        header($headerName . ': ' . $headerVal, true);
+    }
+    http_response_code($re['statusCode']);
+    echo $re['body'];
 }
-http_response_code($re['statusCode']);
-echo $re['body'];
+
+function main_handler($event, $context)
+{
+    global $constStr;
+    $event = json_decode(json_encode($event), true);
+    $context = json_decode(json_encode($context), true);
+    //printInput($event, $context);
+    unset($_POST);
+    unset($_GET);
+    unset($_COOKIE);
+    unset($_SERVER);
+    GetGlobalVariable($event);
+    config_oauth();
+    $path = GetPathSetting($event, $context);
+    return main($path);
+}
 
 function main($path)
 {
@@ -429,7 +447,7 @@ function adminoperate($path)
     }
     if ($_GET['RefreshCache']) {
         //savecache('path_' . $path1, json_decode('{}',true), 1);
-        return output('<meta http-equiv="refresh" content="2;URL=./">', 302);
+        return output('<meta http-equiv="refresh" content="2;URL=./">'.$constStr['RefreshCache'][$constStr['language']], 302);
     }
     return $tmparr;
 }
@@ -670,11 +688,11 @@ function render_list($path, $files)
     $p_path=str_replace('&amp;','&',$p_path);
     $pretitle = str_replace('%23','#',$pretitle);
     $statusCode=200;
-    $theme = getConfig('theme');
-    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
     date_default_timezone_set(get_timezone($_COOKIE['timezone']));
     @ob_start();
 
+    $theme = getConfig('theme');
+    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
     include 'theme/'.$theme;
 
     $html = '<!--
