@@ -55,31 +55,31 @@
 <?php
     if (getConfig('admin')!='') if (!$_SERVER['admin']) {
         if (getConfig('adminloginpage')=='') { ?>
-    <a onclick="login();"><?php echo $constStr['Login'][$constStr['language']]; ?></a>
+    <a onclick="login();"><?php echo getconstStr('Login'); ?></a>
 <?php   }
     } else { ?>
-    <li class="operate"><?php echo $constStr['Operate'][$constStr['language']]; ?><ul>
+    <li class="operate"><?php echo getconstStr('Operate'); ?><ul>
 <?php   if (isset($files['folder'])) { ?>
-        <li><a onclick="showdiv(event,'create','');"><?php echo $constStr['Create'][$constStr['language']]; ?></a></li>
-        <li><a onclick="showdiv(event,'encrypt','');"><?php echo $constStr['encrypt'][$constStr['language']]; ?></a></li>
-        <li><a href="?RefreshCache"><?php echo $constStr['RefreshCache'][$constStr['language']]; ?></a></li>
+        <li><a onclick="showdiv(event,'create','');"><?php echo getconstStr('Create'); ?></a></li>
+        <li><a onclick="showdiv(event,'encrypt','');"><?php echo getconstStr('encrypt'); ?></a></li>
+        <li><a href="?RefreshCache"><?php echo getconstStr('RefreshCache'); ?></a></li>
 <?php   } ?>
-        <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><?php echo $constStr['Setup'][$constStr['language']]; ?></a></li>
-        <li><a onclick="logout()"><?php echo $constStr['Logout'][$constStr['language']]; ?></a></li>
+        <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><?php echo getconstStr('Setup'); ?></a></li>
+        <li><a onclick="logout()"><?php echo getconstStr('Logout'); ?></a></li>
     </ul></li>
 <?php
     } ?>
     <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
         <option value="">Language</option>
 <?php
-    foreach ($constStr['languages'] as $key1 => $value1) { ?>
+    foreach (getconstStr('languages'] as $key1 => $value1) { ?>
         <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
 <?php
     } ?>
     </select>
 <?php
     if ($_SERVER['needUpdate']) { ?>
-    <div style='position:absolute;'><font color='red'><?php echo $constStr['NeedUpdate'][$constStr['language']]; ?></font></div>
+    <div style='position:absolute;'><font color='red'><?php echo getconstStr('NeedUpdate'); ?></font></div>
 <?php } ?>
     <h1 class="title">
         <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
@@ -111,7 +111,7 @@
                 <div id="upload_div" style="margin:10px">
                 <center>
                     <input id="upload_file" type="file" name="upload_filename">
-                    <input id="upload_submit" onclick="preup();" value="<?php echo $constStr['Upload'][$constStr['language']]; ?>" type="button">
+                    <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 <center>
                 </div>
 <?php } else {
@@ -125,7 +125,7 @@
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_path'] . '/' . $path), '/'))); ?></textarea>
-                        <a href="<?php echo path_format($_SERVER['base_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo $constStr['Download'][$constStr['language']]; ?></a>
+                        <a href="<?php echo path_format($_SERVER['base_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
@@ -156,8 +156,8 @@
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
                         <form id="txt-form" action="" method="POST">
-                            <a onclick="enableedit(this);" id="txt-editbutton"><?php echo $constStr['ClicktoEdit'][$constStr['language']]; ?></a>
-                            <a id="txt-save" style="display:none"><?php echo $constStr['Save'][$constStr['language']]; ?></a>
+                            <a onclick="enableedit(this);" id="txt-editbutton"><?php echo getconstStr('ClicktoEdit'); ?></a>
+                            <a id="txt-save" style="display:none"><?php echo getconstStr('Save'); ?></a>
 <?php                   } ?>
                             <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <?php if ($_SERVER['admin']) echo 'onchange="document.getElementById(\'txt-save\').onclick=function(){document.getElementById(\'txt-form\').submit();}"';?> ><?php echo $txtstr;?></textarea>
 <?php                   if ($_SERVER['admin']) echo '</form>'; ?>
@@ -169,7 +169,7 @@
                         </div>
 ';
                     } else {
-                        echo '<span>'.$constStr['FileNotSupport'][$constStr['language']].'</span>';
+                        echo '<span>'.getconstStr('FileNotSupport').'</span>';
                     } ?>
                     </div>
                 </div>
@@ -179,9 +179,9 @@
                     $readme = false; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file" onclick="sortby('a');"><?php echo $constStr['File'][$constStr['language']]; ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo $constStr['ShowThumbnails'][$constStr['language']]; ?></button></th>
-                        <th class="updated_at" width="25%" onclick="sortby('time');"><?php echo $constStr['EditTime'][$constStr['language']]; ?></th>
-                        <th class="size" width="15%" onclick="sortby('size');"><?php echo $constStr['Size'][$constStr['language']]; ?></th>
+                        <th class="file" onclick="sortby('a');"><?php echo getconstStr('File'); ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button></th>
+                        <th class="updated_at" width="25%" onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></th>
+                        <th class="size" width="15%" onclick="sortby('size');"><?php echo getconstStr('Size'); ?></th>
                     </tr>
                     <!-- Dirs -->
 <?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
@@ -192,12 +192,12 @@
                     <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                       if ($_SERVER['admin']) { ?>
-                            <li class="operate"><?php echo $constStr['Operate'][$constStr['language']]; ?>
+                            <li class="operate"><?php echo getconstStr('Operate'); ?>
                             <ul>
-                                <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><?php echo $constStr['encrypt'][$constStr['language']]; ?></a></li>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo $constStr['Rename'][$constStr['language']]; ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo $constStr['Move'][$constStr['language']]; ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo $constStr['Delete'][$constStr['language']]; ?></a></li>
+                                <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><?php echo getconstStr('encrypt'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo getconstStr('Rename'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                       } ?>
@@ -223,11 +223,11 @@
                     <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                           if ($_SERVER['admin']) { ?>
-                            <li class="operate"><?php echo $constStr['Operate'][$constStr['language']]; ?>
+                            <li class="operate"><?php echo getconstStr('Operate'); ?>
                             <ul>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo $constStr['Rename'][$constStr['language']]; ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo $constStr['Move'][$constStr['language']]; ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo $constStr['Delete'][$constStr['language']]; ?></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo getconstStr('Rename'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                           }
@@ -275,7 +275,7 @@
                         if ($pagenum!=1) {
                             $prepagenum = $pagenum-1;
                             $prepagenext .= '
-                                <a onclick="nextpage('.$prepagenum.');">'.$constStr['PrePage'][$constStr['language']].'</a>';
+                                <a onclick="nextpage('.$prepagenum.');">'.getconstStr('PrePage').'</a>';
                         }
                         $prepagenext .= '
                             </td>
@@ -296,7 +296,7 @@
                         if ($pagenum!=$maxpage) {
                             $nextpagenum = $pagenum+1;
                             $prepagenext .= '
-                                <a onclick="nextpage('.$nextpagenum.');">'.$constStr['NextPage'][$constStr['language']].'</a>';
+                                <a onclick="nextpage('.$nextpagenum.');">'.getconstStr('NextPage').'</a>';
                         }
                         $prepagenext .= '
                             </td>
@@ -309,7 +309,7 @@
                 <div id="upload_div" style="margin:0 0 16px 0">
                 <center>
                     <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
-                    <input id="upload_submit" onclick="preup();" value="<?php echo $constStr['Upload'][$constStr['language']]; ?>" type="button">
+                    <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </center>
                 </div>
 <?php               }
@@ -342,8 +342,8 @@
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="'.$constStr['InputPassword'][$constStr['language']].'">
-		            <input type="submit" value="'.$constStr['Submit'][$constStr['language']].'">
+		            <input name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
+		            <input type="submit" value="'.getconstStr('Submit').'">
 	                </form>
                 </center>
                 </div>';
@@ -360,47 +360,47 @@
     <div>
         <div id="rename_div" class="operatediv" style="display:none">
             <div>
-                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
                 <form id="rename_form" onsubmit="return submit_operate('rename');">
                 <input id="rename_sid" name="rename_sid" type="hidden" value="">
                 <input id="rename_hidden" name="rename_oldname" type="hidden" value="">
                 <input id="rename_input" name="rename_newname" type="text" value="">
-                <input name="operate_action" type="submit" value="<?php echo $constStr['Rename'][$constStr['language']]; ?>">
+                <input name="operate_action" type="submit" value="<?php echo getconstStr('Rename'); ?>">
                 </form>
             </div>
         </div>
         <div id="delete_div" class="operatediv" style="display:none">
             <div>
-                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
                 <label id="delete_label"></label>
                 <form id="delete_form" onsubmit="return submit_operate('delete');">
-                <label id="delete_input"><?php echo $constStr['Delete'][$constStr['language']]; ?>?</label>
+                <label id="delete_input"><?php echo getconstStr('Delete'); ?>?</label>
                 <input id="delete_sid" name="delete_sid" type="hidden" value="">
                 <input id="delete_hidden" name="delete_name" type="hidden" value="">
-                <input name="operate_action" type="submit" value="<?php echo $constStr['Submit'][$constStr['language']]; ?>">
+                <input name="operate_action" type="submit" value="<?php echo getconstStr('Submit'); ?>">
                 </form>
             </div>
         </div>
         <div id="encrypt_div" class="operatediv" style="display:none">
             <div>
-                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
                 <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
-                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<?php echo $constStr['InputPasswordUWant'][$constStr['language']]; ?>">
-                <?php if (getConfig('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo $constStr['encrypt'][$constStr['language']]; ?>"><?php } else { ?><br><label><?php echo $constStr['SetpassfileBfEncrypt'][$constStr['language']]; ?></label><?php } ?>
+                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<?php echo getconstStr('InputPasswordUWant'); ?>">
+                <?php if (getConfig('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo getconstStr('encrypt'); ?>"><?php } else { ?><br><label><?php echo getconstStr('SetpassfileBfEncrypt'); ?></label><?php } ?>
                 </form>
             </div>
         </div>
         <div id="move_div" class="operatediv" style="display:none">
             <div>
-                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
                 <form id="move_form" onsubmit="return submit_operate('move');">
                 <input id="move_sid" name="move_sid" type="hidden" value="">
                 <input id="move_hidden" name="move_name" type="hidden" value="">
                 <select id="move_input" name="move_folder">
 <?php   if ($path != '/') { ?>
-                    <option value="/../"><?php echo $constStr['ParentDir'][$constStr['language']]; ?></option>
+                    <option value="/../"><?php echo getconstStr('ParentDir'); ?></option>
 <?php   }
         if (isset($files['children'])) foreach ($files['children'] as $file) {
             if (isset($file['folder'])) { ?>
@@ -408,13 +408,13 @@
 <?php       }
         } ?>
                 </select>
-                <input name="operate_action" type="submit" value="<?php echo $constStr['Move'][$constStr['language']]; ?>">
+                <input name="operate_action" type="submit" value="<?php echo getconstStr('Move'); ?>">
                 </form>
             </div>
         </div>
         <div id="create_div" class="operatediv" style="display:none">
             <div>
-                <a onclick="operatediv_close('create')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+                <a onclick="operatediv_close('create')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
                 <form id="create_form" onsubmit="return submit_operate('create');">
                     <input id="create_sid" name="create_sid" type="hidden" value="">
                     <input id="create_hidden" type="hidden" value="">
@@ -426,21 +426,21 @@
                         <tr>
                             <td>　　　</td>
                             <td>
-                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><?php echo $constStr['Folder'][$constStr['language']]; ?></label>
-                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><?php echo $constStr['File'][$constStr['language']]; ?></label>
+                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><?php echo getconstStr('Folder'); ?></label>
+                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><?php echo getconstStr('File'); ?></label>
                             <td>
                         </tr>
                         <tr>
-                            <td><?php echo $constStr['Name'][$constStr['language']]; ?>：</td>
+                            <td><?php echo getconstStr('Name'); ?>：</td>
                             <td><input id="create_input" name="create_name" type="text" value=""></td>
                         </tr>
                         <tr id="create_text_div">
-                            <td><?php echo $constStr['Content'][$constStr['language']]; ?>：</td>
+                            <td><?php echo getconstStr('Content'); ?>：</td>
                             <td><textarea id="create_text" name="create_text" rows="6" cols="40"></textarea></td>
                         </tr>
                         <tr>
                             <td>　　　</td>
-                            <td><input name="operate_action" type="submit" value="<?php echo $constStr['Create'][$constStr['language']]; ?>"></td>
+                            <td><input name="operate_action" type="submit" value="<?php echo getconstStr('Create'); ?>"></td>
                         </tr>
                     </table>
                 </form>
@@ -452,18 +452,18 @@
         if (getConfig('admin')!='') if (getConfig('adminloginpage')=='') { ?>
     <div id="login_div" class="operatediv" style="display:none">
         <div style="margin:50px">
-            <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo $constStr['Close'][$constStr['language']]; ?></a>
+            <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
 	        <center>
 	            <form action="<?php echo $_GET['preview']?'?preview&':'?';?>admin" method="post">
-		        <input id="login_input" name="password1" type="password" placeholder="<?php echo $constStr['InputPassword'][$constStr['language']]; ?>">
-		        <input type="submit" value="<?php echo $constStr['Login'][$constStr['language']]; ?>">
+		        <input id="login_input" name="password1" type="password" placeholder="<?php echo getconstStr('InputPassword'); ?>">
+		        <input type="submit" value="<?php echo getconstStr('Login'); ?>">
 	            </form>
             </center>
         </div>
 	</div>
 <?php   }
     } ?>
-    <font color="#f7f7f9"><?php echo date("Y-m-d H:i:s")." ".$constStr['Week'][date("w")][$constStr['language']]." ".$_SERVER['REMOTE_ADDR'];?></font>
+    <font color="#f7f7f9"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></font>
 </body>
 
 <link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
@@ -759,9 +759,9 @@
             var td2=document.createElement('td');
             tr1.appendChild(td2);
             td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
-            td2.innerHTML='<?php echo $constStr['GetUploadLink'][$constStr['language']]; ?> ...';
+            td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
             if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><?php echo $constStr['UpFileTooLarge'][$constStr['language']]; ?></font>';
+                td2.innerHTML='<font color="red"><?php echo getconstStr('UpFileTooLarge'); ?></font>';
                 uploadbuttonshow();
                 return;
             }
@@ -778,7 +778,7 @@
                         td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
                         uploadbuttonshow();
                     } else {
-                        td2.innerHTML='<?php echo $constStr['UploadStart'][$constStr['language']]; ?> ...';
+                        td2.innerHTML='<?php echo getconstStr('UploadStart'); ?> ...';
                         binupfile(file,html['uploadUrl'],timea+'_'+i);
                     }
                 }
@@ -832,9 +832,9 @@
                     asize = newstartsize;
 <?php } ?>
                     if (newstartsize==0) {
-                        StartStr='<?php echo $constStr['UploadStartAt'][$constStr['language']]; ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     } else {
-                        StartStr='<?php echo $constStr['LastUpload'][$constStr['language']]; ?>'+size_format(newstartsize)+ '<br><?php echo $constStr['ThisTime'][$constStr['language']].$constStr['UploadStartAt'][$constStr['language']]; ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     }
                     var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                     if (totalsize>200*1024*1024) chunksize=10*1024*1024;
@@ -867,7 +867,7 @@
                                 var tmptime = new Date();
                                 var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<?php echo $constStr['Upload'][$constStr['language']]; ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo $constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo $constStr['CurrentSpeed'][$constStr['language']]; ?> '+size_format(tmpspeed)+'/s <?php echo $constStr['Expect'][$constStr['language']]; ?> '+remaintime.toFixed(1)+'s';
+                                label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
                             }
                         }
                         var C_starttime = new Date();
@@ -895,7 +895,7 @@
                                     if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
                                     if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
                                     if (filename=='') {
-                                        alert('<?php echo $constStr['UploadErrorUpAgain'][$constStr['language']]; ?>');
+                                        alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                         uploadbuttonshow();
                                         return;
                                     }
@@ -907,13 +907,13 @@
                                 }
 <?php } ?>
                                 EndTime=new Date();
-                                MiddleStr = '<?php echo $constStr['EndAt'][$constStr['language']]; ?>:'+EndTime.toLocaleString()+'<br>';
+                                MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'<br>';
                                 if (newstartsize==0) {
-                                    MiddleStr += '<?php echo $constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 } else {
-                                    MiddleStr += '<?php echo $constStr['ThisTime'][$constStr['language']].$constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo $constStr['UploadComplete'][$constStr['language']]; ?></font>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo getconstStr('UploadComplete'); ?></font>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <?php if ($_SERVER['admin']) { ?>
@@ -933,7 +933,7 @@
                     }
                 } else {
                     if (window.location.pathname.indexOf('%23')>0||file.name.indexOf('%23')>0) {
-                        label.innerHTML='<font color="red"><?php echo $constStr['UploadFail23'][$constStr['language']]; ?></font>';
+                        label.innerHTML='<font color="red"><?php echo getconstStr('UploadFail23'); ?></font>';
                     } else {
                         label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
                     }
@@ -951,7 +951,7 @@
     function enableedit(obj) {
         document.getElementById('txt-a').readOnly=!document.getElementById('txt-a').readOnly;
         //document.getElementById('txt-editbutton').innerHTML=(document.getElementById('txt-editbutton').innerHTML=='取消编辑')?'点击后编辑':'取消编辑';
-        obj.innerHTML=(obj.innerHTML=='<?php echo $constStr['CancelEdit'][$constStr['language']]; ?>')?'<?php echo $constStr['ClicktoEdit'][$constStr['language']]; ?>':'<?php echo $constStr['CancelEdit'][$constStr['language']]; ?>';
+        obj.innerHTML=(obj.innerHTML=='<?php echo getconstStr('CancelEdit'); ?>')?'<?php echo getconstStr('ClicktoEdit'); ?>':'<?php echo getconstStr('CancelEdit'); ?>';
         document.getElementById('txt-save').style.display=document.getElementById('txt-save').style.display==''?'none':'';
     }
 <?php   if (!$_GET['preview']) {?>
@@ -970,7 +970,7 @@
             if (str=='') {
                 str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
                 if (str=='') {
-                    alert('<?php echo $constStr['GetFileNameFail'][$constStr['language']]; ?>');
+                    alert('<?php echo getconstStr('GetFileNameFail'); ?>');
                     operatediv_close(action);
                     return;
                 }
