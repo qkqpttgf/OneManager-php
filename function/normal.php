@@ -160,7 +160,7 @@ run Writeable.sh.';
     <form action="?install1" method="post" onsubmit="return adminnotnull(this);">
         <label>admin:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
 language:<br>';
-        foreach (getconstStr('languages'] as $key1 => $value1) {
+        foreach ($constStr['languages'] as $key1 => $value1) {
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==getconstStr('language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
