@@ -1,9 +1,14 @@
 <?php
 include 'vendor/autoload.php';
 include 'conststr.php';
-include 'functions.php';
+include 'function/common.php';
 
-if ($_SERVER['USER']!='qcloud') {
+if ($_SERVER['USER']==='qcloud') {
+    include 'function/scf.php';
+} elseif ($_SERVER['HEROKU_APP_DIR']==='/app') {
+    include 'function/heroku.php';
+} else {
+    include 'function/normal.php';
     //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
     $path = getpath();
     //echo 'path:'. $path;
