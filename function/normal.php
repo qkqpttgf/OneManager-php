@@ -114,7 +114,7 @@ Can not write config to file.<br>
         $tmp['language'] = $_POST['language'];
         $response = setConfig($tmp);
         if ($response) {
-            if (getconstStr('language']!='zh-cn') {
+            if ($constStr['language']!='zh-cn') {
                 $linklang='en-us';
             } else $linklang='zh-cn';
             $ru = "https://developer.microsoft.com/".$linklang."/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl=".$_SERVER['redirect_uri']."&platform=option-php";
