@@ -158,7 +158,7 @@ run Writeable.sh.';
         }
         $html .= '
     <form action="?install1" method="post" onsubmit="return adminnotnull(this);">
-        <label>admin:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription']['admin') . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
+        <label>admin:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
 language:<br>';
         foreach (getconstStr('languages'] as $key1 => $value1) {
             $html .= '
