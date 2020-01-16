@@ -72,7 +72,7 @@
     <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
         <option value="">Language</option>
 <?php
-    foreach (getconstStr('languages'] as $key1 => $value1) { ?>
+    foreach ($constStr['languages'] as $key1 => $value1) { ?>
         <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
 <?php
     } ?>
