@@ -162,7 +162,7 @@ run Writeable.sh.';
 language:<br>';
         foreach ($constStr['languages'] as $key1 => $value1) {
             $html .= '
-        <label><input type="radio" name="language" value="'.$key1.'" '.($key1==getconstStr('language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
+        <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
         $html .= '<br>
         <input type="submit" value="'.getconstStr('Submit').'">
@@ -349,7 +349,7 @@ namespace:' . $namespace . '<br>
             <td><label>' . $key . '</label></td>
             <td width=100%>
                 <select name="' . $key .'">';
-            foreach (getconstStr('languages'] as $key1 => $value1) {
+            foreach ($constStr['languages'] as $key1 => $value1) {
                 $html .= '
                     <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
             }
