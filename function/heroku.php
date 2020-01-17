@@ -2,6 +2,7 @@
 
 function getpath()
 {
+    $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
     $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
