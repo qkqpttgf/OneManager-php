@@ -602,36 +602,36 @@ textarea{
         if (getConfig('adminloginpage')=='') { ?>
 				<a onclick="login();" class="userLoginOut_a">
 					<svg t="1577090686623" class="icon userLoginOut_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5171" width="16" height="16"><path d="M975.13472 794.5216A339.34336 339.34336 0 0 0 804.7616 501.11488a263.61856 263.61856 0 0 1-110.77632 52.59264 432.5888 432.5888 0 0 1 154.95168 333.02528v14.0288a487.28064 487.28064 0 0 0 124.44672-62.75072c1.47456-14.4384 2.05824-28.95872 1.75104-43.4688z" fill="#1296db" p-id="5172"></path><path d="M635.0848 61.8496a233.82016 233.82016 0 0 0-41.70752 4.20864 295.87456 295.87456 0 0 1 27.3408 455.7312h14.37696c127.3856 0 230.66624-103.2704 230.66624-230.66624 0-127.39584-103.2704-230.66624-230.66624-230.66624v1.40288z" fill="#1296db" p-id="5173"></path><path d="M613.35552 539.32032a381.75744 381.75744 0 0 1 188.61056 380.0064c-111.52384 73.58464-645.66272 72.16128-757.92384-4.1984a391.63904 391.63904 0 0 1-2.79552-45.23008 381.06112 381.06112 0 0 1 191.04768-330.57792c110.82752 90.7264 270.24384 90.7264 381.06112 0z" fill="#1296db" p-id="5174"></path><path d="M494.52032 613.9904l-24.8832 67.30752 25.23136 157.05088-66.60096 80.97792-70.11328-80.97792 29.09184-156.70272-29.7984-67.65568z" fill="#1296db" p-id="5175"></path><path d="M422.656 564.92032c-143.08352-0.77824-258.52928-117.26848-258.01728-260.352 0.512-143.09376 116.79744-258.74432 259.8912-258.48832 143.08352 0.256 258.93888 116.3264 258.93888 259.42016a259.42016 259.42016 0 0 1-260.8128 259.42016z" fill="#1296db" p-id="5176"></path></svg>
-				<?php echo $constStr['Login'][$constStr['language']]; ?></a>
+				<?php echo getconstStr('Login'); ?></a>
 		<?php } ?>
 <?php   } elseif($_SERVER['user']){ ?>
 	<a onclick="userLoginOut()" class="userLoginOut_a">
 				<svg t="1577089283125" class="icon userLoginOut_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2711" width="16" height="16"><path d="M972.8 512l-307.2-256 0 153.6-358.4 0 0 204.8 358.4 0 0 153.6 307.2-256zM153.6 153.6l409.6 0 0-102.4-409.6 0c-56.32 0-102.4 46.08-102.4 102.4l0 716.8c0 56.32 46.08 102.4 102.4 102.4l409.6 0 0-102.4-409.6 0 0-716.8z" p-id="2712" fill="#1296db"></path></svg>
-				<?php echo $constStr['Logout'][$constStr['language']]; ?></a>
+				<?php echo getconstStr('Logout'); ?></a>
 
  <?php   } else { ?>
  		
     <div class="operate">
 		<span class="operate_ul_li">
 		<svg t="1577090686623" class="icon userLoginOut_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5171" width="16" height="16"><path d="M975.13472 794.5216A339.34336 339.34336 0 0 0 804.7616 501.11488a263.61856 263.61856 0 0 1-110.77632 52.59264 432.5888 432.5888 0 0 1 154.95168 333.02528v14.0288a487.28064 487.28064 0 0 0 124.44672-62.75072c1.47456-14.4384 2.05824-28.95872 1.75104-43.4688z" fill="#1296db" p-id="5172"></path><path d="M635.0848 61.8496a233.82016 233.82016 0 0 0-41.70752 4.20864 295.87456 295.87456 0 0 1 27.3408 455.7312h14.37696c127.3856 0 230.66624-103.2704 230.66624-230.66624 0-127.39584-103.2704-230.66624-230.66624-230.66624v1.40288z" fill="#1296db" p-id="5173"></path><path d="M613.35552 539.32032a381.75744 381.75744 0 0 1 188.61056 380.0064c-111.52384 73.58464-645.66272 72.16128-757.92384-4.1984a391.63904 391.63904 0 0 1-2.79552-45.23008 381.06112 381.06112 0 0 1 191.04768-330.57792c110.82752 90.7264 270.24384 90.7264 381.06112 0z" fill="#1296db" p-id="5174"></path><path d="M494.52032 613.9904l-24.8832 67.30752 25.23136 157.05088-66.60096 80.97792-70.11328-80.97792 29.09184-156.70272-29.7984-67.65568z" fill="#1296db" p-id="5175"></path><path d="M422.656 564.92032c-143.08352-0.77824-258.52928-117.26848-258.01728-260.352 0.512-143.09376 116.79744-258.74432 259.8912-258.48832 143.08352 0.256 258.93888 116.3264 258.93888 259.42016a259.42016 259.42016 0 0 1-260.8128 259.42016z" fill="#1296db" p-id="5176"></path></svg>
-			<?php echo $constStr['Operate'][$constStr['language']]; ?></span><ul>
+			<?php echo getconstStr('Operate'); ?></span><ul>
 <?php   if (isset($files['folder'])) { ?>
         <li><a onclick="showdiv(event,'create','');" class="operate_ul_li">
 		<svg t="1577090488526" class="icon operate_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="3520" width="16" height="16"><path d="M639.488 863.232H198.144c-8.704 0-15.36-6.656-15.36-15.36V362.496c0-111.104 90.624-201.728 201.728-201.728h441.344c8.704 0 15.36 6.656 15.36 15.36v485.888c-0.512 111.104-91.136 201.216-201.728 201.216z m-425.984-30.72h425.472c93.696 0 170.496-76.288 171.008-170.496V191.488H384.512c-94.208 0-171.008 76.288-171.008 171.008v470.016z" p-id="3521" fill="#1296db"></path><path d="M512 672.256c-8.704 0-15.36-6.656-15.36-15.36V367.104c0-8.704 6.656-15.36 15.36-15.36s15.36 6.656 15.36 15.36v290.304c0 8.192-6.656 14.848-15.36 14.848z" p-id="3522" fill="#1296db"></path><path d="M656.896 527.36H367.104c-8.704 0-15.36-6.656-15.36-15.36s6.656-15.36 15.36-15.36h290.304c8.704 0 15.36 6.656 15.36 15.36s-7.168 15.36-15.872 15.36z" p-id="3523" fill="#1296db"></path></svg>
-			<?php echo $constStr['Create'][$constStr['language']]; ?></a>
+			<?php echo getconstStr('Create'); ?></a>
 		</li> 
         <li><a onclick="showdiv(event,'encrypt','');" class="operate_ul_li">
 		<svg t="1577090538685" class="icon operate_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4319" width="16" height="16"><path d="M298.666667 426.666667V298.666667a213.333333 213.333333 0 1 1 426.666666 0v128h42.666667a85.333333 85.333333 0 0 1 85.333333 85.333333v341.333333a85.333333 85.333333 0 0 1-85.333333 85.333334H256a85.333333 85.333333 0 0 1-85.333333-85.333334v-341.333333a85.333333 85.333333 0 0 1 85.333333-85.333333h42.666667z m-42.666667 85.333333v341.333333h512v-341.333333H256z m128-85.333333h256V298.666667a128 128 0 0 0-256 0v128z m213.333333 170.666666h85.333334v170.666667h-85.333334v-170.666667z" fill="#1296db" p-id="4320"></path></svg>
-			<?php echo $constStr['encrypt'][$constStr['language']]; ?></a>
+			<?php echo getconstStr('encrypt'); ?></a>
 		</li>
 <?php   } ?>
         <li><a class="operate_ul_li" href="<?php echo $_GET['preview']?'?preview&':'?';?>setup">
 		<svg t="1577090621651" class="icon operate_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4964" width="16" height="16"><path d="M438.080965 74.008574c-10.078543 3.412726-17.059538 12.599969-17.742083 23.202445l-4.619204 73.963549c-25.931602 7.55814-50.971905 18.21485-74.854848 31.757285l-40.368406-45.721321c-7.088442-8.03193-18.322297-10.918677-28.293393-7.454786-26.353205 9.187243-50.079582 22.940478-70.500681 40.943504-20.36584 17.955954-37.007869 39.792285-49.341778 64.881706-4.725628 9.55461-3.202948 20.999266 3.830235 28.976962l48.924269 55.43352c-12.909008 23.62507-23.094998 48.874127-30.392194 75.487252l-60.943001-3.778046c-11.391445-0.577145-20.629853 5.143137-25.252127 14.802124-12.126178 25.143657-19.158339 51.548026-20.890796 78.843696-1.629103 27.244504 2.046612 54.384631 10.969842 80.736812 3.411703 10.027377 12.598946 17.009396 23.150256 17.691941l73.963549 4.618181c7.614421 25.931602 18.267039 51.074236 31.81459 74.855872l-45.828768 40.418548c-7.979742 7.090489-10.918677 18.269086-7.402597 28.293393 9.18622 26.354228 22.890336 50.030463 40.948621 70.659293 18.10945 20.36584 39.946804 37.007869 64.87966 49.29266 9.553587 4.720511 21.051455 3.201925 28.975938-3.88754l55.486732-48.873104c23.620977 12.915148 48.870034 23.044856 75.483158 30.342052l-3.77907 60.891835c-0.626263 10.658757 5.14416 20.577664 14.753005 25.195845 24.984021 12.181437 51.444673 19.266809 78.896908 20.998243 1.394766 0.107447 2.78237 0.184195 4.16588 0.246617L514.114662 904.237359c-0.300852-0.019443-0.611937-0.023536-0.910743-0.044002-14.805194-0.940418-29.29214-3.985778-43.3626-9.128915l4.043083-64.310701c0.841158-13.014408-8.03193-24.666796-20.787442-27.345812-35.485189-7.350408-68.347644-20.472264-97.689926-38.740326-9.818623-6.247284-22.571065-5.090948-31.284517 2.573615l-55.751768 49.133024c-12.650111-7.873318-23.935132-17.532305-33.698496-28.503171-9.767458-11.076266-17.84953-23.466458-24.200168-37.115316l48.399313-42.674938c9.813506-8.612145 11.759835-23.150256 4.568039-34.125215-19.636223-29.813003-33.599236-62.358233-41.473577-96.482425-2.622734-11.285021-12.332886-19.577894-23.934109-20.315698l-74.385151-4.619204c-3.306302-14.539134-4.513804-29.235858-3.622504-43.881416 0.947582-14.805194 3.991917-29.343305 9.081843-43.413765l64.306608 3.986801c13.124925 0.841158 24.726148-7.976672 27.347858-20.787442 7.40362-35.427884 20.472264-68.291362 38.845727-97.691973 6.141884-9.812483 5.143137-22.567995-2.520403-31.28247l-49.183166-55.746652c7.92346-12.650111 17.532305-23.940249 28.553313-33.652448 11.026124-9.762341 23.465434-17.845437 37.006845-24.199145l42.62582 48.296983c8.661264 9.762341 23.098068 11.757788 34.016745 4.619204 30.02585-19.687388 62.520939-33.650401 96.534614-41.46846 11.341303-2.626827 19.580964-12.389168 20.314675-23.940249l4.675486-74.329892c13.998829-3.194762 28.096918-4.460592 42.485627-3.690042L514.115686 62.818721C488.208643 61.620429 462.864418 65.596997 438.080965 74.008574zM962.115046 505.346463c-1.732457-27.29567-8.763594-53.700039-20.889773-78.843696-4.623297-9.657964-13.860682-15.379269-25.25315-14.802124l-60.943001 3.778046c-7.297197-26.613124-17.48421-51.862181-30.391171-75.487252l48.923246-55.43352c7.033184-7.977695 8.555863-19.422352 3.829212-28.976962-12.33391-25.090445-28.975938-46.925752-49.340755-64.881706-20.422122-18.003026-44.148499-31.756261-70.501704-40.943504-9.971096-3.463891-21.205974-0.576121-28.29237 7.454786l-40.368406 45.721321c-23.883967-13.542434-48.925293-24.199145-74.854848-31.757285l-4.619204-73.963549c-0.683569-10.602476-7.664563-19.789719-17.743106-23.202445-24.783453-8.4126-50.126654-12.388145-76.031651-11.190877l0 52.53961c14.388708-0.77055 28.486798 0.49528 42.485627 3.690042l4.676509 74.329892c0.733711 11.550057 8.972349 21.312398 20.314675 23.940249 34.012651 7.819083 66.508763 21.781072 96.534614 41.46846 10.917654 7.139607 25.354458 5.143137 34.015721-4.619204l42.62582-48.296983c13.540388 6.353708 25.980721 14.436804 37.006845 24.199145 11.021008 9.712199 20.629853 21.001313 28.554336 33.652448l-49.184189 55.746652c-7.662517 8.715499-8.662287 21.469987-2.520403 31.28247 18.373463 29.399587 31.44313 62.264089 38.845727 97.691973 2.622734 12.81077 14.22191 21.6286 27.347858 20.787442l64.306608-3.986801c5.090948 14.07046 8.134261 28.608571 9.081843 43.413765 0.8913 14.645558-0.316202 29.342282-3.621481 43.881416l-74.385151 4.619204c-11.602246 0.737804-21.311375 9.029654-23.936155 20.315698-7.872295 34.124192-21.837354 66.669422-41.47153 96.482425-7.192819 10.974959-5.246491 25.51307 4.567016 34.125215l48.399313 42.674938c-6.349615 13.648858-14.432711 26.038026-24.199145 37.115316-9.763364 10.970866-21.047362 20.62883-33.697473 28.503171l-55.751768-49.133024c-8.714476-7.66354-21.466917-8.820899-31.284517-2.573615-29.343305 18.269086-62.204737 31.390941-97.689926 38.740326-12.756535 2.677992-21.629623 14.331403-20.787442 27.345812l4.043083 64.310701c-14.071484 5.143137-28.558429 8.188496-43.363623 9.128915-0.298805 0.020466-0.60989 0.024559-0.910743 0.044002l0 52.591799c1.384533-0.063445 2.771113-0.13917 4.16588-0.246617 27.452235-1.730411 53.91391-8.815783 78.897931-20.998243 9.608845-4.618181 15.379269-14.537088 14.753005-25.195845l-3.77907-60.891835c26.613124-7.29822 51.863205-17.426905 75.484182-30.342052l55.486732 48.873104c7.924483 7.089465 19.422352 8.608052 28.975938 3.88754 24.932856-12.284791 46.77021-28.92682 64.87966-49.29266 18.057261-20.62883 31.762401-44.305065 40.948621-70.659293 3.51608-10.025331 0.577145-21.203928-7.402597-28.293393l-45.828768-40.418548c13.546527-23.781636 24.199145-48.925293 31.81459-74.855872l73.963549-4.618181c10.55131-0.682545 19.736507-7.664563 23.14821-17.691941C960.068434 559.731094 963.744149 532.590967 962.115046 505.346463zM514.850419 665.013953c-85.605703 0-155.270343-69.665663-155.270343-155.320485 0-85.60468 69.664639-155.269319 155.270343-155.269319 85.653799 0 155.318438 69.664639 155.318438 155.269319C670.168858 595.34829 600.504218 665.013953 514.850419 665.013953L514.850419 665.013953zM514.850419 413.55999c-52.987818 0-96.134501 43.098587-96.134501 96.133478 0 52.989865 43.146683 96.136547 96.134501 96.136547 52.987818 0 96.134501-43.146683 96.134501-96.136547C610.98492 456.706673 567.838238 413.55999 514.850419 413.55999L514.850419 413.55999zM514.850419 413.55999" p-id="4965" fill="#1296db"></path></svg>
-			<?php echo $constStr['Setup'][$constStr['language']]; ?></a>
+			<?php echo getconstStr('Setup'); ?></a>
 		</li>
         <li><a class="operate_ul_li" onclick="logout()">
 		<svg t="1577089283125" class="icon operate_ico" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="2711" width="16" height="16"><path d="M972.8 512l-307.2-256 0 153.6-358.4 0 0 204.8 358.4 0 0 153.6 307.2-256zM153.6 153.6l409.6 0 0-102.4-409.6 0c-56.32 0-102.4 46.08-102.4 102.4l0 716.8c0 56.32 46.08 102.4 102.4 102.4l409.6 0 0-102.4-409.6 0 0-716.8z" p-id="2712" fill="#1296db"></path></svg>
-			<?php echo $constStr['Logout'][$constStr['language']]; ?></a>
+			<?php echo getconstStr('Logout'); ?></a>
 		</li>
     </ul></div>
 <?php
@@ -647,7 +647,7 @@ textarea{
 	</div>
 <?php
     if ($_SERVER['needUpdate']) { ?>
-    <div style='position:absolute;'><font color='red'><?php echo $constStr['NeedUpdate'][$constStr['language']]; ?></font></div>
+    <div style='position:absolute;'><font color='red'><?php echo getconstStr('NeedUpdate'); ?></font></div>
 <?php } ?>
 
     <h1 class="title">
@@ -680,9 +680,9 @@ textarea{
                 <div id="upload_div" style="margin:10px">
                 <center>
 			<input id="upload_file" type="file" name="upload_filename" onchange="document.getElementById('flieText').value = this.value" style="display:none">
-			<input value="<?php echo $constStr['FileSelected'][$constStr['language']]; ?>" type="button" onclick="document.getElementById('upload_file').click();">
-			<input id="flieText" type="text" style="border:0;outline:none;" onclick="document.getElementById('upload_file').click();" value="<?php echo $constStr['NoFileSelected'][$constStr['language']]; ?>">
-			<input id="upload_submit" onclick="preup();" value="<?php echo $constStr['Upload'][$constStr['language']]; ?>" type="button">
+			<input value="<?php echo getconstStr('FileSelected'); ?>" type="button" onclick="document.getElementById('upload_file').click();">
+			<input id="flieText" type="text" style="border:0;outline:none;" onclick="document.getElementById('upload_file').click();" value="<?php echo getconstStr('NoFileSelected'); ?>">
+			<input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 <center>
                 </div>
 <?php } else {
@@ -696,7 +696,7 @@ textarea{
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_path'] . '/' . $path), '/'))); ?></textarea>
-                        <a href="<?php echo path_format($_SERVER['base_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo $constStr['Download'][$constStr['language']]; ?></a>
+                        <a href="<?php echo path_format($_SERVER['base_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
@@ -727,8 +727,8 @@ textarea{
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
                         <form id="txt-form" action="" method="POST">
-                            <a onclick="enableedit(this);" id="txt-editbutton"><?php echo $constStr['ClicktoEdit'][$constStr['language']]; ?></a>
-                            <a id="txt-save" style="display:none"><?php echo $constStr['Save'][$constStr['language']]; ?></a>
+                            <a onclick="enableedit(this);" id="txt-editbutton"><?php echo getconstStr('ClicktoEdit'); ?></a>
+                            <a id="txt-save" style="display:none"><?php echo getconstStr('Save'); ?></a>
 <?php                   } ?>
                             <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <?php if ($_SERVER['admin']) echo 'onchange="document.getElementById(\'txt-save\').onclick=function(){document.getElementById(\'txt-form\').submit();}"';?> ><?php echo $txtstr;?></textarea>
 <?php                   if ($_SERVER['admin']) echo '</form>'; ?>
@@ -740,7 +740,7 @@ textarea{
                         </div>
 ';
                     } else {
-                        echo '<span>'.$constStr['FileNotSupport'][$constStr['language']].'</span>';
+                        echo '<span>'.getconstStr('FileNotSupport').'</span>';
                     } ?>
                     </div>
                 </div>
@@ -750,9 +750,9 @@ textarea{
                     $readme = false; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file" onclick="sortby('a');"><?php echo $constStr['File'][$constStr['language']]; ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo $constStr['ShowThumbnails'][$constStr['language']]; ?></button></th>
-                        <th class="updated_at" width="25%" onclick="sortby('time');"><?php echo $constStr['EditTime'][$constStr['language']]; ?></th>
-                        <th class="size" width="15%" onclick="sortby('size');"><?php echo $constStr['Size'][$constStr['language']]; ?></th>
+                        <th class="file" onclick="sortby('a');"><?php echo getconstStr('File'); ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button></th>
+                        <th class="updated_at" width="25%" onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></th>
+                        <th class="size" width="15%" onclick="sortby('size');"><?php echo getconstStr('Size'); ?></th>
                     </tr>
                     <!-- Dirs -->
 <?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
@@ -764,23 +764,23 @@ textarea{
                         <td class="file">
 <?php                       if ($_SERVER['admin']) { ?>
                             <li class="operate" ><span class="operate_ul_li">
-							<?php echo $constStr['Operate'][$constStr['language']]; ?></span>
+							<?php echo getconstStr('Operate'); ?></span>
                             <ul>
                                 <li><a class="operate_ul_li" onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);">
 								<img alt="" class="operate_ico operate_ico_encrypt" />
-									<?php echo $constStr['encrypt'][$constStr['language']]; ?></a>
+									<?php echo getconstStr('encrypt'); ?></a>
 								</li>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'rename',<?php echo $filenum;?>);">
 								<img alt="" class="operate_ico operate_ico_rename"/>
-									<?php echo $constStr['Rename'][$constStr['language']]; ?></a>
+									<?php echo getconstStr('Rename'); ?></a>
 								</li>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'move',<?php echo $filenum;?>);">
 									<img alt="" class="operate_ico operate_ico_move" />
-									<?php echo $constStr['Move'][$constStr['language']]; ?></a>
+									<?php echo getconstStr('Move'); ?></a>
 								</li>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'delete',<?php echo $filenum;?>);">
 								<img alt="" class="operate_ico operate_ico_delete"/>
-									<?php echo $constStr['Delete'][$constStr['language']]; ?></a>
+									<?php echo getconstStr('Delete'); ?></a>
 								</li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
@@ -808,18 +808,18 @@ textarea{
                         <td class="file">
 <?php                           if ($_SERVER['admin']) { ?>
                             <li class="operate">
-								<span class="operate_ul_li"><?php echo $constStr['Operate'][$constStr['language']]; ?></span>
+								<span class="operate_ul_li"><?php echo getconstStr('Operate'); ?></span>
                             <ul>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'rename',<?php echo $filenum;?>);">
 									<img class="operate_ico operate_ico_rename" alt="" />
-									<?php echo $constStr['Rename'][$constStr['language']]; ?></a>
+									<?php echo getconstStr('Rename'); ?></a>
 								</li>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'move',<?php echo $filenum;?>);">
 									<img class="operate_ico operate_ico_move" alt=""/>
-									<?php echo $constStr['Move'][$constStr['language']]; ?></a></li>
+									<?php echo getconstStr('Move'); ?></a></li>
                                 <li><a class="operate_ul_li" onclick="showdiv(event, 'delete',<?php echo $filenum;?>);">
 								<img class="operate_ico operate_ico_delete" alt=""/>
-								<?php echo $constStr['Delete'][$constStr['language']]; ?></a></li>
+								<?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                           }
@@ -867,7 +867,7 @@ textarea{
                         if ($pagenum!=1) {
                             $prepagenum = $pagenum-1;
                             $prepagenext .= '
-                                <a onclick="nextpage('.$prepagenum.');">'.$constStr['PrePage'][$constStr['language']].'</a>';
+                                <a onclick="nextpage('.$prepagenum.');">'.getconstStr('PrePage').'</a>';
                         }
                         $prepagenext .= '
                             </td>
@@ -888,7 +888,7 @@ textarea{
                         if ($pagenum!=$maxpage) {
                             $nextpagenum = $pagenum+1;
                             $prepagenext .= '
-                                <a onclick="nextpage('.$nextpagenum.');">'.$constStr['NextPage'][$constStr['language']].'</a>';
+                                <a onclick="nextpage('.$nextpagenum.');">'.getconstStr('NextPage').'</a>';
                         }
                         $prepagenext .= '
                             </td>
@@ -901,9 +901,9 @@ textarea{
                 <div id="upload_div" style="margin:0 0 16px 0">
                 <center>
                     	<input id="upload_file" type="file" name="upload_filename" onchange="splitFileName(this)" style="display:none">
-			<input value="<?php echo $constStr['FileSelected'][$constStr['language']]; ?>" type="button" onclick="document.getElementById('upload_file').click();">
-			<input id="flieText" type="text" style="border:0;outline:none;" onclick="document.getElementById('upload_file').click();" value="<?php echo $constStr['NoFileSelected'][$constStr['language']]; ?>">
-			<input id="upload_submit" onclick="preup();" value="<?php echo $constStr['Upload'][$constStr['language']]; ?>" type="button">
+			<input value="<?php echo getconstStr('FileSelected'); ?>" type="button" onclick="document.getElementById('upload_file').click();">
+			<input id="flieText" type="text" style="border:0;outline:none;" onclick="document.getElementById('upload_file').click();" value="<?php echo getconstStr('NoFileSelected'); ?>">
+			<input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </center>
                 </div>
 <?php               }
@@ -936,8 +936,8 @@ textarea{
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="'.$constStr['InputPassword'][$constStr['language']].'">
-		            <input type="submit" value="'.$constStr['Submit'][$constStr['language']].'">
+		            <input name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
+		            <input type="submit" value="'.getconstStr('Submit').'">
 	                </form>
                 </center>
                 </div>';
@@ -958,9 +958,9 @@ textarea{
 					<input id="rename_sid" name="rename_sid" type="hidden" value="">
 					<input id="rename_hidden" name="rename_oldname" type="hidden" value="">
 					<div class="form-group" style="padding-top: 5%;">
-						<input class="form-field form-field-first basic-style" id="rename_input" name="rename_newname" type="text" placeholder="<?php echo $constStr['Input'][$constStr['language']]; ?>" />
-						<span class="form-field-last basic-style" onclick="document.getElementById('rename_operate_action').click();"><?php echo $constStr['Rename'][$constStr['language']]; ?></span>
-						<input name="operate_action" type="submit" id="rename_operate_action" value="<?php echo $constStr['Rename'][$constStr['language']]; ?>" style="display:none">
+						<input class="form-field form-field-first basic-style" id="rename_input" name="rename_newname" type="text" placeholder="<?php echo getconstStr('Input'); ?>" />
+						<span class="form-field-last basic-style" onclick="document.getElementById('rename_operate_action').click();"><?php echo getconstStr('Rename'); ?></span>
+						<input name="operate_action" type="submit" id="rename_operate_action" value="<?php echo getconstStr('Rename'); ?>" style="display:none">
 					</div>
 				</form>
 			</div>
@@ -970,18 +970,18 @@ textarea{
 				<img class="disLog_btn_close" onclick="closeDisLog(this)" alt="">
 				<div class="disLogContent" >
 					<div class="titleText">
-						 <span id="delete_label"></span><?php echo $constStr['Delete'][$constStr['language']]; ?>?
+						 <span id="delete_label"></span><?php echo getconstStr('Delete'); ?>?
 					</div>
 					<div class="contentTest">
-						<?php echo $constStr['DeleteMsg'][$constStr['language']]; ?>
+						<?php echo getconstStr('DeleteMsg'); ?>
 					</div>
 					<input id="delete_sid" name="delete_sid" type="hidden" value="">
 					<input id="delete_hidden" name="delete_name" type="hidden" value="">
 				</div>
 				<form id="delete_form" onsubmit="return submit_operate('delete');">
-					<div class="disLog_btn_submit" tabindex="1" id="delete_input" onclick="document.getElementById('delete_operate_action').click();" ><?php echo $constStr['Submit'][$constStr['language']]; ?></div>
-					<input name="operate_action" type="submit" id="delete_operate_action" value="<?php echo $constStr['Submit'][$constStr['language']]; ?>" style="display:none">
-					<div class="disLog_btn_cancel" tabindex="0" onclick="closeDisLog(this)"><?php echo $constStr['Cancel'][$constStr['language']]; ?></div>
+					<div class="disLog_btn_submit" tabindex="1" id="delete_input" onclick="document.getElementById('delete_operate_action').click();" ><?php echo getconstStr('Submit'); ?></div>
+					<input name="operate_action" type="submit" id="delete_operate_action" value="<?php echo getconstStr('Submit'); ?>" style="display:none">
+					<div class="disLog_btn_cancel" tabindex="0" onclick="closeDisLog(this)"><?php echo getconstStr('Cancel'); ?></div>
 				</form>
 			</div>
 		</div>
@@ -993,16 +993,16 @@ textarea{
 				<form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
 				<?php if (getConfig('passfile')=='') {?>
 				<div class="contentTest">
-					<?php echo $constStr['SetpassfileBfEncrypt'][$constStr['language']]; ?>
+					<?php echo getconstStr('SetpassfileBfEncrypt'); ?>
 				</div>
 				<div class="form-group" style="padding-top: 8%;">
-					<div class="disLog_btn_cancel" style="margin-left:50%;" id="encrypt_input" tabindex="0" onclick="closeDisLog(this)"><?php echo $constStr['Cancel'][$constStr['language']]; ?></div>
+					<div class="disLog_btn_cancel" style="margin-left:50%;" id="encrypt_input" tabindex="0" onclick="closeDisLog(this)"><?php echo getconstStr('Cancel'); ?></div>
 				</div>
 				<?php } else {?>
 					<div class="form-group" style="padding-top: 5%;">
-						<input class="form-field form-field-first basic-style" id="encrypt_input" name="encrypt_newpass" type="text" placeholder="<?php echo $constStr['InputPasswordUWant'][$constStr['language']]; ?>" />
-						<span class="form-field-last basic-style" onclick="document.getElementById('encrypt_operate_action').click();"><?php echo $constStr['encrypt'][$constStr['language']]; ?></span>
-						<input name="operate_action" type="submit" id="encrypt_operate_action" value="<?php echo $constStr['encrypt'][$constStr['language']]; ?>" style="display:none">
+						<input class="form-field form-field-first basic-style" id="encrypt_input" name="encrypt_newpass" type="text" placeholder="<?php echo getconstStr('InputPasswordUWant'); ?>" />
+						<span class="form-field-last basic-style" onclick="document.getElementById('encrypt_operate_action').click();"><?php echo getconstStr('encrypt'); ?></span>
+						<input name="operate_action" type="submit" id="encrypt_operate_action" value="<?php echo getconstStr('encrypt'); ?>" style="display:none">
 					</div>
 				<?php } ?>
 					<input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
@@ -1021,7 +1021,7 @@ textarea{
 					<div class="form-group" style="padding-top: 5%;">
 						<select class="cs-select cs-skin-elastic" id="move_input" name="move_folder" style="width: 120px;">
 						<?php   if ($path != '/') { ?>
-											<option value="/../"><?php echo $constStr['ParentDir'][$constStr['language']]; ?></option>
+											<option value="/../"><?php echo getconstStr('ParentDir'); ?></option>
 						<?php   }
 								if (isset($files['children'])) foreach ($files['children'] as $file) {
 									if (isset($file['folder'])) { ?>
@@ -1029,8 +1029,8 @@ textarea{
 						<?php       }
 								} ?>
 						</select>
-						<span class="form-field-first basic-style" onclick="document.getElementById('move_operate_action').click();"><?php echo $constStr['Move'][$constStr['language']]; ?></span>
-						<input name="operate_action" type="submit" id="move_operate_action" value="<?php echo $constStr['Move'][$constStr['language']]; ?>" style="display:none">
+						<span class="form-field-first basic-style" onclick="document.getElementById('move_operate_action').click();"><?php echo getconstStr('Move'); ?></span>
+						<input name="operate_action" type="submit" id="move_operate_action" value="<?php echo getconstStr('Move'); ?>" style="display:none">
 					</div>
 				</form>
 			</div>
@@ -1048,26 +1048,26 @@ textarea{
 							<ul class="radio_ul">
 								<li>
 									<input type="radio" id="create_type_file" name="create_type" value="file" checked onclick="document.getElementById('create_text_div').style.display='';document.getElementById('create_disLogBody').style.height='245px';">
-									<input type="text" readonly value='<?php echo $constStr['File'][$constStr['language']]; ?>'>
+									<input type="text" readonly value='<?php echo getconstStr('File'); ?>'>
 								</li>
 								<li>
 									<input type="radio" id="create_type_folder" name="create_type" value="folder" onclick="document.getElementById('create_text_div').style.display='none';document.getElementById('create_disLogBody').style.height='140px';">
-									<input type="text" readonly value='<?php echo $constStr['Folder'][$constStr['language']]; ?>'>
+									<input type="text" readonly value='<?php echo getconstStr('Folder'); ?>'>
 								</li>
 							</ul>
 							<div class="form-group" style="padding-top: 5%;" >
-								<input class="form-field basic-style" id="create_input" name="create_name" type="text" placeholder="<?php echo $constStr['Name'][$constStr['language']]; ?>" style="border-radius: 6px;"/>
+								<input class="form-field basic-style" id="create_input" name="create_name" type="text" placeholder="<?php echo getconstStr('Name'); ?>" style="border-radius: 6px;"/>
 							</div>
 							<div class="form-group" style="padding-top: 5%;" id="create_text_div">
-								<textarea class="form-field basic-style" id="create_text" name="create_text" rows="3" placeholder="<?php echo $constStr['Content'][$constStr['language']]; ?>" style="white-space: pre-wrap;"></textarea>
+								<textarea class="form-field basic-style" id="create_text" name="create_text" rows="3" placeholder="<?php echo getconstStr('Content'); ?>" style="white-space: pre-wrap;"></textarea>
 							</div>
 						</div>	
 					</div>
 					<input id="create_sid" name="create_sid" type="hidden" value="">
                     <input id="create_hidden" type="hidden" value="">
-					<div class="disLog_btn_submit" tabindex="1" id="create_input" onclick="document.getElementById('create_operate_action').click();" ><?php echo $constStr['Submit'][$constStr['language']]; ?></div>
-					<input name="operate_action" type="submit" id="create_operate_action" value="<?php echo $constStr['Create'][$constStr['language']]; ?>" style="display:none">
-					<div class="disLog_btn_cancel" tabindex="0" onclick="closeDisLog(this)"><?php echo $constStr['Cancel'][$constStr['language']]; ?></div>
+					<div class="disLog_btn_submit" tabindex="1" id="create_input" onclick="document.getElementById('create_operate_action').click();" ><?php echo getconstStr('Submit'); ?></div>
+					<input name="operate_action" type="submit" id="create_operate_action" value="<?php echo getconstStr('Create'); ?>" style="display:none">
+					<div class="disLog_btn_cancel" tabindex="0" onclick="closeDisLog(this)"><?php echo getconstStr('Cancel'); ?></div>
 				</form>
 			</div>
         </div>
@@ -1077,18 +1077,18 @@ textarea{
 	<div id="login_div" class="disLogBg" >
 		<div class="disLogBody" >
 			<img class="disLog_btn_close" onclick="closeDisLog(this)" alt="">
-			<div class="titleText" ><?php echo $constStr['AdminLogin'][$constStr['language']]; ?>！</div>
+			<div class="titleText" ><?php echo getconstStr('AdminLogin'); ?>！</div>
 			<form action="<?php echo $_GET['preview']?'?preview&':'?';?>admin" method="post" id="loginForm">
 				<div class="form-group" style="padding-top: 5%;">
-					<input class="form-field form-field-first basic-style" id="login_input" name="password1" type="password" onchange="document.getElementById('loginForm').submit();" placeholder="<?php echo $constStr['InputPassword'][$constStr['language']]; ?>" />
-					<span class="form-field-last basic-style"><?php echo $constStr['Login'][$constStr['language']]; ?></span>
+					<input class="form-field form-field-first basic-style" id="login_input" name="password1" type="password" onchange="document.getElementById('loginForm').submit();" placeholder="<?php echo getconstStr('InputPassword'); ?>" />
+					<span class="form-field-last basic-style"><?php echo getconstStr('Login'); ?></span>
 				</div>
 			</form>
 		</div>
 	</div>
 <?php   }
     } ?>
-    <font id="mask" color="#f7f7f9"><?php echo date("Y-m-d H:i:s")." ".$constStr['Week'][date("w")][$constStr['language']]." ".$_SERVER['REMOTE_ADDR'];?></font>
+    <font id="mask" color="#f7f7f9"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></font>
 </body>
 <link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script>
@@ -1378,9 +1378,9 @@ textarea{
             var td2=document.createElement('td');
             tr1.appendChild(td2);
             td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
-            td2.innerHTML='<?php echo $constStr['GetUploadLink'][$constStr['language']]; ?> ...';
+            td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
             if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><?php echo $constStr['UpFileTooLarge'][$constStr['language']]; ?></font>';
+                td2.innerHTML='<font color="red"><?php echo getconstStr('UpFileTooLarge'); ?></font>';
                 uploadbuttonshow();
                 return;
             }
@@ -1396,7 +1396,7 @@ textarea{
                         td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
                         uploadbuttonshow();
                     } else {
-                        td2.innerHTML='<?php echo $constStr['UploadStart'][$constStr['language']]; ?> ...';
+                        td2.innerHTML='<?php echo getconstStr('UploadStart'); ?> ...';
                         binupfile(file,html['uploadUrl'],timea+'_'+i);
                     }
                 }
@@ -1450,9 +1450,9 @@ function binupfile(file,url,tdnum){
                     asize = newstartsize;
 <?php } ?>
                     if (newstartsize==0) {
-                        StartStr='<?php echo $constStr['UploadStartAt'][$constStr['language']]; ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     } else {
-                        StartStr='<?php echo $constStr['LastUpload'][$constStr['language']]; ?>'+size_format(newstartsize)+ '<br><?php echo $constStr['ThisTime'][$constStr['language']].$constStr['UploadStartAt'][$constStr['language']]; ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     }
                     var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                     if (totalsize>200*1024*1024) chunksize=10*1024*1024;
@@ -1485,7 +1485,7 @@ function binupfile(file,url,tdnum){
                                 var tmptime = new Date();
                                 var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<?php echo $constStr['Upload'][$constStr['language']]; ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo $constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo $constStr['CurrentSpeed'][$constStr['language']]; ?> '+size_format(tmpspeed)+'/s <?php echo $constStr['Expect'][$constStr['language']]; ?> '+remaintime.toFixed(1)+'s';
+                                label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
                             }
                         }
                         var C_starttime = new Date();
@@ -1513,7 +1513,7 @@ function binupfile(file,url,tdnum){
                                     if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
                                     if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
                                     if (filename=='') {
-                                        alert('<?php echo $constStr['UploadErrorUpAgain'][$constStr['language']]; ?>');
+                                        alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                         uploadbuttonshow();
                                         return;
                                     }
@@ -1525,13 +1525,13 @@ function binupfile(file,url,tdnum){
                                 }
 <?php } ?>
                                 EndTime=new Date();
-                                MiddleStr = '<?php echo $constStr['EndAt'][$constStr['language']]; ?>:'+EndTime.toLocaleString()+'<br>';
+                                MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'<br>';
                                 if (newstartsize==0) {
-                                    MiddleStr += '<?php echo $constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 } else {
-                                    MiddleStr += '<?php echo $constStr['ThisTime'][$constStr['language']].$constStr['AverageSpeed'][$constStr['language']]; ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin'] && !$_SERVER['user']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo $constStr['UploadComplete'][$constStr['language']]; ?></font>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin'] && !$_SERVER['user']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo getconstStr('UploadComplete'); ?></font>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <?php if ($_SERVER['admin']  || $_SERVER['user'] ) { ?>
@@ -1551,7 +1551,7 @@ function binupfile(file,url,tdnum){
                     }
                 } else {
                     if (window.location.pathname.indexOf('%23')>0||file.name.indexOf('%23')>0) {
-                        label.innerHTML='<font color="red"><?php echo $constStr['UploadFail23'][$constStr['language']]; ?></font>';
+                        label.innerHTML='<font color="red"><?php echo getconstStr('UploadFail23'); ?></font>';
                     } else {
                         label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
                     }
@@ -1569,7 +1569,7 @@ function binupfile(file,url,tdnum){
     function enableedit(obj) {
         document.getElementById('txt-a').readOnly=!document.getElementById('txt-a').readOnly;
         //document.getElementById('txt-editbutton').innerHTML=(document.getElementById('txt-editbutton').innerHTML=='取消编辑')?'点击后编辑':'取消编辑';
-        obj.innerHTML=(obj.innerHTML=='<?php echo $constStr['CancelEdit'][$constStr['language']]; ?>')?'<?php echo $constStr['ClicktoEdit'][$constStr['language']]; ?>':'<?php echo $constStr['CancelEdit'][$constStr['language']]; ?>';
+        obj.innerHTML=(obj.innerHTML=='<?php echo getconstStr('CancelEdit'); ?>')?'<?php echo getconstStr('ClicktoEdit'); ?>':'<?php echo getconstStr('CancelEdit'); ?>';
         document.getElementById('txt-save').style.display=document.getElementById('txt-save').style.display==''?'none':'';
     }
 <?php   if (!$_GET['preview']) {?>
@@ -1586,7 +1586,7 @@ function binupfile(file,url,tdnum){
             if (str=='') {
                 str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
                 if (str=='') {
-                    alert('<?php echo $constStr['GetFileNameFail'][$constStr['language']]; ?>');
+                    alert('<?php echo getconstStr('GetFileNameFail'); ?>');
                     operatediv_close(action);
                     return;
                 }
