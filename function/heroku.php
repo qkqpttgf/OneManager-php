@@ -169,7 +169,7 @@ language:<br>';
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
         if (getConfig('APIKey')=='') $html .= '
-        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' API Key</a><br>
+        <a href="https://dashboard.heroku.com/account" target="_blank">'.getconstStr('Create').' API Key</a><br>
         <label>API Key:<input name="APIKey" type="text" placeholder="" size=""></label><br>';
         $html .= '
         <label>admin:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
