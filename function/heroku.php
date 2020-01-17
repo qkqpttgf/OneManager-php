@@ -1,110 +1,39 @@
 <?php
 
-function printInput($event, $context)
+function getpath()
 {
-    if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+30) . '...Too Long!...' . substr($event['body'],-50);
-    echo urldecode(json_encode($event, JSON_PRETTY_PRINT)) . '
- 
-' . urldecode(json_encode($context, JSON_PRETTY_PRINT)) . '
- 
-';
+    $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
+    $p = strpos($_SERVER['REQUEST_URI'],'?');
+    if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
+    else $path = $_SERVER['REQUEST_URI'];
+    $path = path_format( substr($path, strlen($_SERVER['base_path'])) );
+    return $path;
+    //return spurlencode($path, '/');
 }
 
-function GetGlobalVariable($event)
+function getGET()
 {
-    $_GET = $event['queryString'];
-    $postbody = explode("&",$event['body']);
-    foreach ($postbody as $postvalues) {
-        $pos = strpos($postvalues,"=");
-        $_POST[urldecode(substr($postvalues,0,$pos))]=urldecode(substr($postvalues,$pos+1));
-    }
-    $cookiebody = explode("; ",$event['headers']['cookie']);
-    foreach ($cookiebody as $cookievalues) {
-        $pos = strpos($cookievalues,"=");
-        $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
-    }
-}
-
-function GetPathSetting($event, $context)
-{
-    $_SERVER['function_name'] = $context['function_name'];
-    $_SERVER['namespace'] = $context['namespace'];
-    $host_name = $event['headers']['host'];
-    $serviceId = $event['requestContext']['serviceId'];
-    $public_path = path_format(getenv('public_path'));
-    $private_path = path_format(getenv('private_path'));
-    $domain_path = getenv('domain_path');
-    $tmp_path='';
-    if ($domain_path!='') {
-        $tmp = explode("|",$domain_path);
-        foreach ($tmp as $multidomain_paths){
-            $pos = strpos($multidomain_paths,":");
-            $tmp_path = path_format(substr($multidomain_paths,$pos+1));
-            if (substr($multidomain_paths,0,$pos)==$host_name) $private_path=$tmp_path;
+    $p = strpos($_SERVER['REQUEST_URI'],'?');
+    if ($p>0) {
+        $getstr = substr($_SERVER['REQUEST_URI'], $p+1);
+        $getstrarr = explode("&",$getstr);
+        foreach ($getstrarr as $getvalues) {
+            if ($getvalues != '') {
+                $pos = strpos($getvalues, "=");
+            //echo $pos;
+                if ($pos > 0) {
+                    $getarry[urldecode(substr($getvalues, 0, $pos))] = urldecode(substr($getvalues, $pos + 1));
+                } else {
+                    $getarry[urldecode($getvalues)] = true;
+                }
+            }
         }
     }
-    // public_path is not Parent Dir of private_path. public_path 不能是 private_path 的上级目录。
-    if ($tmp_path!='') if ($public_path == substr($tmp_path,0,strlen($public_path))) $public_path=$tmp_path;
-    if ($public_path == substr($private_path,0,strlen($public_path))) $public_path=$private_path;
-    if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
-        $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
-        $_SERVER['list_path'] = $public_path;
-        $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
-        $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
-        $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
+    if (isset($getarry)) {
+        return $getarry;
     } else {
-        $_SERVER['base_path'] = $event['requestContext']['path'];
-        $_SERVER['list_path'] = $private_path;
-        $_SERVER['Region'] = getenv('Region');
-        $path = substr($event['path'], strlen($event['requestContext']['path']));
+        return [];
     }
-    if (substr($path,-1)=='/') $path=substr($path,0,-1);
-    if (empty($_SERVER['list_path'])) {
-        $_SERVER['list_path'] = '/';
-    } else {
-        $_SERVER['list_path'] = spurlencode($_SERVER['list_path'],'/') ;
-    }
-    $_SERVER['is_guestup_path'] = is_guestup_path($path);
-    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
-    $_SERVER['REMOTE_ADDR'] = $event['requestContext']['sourceIp'];
-    $_SERVER['ajax']=0;
-    if ($event['headers']['x-requested-with']=='XMLHttpRequest') {
-        $_SERVER['ajax']=1;
-    }
-/*
-    $referer = $event['headers']['referer'];
-    $tmpurl = substr($referer,strpos($referer,'//')+2);
-    $refererhost = substr($tmpurl,0,strpos($tmpurl,'/'));
-    if ($refererhost==$host_name) {
-        // Guest only upload from this site. 仅游客上传用，referer不对就空值，无法上传
-        $_SERVER['current_url'] = substr($referer,0,strpos($referer,'//')) . '//' . $host_name.$_SERVER['PHP_SELF'];
-    } else {
-        $_SERVER['current_url'] = '';
-    }
-*/
-    return $path;
-}
-
-
-function getConfig($str)
-{
-    return getenv($str);
-}
-
-function array_value_isnot_null($arr)
-{
-    return $arr!=='';
-}
-
-function setConfig($arr)
-{
-    //$function_name, $Region, $Namespace, $SecretId, $SecretKey
-    $function_name = $_SERVER['function_name'];
-    $Region = $_SERVER['Region'];
-    $Namespace = $_SERVER['namespace'];
-    $SecretId = getConfig('SecretId');
-    $SecretKey = getConfig('SecretKey');
-    return updateEnvironment($arr, $function_name, $Region, $Namespace, $SecretId, $SecretKey);
 }
 
 function get_refresh_token()
@@ -167,17 +96,15 @@ function get_refresh_token()
                 $tmp['client_id'] = $_POST['client_id'];
                 $tmp['client_secret'] = $_POST['client_secret'];
             }
-            $response = setConfig($tmp);
+            $response = json_decode(setConfig($tmp)['body'], true);
             $title = getconstStr('MayinEnv');
             $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install3">';
-            if (isset($response['Error'])) {
-                $html = $response['Error']['Code'] . '<br>
-' . $response['Error']['Message'] . '<br><br>
+            if (isset($response['id'])&&isset($response['message'])) {
+            $html = $response['id'] . '<br>
+' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
-                $title = 'Error';
+<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+            $title = 'Error';
             }
             return message($html, $title, 201);
         }
@@ -186,25 +113,25 @@ namespace:' . $Namespace . '<br>
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
             $tmp['language'] = $_POST['language'];
-            $SecretId = getConfig('SecretId');
-            if ($SecretId=='') {
-                $SecretId = $_POST['SecretId'];
-                $tmp['SecretId'] = $SecretId;
+            $APIKey = getConfig('APIKey');
+            if ($APIKey=='') {
+                $APIKey = $_POST['APIKey'];
+                $tmp['APIKey'] = $APIKey;
             }
-            $SecretKey = getConfig('SecretKey');
-            if ($SecretKey=='') {
-                $SecretKey = $_POST['SecretKey'];
-                $tmp['SecretKey'] = $SecretKey;
-            }
-            echo SetbaseConfig($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-            $response = updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-            if (isset($response['Error'])) {
-                $html = $response['Error']['Code'] . '<br>
-' . $response['Error']['Message'] . '<br><br>
+            $function_name = getConfig('function_name');
+            if ($function_name=='') {
+		        $tmp1 = substr($_SERVER['HTTP_HOST'], 0, strrpos($_SERVER['HTTP_HOST'], '.'));
+		        $maindomain = substr($tmp1, strrpos($tmp1, '.')+1);
+		        if ($maindomain=='herokuapp') $function_name = substr($tmp1, 0, strrpos($tmp1, '.'));
+                else $function_name = 'visit from x.herokuapp.com';
+                $tmp['function_name'] = $function_name;
+	        }
+            $response = json_decode(setHerokuConfig($tmp, $function_name, $APIKey)['body'], true);
+            if (isset($response['id'])&&isset($response['message'])) {
+                $html = $response['id'] . '<br>
+' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
                 $title = 'Error';
             } else {
                 if ($constStr['language']!='zh-cn') {
@@ -240,10 +167,9 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
-        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' SecretId & SecretKey</a><br>
-        <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
-        <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
+        if (getConfig('APIKey')=='') $html .= '
+        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' API Key</a><br>
+        <label>API Key:<input name="APIKey" type="text" placeholder="" size=""></label><br>';
         $html .= '
         <label>admin:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
         $html .= '
@@ -261,7 +187,7 @@ language:<br>';
                 alert(\'input admin\');
                 return false;
             }';
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
+        if (getConfig('APIKey')=='') $html .= '
             if (t.SecretId.value==\'\') {
                 alert(\'input SecretId\');
                 return false;
@@ -282,138 +208,65 @@ language:<br>';
     return message($html, $title, 201);
 }
 
-function post2url($url, $data)
+function getConfig($str)
 {
+    return getenv($str);
+}
+
+function array_value_isnot_null($arr)
+{
+    return $arr!=='';
+}
+
+function setConfig($arr)
+{
+    return setHerokuConfig($arr, getConfig('function_name'), getConfig('APIKey'));
+}
+
+function HerokuAPI($method, $url, $data = '', $apikey)
+{
+    if ($method=='PATCH') {
+        $headers['Content-Type'] = 'application/json';
+    } 
+    $headers['Authorization'] = 'Bearer ' . $apikey;
+    $headers['Accept'] = 'application/vnd.heroku+json; version=3';
+    //if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
+    //if (!isset($headers['Referer'])) $headers['Referer'] = $url;
+    $sendHeaders = array();
+    foreach ($headers as $headerName => $headerVal) {
+        $sendHeaders[] = $headerName . ': ' . $headerVal;
+    }
+    error_log($method . $url . $data . $apikey);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_POST, 1);
-    curl_setopt($ch, CURLOPT_POSTFIELDS, $data);
+    curl_setopt($ch, CURLOPT_CUSTOMREQUEST,$method);
+    curl_setopt($ch, CURLOPT_POSTFIELDS,$data);
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
-    $response = curl_exec($ch);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
+    $response['body'] = curl_exec($ch);
+    $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
-    //echo $response;
+    error_log($response['stat'].'
+'.$response['body'].'
+');
     return $response;
 }
 
-function ReorganizeDate($arr)
+function getHerokuConfig($function_name, $apikey)
 {
-    $str = '';
-    ksort($arr);
-    foreach ($arr as $k1 => $v1) {
-        $str .= '&' . $k1 . '=' . $v1;
-    }
-    $str = substr($str, 1); // remove first '&'. 去掉第一个&
-    return $str;
+    return HerokuAPI('GET', 'https://api.heroku.com/apps/' . $function_name . '/config-vars', '', $apikey);
 }
 
-function getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey)
+function setHerokuConfig($env, $function_name, $apikey)
 {
-    //$meth = 'GET';
-    $meth = 'POST';
-    $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'GetFunction';
-    $tmpdata['FunctionName'] = $function_name;
-    $tmpdata['Namespace'] = $Namespace;
-    $tmpdata['Nonce'] = time();
-    $tmpdata['Region'] = $Region;
-    $tmpdata['SecretId'] = $SecretId;
-    $tmpdata['Timestamp'] = time();
-    $tmpdata['Token'] = '';
-    $tmpdata['Version'] = '2018-04-16';
-    $data = ReorganizeDate($tmpdata);
-    $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
-    //echo urlencode($signStr);
-    //return file_get_contents('https://'.$url.'&Signature='.urlencode($signStr));
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
+    $data = json_encode($env);
+    return HerokuAPI('PATCH', 'https://api.heroku.com/apps/' . $function_name . '/config-vars', $data, $apikey);
 }
-
-function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
-{
-    //print_r($Envs);
-    //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
-    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
-    foreach ($tmp as $tmp1) {
-        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
-    }
-    foreach ($Envs as $key1 => $value1) {
-        $tmp_env[$key1] = $value1;
-    }
-    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
-    $tmp_env['Region'] = $Region;
-    ksort($tmp_env);
-
-    $i = 0;
-    foreach ($tmp_env as $key1 => $value1) {
-        $tmpdata['Environment.Variables.'.$i.'.Key'] = $key1;
-        $tmpdata['Environment.Variables.'.$i.'.Value'] = $value1;
-        $i++;
-    }
-    $meth = 'POST';
-    $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'UpdateFunctionConfiguration';
-    $tmpdata['FunctionName'] = $function_name;
-    $tmpdata['Namespace'] = $Namespace;
-    $tmpdata['Nonce'] = time();
-    $tmpdata['Region'] = $Region;
-    $tmpdata['SecretId'] = $SecretId;
-    $tmpdata['Timestamp'] = time();
-    $tmpdata['Token'] = '';
-    $tmpdata['Version'] = '2018-04-16';
-    $data = ReorganizeDate($tmpdata);
-    $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
-    //echo urlencode($signStr);
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
-}
-
-function SetbaseConfig($function_name, $Region, $Namespace, $SecretId, $SecretKey)
-{
-    $meth = 'POST';
-    $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'UpdateFunctionConfiguration';
-    $tmpdata['FunctionName'] = $function_name;
-    $tmpdata['Description'] = 'Onedrive index in SCF. SCF上的Onedrive目录网站程序。 by 逸笙';
-    $tmpdata['MemorySize'] = 128;
-    $tmpdata['Timeout'] = 30;
-    $tmpdata['Namespace'] = $Namespace;
-    $tmpdata['Nonce'] = time();
-    $tmpdata['Region'] = $Region;
-    $tmpdata['SecretId'] = $SecretId;
-    $tmpdata['Timestamp'] = time();
-    $tmpdata['Token'] = '';
-    $tmpdata['Version'] = '2018-04-16';
-    $data = ReorganizeDate($tmpdata);
-    $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
-    //echo urlencode($signStr);
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
-}
-
-function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey)
-{
-    $meth = 'POST';
-    $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = 'https://github.com/qkqpttgf/OneDrive_SCF';
-    $tmpdata['CodeSource'] = 'Git';
-    $tmpdata['FunctionName'] = $function_name;
-    $tmpdata['Handler'] = 'index.main_handler';
-    $tmpdata['Namespace'] = $Namespace;
-    $tmpdata['Nonce'] = time();
-    $tmpdata['Region'] = $Region;
-    $tmpdata['SecretId'] = $SecretId;
-    $tmpdata['Timestamp'] = time();
-    $tmpdata['Token'] = '';
-    $tmpdata['Version'] = '2018-04-16';
-    $data = ReorganizeDate($tmpdata);
-    $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
-    //echo urlencode($signStr);
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
-}
-
 
 function EnvOpt($function_name, $needUpdate = 0)
 {
@@ -426,8 +279,8 @@ function EnvOpt($function_name, $needUpdate = 0)
     ];
     asort($constEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
-    if ($_POST['updateProgram']==getconstStr('updateProgram')) {
-        $response = json_decode(updateProgram($function_name, $Region, $namespace), true)['Response'];
+    /*if ($_POST['updateProgram']==getconstStr('updateProgram')) {
+        $response = json_decode(updataProgram($function_name, $Region, $namespace), true)['Response'];
         if (isset($response['Error'])) {
             $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
@@ -442,7 +295,7 @@ namespace:' . $namespace . '<br>
             $title = getconstStr('Setup');
         }
         return message($html, $title);
-    }
+    }*/
     if ($_POST['submit1']) {
         foreach ($_POST as $k => $v) {
             if (in_array($k, $constEnv)) {
@@ -460,20 +313,13 @@ namespace:' . $namespace . '<br>
             $tmp['domain_path'] = $tmparr;
         }
         $response = setConfig($tmp);
-        if (isset($response['Error'])) {
-                $html = $response['Error']['Code'] . '<br>
-' . $response['Error']['Message'] . '<br><br>
-function_name:' . $_SERVER['function_name'] . '<br>
-Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
+        if (!$response) {
+            $html = $response . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
-                $title = 'Error';
-            } else {
-                sleep(3);
+            $title = 'Error';
+        } else {
             $html .= '<script>location.href=location.href</script>';
-            $title = getconstStr('Setup');
         }
-        return message($html, $title);
     }
     if ($_GET['preview']) {
         $preurl = $_SERVER['PHP_SELF'] . '?preview';
@@ -483,14 +329,14 @@ namespace:' . $Namespace . '<br>
     $html .= '
         <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;
         <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
-    if ($needUpdate) {
+    /*if ($needUpdate) {
         $html .= '<pre>' . $_SERVER['github_version'] . '</pre>
         <form action="" method="post">
             <input type="submit" name="updateProgram" value="'.getconstStr('updateProgram').'">
         </form>';
     } else {
         $html .= getconstStr('NotNeedUpdate');
-    }
+    }*/
     $html .= '
     <form action="" method="post">
     <table border=1 width=100%>';

@@ -375,7 +375,7 @@ function main($path)
         }
         if (getConfig('admin')!='') {
             if ($_POST['password1']==getConfig('admin')) {
-                return adminform($_SERVER['function_name'].'admin',md5($_POST['password1']),$url);
+                return adminform('admin',md5($_POST['password1']),$url);
             } else return adminform();
         } else {
             return output('', 302, [ 'Location' => $url ]);
