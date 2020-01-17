@@ -8,6 +8,17 @@ if ($_SERVER['USER']==='qcloud') {
     include 'function/scf.php';
 } elseif ($_SERVER['HEROKU_APP_DIR']==='/app') {
     include 'function/heroku.php';
+    $path = getpath();
+    //echo 'path:'. $path;
+    $_GET = getGET();
+    //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
+    $re = main($path);
+    $sendHeaders = array();
+    foreach ($re['headers'] as $headerName => $headerVal) {
+        header($headerName . ': ' . $headerVal, true);
+    }
+    http_response_code($re['statusCode']);
+    echo $re['body'];
 } else {
     include 'function/normal.php';
     $path = getpath();
