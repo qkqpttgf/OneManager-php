@@ -397,7 +397,7 @@ function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKe
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = 'https://github.com/qkqpttgf/OneDrive_SCF';
+    $tmpdata['Code.GitUrl'] = 'https://github.com/qkqpttgf/OneManager-php';
     $tmpdata['CodeSource'] = 'Git';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Handler'] = 'index.main_handler';
@@ -427,7 +427,7 @@ function EnvOpt($function_name, $needUpdate = 0)
     asort($constEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if ($_POST['updateProgram']==getconstStr('updateProgram')) {
-        $response = json_decode(updateProgram($function_name, $Region, $namespace), true)['Response'];
+        $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'))['body'], true)['Response'];
         if (isset($response['Error'])) {
             $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
