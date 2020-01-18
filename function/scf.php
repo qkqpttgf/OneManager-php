@@ -67,21 +67,7 @@ function GetPathSetting($event, $context)
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['REMOTE_ADDR'] = $event['requestContext']['sourceIp'];
-    $_SERVER['ajax']=0;
-    if ($event['headers']['x-requested-with']=='XMLHttpRequest') {
-        $_SERVER['ajax']=1;
-    }
-/*
-    $referer = $event['headers']['referer'];
-    $tmpurl = substr($referer,strpos($referer,'//')+2);
-    $refererhost = substr($tmpurl,0,strpos($tmpurl,'/'));
-    if ($refererhost==$host_name) {
-        // Guest only upload from this site. 仅游客上传用，referer不对就空值，无法上传
-        $_SERVER['current_url'] = substr($referer,0,strpos($referer,'//')) . '//' . $host_name.$_SERVER['PHP_SELF'];
-    } else {
-        $_SERVER['current_url'] = '';
-    }
-*/
+    $_SERVER['HTTP_X_REQUESTED_WITH'] = $event['headers']['x-requested-with'];
     return $path;
 }
 
