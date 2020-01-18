@@ -129,26 +129,28 @@
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
-                    $DPvideo='';
+                    $DPvideo = '';
+                    $pdfurl = '';
                     if (in_array($ext, $exts['img'])) {
-                        echo '
-                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
+                        echo '                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
 ';
                     } elseif (in_array($ext, $exts['video'])) {
                     //echo '<video src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></video>';
                         $DPvideo=$files['@microsoft.graph.downloadUrl'];
-                        echo '<div id="video-a0"></div>';
+                        echo '                        <div id="video-a0"></div>
+';
                     } elseif (in_array($ext, $exts['music'])) {
-                        echo '
-                        <audio src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></audio>
+                        echo '                        <audio src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></audio>
 ';
                     } elseif (in_array($ext, ['pdf'])) {
-                        echo '
+                        /*echo '
                         <embed src="' . $files['@microsoft.graph.downloadUrl'] . '" type="application/pdf" width="100%" height=800px">
+';*/
+                        $pdfurl = $files['@microsoft.graph.downloadUrl'];
+                        echo '                        <div id="pdf-d"></div>
 ';
                     } elseif (in_array($ext, $exts['office'])) {
-                        echo '
-                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
+                        echo '                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
 ';
                     } elseif (in_array($ext, $exts['txt'])) {
                         $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl'])['body']);
@@ -163,8 +165,7 @@
 <?php                   if ($_SERVER['admin']) echo '</form>'; ?>
                         </div>
 <?php               } elseif (in_array($ext, ['md'])) {
-                        echo '
-                        <div class="markdown-body" id="readme">
+                        echo '                        <div class="markdown-body" id="readme">
                             <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
                         </div>
 ';
@@ -469,6 +470,7 @@
 <link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script>
 <?php if (isset($files['folder']) && $_SERVER['is_guestup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
+<?php if ($pdfurl!='') { ?><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><?php } ?>
 <script type="text/javascript">
     var root = '<?php echo $_SERVER["base_path"]; ?>';
     function path_format(path) {
@@ -580,7 +582,37 @@
         }
     }
     addVideos(['<?php echo $DPvideo;?>']);
-<?php   } 
+<?php   }
+        if ($pdfurl!='') { ?>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
+    var loadingTask = pdfjsLib.getDocument({ url: '<?php echo $pdfurl;?>', });
+    loadingTask.promise.then(function(pdf) {
+        var pagenum =  pdf.numPages;
+        var pdfContainer = document.getElementById('pdf-d');
+        for (var i=1;i<=pagenum;i++) {
+            var canvasNew = document.createElement('canvas');
+            canvasNew.id = 'pdf-c'+i;
+            pdfContainer.appendChild(canvasNew);
+            renderpage(pdf,i);
+        }
+    });
+    function renderpage(pdf,i)
+    {
+        pdf.getPage(i).then(function(page) { 
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale, });
+            var canvas = document.getElementById('pdf-c'+i);
+            var context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport,
+            };
+            page.render(renderContext);
+        });
+    }
+<?php   }
     } else { // view folder. 不预览，即浏览目录时?>
     var sort=0;
     function showthumbnails(obj) {
