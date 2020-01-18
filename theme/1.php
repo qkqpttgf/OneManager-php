@@ -1563,7 +1563,7 @@ function binupfile(file,url,tdnum){
 <?php }
     if ($_SERVER['admin']) { // admin login. 管理登录后 ?>
     function logout() {
-        document.cookie = "<?php echo $_SERVER['function_name'] . 'admin';?>=; path=/";
+        document.cookie = "admin=; path=/";
         location.href = location.href;
     }
     function enableedit(obj) {
