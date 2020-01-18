@@ -304,7 +304,7 @@ namespace:' . $namespace . '<br>
                 $tmp[$k] = $v;
             }
         }
-        if ($tmp['domain_path']!='') {
+        /*if ($tmp['domain_path']!='') {
             $tmp1 = explode("|",$tmp['domain_path']);
             $tmparr = [];
             foreach ($tmp1 as $multidomain_paths){
@@ -312,7 +312,7 @@ namespace:' . $namespace . '<br>
                 if ($pos>0) $tmparr[substr($multidomain_paths, 0, $pos)] = path_format(substr($multidomain_paths, $pos+1));
             }
             $tmp['domain_path'] = $tmparr;
-        }
+        }*/
         $response = setConfig($tmp);
         if (!$response) {
             $html = $response . '<br>
@@ -371,7 +371,7 @@ namespace:' . $namespace . '<br>
                 </select>
             </td>
         </tr>';
-        } elseif ($key=='domain_path') {
+        } /*elseif ($key=='domain_path') {
             $tmp = getConfig($key);
             $domain_path = '';
             foreach ($tmp as $k1 => $v1) {
@@ -383,7 +383,7 @@ namespace:' . $namespace . '<br>
             <td><label>' . $key . '</label></td>
             <td width=100%><input type="text" name="' . $key .'" value="' . $domain_path . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
-        } else $html .= '
+        }*/ else $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
