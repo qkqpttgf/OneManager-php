@@ -1,0 +1,7 @@
+{
+  "name": "herokuOnedrive",
+  "description": "Deploy herokuOnedrive to heroku",
+  "website": "https://github.com/qkqpttgf/herokuOnedrive",
+  "repository": "https://github.com/qkqpttgf/herokuOnedrive",
+  "success_url": "/"
+}
