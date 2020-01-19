@@ -363,7 +363,8 @@ namespace:' . $namespace . '<br>
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%>
-                <select name="' . $key .'">';
+                <select name="' . $key .'">
+                <option value=""></option>';
             foreach ($theme_arr as $v1) {
                 if ($v1!='.' && $v1!='..') $html .= '
                     <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
