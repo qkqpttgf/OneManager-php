@@ -300,8 +300,7 @@ namespace:' . $namespace . '<br>
     if ($_POST['submit1']) {
         foreach ($_POST as $k => $v) {
             if (in_array($k, $constEnv)) {
-                //if (!(getConfig($k)==''&&$v=='')) 
-                $tmp[$k] = $v;
+                if (!(getConfig($k)==''&&$v=='')) $tmp[$k] = $v;
             }
         }
         /*if ($tmp['domain_path']!='') {
