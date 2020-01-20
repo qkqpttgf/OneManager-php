@@ -411,6 +411,9 @@ namespace:' . $namespace . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
             $title = 'Error';
         } else {
+            $trynum = 0;
+            while( json_decode(getfunctioninfo($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
             $html .= getconstStr('UpdateSuccess') . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
             $title = getconstStr('Setup');
