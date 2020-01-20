@@ -107,7 +107,7 @@ function get_refresh_token()
             setConfig([ 'refresh_token' => $tmptoken ]);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             $trynum = 0;
-            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;
             $str .= '
             <meta http-equiv="refresh" content="2;URL=' . $url . '">';
