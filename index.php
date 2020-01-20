@@ -45,7 +45,7 @@ function main_handler($event, $context)
     unset($_COOKIE);
     unset($_SERVER);
     GetGlobalVariable($event);
-    echo '<pre>'. json_encode($_COOKIE, JSON_PRETTY_PRINT).'</pre>';
+    //echo '<pre>'. json_encode($_COOKIE, JSON_PRETTY_PRINT).'</pre>';
     config_oauth();
     $path = GetPathSetting($event, $context);
     return main($path);
