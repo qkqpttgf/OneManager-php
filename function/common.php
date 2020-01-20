@@ -72,11 +72,13 @@ function getListpath($domain)
         $tmp = explode("|",$domain_path1);
         foreach ($tmp as $multidomain_paths){
             $pos = strpos($multidomain_paths,":");
-            $domain1 = substr($multidomain_paths,0,$pos);
-            $tmp_path = path_format(substr($multidomain_paths,$pos+1));
-            $domain_path[$domain1] = $tmp_path;
-            if ($public_path=='') $public_path = $tmp_path;
+            if ($pos>0) {
+                $domain1 = substr($multidomain_paths,0,$pos);
+                $tmp_path = path_format(substr($multidomain_paths,$pos+1));
+                $domain_path[$domain1] = $tmp_path;
+                if ($public_path=='') $public_path = $tmp_path;
             //if (substr($multidomain_paths,0,$pos)==$host_name) $private_path=$tmp_path;
+            }
         }
     }
     if (isset($domain_path[$domain])) return spurlencode($domain_path[$domain],'/');
