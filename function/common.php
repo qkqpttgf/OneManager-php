@@ -65,18 +65,22 @@ function config_oauth()
 
 function getListpath($domain)
 {
-    $domain_path = getConfig('domain_path');
-    /*$tmp_path='';
-    if ($domain_path!='') {
-        $tmp = explode("|",$domain_path);
+    $domain_path1 = getConfig('domain_path');
+    $public_path = getConfig('public_path');
+    $tmp_path='';
+    if ($domain_path1!='') {
+        $tmp = explode("|",$domain_path1);
         foreach ($tmp as $multidomain_paths){
             $pos = strpos($multidomain_paths,":");
+            $domain1 = substr($multidomain_paths,0,$pos);
             $tmp_path = path_format(substr($multidomain_paths,$pos+1));
-            if (substr($multidomain_paths,0,$pos)==$host_name) $private_path=$tmp_path;
+            $domain_path[$domain1] = $tmp_path;
+            if ($public_path=='') $public_path = $tmp_path;
+            //if (substr($multidomain_paths,0,$pos)==$host_name) $private_path=$tmp_path;
         }
-    }*/
+    }
     if (isset($domain_path[$domain])) return spurlencode($domain_path[$domain],'/');
-    return spurlencode(getConfig('public_path'),'/');
+    return spurlencode($public_path,'/');
 }
 
 function path_format($path)
