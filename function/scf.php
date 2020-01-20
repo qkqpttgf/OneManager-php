@@ -153,7 +153,7 @@ function get_refresh_token()
                 $tmp['client_id'] = $_POST['client_id'];
                 $tmp['client_secret'] = $_POST['client_secret'];
             }
-            $response = setConfig($tmp);
+            $response = json_decode( setConfig($tmp), true )['Response'];
             $title = getconstStr('MayinEnv');
             $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install3">';
             if (isset($response['Error'])) {
@@ -161,7 +161,7 @@ function get_refresh_token()
 ' . $response['Error']['Message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
+namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
                 $title = 'Error';
             }
@@ -183,13 +183,19 @@ namespace:' . $Namespace . '<br>
                 $tmp['SecretKey'] = $SecretKey;
             }
             echo SetbaseConfig($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-            $response = updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+            $trynum = 0;
+            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
+            //sleep(10);
+            //$stat = json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response'];
+            //echo $stat['Status'].$stat['StatusDesc'];
+            $response = json_decode( updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
             if (isset($response['Error'])) {
                 $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
+namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
                 $title = 'Error';
             } else {
@@ -445,17 +451,20 @@ namespace:' . $namespace . '<br>
             }
             $tmp['domain_path'] = $tmparr;
         }*/
-        $response = setConfig($tmp);
+        $response = json_decode( setConfig($tmp), true )['Response'];
         if (isset($response['Error'])) {
                 $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $Namespace . '<br>
+namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
                 $title = 'Error';
             } else {
-                sleep(3);
+                $trynum = 0;
+                while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
+                //sleep(3);
             $html .= '<script>location.href=location.href</script>';
             $title = getconstStr('Setup');
         }
