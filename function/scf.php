@@ -30,8 +30,8 @@ function GetPathSetting($event, $context)
     $_SERVER['function_name'] = $context['function_name'];
     $_SERVER['namespace'] = $context['namespace'];
     $host_name = $event['headers']['host'];
+    $_SERVER['HTTP_HOST'] = $host_name;
     $serviceId = $event['requestContext']['serviceId'];
-    $_SERVER['list_path'] = getListpath($host_name);
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
         $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
@@ -43,9 +43,6 @@ function GetPathSetting($event, $context)
         $path = substr($event['path'], strlen($event['requestContext']['path']));
     }
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
-    if (empty($_SERVER['list_path'])) {
-        $_SERVER['list_path'] = '/';
-    }
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['REMOTE_ADDR'] = $event['requestContext']['sourceIp'];
