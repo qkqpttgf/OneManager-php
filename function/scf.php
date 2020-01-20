@@ -31,38 +31,20 @@ function GetPathSetting($event, $context)
     $_SERVER['namespace'] = $context['namespace'];
     $host_name = $event['headers']['host'];
     $serviceId = $event['requestContext']['serviceId'];
-    $public_path = path_format(getenv('public_path'));
-    $private_path = path_format(getenv('private_path'));
-    $domain_path = getenv('domain_path');
-    $tmp_path='';
-    if ($domain_path!='') {
-        $tmp = explode("|",$domain_path);
-        foreach ($tmp as $multidomain_paths){
-            $pos = strpos($multidomain_paths,":");
-            $tmp_path = path_format(substr($multidomain_paths,$pos+1));
-            if (substr($multidomain_paths,0,$pos)==$host_name) $private_path=$tmp_path;
-        }
-    }
-    // public_path is not Parent Dir of private_path. public_path 不能是 private_path 的上级目录。
-    if ($tmp_path!='') if ($public_path == substr($tmp_path,0,strlen($public_path))) $public_path=$tmp_path;
-    if ($public_path == substr($private_path,0,strlen($public_path))) $public_path=$private_path;
+    $_SERVER['list_path'] = getListpath($host_name);
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
-        $_SERVER['list_path'] = $public_path;
         $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
         $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
         $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
     } else {
         $_SERVER['base_path'] = $event['requestContext']['path'];
-        $_SERVER['list_path'] = $private_path;
         $_SERVER['Region'] = getenv('Region');
         $path = substr($event['path'], strlen($event['requestContext']['path']));
     }
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
     if (empty($_SERVER['list_path'])) {
         $_SERVER['list_path'] = '/';
-    } else {
-        $_SERVER['list_path'] = spurlencode($_SERVER['list_path'],'/') ;
     }
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
