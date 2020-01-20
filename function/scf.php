@@ -106,8 +106,11 @@ function get_refresh_token()
         </script>';
             setConfig([ 'refresh_token' => $tmptoken ]);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
+            $trynum = 0;
+            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
             $str .= '
-            <meta http-equiv="refresh" content="5;URL=' . $url . '">';
+            <meta http-equiv="refresh" content="2;URL=' . $url . '">';
             return message($str, getconstStr('WaitJumpIndex'));
         }
         return message('<pre>' . $tmp['body'] . '</pre>', $tmp['stat']);
@@ -165,12 +168,6 @@ namespace:' . $_SERVER['namespace'] . '<br>
                 $tmp['SecretKey'] = $SecretKey;
             }
             echo SetbaseConfig($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-            $trynum = 0;
-            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
-            //sleep(10);
-            //$stat = json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response'];
-            //echo $stat['Status'].$stat['StatusDesc'];
             $response = json_decode( updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
             if (isset($response['Error'])) {
                 $html = $response['Error']['Code'] . '<br>
@@ -309,6 +306,9 @@ function getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $Secret
 function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
     //print_r($Envs);
+    $trynum = 0;
+    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
     //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
     foreach ($tmp as $tmp1) {
@@ -444,7 +444,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
                 $title = 'Error';
             } else {
                 $trynum = 0;
-                while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+                while( json_decode(getfunctioninfo($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;
                 //sleep(3);
             $html .= '<script>location.href=location.href</script>';
