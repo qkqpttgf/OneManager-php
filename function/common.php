@@ -244,19 +244,17 @@ function message($message, $title = 'Message', $statusCode = 200)
 
 function needUpdate()
 {
-    if ($_SERVER['admin']) {
-        $current_ver = file_get_contents(__DIR__ . '/../version');
-        $current_ver = substr($current_ver, strpos($current_ver, '.')+1);
-        $current_ver = explode(urldecode('%0A'),$current_ver)[0];
-        $current_ver = explode(urldecode('%0D'),$current_ver)[0];
-        $github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
-        $github_ver = substr($github_version, strpos($github_version, '.')+1);
-        $github_ver = explode(urldecode('%0A'),$github_ver)[0];
-        $github_ver = explode(urldecode('%0D'),$github_ver)[0];
-        if ($current_ver != $github_ver) {
-            $_SERVER['github_version'] = $github_version;
-            return 1;
-        }
+    $current_ver = file_get_contents(__DIR__ . '/../version');
+    $current_ver = substr($current_ver, strpos($current_ver, '.')+1);
+    $current_ver = explode(urldecode('%0A'),$current_ver)[0];
+    $current_ver = explode(urldecode('%0D'),$current_ver)[0];
+    $github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    $github_ver = substr($github_version, strpos($github_version, '.')+1);
+    $github_ver = explode(urldecode('%0A'),$github_ver)[0];
+    $github_ver = explode(urldecode('%0D'),$github_ver)[0];
+    if ($current_ver != $github_ver) {
+        $_SERVER['github_version'] = $github_version;
+        return 1;
     }
     return 0;
 }
