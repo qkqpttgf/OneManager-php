@@ -175,6 +175,13 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
                 $title = 'Error';
             } else {
+                if (needUpdate()) {
+                    $trynum = 0;
+                    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+'.++$trynum;
+                    updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+                    return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
+                } 
                 if ($constStr['language']!='zh-cn') {
                     $linklang='en-us';
                 } else $linklang='zh-cn';
@@ -398,7 +405,7 @@ function EnvOpt($function_name, $needUpdate = 0)
     asort($constEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if ($_POST['updateProgram']==getconstStr('updateProgram')) {
-        $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'))['body'], true)['Response'];
+        $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
         if (isset($response['Error'])) {
             $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
