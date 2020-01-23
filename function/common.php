@@ -3,14 +3,14 @@
 function getcache($str)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
     return $cache->fetch($str);
 }
 
 function savecache($key, $value, $exp = 3300)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), '.Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
     $cache->save($key, $value, $exp);
 }
 
