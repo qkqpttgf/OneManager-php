@@ -203,16 +203,20 @@ function ConfigWriteable()
 function RewriteEngineOn()
 {
     $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-    $tmpurl=$http_type . $_SERVER['SERVER_NAME'] . path_format($_SERVER['base_path'] . '/config.php');
+    $tmpurl = $http_type . $_SERVER['SERVER_NAME'];
+    //if $_SERVER['SERVER_PORT']
+    $tmpurl .= path_format($_SERVER['base_path'] . '/config.php');
     $tmp = curl_request($tmpurl);
+    if ($tmp['stat']==200) return false;
     if ($tmp['stat']==201) return true; //when install return 201, after installed return 404 or 200;
     return false;
 }
 
 function getConfig($str)
 {
-    include 'config.php';
-    //$s = file_get_contents('config.json');
+    //include 'config.php';
+    $s = file_get_contents('config.php');
+    $configs = substr($s, 18, -2);
     if ($configs!='') {
         $envs = json_decode($configs, true);
         if (isset($envs[$str])) return $envs[$str];
