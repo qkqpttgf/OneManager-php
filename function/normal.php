@@ -259,7 +259,9 @@ function array_value_isnot_null($arr)
 
 function setConfig($arr)
 {
-    include 'config.php';
+    //include 'config.php';
+    $s = file_get_contents('config.php');
+    $configs = substr($s, 18, -2);
     if ($configs!='') $envs = json_decode($configs, true);
     foreach ($arr as $k1 => $v1) {
         $envs[$k1] = $v1;
