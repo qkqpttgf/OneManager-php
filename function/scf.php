@@ -50,7 +50,6 @@ function GetPathSetting($event, $context)
     return $path;
 }
 
-
 function getConfig($str)
 {
     return getenv($str);
@@ -354,8 +353,8 @@ function SetbaseConfig($function_name, $Region, $Namespace, $SecretId, $SecretKe
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionConfiguration';
     $tmpdata['FunctionName'] = $function_name;
-    $tmpdata['Description'] = 'Onedrive index in SCF. SCF上的Onedrive目录网站程序。';
-    $tmpdata['MemorySize'] = 128;
+    $tmpdata['Description'] = 'Onedrive index & manager in SCF.';
+    $tmpdata['MemorySize'] = 64;
     $tmpdata['Timeout'] = 30;
     $tmpdata['Namespace'] = $Namespace;
     $tmpdata['Nonce'] = time();
