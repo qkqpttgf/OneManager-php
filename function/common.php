@@ -857,11 +857,12 @@ function render_list($path, $files)
 
     $theme = getConfig('theme');
     if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
-    include 'theme/'.$theme;
+    $htmlpage = include 'theme/'.$theme;
 
     $html = '<!--
     github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
+    if (isset($htmlpage['statusCode'])) return $htmlpage;
     if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
 }
