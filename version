@@ -1,6 +1,6 @@
-20200129-2050.03
-if there is 'index.html', then do not show file but show the html.
-如果有index.html，就不显示文件列表了，直接显示html内容。
+20200129-2050.04
+if there is 'index.html', then do not show file but show the html, except admin.
+如果有index.html，就不显示文件列表了，直接显示html内容，除非是管理员。
 
 20200120.02
 fix domain_path do not work. domain_path正常工作了。
