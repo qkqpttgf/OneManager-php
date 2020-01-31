@@ -216,7 +216,7 @@
                         if (isset($file['file'])) {
                             if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getConfig('passfile') ) ) {
                                 if (strtolower($file['name']) === 'readme.md') $readme = $file;
-                                if (strtolower($file['name']) === 'index.html') {
+                                if (strtolower($file['name']) === 'index.html' && !$_SERVER['admin']) {
                                     $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
                                     return output($html,200);
                                 }
