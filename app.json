@@ -1,7 +1,7 @@
 {
-  "name": "herokuOnedrive",
-  "description": "Deploy herokuOnedrive to heroku",
-  "website": "https://github.com/qkqpttgf/herokuOnedrive",
-  "repository": "https://github.com/qkqpttgf/herokuOnedrive",
+  "name": "OneManager",
+  "description": "Deploy OneManager to heroku",
+  "website": "https://github.com/qkqpttgf/OneManager-php",
+  "repository": "https://github.com/qkqpttgf/OneManager-php",
   "success_url": "/"
 }
