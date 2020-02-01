@@ -26,7 +26,6 @@ function getconstStr($str)
 
 function config_oauth()
 {
-    global $constStr;
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
     $_SERVER['redirect_uri'] = 'https://scfonedrive.github.io';
@@ -354,7 +353,6 @@ function bigfileupload($path)
 function main($path)
 {
     global $exts;
-    global $constStr;
     config_oauth();
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
@@ -493,7 +491,6 @@ function list_files($path)
 
 function adminform($name = '', $pass = '', $path = '')
 {
-    global $constStr;
     $statusCode = 401;
     $html = '<html><head><title>'.getconstStr('AdminLogin').'</title><meta charset=utf-8></head>';
     if ($name!=''&&$pass!='') {
@@ -526,7 +523,6 @@ function adminform($name = '', $pass = '', $path = '')
 
 function adminoperate($path)
 {
-    global $constStr;
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     $tmparr['statusCode'] = 0;
