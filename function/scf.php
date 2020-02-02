@@ -23,6 +23,7 @@ function GetGlobalVariable($event)
         $pos = strpos($cookievalues,"=");
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
+    $_SERVER['USER'] = 'qcloud';
 }
 
 function GetPathSetting($event, $context)
@@ -100,7 +101,7 @@ function get_refresh_token()
             }
             document.cookie=\'language=; path=/\';
         </script>';
-            setConfig([ 'refresh_token' => $tmptoken ]);
+            setConfig([ 'refresh_token' => $tmptoken, 'token_expires' => time()+30*24*60*60 ]);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             $trynum = 0;
             while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '

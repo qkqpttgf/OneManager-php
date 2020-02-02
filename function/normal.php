@@ -65,7 +65,7 @@ function get_refresh_token()
             }
             document.cookie=\'language=; path=/\';
         </script>';
-            setConfig([ 'refresh_token' => $tmptoken ]);
+            setConfig([ 'refresh_token' => $tmptoken, 'token_expires' => time()+30*24*60*60 ]);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             $str .= '
             <meta http-equiv="refresh" content="5;URL=' . $url . '">';

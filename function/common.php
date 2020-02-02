@@ -17,9 +17,6 @@ function savecache($key, $value, $exp = 3300)
 function getconstStr($str)
 {
     global $constStr;
-    $constStr['language'] = $_COOKIE['language'];
-    if ($constStr['language']=='') $constStr['language'] = getConfig('language');
-    if ($constStr['language']=='') $constStr['language'] = 'en-us';
     if ($constStr[$str][$constStr['language']]!='') return $constStr[$str][$constStr['language']];
     return $constStr[$str]['en-us'];
 }
@@ -353,7 +350,11 @@ function bigfileupload($path)
 function main($path)
 {
     global $exts;
+    global $constStr;
     config_oauth();
+    $constStr['language'] = $_COOKIE['language'];
+    if ($constStr['language']=='') $constStr['language'] = getConfig('language');
+    if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
@@ -363,6 +364,19 @@ function main($path)
 
     $refresh_token = getConfig('refresh_token');
     if (!$refresh_token) return get_refresh_token();
+
+    if (!($_SERVER['access_token'] = getcache('access_token'))) {
+        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
+        if ($response['stat']==200) $ret = json_decode($response['body'], true);
+        if (!isset($ret['access_token'])) {
+            error_log('failed to get access_token. response' . json_encode($ret));
+            throw new Exception($response['stat'].'failed to get access_token.'.$response['body']);
+        }
+        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        $_SERVER['access_token'] = $ret['access_token'];
+        savecache('access_token', $_SERVER['access_token']);
+        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
+    }
 
     if (getConfig('adminloginpage')=='') {
         $adminloginpage = 'admin';
@@ -399,19 +413,6 @@ function main($path)
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
     $_SERVER['retry'] = 0;
-
-    if (!($_SERVER['access_token'] = getcache('access_token'))) {
-        $ret = json_decode(curl_request(
-            $_SERVER['oauth_url'] . 'token',
-            'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token
-        )['body'], true);
-        if (!isset($ret['access_token'])) {
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception('failed to get access_token.');
-        }
-        $_SERVER['access_token'] = $ret['access_token'];
-        savecache('access_token', $_SERVER['access_token']);
-    }
 
     if ($_SERVER['ajax']) {
         if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
