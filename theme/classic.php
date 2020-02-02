@@ -55,17 +55,17 @@
 <?php
     if (getConfig('admin')!='') if (!$_SERVER['admin']) {
         if (getConfig('adminloginpage')=='') { ?>
-    <a onclick="login();"><?php echo getconstStr('Login'); ?></a>
+    <a onclick="login();"><ion-icon name="log-in"></ion-icon><?php echo getconstStr('Login'); ?></a>
 <?php   }
     } else { ?>
-    <li class="operate"><?php echo getconstStr('Operate'); ?><ul>
+    <li class="operate"><ion-icon name="construct"></ion-icon><?php echo getconstStr('Operate'); ?><ul>
 <?php   if (isset($files['folder'])) { ?>
-        <li><a onclick="showdiv(event,'create','');"><?php echo getconstStr('Create'); ?></a></li>
-        <li><a onclick="showdiv(event,'encrypt','');"><?php echo getconstStr('encrypt'); ?></a></li>
-        <li><a href="?RefreshCache"><?php echo getconstStr('RefreshCache'); ?></a></li>
+        <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><?php echo getconstStr('Create'); ?></a></li>
+        <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><?php echo getconstStr('encrypt'); ?></a></li>
+        <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><?php echo getconstStr('RefreshCache'); ?></a></li>
 <?php   } ?>
-        <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><?php echo getconstStr('Setup'); ?></a></li>
-        <li><a onclick="logout()"><?php echo getconstStr('Logout'); ?></a></li>
+        <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
+        <li><a onclick="logout()"><ion-icon name="log-out"></ion-icon><?php echo getconstStr('Logout'); ?></a></li>
     </ul></li>
 <?php
     } ?>
@@ -158,8 +158,9 @@
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
                         <form id="txt-form" action="" method="POST">
-                            <a onclick="enableedit(this);" id="txt-editbutton"><?php echo getconstStr('ClicktoEdit'); ?></a>
-                            <a id="txt-save" style="display:none"><?php echo getconstStr('Save'); ?></a>
+                            <a onclick="document.getElementById('txt-a').readOnly='';document.getElementById('txt-save').style.display='';document.getElementById('txt-editbutton').style.display='none';document.getElementById('txt-cancelbutton').style.display='';" id="txt-editbutton"><ion-icon name="create"></ion-icon><?php echo getconstStr('ClicktoEdit'); ?></a>
+                            <a onclick="document.getElementById('txt-a').readOnly='readonly';document.getElementById('txt-save').style.display='none';document.getElementById('txt-editbutton').style.display='';document.getElementById('txt-cancelbutton').style.display='none';" id="txt-cancelbutton" style="display:none"><ion-icon name="close"></ion-icon><?php echo getconstStr('CancelEdit'); ?></a>&nbsp;&nbsp;&nbsp;
+                            <a id="txt-save" style="display:none"><ion-icon name="save"></ion-icon><?php echo getconstStr('Save'); ?></a>
 <?php                   } ?>
                             <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <?php if ($_SERVER['admin']) echo 'onchange="document.getElementById(\'txt-save\').onclick=function(){document.getElementById(\'txt-form\').submit();}"';?> ><?php echo $txtstr;?></textarea>
 <?php                   if ($_SERVER['admin']) echo '</form>'; ?>
@@ -180,7 +181,7 @@
                     $readme = false; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file" onclick="sortby('a');"><?php echo getconstStr('File'); ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button></th>
+                        <th class="file" onclick="sortby('a');"><?php echo getconstStr('File'); if ($_SERVER['USER']!='qcloud') { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?></th>
                         <th class="updated_at" width="25%" onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></th>
                         <th class="size" width="15%" onclick="sortby('size');"><?php echo getconstStr('Size'); ?></th>
                     </tr>
@@ -193,12 +194,12 @@
                     <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                       if ($_SERVER['admin']) { ?>
-                            <li class="operate"><?php echo getconstStr('Operate'); ?>
+                            <li class="operate"><ion-icon name="construct"></ion-icon><?php echo getconstStr('Operate'); ?>
                             <ul>
-                                <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><?php echo getconstStr('encrypt'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo getconstStr('Rename'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo getconstStr('Move'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo getconstStr('Delete'); ?></a></li>
+                                <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><ion-icon name="lock"></ion-icon><?php echo getconstStr('encrypt'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                       } ?>
@@ -224,11 +225,11 @@
                     <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                           if ($_SERVER['admin']) { ?>
-                            <li class="operate"><?php echo getconstStr('Operate'); ?>
+                            <li class="operate"><ion-icon name="construct"></ion-icon><?php echo getconstStr('Operate'); ?>
                             <ul>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><?php echo getconstStr('Rename'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><?php echo getconstStr('Move'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><?php echo getconstStr('Delete'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                           }
@@ -979,12 +980,6 @@
     function logout() {
         document.cookie = "admin=; path=/";
         location.href = location.href;
-    }
-    function enableedit(obj) {
-        document.getElementById('txt-a').readOnly=!document.getElementById('txt-a').readOnly;
-        //document.getElementById('txt-editbutton').innerHTML=(document.getElementById('txt-editbutton').innerHTML=='取消编辑')?'点击后编辑':'取消编辑';
-        obj.innerHTML=(obj.innerHTML=='<?php echo getconstStr('CancelEdit'); ?>')?'<?php echo getconstStr('ClicktoEdit'); ?>':'<?php echo getconstStr('CancelEdit'); ?>';
-        document.getElementById('txt-save').style.display=document.getElementById('txt-save').style.display==''?'none':'';
     }
 <?php   if (!$_GET['preview']) {?>
     function showdiv(event,action,num) {
