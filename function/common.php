@@ -170,6 +170,8 @@ function encode_str_replace($str)
 
 function gethiddenpass($path,$passfile)
 {
+    $password=getcache($path . '/password');
+    if ($password=='') {
     $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
     if (isset($ispassfile['file'])) {
@@ -178,12 +180,14 @@ function gethiddenpass($path,$passfile)
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
             $password=md5($password);
+            savecache($path . '/password', $password);
             return $password;
         } else {
             //return md5('DefaultP@sswordWhenNetworkError');
             return md5( md5(time()).rand(1000,9999) );
         }
     } else {
+        savecache($path . '/password', 'null');
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
             return gethiddenpass($path,$passfile);
@@ -191,7 +195,15 @@ function gethiddenpass($path,$passfile)
             return '';
         }
     }
-    return md5('DefaultP@sswordWhenNetworkError');
+    } elseif ($password==='null') {
+        if ($path !== '' ) {
+            $path = substr($path,0,strrpos($path,'/'));
+            return gethiddenpass($path,$passfile);
+        } else {
+            return '';
+        }
+    } else return $password;
+    // return md5('DefaultP@sswordWhenNetworkError');
 }
 
 function get_timezone($timezone = '8')
@@ -308,6 +320,8 @@ function get_thumbnails_url($path = '/')
 {
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
+    $thumb_url = getcache($path);
+    if ($thumb_url!='') return output($thumb_url);
     $url = $_SERVER['api_url'];
     if ($path !== '/') {
         $url .= ':' . $path;
@@ -315,7 +329,10 @@ function get_thumbnails_url($path = '/')
     }
     $url .= ':/thumbnails/0/medium';
     $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-    if (isset($files['url'])) return output($files['url']);
+    if (isset($files['url'])) {
+        savecache($path, $files['url']);
+        return output($files['url']);
+    }
     return output('', 404);
 }
 
@@ -606,6 +623,7 @@ function adminoperate($path)
     }
     if ($_GET['RefreshCache']) {
         //savecache('path_' . $path1, json_decode('{}',true), 1);
+        savecache($path . '/password', '', 1);
         return output('<meta http-equiv="refresh" content="2;URL=./">'.getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
