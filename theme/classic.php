@@ -30,7 +30,7 @@
         .list-table tr:first-child{background:#fff}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
-        .list-table .file ion-icon{font-size:15px;margin-right:5px;vertical-align:bottom}
+        .list-table .file ion-icon{font-size:15px;/*margin-right:5px;*/vertical-align:bottom}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;list-style:none;}
@@ -365,7 +365,7 @@
 <?php
     if ($_SERVER['admin']) {
         if (!$_GET['preview']) { ?>
-    <div>
+    <div style="word-break: break-all;word-wrap: break-word;">
         <div id="rename_div" class="operatediv" style="display:none">
             <div>
                 <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
@@ -1025,7 +1025,12 @@
             document.getElementById(action + '_div').style.top=(window.innerHeight-document.getElementById(action + '_div').offsetHeight)/2+$scrollY +'px';
         } else {
             if ($x + document.getElementById(action + '_div').offsetWidth > document.body.clientWidth) {
-                document.getElementById(action + '_div').style.left=document.body.clientWidth-document.getElementById(action + '_div').offsetWidth+'px';
+                if (document.getElementById(action + '_div').offsetWidth > document.body.clientWidth) {
+                    document.getElementById(action + '_div').offsetWidth=document.body.clientWidth+'px';
+                    document.getElementById(action + '_div').style.left='0px';
+                } else {
+                    document.getElementById(action + '_div').style.left=document.body.clientWidth-document.getElementById(action + '_div').offsetWidth+'px';
+                }
             } else {
                 document.getElementById(action + '_div').style.left=$x+'px';
             }
