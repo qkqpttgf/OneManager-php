@@ -10,7 +10,7 @@ How to Install:
     让代码中的config.php文件程序可读写，推荐chmod 666 config.php。  
     5.View the website in chrome or other.  
     在浏览器中访问。  
-    6.Follow the guide, band your onedrive.  
+    6.Follow the guide, bind your onedrive.  
     根据引导，绑定你的OneDrive。  
 
 # Deploy to SCF  
@@ -23,7 +23,7 @@ DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/t
 # Deploy to heroku  
 Official: https://heroku.com  
 
-How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect github.  
+How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
 DEMO:  https://herooneindex.herokuapp.com/  
 
