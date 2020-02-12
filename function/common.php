@@ -137,6 +137,7 @@ function curl_request($url, $data = false, $headers = [])
     $response['body'] = curl_exec($ch);
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
+    if ($response['stat']==0) return curl_request($url, $data, $headers);
     return $response;
 }
 
@@ -624,7 +625,7 @@ function adminoperate($path)
     if ($_GET['RefreshCache']) {
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         savecache($path . '/password', '', 1);
-        return output('<meta http-equiv="refresh" content="2;URL=./">'.getconstStr('RefreshCache'), 302);
+        return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
 }
