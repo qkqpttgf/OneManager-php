@@ -214,11 +214,6 @@ function getConfig($str)
     return getenv($str);
 }
 
-function array_value_isnot_null($arr)
-{
-    return $arr!=='';
-}
-
 function setConfig($arr)
 {
     return setHerokuConfig($arr, getConfig('function_name'), getConfig('APIKey'));
