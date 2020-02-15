@@ -1,3 +1,5 @@
+QQ Group: 943919989  
+
 # Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
 How to Install:  
     1.Start web service on your server (httpd or other), make sure you can visit it.  
