@@ -56,11 +56,6 @@ function getConfig($str)
     return getenv($str);
 }
 
-function array_value_isnot_null($arr)
-{
-    return $arr!=='';
-}
-
 function setConfig($arr)
 {
     //$function_name, $Region, $Namespace, $SecretId, $SecretKey
@@ -181,7 +176,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
 '.++$trynum;
                     updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
                     return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
-                } 
+                }
                 if ($constStr['language']!='zh-cn') {
                     $linklang='en-us';
                 } else $linklang='zh-cn';
