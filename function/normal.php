@@ -252,11 +252,6 @@ function getConfig($str)
     */
 }
 
-function array_value_isnot_null($arr)
-{
-    return $arr!=='';
-}
-
 function setConfig($arr)
 {
     //include 'config.php';
