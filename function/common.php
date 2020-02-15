@@ -112,6 +112,11 @@ function is_guestup_path($path)
     return 0;
 }
 
+function array_value_isnot_null($arr)
+{
+    return $arr!=='';
+}
+
 function curl_request($url, $data = false, $headers = [])
 {
     if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
@@ -146,6 +151,7 @@ function clearbehindvalue($path,$page1,$maxpage,$pageinfocache)
     for ($page=$page1+1;$page<$maxpage;$page++) {
         $pageinfocache['nextlink_' . $path . '_page_' . $page] = '';
     }
+    $pageinfocache = array_filter($pageinfocache, 'array_value_isnot_null');
     return $pageinfocache;
 }
 
@@ -392,7 +398,7 @@ function main($path)
         }
         error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         $_SERVER['access_token'] = $ret['access_token'];
-        savecache('access_token', $_SERVER['access_token']);
+        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
         if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
     }
 
