@@ -1,7 +1,10 @@
+20200215-1850.07
+fix: head.md not show if no readme.md.
+修复当没有readme的时候就不显示head的问题。
+
 20200215-1700.06
 classic theme can read the head.md file now.
 classic主题可以处理head.md文件了。
-
 20200202-2010.05
 refresh token expires in 90 day, save a new token per month. classic theme add some icon for admin.
 refresh token 90天过期，所以每月保存一个新的token。classic主题加了点管理图标。
