@@ -90,7 +90,7 @@
     <h1 class="title">
         <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
     </h1>
-    <div class="list-wrapper">
+    <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
 <?php
@@ -222,6 +222,7 @@
                         // Files
                         if (isset($file['file'])) {
                             if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getConfig('passfile') ) ) {
+                                if (strtolower($file['name']) === 'head.md') $head = $file;
                                 if (strtolower($file['name']) === 'readme.md') $readme = $file;
                                 if (strtolower($file['name']) === 'index.html' && !$_SERVER['admin']) {
                                     $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
@@ -325,6 +326,24 @@
                     $statusCode=500;
                     echo 'Unknown path or file.';
                     echo json_encode($files, JSON_PRETTY_PRINT);
+                }
+                if ($head) {
+                    echo '
+            </div>
+        </div>
+    </div>
+    <div class="list-wrapper" id="head-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <svg class="octicon octicon-book" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path fill-rule="evenodd" d="M3 5h4v1H3V5zm0 3h4V7H3v1zm0 2h4V9H3v1zm11-5h-4v1h4V5zm0 2h-4v1h4V7zm0 2h-4v1h4V9zm2-6v9c0 .55-.45 1-1 1H9.5l-1 1-1-1H2c-.55 0-1-.45-1-1V3c0-.55.45-1 1-1h5.5l1 1 1-1H15c.55 0 1 .45 1 1zm-8 .5L7.5 3H2v9h6V3.5zm7-.5H9.5l-.5.5V12h6V3z"></path></svg>
+                    <span style="line-height: 16px;vertical-align: top;">'.$head['name'].'</span>
+                    <div class="markdown-body" id="head">
+                        <textarea id="head-md" style="display:none;">' . curl_request(fetch_files(spurlencode(path_format($path . '/' .$head['name']),'/'))['@microsoft.graph.downloadUrl'])['body'] . '
+                        </textarea>
+                    </div>
+                </div>
+';
                 }
                 if ($readme) {
                     echo '
@@ -505,9 +524,15 @@
         document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
+    var $head = document.getElementById('head');
+    if ($head) {
+        document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
+        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+        
+    }
     var $readme = document.getElementById('readme');
     if ($readme) {
-        $readme.innerHTML = marked(document.getElementById('readme-md').innerText)
+        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
     }
 <?php
     if ($_GET['preview']) { //is preview mode. 在预览时处理 ?>
