@@ -1,7 +1,10 @@
+20200215-1700.06
+classic theme can read the head.md file now.
+classic主题可以处理head.md文件了。
+
 20200202-2010.05
 refresh token expires in 90 day, save a new token per month. classic theme add some icon for admin.
 refresh token 90天过期，所以每月保存一个新的token。classic主题加了点管理图标。
-
 20200129-2050.04
 if there is 'index.html', then do not show file but show the html, except admin.
 如果有index.html，就不显示文件列表了，直接显示html内容，除非是管理员。
