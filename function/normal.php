@@ -220,7 +220,7 @@ Can not write config to file.<br>
                 return false;
             }
             //t.disktag_add.value=encodeURIComponent(t.disktag_add.value);
-            var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{2,20})$/;
+            var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
             if (!reg.test(t.disktag_add.value)) {
                 alert(\'Tag Only letters and numbers, must start with letters!\');
                 return false;
