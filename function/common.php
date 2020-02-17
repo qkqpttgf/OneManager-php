@@ -3,14 +3,14 @@
 function getcache($str)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     return $cache->fetch($str);
 }
 
 function savecache($key, $value, $exp = 3300)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     $cache->save($key, $value, $exp);
 }
 
@@ -375,32 +375,30 @@ function main($path)
 {
     global $exts;
     global $constStr;
-    config_oauth();
+echo 'main.enterpath:'.$path.'
+';
     $constStr['language'] = $_COOKIE['language'];
     if ($constStr['language']=='') $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
+    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
+    $disktags = explode("|",getConfig('disktag'));
+    echo 'count$disk:'.count($disktags);
+    if (count($disktags)>1) {
+        if ($path=='/') return output('', 302, [ 'Location' => path_format($_SERVER['PHP_SELF'].'/'.$disktags[0]) ]);
+        $_SERVER['disktag'] = $path;
+        $pos = strpos($path, '/');
+        if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+        $path = substr($path, strlen('/'.$_SERVER['disktag']));
+    } else $_SERVER['disktag'] = $disktags[0];
+    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
+';
+    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
+    if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] .= '/' . $_SERVER['disktag'];
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
-    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['ajax']=0;
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
-
-    $refresh_token = getConfig('refresh_token');
-    if (!$refresh_token) return get_refresh_token();
-
-    if (!($_SERVER['access_token'] = getcache('access_token'))) {
-        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
-        if ($response['stat']==200) $ret = json_decode($response['body'], true);
-        if (!isset($ret['access_token'])) {
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception($response['stat'].'failed to get access_token.'.$response['body']);
-        }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
-        $_SERVER['access_token'] = $ret['access_token'];
-        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
-        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
-    }
 
     if (getConfig('adminloginpage')=='') {
         $adminloginpage = 'admin';
@@ -436,6 +434,28 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
+    
+    if (getConfig('admin')=='') return install();
+    config_oauth();
+    if ($_SERVER['admin']) if ($_GET['AddDisk']||$_GET['authorization_code']) return get_refresh_token();
+    $refresh_token = getConfig('refresh_token');
+    //if (!$refresh_token) return get_refresh_token();
+    if (!$refresh_token) {
+        return render_list();
+    } else {
+    if (!($_SERVER['access_token'] = getcache('access_token'))) {
+        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
+        if ($response['stat']==200) $ret = json_decode($response['body'], true);
+        if (!isset($ret['access_token'])) {
+            error_log('failed to get access_token. response' . json_encode($ret));
+            throw new Exception($response['stat'].'failed to get access_token.'.$response['body']);
+        }
+        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        $_SERVER['access_token'] = $ret['access_token'];
+        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
+        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
+    }
+
     $_SERVER['retry'] = 0;
 
     if ($_SERVER['ajax']) {
@@ -489,7 +509,8 @@ function main($path)
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
     } else {
-        return message('<div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+        return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+    }
     }
 }
 
@@ -842,7 +863,7 @@ function fetch_files_children($files, $path, $page)
     return $files;
 }
 
-function render_list($path, $files)
+function render_list($path = '', $files = '')
 {
     global $exts;
     global $constStr;
