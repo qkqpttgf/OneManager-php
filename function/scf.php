@@ -1,4 +1,5 @@
 <?php
+
 $commonEnv = [
     //'Region',
     //'SecretId',
@@ -10,17 +11,6 @@ $commonEnv = [
     'passfile',
     'sitename',
     'theme',
-];
-$innerEnv = [
-    'Onedrive_ver',
-    'client_id',
-    'client_secret',
-    'domain_path',
-    'guestup_path',
-    'diskname',
-    'public_path',
-    'refresh_token',
-    'token_expires',
 ];
 
 function printInput($event, $context)

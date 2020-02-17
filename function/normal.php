@@ -1,5 +1,15 @@
 <?php
 
+$commonEnv = [
+    //'admin',
+    'adminloginpage',
+    //'disktag',
+    'language',
+    'passfile',
+    'sitename',
+    'theme',
+];
+
 function getpath()
 {
     $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
@@ -260,10 +270,6 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
-        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' SecretId & SecretKey</a><br>
-        <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
-        <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
         $html .= '
         <label>Set admin password:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
         $html .= '
@@ -280,17 +286,7 @@ language:<br>';
             if (t.admin.value==\'\') {
                 alert(\'input admin\');
                 return false;
-            }';
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
-            if (t.SecretId.value==\'\') {
-                alert(\'input SecretId\');
-                return false;
             }
-            if (t.SecretKey.value==\'\') {
-                alert(\'input SecretKey\');
-                return false;
-            }';
-        $html .= '
             return true;
         }
     </script>';
@@ -326,13 +322,10 @@ function RewriteEngineOn()
 function EnvOpt($function_name, $needUpdate = 0)
 {
     global $constStr;
-    $constEnv = [
-        //'admin',
-        'adminloginpage', 'domain_path', 'guestup_path', 'passfile',
-        //'private_path', 
-        'public_path', 'sitename', 'language', 'theme'
-    ];
-    asort($constEnv);
+    global $commonEnv;
+    global $innerEnv;
+    asort($commonEnv);
+    asort($innerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     /*if ($_POST['updateProgram']==getconstStr('updateProgram')) {
         $response = json_decode(updataProgram($function_name, $Region, $namespace), true)['Response'];
@@ -352,13 +345,14 @@ namespace:' . $namespace . '<br>
         return message($html, $title);
     }*/
     if ($_POST['submit1']) {
+        $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
-            if (in_array($k, $constEnv)) {
-                //if (!(getConfig($k)==''&&$v=='')) 
+            if (in_array($k, $commonEnv)||in_array($k, $innerEnv)||$k=='disktag_del' || $k=='disktag_add') {
                 $tmp[$k] = $v;
             }
+            if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
         }
-        if ($tmp['domain_path']!='') {
+        /*if ($tmp['domain_path']!='') {
             $tmp1 = explode("|",$tmp['domain_path']);
             $tmparr = [];
             foreach ($tmp1 as $multidomain_paths){
@@ -366,8 +360,8 @@ namespace:' . $namespace . '<br>
                 if ($pos>0) $tmparr[substr($multidomain_paths, 0, $pos)] = path_format(substr($multidomain_paths, $pos+1));
             }
             $tmp['domain_path'] = $tmparr;
-        }
-        $response = setConfig($tmp);
+        }*/
+        $response = setConfig($tmp, $_SERVER['disk_oprating']);
         if (!$response) {
             $html = $response . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
@@ -393,9 +387,12 @@ namespace:' . $namespace . '<br>
         $html .= getconstStr('NotNeedUpdate');
     }*/
     $html .= '
-    <form action="" method="post">
-    <table border=1 width=100%>';
-    foreach ($constEnv as $key) {
+    <form name="common" action="" method="post">
+    <table border=1 width=100%>
+        <tr>
+            <td colspan="2">平台变量：</td>
+        </tr>';
+    foreach ($commonEnv as $key) {
         if ($key=='language') {
             $html .= '
         <tr>
@@ -444,8 +441,38 @@ namespace:' . $namespace . '<br>
             <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
     }
-    $html .= '</table>
-    <input type="submit" name="submit1" value="'.getconstStr('Setup').'">
+    $html .= '
+        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+    </table>
     </form>';
+    foreach (explode("|",getConfig('disktag')) as $disktag) {
+        if ($disktag!='') {
+            $html .= '
+    <table border=1 width=100%>
+        <form action="" method="post">
+        <tr>
+            <td colspan="2">'.$disktag.'：
+            <input type="hidden" name="disktag_del" value="'.$disktag.'">
+            <input type="submit" name="submit1" value="Del disk">
+            </td>
+        </tr>
+        </form>
+        <form name="'.$disktag.'" action="" method="post">
+        <input type="hidden" name="disk" value="'.$disktag.'">';
+            foreach ($innerEnv as $key) {
+                $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+        </tr>';
+            }
+            $html .= '
+        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+        </form>
+    </table>';
+        }
+    }
+    $html .= '
+    <a href="?AddDisk">Add Disk</a>';
     return message($html, getconstStr('Setup'));
 }

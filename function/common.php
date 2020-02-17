@@ -1,5 +1,17 @@
 <?php
 
+$innerEnv = [
+    'Onedrive_ver',
+    'client_id',
+    'client_secret',
+    'domain_path',
+    'guestup_path',
+    'diskname',
+    'public_path',
+    'refresh_token',
+    'token_expires',
+];
+
 function getcache($str)
 {
     $cache = null;
