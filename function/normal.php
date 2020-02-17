@@ -96,7 +96,8 @@ function setConfig($arr, $disktag = '')
     }*/
     if ($oparetdisk) {
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        $envs['disktag'] = substr($disktag_s, 0, -1);
+        if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
+        else $tmp['disktag'] = '';
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
