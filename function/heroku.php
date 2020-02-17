@@ -95,7 +95,8 @@ function setConfig($arr, $disktag = '')
     }
     if ($oparetdisk) {
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        $tmp['disktag'] = substr($disktag_s, 0, -1);
+        if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
+        else $tmp['disktag'] = '';
     }
     echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 ';
