@@ -70,12 +70,6 @@ function getConfig($str, $disktag = '')
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     if (in_array($str, $innerEnv)) {
         return json_decode(getenv($disktag), true)[$str];
-        $a=getenv($_SERVER['disktag']);
-        echo $str.'，'.$a.'，';
-        $b = json_decode($a, true);
-        echo json_encode($b[$str], JSON_PRETTY_PRINT).'。
-';
-        return $b[$str];
     }
     return getenv($str);
 }
