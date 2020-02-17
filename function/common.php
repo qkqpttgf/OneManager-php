@@ -387,14 +387,14 @@ function main($path)
 {
     global $exts;
     global $constStr;
-echo 'main.enterpath:'.$path.'
-';
+//echo 'main.enterpath:'.$path.'
+//';
     $constStr['language'] = $_COOKIE['language'];
     if ($constStr['language']=='') $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $disktags = explode("|",getConfig('disktag'));
-    echo 'count$disk:'.count($disktags);
+//    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/') return output('', 302, [ 'Location' => path_format($_SERVER['PHP_SELF'].'/'.$disktags[0]) ]);
         $_SERVER['disktag'] = $path;
@@ -402,8 +402,8 @@ echo 'main.enterpath:'.$path.'
         if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
         $path = substr($path, strlen('/'.$_SERVER['disktag']));
     } else $_SERVER['disktag'] = $disktags[0];
-    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
-';
+//    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
+//';
     $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] .= '/' . $_SERVER['disktag'];
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
