@@ -73,7 +73,7 @@ function config_oauth()
         // MS Customer
         // https://portal.azure.com
         $_SERVER['client_id'] = getConfig('client_id');
-        $_SERVER['client_secret'] = base64_decode(equal_replace(getenv('client_secret'),1));
+        $_SERVER['client_secret'] = base64_decode(equal_replace(getConfig('client_secret'),1));
         //getConfig('client_secret');
         $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
