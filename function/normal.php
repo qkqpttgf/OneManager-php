@@ -72,7 +72,7 @@ function setConfig($arr, $disktag = '')
     if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|",getConfig('disktag'));
     //$indisk = 0;
-    $oparetdisk = 0;
+    $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $innerEnv)) {
             $envs[$disktag][$k] = $v;
@@ -80,11 +80,11 @@ function setConfig($arr, $disktag = '')
             $indisk = 1;*/
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
-            $oparetdisk = 1;
+            $operatedisk = 1;
         } elseif ($k=='disktag_del') {
             $disktags = array_diff($disktags, [ $v ]);
             $envs[$v] = '';
-            $oparetdisk = 1;
+            $operatedisk = 1;
         } else {
             $envs[$k] = $v;
         }
@@ -94,10 +94,10 @@ function setConfig($arr, $disktag = '')
         ksort($diskconfig);
         $tmp[$disktag] = json_encode($diskconfig);
     }*/
-    if ($oparetdisk) {
+    if ($operatedisk) {
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
-        else $tmp['disktag'] = '';
+        if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
+        else $envs['disktag'] = '';
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
