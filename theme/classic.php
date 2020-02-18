@@ -95,11 +95,13 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
+                <div class="table-header">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
         echo '<a href="'.path_format($_SERVER['base_path'].'/'.$disk).'">'.$diskname.'</a>&nbsp&nbsp';
     } ?>
+                </div>
             </div>
         </div>
     </div>
