@@ -580,8 +580,8 @@ namespace:' . $_SERVER['namespace'] . '<br>
         $html .= getconstStr('NotNeedUpdate');
     }
     $html .= '
-    <form name="common" action="" method="post">
     <table border=1 width=100%>
+    <form name="common" action="" method="post">
         <tr>
             <td colspan="2">平台变量：</td>
         </tr>';
@@ -636,8 +636,8 @@ namespace:' . $_SERVER['namespace'] . '<br>
     }
     $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-    </table>
-    </form>';
+    </form>
+    </table><br>';
     foreach (explode("|",getConfig('disktag')) as $disktag) {
         if ($disktag!='') {
             $html .= '
@@ -662,7 +662,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
             $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
         </form>
-    </table>';
+    </table><br>';
         }
     }
     $html .= '
