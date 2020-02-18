@@ -12,6 +12,18 @@ $innerEnv = [
     'token_expires',
 ];
 
+$ShowedinnerEnv = [
+    //'Onedrive_ver',
+    //'client_id',
+    //'client_secret',
+    'domain_path',
+    'guestup_path',
+    'diskname',
+    'public_path',
+    //'refresh_token',
+    //'token_expires',
+];
+
 function getcache($str)
 {
     $cache = null;
@@ -61,7 +73,8 @@ function config_oauth()
         // MS Customer
         // https://portal.azure.com
         $_SERVER['client_id'] = getConfig('client_id');
-        $_SERVER['client_secret'] = getConfig('client_secret');
+        $_SERVER['client_secret'] = base64_decode(equal_replace(getenv('client_secret'),1));
+        //getConfig('client_secret');
         $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
@@ -116,6 +129,16 @@ function spurlencode($str,$splite='')
     }
     $tmp = str_replace('%2520', '%20',$tmp);
     return $tmp;
+}
+
+function equal_replace($str, $add = false)
+{
+    if ($add) {
+        while(strlen($str)%4) $str .= '=';
+    } else {
+        while(substr($str,-1)=='=') $str=substr($str,0,-1);
+    }
+    return $str;
 }
 
 function is_guestup_path($path)

@@ -76,13 +76,8 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    echo '进入设置：'.json_encode($arr,JSON_PRETTY_PRINT).'
-';
     global $innerEnv;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    //$disktags = json_decode(getConfig('disktag'), true);
-    //if ($_SERVER['disk_oprating']) $disktag = $_SERVER['disk_oprating'];
-    //else $disktag = $_SERVER['disktag'];
     $disktags = explode("|",getConfig('disktag'));
     $diskconfig = json_decode(getenv($disktag), true);
     $tmp = [];
@@ -113,8 +108,8 @@ function setConfig($arr, $disktag = '')
         if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
         else $tmp['disktag'] = '';
     }
-    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
-';
+    //echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
+//';
     return updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
 }
 
@@ -194,7 +189,8 @@ function get_refresh_token()
             $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
             if ($_POST['Onedrive_ver']=='MSC') {
                 $tmp['client_id'] = $_POST['client_id'];
-                $tmp['client_secret'] = $_POST['client_secret'];
+                $tmp['client_secret'] = equal_replace(base64_encode($_POST['client_secret']));
+                //$_POST['client_secret'];
             }
             $response = json_decode( setConfig($tmp, $_COOKIE['disktag']), true )['Response'];
             $title = getconstStr('MayinEnv');
@@ -508,8 +504,9 @@ function EnvOpt($function_name, $needUpdate = 0)
     global $constStr;
     global $commonEnv;
     global $innerEnv;
+    global $ShowedinnerEnv;
     asort($commonEnv);
-    asort($innerEnv);
+    asort($ShowedinnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if ($_POST['updateProgram']==getconstStr('updateProgram')) {
         $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
@@ -569,7 +566,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
     }
     $html .= '
-        <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;
+        <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="/'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
         <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
     if ($needUpdate) {
         $html .= '<pre>' . $_SERVER['github_version'] . '</pre>
@@ -579,7 +576,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
     } else {
         $html .= getconstStr('NotNeedUpdate');
     }
-    $html .= '
+    $html .= '<br>
     <table border=1 width=100%>
     <form name="common" action="" method="post">
         <tr>
@@ -649,19 +646,23 @@ namespace:' . $_SERVER['namespace'] . '<br>
             <input type="submit" name="submit1" value="Del disk">
             </td>
         </tr>
-        </form>
+        </form>';
+            if (getConfig('refresh_token', $disktag)!='') {
+                $html .= '
         <form name="'.$disktag.'" action="" method="post">
         <input type="hidden" name="disk" value="'.$disktag.'">';
-            foreach ($innerEnv as $key) {
-                $html .= '
+                foreach ($ShowedinnerEnv as $key) {
+                    $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
+                }
+                $html .= '
+        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+        </form>';
             }
             $html .= '
-        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-        </form>
     </table><br>';
         }
     }
