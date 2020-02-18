@@ -104,11 +104,12 @@ function setConfig($arr, $disktag = '')
         $tmp[$disktag] = json_encode($diskconfig);
     }
     if ($oparetdisk) {
+        $disktags = array_unique($disktags);
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
         if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
         else $tmp['disktag'] = '';
     }
-    //echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
+//    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 //';
     return updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
 }
@@ -161,7 +162,7 @@ function get_refresh_token()
             <meta http-equiv="refresh" content="2;URL=' . $url . '">';
             return message($str, getconstStr('WaitJumpIndex'));
         }
-        return message('<pre>' . $tmp['body'] . '</pre>', $tmp['stat']);
+        return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
         //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
     }
     if ($_GET['install1']) {

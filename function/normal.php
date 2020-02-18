@@ -95,6 +95,7 @@ function setConfig($arr, $disktag = '')
         $tmp[$disktag] = json_encode($diskconfig);
     }*/
     if ($operatedisk) {
+        $disktags = array_unique($disktags);
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
         if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
         else $envs['disktag'] = '';
