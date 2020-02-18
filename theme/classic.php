@@ -92,22 +92,33 @@
     <h1 class="title">
         <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
     </h1>
-<?php $disktags = explode("|",getConfig('disktag'));
-    if (count($disktags)>1) { ?>
-    <div class="list-wrapper" id="list-div">
-        <div class="list-container">
-            <div class="list-header-container">
-                <div class="more-disk">
-<?php foreach ($disktags as $disk) {
-        $diskname = getConfig('diskname', $disk);
-        if ($diskname=='') $diskname = $disk;
-        echo '<a href="'.path_format($_SERVER['base_path'].'/'.$disk).'">'.$diskname.'</a>&nbsp&nbsp';
-    } ?>
-                </div>
+<?php 
+    $disktags = explode("|",getConfig('disktag'));
+    if (count($disktags)>1)
+    {
+        ?>
+    <div style="text-align:center;">
+        <div style="width:fit-content;margin:30px auto;box-shadow:0 0 32px 0 rgb(128,128,128);border-radius:15px;font-size:20px;padding:8px 30px">
+        <?php
+        foreach ($disktags as $disk) 
+        {
+            $diskname = getConfig('diskname', $disk);
+            if ($diskname=='')
+                $diskname = $disk;
+            ?>
+            <div style="margin:0 30px;display:inline-block">
+                <a href="<?php echo path_format($_SERVER['base_path'].'/'.$disk)?>">
+                    <div style="display:inline-block;padding:8px 15px;border-radius:5px;background-color:#dddede;">
+                        <?php echo $diskname; ?>
+                    </div>
+                </a>
             </div>
+            <?php
+        } ?>
         </div>
-    </div>
-<?php }
+    </div>    
+        <?php
+    }
     if ($files) { ?>
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
