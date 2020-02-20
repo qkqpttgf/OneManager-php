@@ -1,4 +1,5 @@
 QQ Group: 943919989  
+Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
 
 # Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
 How to Install:  
