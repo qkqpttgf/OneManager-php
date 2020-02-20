@@ -1,16 +1,40 @@
 <?php
 
+$innerEnv = [
+    'Onedrive_ver',
+    'client_id',
+    'client_secret',
+    'domain_path',
+    'guestup_path',
+    'diskname',
+    'public_path',
+    'refresh_token',
+    'token_expires',
+];
+
+$ShowedinnerEnv = [
+    //'Onedrive_ver',
+    //'client_id',
+    //'client_secret',
+    'domain_path',
+    'guestup_path',
+    'diskname',
+    'public_path',
+    //'refresh_token',
+    //'token_expires',
+];
+
 function getcache($str)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     return $cache->fetch($str);
 }
 
 function savecache($key, $value, $exp = 3300)
 {
     $cache = null;
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'Onedrive');
+    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     $cache->save($key, $value, $exp);
 }
 
@@ -49,7 +73,8 @@ function config_oauth()
         // MS Customer
         // https://portal.azure.com
         $_SERVER['client_id'] = getConfig('client_id');
-        $_SERVER['client_secret'] = getConfig('client_secret');
+        $_SERVER['client_secret'] = base64_decode(equal_replace(getConfig('client_secret'),1));
+        //getConfig('client_secret');
         $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
@@ -104,6 +129,16 @@ function spurlencode($str,$splite='')
     }
     $tmp = str_replace('%2520', '%20',$tmp);
     return $tmp;
+}
+
+function equal_replace($str, $add = false)
+{
+    if ($add) {
+        while(strlen($str)%4) $str .= '=';
+    } else {
+        while(substr($str,-1)=='=') $str=substr($str,0,-1);
+    }
+    return $str;
 }
 
 function is_guestup_path($path)
@@ -375,32 +410,30 @@ function main($path)
 {
     global $exts;
     global $constStr;
-    config_oauth();
+//echo 'main.enterpath:'.$path.'
+//';
     $constStr['language'] = $_COOKIE['language'];
     if ($constStr['language']=='') $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
+    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
+    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
+    $disktags = explode("|",getConfig('disktag'));
+//    echo 'count$disk:'.count($disktags);
+    if (count($disktags)>1) {
+        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['PHP_SELF'].'/'.$disktags[0]) ]);
+        $_SERVER['disktag'] = $path;
+        $pos = strpos($path, '/');
+        if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+        $path = substr($path, strlen('/'.$_SERVER['disktag']));
+        if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
+    } else $_SERVER['disktag'] = $disktags[0];
+//    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
+//';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
-    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['ajax']=0;
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
-
-    $refresh_token = getConfig('refresh_token');
-    if (!$refresh_token) return get_refresh_token();
-
-    if (!($_SERVER['access_token'] = getcache('access_token'))) {
-        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
-        if ($response['stat']==200) $ret = json_decode($response['body'], true);
-        if (!isset($ret['access_token'])) {
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception($response['stat'].'failed to get access_token.'.$response['body']);
-        }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
-        $_SERVER['access_token'] = $ret['access_token'];
-        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
-        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
-    }
 
     if (getConfig('adminloginpage')=='') {
         $adminloginpage = 'admin';
@@ -436,8 +469,29 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
-    $_SERVER['retry'] = 0;
+    
+    if (getConfig('admin')=='') return install();
+    config_oauth();
+    if ($_SERVER['admin']) if ($_GET['AddDisk']||$_GET['authorization_code']) return get_refresh_token();
+    $refresh_token = getConfig('refresh_token');
+    //if (!$refresh_token) return get_refresh_token();
+    if (!$refresh_token) {
+        return render_list();
+    } else {
+    if (!($_SERVER['access_token'] = getcache('access_token'))) {
+        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
+        if ($response['stat']==200) $ret = json_decode($response['body'], true);
+        if (!isset($ret['access_token'])) {
+            error_log('failed to get access_token. response' . json_encode($ret));
+            throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
+        }
+        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        $_SERVER['access_token'] = $ret['access_token'];
+        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
+        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
+    }
 
+    $_SERVER['retry'] = 0;
     if ($_SERVER['ajax']) {
         if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
             // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
@@ -489,7 +543,8 @@ function main($path)
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
     } else {
-        return message('<div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+        return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+    }
     }
 }
 
@@ -598,7 +653,7 @@ function adminoperate($path)
             savecache('path_' . $path2, json_decode('{}',true), 1);
             return output($result['body'], $result['stat']);
         } else {
-            return output('{"error":"Can not Move!"}', 403);
+            return output('{"error":"'.getconstStr('CannotMove').'"}', 403);
         }
     }
     if ($_POST['editfile']!='') {
@@ -612,7 +667,7 @@ function adminoperate($path)
         $result = MSAPI('PUT', $path1, $data, $_SERVER['access_token'])['body'];
         //echo $result;
         $resultarry = json_decode($result,true);
-        if (isset($resultarry['error'])) return message($resultarry['error']['message']. '<hr><a href="javascript:history.back(-1)">上一页</a>','Error',403);
+        if (isset($resultarry['error'])) return message($resultarry['error']['message']. '<hr><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>','Error',403);
     }
     if ($_GET['create_name']!='') {
         // create 新建
@@ -842,7 +897,7 @@ function fetch_files_children($files, $path, $page)
     return $files;
 }
 
-function render_list($path, $files)
+function render_list($path = '', $files = '')
 {
     global $exts;
     global $constStr;
@@ -882,7 +937,7 @@ function render_list($path, $files)
     $htmlpage = include 'theme/'.$theme;
 
     $html = '<!--
-    github ： https://github.com/qkqpttgf/OneManager-php
+    Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
     if (isset($htmlpage['statusCode'])) return $htmlpage;
     if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
