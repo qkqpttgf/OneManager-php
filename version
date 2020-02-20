@@ -1,7 +1,10 @@
+20200220-1220.08
+Multy Mode! You can add more Onedrive in one project. And now, heroku apps can update in setup!  
+多盘来了，另，heroku 上也能一键更新了！  
+
 20200215-1850.07
 fix: head.md not show if no readme.md.
 修复当没有readme的时候就不显示head的问题。
-
 20200215-1700.06
 classic theme can read the head.md file now.
 classic主题可以处理head.md文件了。
