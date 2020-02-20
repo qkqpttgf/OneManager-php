@@ -6,7 +6,7 @@ $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff'
 $exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 $exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c'];
-$exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv'];
+$exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
 $constStr = [
@@ -77,9 +77,9 @@ $constStr = [
         ],
     ],
     'SetSecretsFirst' => [
-        'en-us' => 'Set APIKey in Config vars first! Then reflesh.',
-        'zh-cn' => '先在环境变量设置APIKey！再刷新。',
-        'ja' => '最初に環境変数にAPIKeyを設定してください！ 再度更新します。',
+        'en-us' => 'Set API in Config first! or reinstall.',
+        'zh-cn' => '先在环境变量设置API！或重装。',
+        'ja' => '最初に環境変数にAPIを設定してください！',
     ],
     'RefleshtoLogin' => [
         'en-us' => '<font color="red">Reflesh</font> and login.',
@@ -140,6 +140,21 @@ $constStr = [
         'en-us' => 'Not Need Update',
         'zh-cn' => '不需要更新',
         'ja' => '更新不要',
+    ],
+    'PlatformConfig' => [
+        'en-us' => 'Platform Config',
+        'zh-cn' => '平台变量',
+        'ja' => '',
+    ],
+    'DelDisk' => [
+        'en-us' => 'Del This Disk',
+        'zh-cn' => '删除此盘',
+        'ja' => '',
+    ],
+    'AddDisk' => [
+        'en-us' => 'Add Onedrive Disk',
+        'zh-cn' => '添加Onedrive盘',
+        'ja' => '',
     ],
     'Home' => [
         'en-us' => 'Home',
@@ -215,6 +230,11 @@ $constStr = [
         'en-us' => 'Move',
         'zh-cn' => '移动',
         'ja' => '移動する',
+    ],
+    'CannotMove' => [
+        'en-us' => 'Can not Move!',
+        'zh-cn' => '不能移动！',
+        'ja' => '',
     ],
     'Delete' => [
         'en-us' => 'Delete',
@@ -361,6 +381,11 @@ $constStr = [
         'zh-cn' => 'OneManager',
         'ja' => 'OneManager',
     ],
+    'SavingToken' => [
+        'en-us' => 'Saving refresh_token!',
+        'zh-cn' => '正在保存 refresh_token！',
+        'ja' => '',
+    ],
     'MayinEnv' => [
         'en-us' => 'The \'Onedrive_ver\' may in Config',
         'zh-cn' => 'Onedrive_ver应该已经写入',
@@ -380,6 +405,16 @@ $constStr = [
         'en-us' => 'Login Office and Get a refresh_token',
         'zh-cn' => '跳转到Office，登录获取refresh_token',
         'ja' => 'Officeにジャンプしてログインし、refresh_tokenを取得します',
+    ],
+    'OnedriveDiskTag' => [
+        'en-us' => 'Onedrive Disk Tag',
+        'zh-cn' => 'Onedrive 标签',
+        'ja' => '',
+    ],
+    'OnedriveDiskName' => [
+        'en-us' => 'Onedrive Showed Name',
+        'zh-cn' => 'Onedrive 显示名称',
+        'ja' => '',
     ],
     'OndriveVerMS' => [
         'en-us' => 'default(Onedrive, Onedrive for business)',
@@ -401,6 +436,32 @@ $constStr = [
         'zh-cn' => '申请应用ID与机密',
         'ja' => 'アプリケーションIDとシークレット',
     ],
+    'TagFormatAlert' =>[
+        'en-us' => 'Tag Only letters and numbers, must start with letters, at least 2 letters!',
+        'zh-cn' => '标签只能字母与数字，至少2位',
+        'ja' => '',
+    ],
+    'ClickInstall' =>[
+        'en-us' => 'Click to install the project',
+        'zh-cn' => '点击开始安装程序',
+        'ja' => '',
+    ],
+    'LogintoBind' =>[
+        'en-us' => 'then login and bind your onedrive in setup',
+        'zh-cn' => '然后登录后在设置中绑定你的onedrive。',
+        'ja' => '',
+    ],
+    'MakesuerWriteable' =>[
+        'en-us' => 'Plase make sure the config.php is writeable. run writeable.sh.',
+        'zh-cn' => '确认config.php可写。',
+        'ja' => '',
+    ],
+    'MakesuerRewriteOn' =>[
+        'en-us' => 'Plase make sure the RewriteEngine is On.',
+        'zh-cn' => '确认重写（伪静态）功能启用。',
+        'ja' => '',
+    ],
+    
     'Reflesh' => [
         'en-us' => 'Reflesh',
         'zh-cn' => '刷新',
