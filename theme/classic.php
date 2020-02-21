@@ -46,7 +46,7 @@
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:#fff;}
-        #readme{padding:20px;text-align:left}
+        .markdown-body{padding:20px;text-align:left}
         @media only screen and (max-width:480px){
             .title{margin-bottom:24px}
             .list-wrapper{width:95%; margin-bottom:24px;}
