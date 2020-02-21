@@ -765,12 +765,22 @@ function fetch_files($path = '/')
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
         // https://developer.microsoft.com/zh-cn/graph/graph-explorer
+        $pos = strrpos($path, '/');
+        if ($pos>1) {
+            $parentpath = substr($path, 0, $pos);
+            $filename = substr($path, $pos+1);
+            if ($parentfiles = getcache('path_' . $parentpath))
+                foreach ($parentfiles['children'] as $file)
+                    if ($file['name']==$filename)
+                        if (isset($file['@microsoft.graph.downloadUrl']))
+                            return $file;
+        }
         $url = $_SERVER['api_url'];
         if ($path !== '/') {
             $url .= ':' . $path;
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
-        $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime)';
+        $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl)';
         $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
         if ($arr['stat']<500) {
             $files = json_decode($arr['body'], true);
