@@ -190,12 +190,12 @@
                             <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <?php if ($_SERVER['admin']) echo 'onchange="document.getElementById(\'txt-save\').onclick=function(){document.getElementById(\'txt-form\').submit();}"';?> ><?php echo $txtstr;?></textarea>
 <?php                   if ($_SERVER['admin']) echo '</form>'; ?>
                         </div>
-<?php               } elseif (in_array($ext, ['md'])) {
+<?php               } /*elseif (in_array($ext, ['md'])) {
                         echo '                        <div class="markdown-body" id="readme">
                             <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
                         </div>
 ';
-                    } else {
+                    }*/ else {
                         echo '<span>'.getconstStr('FileNotSupport').'</span>';
                     } ?>
                     </div>
