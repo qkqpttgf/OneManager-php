@@ -1,6 +1,13 @@
 QQ Group: 943919989  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
 
+# Deploy to heroku  
+Official: https://heroku.com  
+
+How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect to your github fork.  
+
+DEMO:  https://herooneindex.herokuapp.com/  
+
 # Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
 How to Install:  
     1.Start web service on your server (httpd or other), make sure you can visit it.  
@@ -22,13 +29,6 @@ Official: https://cloud.tencent.com/product/scf
 How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview  
 
 DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
-
-# Deploy to heroku  
-Official: https://heroku.com  
-
-How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect to your github fork.  
-
-DEMO:  https://herooneindex.herokuapp.com/  
 
 # Features 特性  
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
