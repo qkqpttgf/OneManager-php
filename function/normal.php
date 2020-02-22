@@ -3,6 +3,7 @@
 $commonEnv = [
     //'admin',
     'adminloginpage',
+    'background',
     //'disktag',
     'language',
     'passfile',
