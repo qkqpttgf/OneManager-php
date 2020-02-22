@@ -115,14 +115,14 @@ function path_format($path)
     return $path;
 }
 
-function spurlencode($str,$splite='')
+function spurlencode($str,$split='')
 {
     $str = str_replace(' ', '%20',$str);
     $tmp='';
-    if ($splite!='') {
-        $tmparr=explode($splite,$str);
+    if ($split!='') {
+        $tmparr=explode($split,$str);
         for($x=0;$x<count($tmparr);$x++) {
-            if ($tmparr[$x]!='') $tmp .= $splite . urlencode($tmparr[$x]);
+            if ($tmparr[$x]!='') $tmp .= $split . urlencode($tmparr[$x]);
         }
     } else {
         $tmp = urlencode($str);
@@ -155,7 +155,7 @@ function array_value_isnot_null($arr)
 function curl_request($url, $data = false, $headers = [])
 {
     if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
-    if (!isset($headers['Referer'])) $headers['Referer'] = $url;
+    //if (!isset($headers['Referer'])) $headers['Referer'] = $url;
     if (!isset($headers['Content-Type'])) $headers['Content-Type'] = 'application/x-www-form-urlencoded';
     $sendHeaders = array();
     foreach ($headers as $headerName => $headerVal) {
@@ -212,7 +212,7 @@ function encode_str_replace($str)
 
 function gethiddenpass($path,$passfile)
 {
-    $password=getcache($path . '/password');
+    $password=getcache('path_' . $path . '/?password');
     if ($password=='') {
     $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
@@ -656,6 +656,42 @@ function adminoperate($path)
             return output('{"error":"'.getconstStr('CannotMove').'"}', 403);
         }
     }
+    if ($_GET['copy_name']!='') {
+        // copy 复制
+        $filename = spurlencode($_GET['copy_name']);
+        $filename = path_format($path1 . '/' . $filename);
+        $namearr = splitlast($_GET['copy_name'], '.');
+        if ($namearr[0]!='') {
+            $newname = $namearr[0] . ' (' . getconstStr('Copy') . ')';
+            if ($namearr[1]!='') $newname .= '.' . $namearr[1];
+        } else {
+            $newname = '.' . $namearr[1] . ' (' . getconstStr('Copy') . ')';
+        }
+        //$newname = spurlencode($newname);
+            //$foldername = path_format('/'.urldecode($path1).'/./');
+            //$data = '{"parentReference":{"path": "/drive/root:'.$foldername.'"}}';
+        $data = '{ "name": "' . $newname . '" }';
+        $result = MSAPI('copy', $filename, $data, $_SERVER['access_token']);
+        $num = 0;
+        while ($result['stat']==409 && json_decode($result['body'], true)['error']['code']=='nameAlreadyExists') {
+            $num++;
+            if ($namearr[0]!='') {
+                $newname = $namearr[0] . ' (' . getconstStr('Copy') . ' ' . $num . ')';
+                if ($namearr[1]!='') $newname .= '.' . $namearr[1];
+            } else {
+                $newname = '.' . $namearr[1] . ' ('.getconstStr('Copy'). ' ' . $num .')';
+            }
+            //$newname = spurlencode($newname);
+            $data = '{ "name": "' . $newname . '" }';
+            $result = MSAPI('copy', $filename, $data, $_SERVER['access_token']);
+        }
+        //echo $result['stat'].$result['body'];
+            //savecache('path_' . $path1, json_decode('{}',true), 1);
+            //if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) . '/' );
+            //else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] . '/' );
+            //savecache('path_' . $path2, json_decode('{}',true), 1);
+        return output($result['body'].json_encode($result['Location']), $result['stat']);
+    }
     if ($_POST['editfile']!='') {
         // edit 编辑
         $data = $_POST['editfile'];
@@ -685,10 +721,26 @@ function adminoperate($path)
     }
     if ($_GET['RefreshCache']) {
         //savecache('path_' . $path1, json_decode('{}',true), 1);
-        savecache($path . '/password', '', 1);
+        savecache('path_' . $path . '/?password', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
+}
+
+function splitlast($str, $split)
+{
+    $pos = strrpos($str, $split);
+    if ($pos===false) {
+        $tmp[0] = $str;
+        $tmp[1] = '';
+    } elseif ($pos>0) {
+        $tmp[0] = substr($str, 0, $pos);
+        $tmp[1] = substr($str, $pos+1);
+    } else {
+        $tmp[0] = '';
+        $tmp[1] = $str;
+    }
+    return $tmp;
 }
 
 function MSAPI($method, $path, $data = '', $access_token)
@@ -732,7 +784,7 @@ function MSAPI($method, $path, $data = '', $access_token)
     }
     $headers['Authorization'] = 'Bearer ' . $access_token;
     if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
-    if (!isset($headers['Referer'])) $headers['Referer'] = $url;
+    //if (!isset($headers['Referer'])) $headers['Referer'] = $url;*
     $sendHeaders = array();
     foreach ($headers as $headerName => $headerVal) {
         $sendHeaders[] = $headerName . ': ' . $headerVal;
@@ -747,9 +799,11 @@ function MSAPI($method, $path, $data = '', $access_token)
     curl_setopt($ch, CURLOPT_HEADER, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
+    //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
     $response['body'] = curl_exec($ch);
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+    //$response['Location'] = curl_getinfo($ch);
     curl_close($ch);
     error_log($response['stat'].'
 '.$response['body'].'
@@ -789,7 +843,7 @@ function fetch_files($path = '/')
                 if ($files['folder']['childCount']>200) {
                 // files num > 200 , then get nextlink
                     $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                    $files=fetch_files_children($files, $path, $page);
+                    $files=fetch_files_children($files, $path1, $page);
                 } else {
                 // files num < 200 , then cache
                     savecache('path_' . $path, $files);
@@ -808,6 +862,8 @@ function fetch_files($path = '/')
 
 function fetch_files_children($files, $path, $page)
 {
+    $path1 = path_format($path);
+    $path = path_format($_SERVER['list_path'] . path_format($path));
     $cachefilename = '.SCFcache_'.$_SERVER['function_name'];
     $maxpage = ceil($files['folder']['childCount']/200);
     if (!($files['children'] = getcache('files_' . $path . '_page_' . $page))) {
