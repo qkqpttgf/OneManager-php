@@ -1,7 +1,10 @@
-20200220-1220.08
-Multy Mode! You can add more Onedrive in one project. And now, heroku apps can update in setup!  
-多盘来了，另，heroku 上也能一键更新了！  
+20200222-1700.09
+Can copy file and folder now.
+可以复制文件跟目录了。
 
+20200220-1220.08
+Multy Mode! You can add more Onedrive in one project (bind Onedrive in setup). And now, heroku apps can update in setup!  
+多盘来了，在设置中添加Onedrive，另，heroku 上也能一键更新了！  
 20200215-1850.07
 fix: head.md not show if no readme.md.
 修复当没有readme的时候就不显示head的问题。
@@ -12,8 +15,8 @@ classic主题可以处理head.md文件了。
 refresh token expires in 90 day, save a new token per month. classic theme add some icon for admin.
 refresh token 90天过期，所以每月保存一个新的token。classic主题加了点管理图标。
 20200129-2050.04
-if there is 'index.html', then do not show file but show the html, except admin.
-如果有index.html，就不显示文件列表了，直接显示html内容，除非是管理员。
+if there is 'index.html', then do not show file but show the index.html, except admin.
+如果有index.html，就不显示文件列表了，直接显示index.html内容，除非是管理员。
 20200120.02
 fix domain_path do not work. domain_path正常工作了。
 20200118.01
