@@ -231,6 +231,11 @@ $constStr = [
         'zh-cn' => '移动',
         'ja' => '移動する',
     ],
+    'Copy' => [
+        'en-us' => 'Copy',
+        'zh-cn' => '复制',
+        'ja' => '',
+    ],
     'CannotMove' => [
         'en-us' => 'Can not Move!',
         'zh-cn' => '不能移动！',
