@@ -224,6 +224,7 @@
                                 <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><ion-icon name="lock"></ion-icon><?php echo getconstStr('encrypt'); ?></a></li>
                                 <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
                                 <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<?php echo $filenum;?>);"><ion-icon name="copy"></ion-icon><?php echo getconstStr('Copy'); ?></a></li>
                                 <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
@@ -255,6 +256,7 @@
                             <ul>
                                 <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
                                 <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<?php echo $filenum;?>);"><ion-icon name="copy"></ion-icon><?php echo getconstStr('Copy'); ?></a></li>
                                 <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
                             </ul>
                             </li>&nbsp;&nbsp;&nbsp;
@@ -436,6 +438,17 @@
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
                 <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<?php echo getconstStr('InputPasswordUWant'); ?>">
                 <?php if (getConfig('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo getconstStr('encrypt'); ?>"><?php } else { ?><br><label><?php echo getconstStr('SetpassfileBfEncrypt'); ?></label><?php } ?>
+                </form>
+            </div>
+        </div>
+        <div id="copy_div" class="operatediv" style="display:none">
+            <div>
+                <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <form id="copy_form" onsubmit="return submit_operate('copy');">
+                <input id="copy_sid" name="copy_sid" type="hidden" value="">
+                <input id="copy_hidden" name="copy_name" type="hidden" value="">
+                <input id="copy_input" name="copy_input" type="hidden" value="">
+                <input name="operate_action" type="submit" value="<?php echo getconstStr('Copy'); ?>">
                 </form>
             </div>
         </div>
@@ -1096,6 +1109,7 @@
         xhr.onload = function(e){
             var html;
             if (xhr.status<300) {
+                console.log(xhr.status+','+xhr.responseText);
                 if (str=='rename') {
                     html=JSON.parse(xhr.responseText);
                     var file_a = document.getElementById('file_a'+num);
