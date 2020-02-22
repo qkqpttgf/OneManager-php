@@ -6,6 +6,7 @@ $commonEnv = [
     //'SecretKey',
     //'admin',
     'adminloginpage',
+    'background',
     //'disktag',
     'language',
     'passfile',

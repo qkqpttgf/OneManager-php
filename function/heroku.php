@@ -4,6 +4,7 @@ $commonEnv = [
     //'APIKey',
     //'admin',
     'adminloginpage',
+    'background',
     //'disktag',
     //'function_name',
     'language',
