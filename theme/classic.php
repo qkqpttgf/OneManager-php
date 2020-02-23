@@ -22,9 +22,9 @@
         .list-header-container{position:relative}
         .list-header-container a.back-link{color:#000;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;padding:10px 10px;vertical-align:middle;text-decoration:none}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .list-header-container .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
+        .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
-        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
+        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);}
         .more-disk a{padding:5px;transition-duration: 0.4s;border-radius: 12px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
         .more-disk a:hover{ background-color: rgba(85,85,85,0.7); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
@@ -49,10 +49,11 @@
         .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
         .markdown-body{padding:20px;text-align:left}
         @media only screen and (max-width:480px){
+            .more-disk{white-space:nowrap;overflow:auto;}
             .title{margin-bottom:24px}
             .list-wrapper{width:95%; margin-bottom:24px;}
             .list-table {padding:8px}
-            .list-table td, .list-table th{padding:0 10px;text-align:left;white-space:nowrap;overflow:auto;max-width:80px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
         }
     </style>
 </head>
