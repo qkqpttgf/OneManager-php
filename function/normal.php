@@ -368,8 +368,8 @@ namespace:' . $namespace . '<br>
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
     }
     $html .= '
-        <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
-        <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
+<a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
+<a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
     /*if ($needUpdate) {
         $html .= '<pre>' . $_SERVER['github_version'] . '</pre>
         <form action="" method="post">
@@ -378,8 +378,8 @@ namespace:' . $namespace . '<br>
     } else {
         $html .= getconstStr('NotNeedUpdate');
     }*/
-    $html .= '<br>
-    <table border=1 width=100%>
+    $html .= 'Can not update by a click!<br>
+<table border=1 width=100%>
     <form name="common" action="" method="post">
         <tr>
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
@@ -436,22 +436,22 @@ namespace:' . $namespace . '<br>
     $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
     </form>
-    </table><br>';
+</table><br>';
     foreach (explode("|",getConfig('disktag')) as $disktag) {
         if ($disktag!='') {
             $html .= '
-    <table border=1 width=100%>
-        <form action="" method="post">
+<table border=1 width=100%>
+    <form action="" method="post">
         <tr>
             <td colspan="2">'.$disktag.'：
             <input type="hidden" name="disktag_del" value="'.$disktag.'">
             <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
             </td>
         </tr>
-        </form>';
+    </form>';
             if (getConfig('refresh_token', $disktag)!='') {
                 $html .= '
-        <form name="'.$disktag.'" action="" method="post">
+    <form name="'.$disktag.'" action="" method="post">
         <input type="hidden" name="disk" value="'.$disktag.'">';
                 foreach ($ShowedinnerEnv as $key) {
                     $html .= '
@@ -462,13 +462,13 @@ namespace:' . $namespace . '<br>
                 }
                 $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-        </form>';
+    </form>';
             }
             $html .= '
-    </table><br>';
+</table><br>';
         }
     }
     $html .= '
-    <a href="?AddDisk">'.getconstStr('AddDisk').'</a>';
+<a href="?AddDisk">'.getconstStr('AddDisk').'</a>';
     return message($html, getconstStr('Setup'));
 }
