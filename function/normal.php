@@ -1,16 +1,5 @@
 <?php
 
-$commonEnv = [
-    //'admin',
-    'adminloginpage',
-    'background',
-    //'disktag',
-    'language',
-    'passfile',
-    'sitename',
-    'theme',
-];
-
 function getpath()
 {
     $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
@@ -201,8 +190,8 @@ Can not write config to file.<br>
     $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
     $html = '
     <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
-        '.getconstStr('OnedriveDiskTag').':<input type="text" name="disktag_add"><br>
-        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname"><br>
+        '.getconstStr('OnedriveDiskTag').':<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
+        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
         Onedrive_Ver：<br>
         <label><input type="radio" name="Onedrive_ver" value="MS" checked>MS: '.getconstStr('OndriveVerMS').'</label><br>
         <label><input type="radio" name="Onedrive_ver" value="CN">CN: '.getconstStr('OndriveVerCN').'</label><br>
@@ -210,7 +199,7 @@ Can not write config to file.<br>
             <div id="secret" style="display:none">
                 <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
                 client_secret:<input type="text" name="client_secret"><br>
-                client_id(12345678-90ab-cdef-ghij-klmnopqrstuv):<input type="text" name="client_id"><br>
+                client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
             </div>
         </label><br>
         <input type="submit" value="'.getconstStr('Submit').'">
@@ -219,7 +208,7 @@ Can not write config to file.<br>
         function notnull(t)
         {
             if (t.disktag_add.value==\'\') {
-                alert(\'input Disk Tag\');
+                alert(\'Input Disk Tag\');
                 return false;
             }
             var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
@@ -379,8 +368,8 @@ namespace:' . $namespace . '<br>
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
     }
     $html .= '
-        <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
-        <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
+<a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
+<a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
     /*if ($needUpdate) {
         $html .= '<pre>' . $_SERVER['github_version'] . '</pre>
         <form action="" method="post">
@@ -389,8 +378,8 @@ namespace:' . $namespace . '<br>
     } else {
         $html .= getconstStr('NotNeedUpdate');
     }*/
-    $html .= '<br>
-    <table border=1 width=100%>
+    $html .= 'Can not update by a click!<br>
+<table border=1 width=100%>
     <form name="common" action="" method="post">
         <tr>
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
@@ -447,22 +436,22 @@ namespace:' . $namespace . '<br>
     $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
     </form>
-    </table><br>';
+</table><br>';
     foreach (explode("|",getConfig('disktag')) as $disktag) {
         if ($disktag!='') {
             $html .= '
-    <table border=1 width=100%>
-        <form action="" method="post">
+<table border=1 width=100%>
+    <form action="" method="post">
         <tr>
             <td colspan="2">'.$disktag.'：
             <input type="hidden" name="disktag_del" value="'.$disktag.'">
             <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
             </td>
         </tr>
-        </form>';
+    </form>';
             if (getConfig('refresh_token', $disktag)!='') {
                 $html .= '
-        <form name="'.$disktag.'" action="" method="post">
+    <form name="'.$disktag.'" action="" method="post">
         <input type="hidden" name="disk" value="'.$disktag.'">';
                 foreach ($ShowedinnerEnv as $key) {
                     $html .= '
@@ -473,13 +462,13 @@ namespace:' . $namespace . '<br>
                 }
                 $html .= '
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-        </form>';
+    </form>';
             }
             $html .= '
-    </table><br>';
+</table><br>';
         }
     }
     $html .= '
-    <a href="?AddDisk">'.getconstStr('AddDisk').'</a>';
+<a href="?AddDisk">'.getconstStr('AddDisk').'</a>';
     return message($html, getconstStr('Setup'));
 }

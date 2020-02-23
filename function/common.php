@@ -1,5 +1,21 @@
 <?php
 
+$commonEnv = [
+    //'APIKey', // used in heroku.
+    //'Region', // used in SCF.
+    //'SecretId', // used in SCF.
+    //'SecretKey', // used in SCF.
+    //'admin',
+    'adminloginpage',
+    'background',
+    //'disktag',
+    //'function_name', // used in heroku.
+    'language',
+    'passfile',
+    'sitename',
+    'theme',
+];
+
 $innerEnv = [
     'Onedrive_ver',
     'client_id',
@@ -289,7 +305,16 @@ function get_timezone($timezone = '8')
 
 function message($message, $title = 'Message', $statusCode = 200)
 {
-    return output('<html><meta charset=utf-8><body><h1>' . $title . '</h1><p>' . $message . '</p></body></html>', $statusCode);
+    return output('
+<html>
+    <meta charset=utf-8>
+    <body>
+        <h1>' . $title . '</h1>
+        <p>
+' . $message . '
+        </p>
+    </body>
+</html>', $statusCode);
 }
 
 function needUpdate()
