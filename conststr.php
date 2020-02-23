@@ -1,6 +1,4 @@
 <?php
-global $exts;
-global $constStr;
 
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
 $exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg'];
@@ -49,6 +47,9 @@ $constStr = [
             'admin' => 'The admin password, Login button will not show when empty',
             'adminloginpage' => 'if set, the Login button will not display, and the login page no longer \'?admin\', it is \'?{this value}\'.',
             'domain_path' => 'more custom domain, format is a1.com:/dirto/path1|b2.com:/path2',
+            'diskname' => 'The disk name you want show.',
+            'disktag' => 'A tag used in store config and url.',
+            'background' => 'Set an url as background photo, or put a \'background.jpg\' at showed path.',
             'guestup_path' => 'Set guest upload dir, before set this, the files in this dir will show as normal.',
             'passfile' => 'The password of dir will save in this file.',
             'public_path' => 'Show this Onedrive dir when through the long url of API Gateway; public show files less than private.',
@@ -59,6 +60,9 @@ $constStr = [
             'admin' => '管理密码，不添加时不显示登录页面且无法登录。',
             'adminloginpage' => '如果设置，登录按钮及页面隐藏。管理登录的页面不再是\'?admin\'，而是\'?此设置的值\'。',
             'domain_path' => '使用多个自定义域名时，指定每个域名看到的目录。格式为a1.com:/dirto/path1|b1.com:/path2，比private_path优先。',
+            'diskname' => '这个盘你想显示什么名称。',
+            'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
+            'background' => '设置一个url作为背景，或者在你显示的目录放一个background.jpg文件。',
             'guestup_path' => '设置游客上传路径（图床路径），不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
             'passfile' => '自定义密码文件的名字，可以是\'pppppp\'，也可以是\'aaaa.txt\'等等；列目录时不会显示，只有知道密码才能查看或下载此文件。密码是这个文件的内容，可以空格、可以中文；',
             'public_path' => '使用API长链接访问时，显示网盘文件的路径，不设置时默认为根目录；不能是private_path的上级（public看到的不能比private多，要么看到的就不一样）。',
@@ -69,6 +73,9 @@ $constStr = [
             'admin' => 'パスワードを管理する、追加しない場合、ログインページは表示されず、ログインできません。',
             'adminloginpage' => '設定すると、ログインボタンとページが非表示になります。ログインを管理するためのページは\'?admin \'ではなく、\'?この設定の値\'。',
             'domain_path' => '複数のカスタムドメイン名を使用する場合、各ドメイン名に表示されるディレクトリを指定します。形式はa1.com:/dirto/path1|b1.com:/path2で、private_pathよりも優先されます。',
+            'diskname' => '',
+            'disktag' => '',
+            'background' => '',
             'guestup_path' => 'マップベッドのパスを設定します。この値が設定されていない場合、ディレクトリの内容は通常ファイルにリストされ、設定後はアップロードインターフェイスのみが表示されます。',
             'passfile' => 'カスタムパスワードファイルの名前は、\'pppppp \'、\'aaaa.txt \'などの場合があります。ディレクトリをリストするときには表示されません。パスワードを知っている場合にのみ、このファイルを表示またはダウンロードできます。 パスワードはこのファイルの内容であり、スペースまたは漢字を使用できます。',
             'public_path' => 'APIのロングリンクアクセスを使用する場合、ネットワークディスクファイルのパスが表示されますが、設定されていない場合はデフォルトでルートディレクトリになり、private_pathの上位にはなりません（publicはprivate以上のものを見ることができません。それ以外は異なります。）。',
@@ -442,8 +449,8 @@ $constStr = [
         'ja' => 'アプリケーションIDとシークレット',
     ],
     'TagFormatAlert' =>[
-        'en-us' => 'Tag Only letters and numbers, must start with letters, at least 2 letters!',
-        'zh-cn' => '标签只能字母与数字，至少2位',
+        'en-us' => 'Tag must start with a letter, end with a letter or digit and can only contain lowercase letters, digits, and dashes， at least 2 letters!',
+        'zh-cn' => '标签只能以字母开头，以字母或数字结尾，至少2位',
         'ja' => '',
     ],
     'ClickInstall' =>[
