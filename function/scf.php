@@ -1,19 +1,5 @@
 <?php
 
-$commonEnv = [
-    //'Region',
-    //'SecretId',
-    //'SecretKey',
-    //'admin',
-    'adminloginpage',
-    'background',
-    //'disktag',
-    'language',
-    'passfile',
-    'sitename',
-    'theme',
-];
-
 function printInput($event, $context)
 {
     if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+30) . '...Too Long!...' . substr($event['body'],-50);
