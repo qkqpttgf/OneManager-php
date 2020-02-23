@@ -142,9 +142,7 @@ function get_refresh_token()
         </script>';
             setConfig([ 'refresh_token' => $tmptoken, 'token_expires' => time()+30*24*60*60 ], $_COOKIE['disktag']);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
-            $trynum = 0;
-            while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
+            WaitSCFStat();
             $str .= '
             <meta http-equiv="refresh" content="2;URL=' . $url . '">';
             return message($str, getconstStr('WaitJumpIndex'));
