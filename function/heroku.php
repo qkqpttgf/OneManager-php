@@ -1,18 +1,5 @@
 <?php
 
-$commonEnv = [
-    //'APIKey',
-    //'admin',
-    'adminloginpage',
-    'background',
-    //'disktag',
-    //'function_name',
-    'language',
-    'passfile',
-    'sitename',
-    'theme',
-];
-
 function getpath()
 {
     $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
