@@ -29,14 +29,15 @@
         .more-disk a:hover{ background-color: rgba(85,85,85,0.7); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:40px}
-        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7)}
+        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
+        .list-table tr[data-to]:hover a[name~="filelist"]{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
         .list-table .file ion-icon{font-size:15px;/*margin-right:5px;*/vertical-align:bottom}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
-        .operate{display:inline-table;margin:0;list-style:none;}
+        .operate{display:inline-table;margin:0;list-style:none}
         .operate ion-icon{vertical-align:bottom}
         .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
         .operate:hover ul{position:absolute;display:inline-table;}
@@ -232,7 +233,7 @@
                             </li>&nbsp;&nbsp;&nbsp;
 <?php                       } ?>
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<?php echo $filenum;?>" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name']) . '/'); ?>"><?php echo str_replace('&','&amp;', $file['name']);?></a>
+                            <a id="file_a<?php echo $filenum;?>" name="filelist" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name']) . '/'); ?>"><?php echo str_replace('&','&amp;', $file['name']);?></a>
                         </td>
                         <td class="updated_at" id="folder_time<?php echo $filenum;?>"><?php echo time_format($file['lastModifiedDateTime']); ?></td>
                         <td class="size" id="folder_size<?php echo $filenum;?>"><?php echo size_format($file['size']); ?></td>
