@@ -190,8 +190,8 @@ Can not write config to file.<br>
     $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
     $html = '
     <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
-        '.getconstStr('OnedriveDiskTag').':<input type="text" name="disktag_add"><br>
-        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname"><br>
+        '.getconstStr('OnedriveDiskTag').':<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
+        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
         Onedrive_Ver：<br>
         <label><input type="radio" name="Onedrive_ver" value="MS" checked>MS: '.getconstStr('OndriveVerMS').'</label><br>
         <label><input type="radio" name="Onedrive_ver" value="CN">CN: '.getconstStr('OndriveVerCN').'</label><br>
@@ -199,7 +199,7 @@ Can not write config to file.<br>
             <div id="secret" style="display:none">
                 <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
                 client_secret:<input type="text" name="client_secret"><br>
-                client_id(12345678-90ab-cdef-ghij-klmnopqrstuv):<input type="text" name="client_id"><br>
+                client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
             </div>
         </label><br>
         <input type="submit" value="'.getconstStr('Submit').'">
@@ -208,7 +208,7 @@ Can not write config to file.<br>
         function notnull(t)
         {
             if (t.disktag_add.value==\'\') {
-                alert(\'input Disk Tag\');
+                alert(\'Input Disk Tag\');
                 return false;
             }
             var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
