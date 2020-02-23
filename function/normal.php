@@ -1,16 +1,5 @@
 <?php
 
-$commonEnv = [
-    //'admin',
-    'adminloginpage',
-    'background',
-    //'disktag',
-    'language',
-    'passfile',
-    'sitename',
-    'theme',
-];
-
 function getpath()
 {
     $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
