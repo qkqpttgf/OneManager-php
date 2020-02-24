@@ -30,7 +30,7 @@
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:40px}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
-        .list-table tr[data-to]:hover a[name~="filelist"]{color:white}
+        .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
@@ -43,6 +43,7 @@
         .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:7px;list-style:none;display:inline-table;}
         .operate ul li ion-icon{vertical-align:bottom}
+        .list-table tr[data-to]:hover .operate a{color:black}
 <?php } ?>
         .operatediv{position:absolute;border:1px #CCCCCC;background-color:#FFFFCC;z-index:2;}
         .operatediv div{margin:16px}
