@@ -1,6 +1,22 @@
 <?php
 
-$commonEnv = [
+$CommonEnv = [
+    'APIKey', // used in heroku.
+    'Region', // used in SCF.
+    'SecretId', // used in SCF.
+    'SecretKey', // used in SCF.
+    'admin',
+    'adminloginpage',
+    'background',
+    'disktag',
+    'function_name', // used in heroku.
+    'language',
+    'passfile',
+    'sitename',
+    'theme',
+];
+
+$ShowedCommonEnv = [
     //'APIKey', // used in heroku.
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
@@ -16,7 +32,7 @@ $commonEnv = [
     'theme',
 ];
 
-$innerEnv = [
+$InnerEnv = [
     'Onedrive_ver',
     'client_id',
     'client_secret',
@@ -28,7 +44,7 @@ $innerEnv = [
     'token_expires',
 ];
 
-$ShowedinnerEnv = [
+$ShowedInnerEnv = [
     //'Onedrive_ver',
     //'client_id',
     //'client_secret',
