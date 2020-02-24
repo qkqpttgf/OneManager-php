@@ -418,9 +418,9 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
     echo json_encode($Envs,JSON_PRETTY_PRINT);
-    $trynum = 0;
+    /*$trynum = 0;
     while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
+'.++$trynum;*/
     //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
     foreach ($tmp as $tmp1) {
