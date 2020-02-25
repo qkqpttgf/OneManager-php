@@ -433,8 +433,8 @@ function bigfileupload($path)
         //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
         if (isset($getoldupinfo['file'])&&$getoldupinfo['size']<5120) {
             $getoldupinfo_j = curl_request($getoldupinfo['@microsoft.graph.downloadUrl']);
-            $getoldupinfo = json_decode($getoldupinfo_j , true);
-            if ( json_decode( curl_request($getoldupinfo['uploadUrl']), true)['@odata.context']!='' ) return output($getoldupinfo_j);
+            $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
+            if ( json_decode( curl_request($getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
         }
         if (!$_SERVER['admin']) $filename = spurlencode( $fileinfo['name'] ) . '.scfupload';
         $response=MSAPI('createUploadSession',path_format($path1 . '/' . $filename),'{"item": { "@microsoft.graph.conflictBehavior": "fail"  }}',$_SERVER['access_token']);
