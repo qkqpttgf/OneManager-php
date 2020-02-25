@@ -53,9 +53,9 @@ function GetPathSetting($event, $context)
 
 function getConfig($str, $disktag = '')
 {
-    global $innerEnv;
+    global $InnerEnv;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    if (in_array($str, $innerEnv)) {
+    if (in_array($str, $InnerEnv)) {
         return json_decode(getenv($disktag), true)[$str];
     }
     return getenv($str);
@@ -63,7 +63,7 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    global $innerEnv;
+    global $InnerEnv;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     $disktags = explode("|",getConfig('disktag'));
     $diskconfig = json_decode(getenv($disktag), true);
@@ -71,7 +71,7 @@ function setConfig($arr, $disktag = '')
     $indisk = 0;
     $oparetdisk = 0;
     foreach ($arr as $k => $v) {
-        if (in_array($k, $innerEnv)) {
+        if (in_array($k, $InnerEnv)) {
             $diskconfig[$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
@@ -111,6 +111,8 @@ function WaitSCFStat()
 function get_refresh_token()
 {
     global $constStr;
+    global $CommonEnv;
+    foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
     $url = path_format($_SERVER['PHP_SELF'] . '/');
     if ($_GET['authorization_code'] && isset($_GET['code'])) {
         $_SERVER['disktag'] = $_COOKIE['disktag'];
@@ -169,6 +171,9 @@ function get_refresh_token()
     }
     if ($_GET['install0']) {
         if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
+            if (in_array($_COOKIE['disktag'], $CommonEnv)) {
+                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+            }
             $_SERVER['disktag'] = $_COOKIE['disktag'];
             $tmp['disktag_add'] = $_POST['disktag_add'];
             $tmp['diskname'] = $_POST['diskname'];
@@ -221,6 +226,11 @@ namespace:' . $_SERVER['namespace'] . '<br>
         {
             if (t.disktag_add.value==\'\') {
                 alert(\'Input Disk Tag\');
+                return false;
+            }
+            envs = [' . $envs . '];
+            if (envs.indexOf(t.disktag_add.value)>-1) {
+                alert(\'' . $envs . '\');
                 return false;
             }
             var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
@@ -418,9 +428,9 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
     echo json_encode($Envs,JSON_PRETTY_PRINT);
-    $trynum = 0;
+    /*$trynum = 0;
     while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
+'.++$trynum;*/
     //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
     foreach ($tmp as $tmp1) {
@@ -487,11 +497,10 @@ function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKe
 function EnvOpt($function_name, $needUpdate = 0)
 {
     global $constStr;
-    global $commonEnv;
-    global $innerEnv;
-    global $ShowedinnerEnv;
-    asort($commonEnv);
-    asort($ShowedinnerEnv);
+    global $ShowedCommonEnv;
+    global $ShowedInnerEnv;
+    asort($ShowedCommonEnv);
+    asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if ($_POST['updateProgram']==getconstStr('updateProgram')) {
         $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
@@ -514,7 +523,7 @@ namespace:' . $namespace . '<br>
     if ($_POST['submit1']) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
-            if (in_array($k, $commonEnv)||in_array($k, $innerEnv)||$k=='disktag_del' || $k=='disktag_add') {
+            if (in_array($k, $ShowedCommonEnv)||in_array($k, $ShowedInnerEnv)||$k=='disktag_del' || $k=='disktag_add') {
                 $tmp[$k] = $v;
             }
             if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
@@ -568,7 +577,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
         <tr>
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
         </tr>';
-    foreach ($commonEnv as $key) {
+    foreach ($ShowedCommonEnv as $key) {
         if ($key=='language') {
             $html .= '
         <tr>
@@ -637,7 +646,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
                 $html .= '
     <form name="'.$disktag.'" action="" method="post">
         <input type="hidden" name="disk" value="'.$disktag.'">';
-                foreach ($ShowedinnerEnv as $key) {
+                foreach ($ShowedInnerEnv as $key) {
                     $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
