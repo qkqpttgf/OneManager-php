@@ -218,7 +218,7 @@ Can not write config to file.<br>
             }
             envs = [' . $envs . '];
             if (envs.indexOf(t.disktag_add.value)>-1) {
-                alert(\'' . $envs . '\');
+                alert("Do not input ' . $envs . '");
                 return false;
             }
             var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
