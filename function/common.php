@@ -1,6 +1,22 @@
 <?php
 
-$commonEnv = [
+$CommonEnv = [
+    'APIKey', // used in heroku.
+    'Region', // used in SCF.
+    'SecretId', // used in SCF.
+    'SecretKey', // used in SCF.
+    'admin',
+    'adminloginpage',
+    'background',
+    'disktag',
+    'function_name', // used in heroku.
+    'language',
+    'passfile',
+    'sitename',
+    'theme',
+];
+
+$ShowedCommonEnv = [
     //'APIKey', // used in heroku.
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
@@ -16,7 +32,7 @@ $commonEnv = [
     'theme',
 ];
 
-$innerEnv = [
+$InnerEnv = [
     'Onedrive_ver',
     'client_id',
     'client_secret',
@@ -28,7 +44,7 @@ $innerEnv = [
     'token_expires',
 ];
 
-$ShowedinnerEnv = [
+$ShowedInnerEnv = [
     //'Onedrive_ver',
     //'client_id',
     //'client_secret',
@@ -417,8 +433,8 @@ function bigfileupload($path)
         //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
         if (isset($getoldupinfo['file'])&&$getoldupinfo['size']<5120) {
             $getoldupinfo_j = curl_request($getoldupinfo['@microsoft.graph.downloadUrl']);
-            $getoldupinfo = json_decode($getoldupinfo_j , true);
-            if ( json_decode( curl_request($getoldupinfo['uploadUrl']), true)['@odata.context']!='' ) return output($getoldupinfo_j);
+            $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
+            if ( json_decode( curl_request($getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
         }
         if (!$_SERVER['admin']) $filename = spurlencode( $fileinfo['name'] ) . '.scfupload';
         $response=MSAPI('createUploadSession',path_format($path1 . '/' . $filename),'{"item": { "@microsoft.graph.conflictBehavior": "fail"  }}',$_SERVER['access_token']);
