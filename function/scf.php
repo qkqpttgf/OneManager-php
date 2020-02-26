@@ -33,14 +33,12 @@ function GetPathSetting($event, $context)
     $host_name = $event['headers']['host'];
     $_SERVER['HTTP_HOST'] = $host_name;
     $serviceId = $event['requestContext']['serviceId'];
+    $Region = $event['requestContext']['Region'];
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
-        $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
-        $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
         $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
     } else {
         $_SERVER['base_path'] = $event['requestContext']['path'];
-        $_SERVER['Region'] = getenv('Region');
         $path = substr($event['path'], strlen($event['requestContext']['path']));
     }
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
@@ -98,13 +96,13 @@ function setConfig($arr, $disktag = '')
     }
 //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 //';
-    return updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
+    return updateEnvironment($tmp, $_SERVER['function_name'], getConfig('Region'), $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
 }
 
 function WaitSCFStat()
 {
     $trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
+    while( json_decode(getfunctioninfo($_SERVER['function_name'], getConfig('Region'), $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;
 }
 
@@ -263,7 +261,12 @@ function install()
                 $SecretKey = $_POST['SecretKey'];
                 $tmp['SecretKey'] = $SecretKey;
             }
-            $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
+            $Region = getConfig('Region');
+            if ($Region=='') {
+                $Region = $_POST['Region'];
+                $tmp['Region'] = $Region;
+            }
+            $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $Region, $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
             if (isset($response['Error'])) {
                 $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
@@ -274,11 +277,11 @@ namespace:' . $_SERVER['namespace'] . '<br>
                 $title = 'Error';
             } else {
                 $trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+    while( json_decode(getfunctioninfo($_SERVER['function_name'], $Region, $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;
-                //$response = json_decode( updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
+                //$response = json_decode( updateEnvironment($tmp, $_SERVER['function_name'], $Region, $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
                 if (needUpdate()) {
-                    updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+                    updateProgram($_SERVER['function_name'], $Region, $_SERVER['namespace'], $SecretId, $SecretKey);
                     return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
                 }
                 return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
@@ -429,7 +432,7 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
 {
     echo json_encode($Envs,JSON_PRETTY_PRINT);
     /*$trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
+    while( json_decode(getfunctioninfo($_SERVER['function_name'], $Region, $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;*/
     //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
@@ -503,7 +506,7 @@ function EnvOpt($function_name, $needUpdate = 0)
     asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if ($_POST['updateProgram']==getconstStr('updateProgram')) {
-        $response = json_decode(updateProgram($function_name, $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
+        $response = json_decode(updateProgram($function_name, getConfig('Region'), $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
         if (isset($response['Error'])) {
             $html = $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
