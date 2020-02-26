@@ -642,16 +642,44 @@
         );
     }
     function createDplayers(videos) {
-        for (i = 0; i < videos.length; i++) {
-            console.log(videos[i]);
-            new DPlayer({
-                container: document.getElementById('video-a' + i),
-                screenshot: true,
-                video: {
-                    url: videos[i]
-                }
-            });
-        }
+        var url = '<?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_path'] . '/' . $path), '/'))); ?>' , subtitle = url.replace(/\.[^\.]+?(\?|$)/,'.vtt$1');
+        var dp = new DPlayer({
+            container: document.getElementById('video-a0'),
+            autoplay: false,
+            screenshot: true,
+            hotkey: true,
+            volume: 1,
+            preload: 'auto',
+            mutex: true,
+            video:{
+                url: url,
+            },
+            subtitle: {
+                url: subtitle,
+                fontSize: '25px',
+                bottom: '7%',
+            },
+        });
+        // 防止出现401 token过期
+        dp.on('error', function () {
+            console.log('获取资源错误，开始重新加载！');
+            let last = dp.video.currentTime;
+            dp.video.src = url;
+            dp.video.load();
+            dp.video.currentTime = last;
+            dp.play();
+        });
+        // 如果是播放状态 & 没有播放完 每25分钟重载视频防止卡死
+        setInterval(function () {
+            if (!dp.video.paused && !dp.video.ended) {
+                console.log('开始重新加载！');
+                let last = dp.video.currentTime;
+                dp.video.src = url;
+                dp.video.load();
+                dp.video.currentTime = last;
+                dp.play();
+            }
+        }, 1000 * 60 * 25)
     }
     addVideos(['<?php echo $DPvideo;?>']);
 <?php   }
