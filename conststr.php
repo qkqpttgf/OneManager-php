@@ -268,6 +268,12 @@ $constStr = [
         'ja' => '画像のサムネイル',
         'ko-kr' => '사진 섬네일',
     ],
+    'CopyAllDownloadUrl' => [
+        'en-us' => 'CopyAllDownloadUrl',
+        'zh-cn' => '复制所有下载链接',
+        'ja' => 'すべてのダウンロードリンクをコピー',
+        'ko-kr' => '모든 다운로드 링크 복사',
+    ],
     'EditTime' => [
         'en-us' => 'EditTime',
         'zh-cn' => '修改时间',
