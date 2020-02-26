@@ -28,6 +28,12 @@ Official: https://cloud.tencent.com/product/scf
 
 How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview  
 
+Necessary environment variables (add first before installation):<br>
+必填环境变量（安装前添加）：  
+SecretId       ：腾讯云API 的 SecretId。  
+SecretKey      ：腾讯云API 的 SecretKey。<br>
+Region         ：腾讯云API 所在的地理位置，添加值参考[官方地域列表](https://cloud.tencent.com/document/api/583/17238#.E5.9C.B0.E5.9F.9F.E5.88.97.E8.A1.A8)。<br>
+
 DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
 
 # Features 特性  
