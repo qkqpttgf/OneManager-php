@@ -17,8 +17,8 @@
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#FFF;text-decoration:none}
-        .title a:hover{color: #000; }
-        .list-wrapper{width:80%;margin:0 auto 30px;position:relative;box-shadow:0 0 32px 0 rgb(128,128,128);border-radius:15px;}
+        .title a:hover{color: #05f7d5; }
+        .list-wrapper{width:80%;margin:0 auto 30px;position:relative;box-shadow:0 0 32px 0 rgba(0,0,0,0.3);border-radius:15px;}
         .list-container{position:relative;overflow:hidden;border-radius:15px;}
         .list-header-container{position:relative}
         .list-header-container a.back-link{color:#FFF;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;padding:10px 10px;vertical-align:middle;text-decoration:none}
@@ -44,7 +44,7 @@
         .operate ul li{padding:7px;list-style:none;display:block;}
         .operate ul li ion-icon{vertical-align:bottom}
 <?php } ?>
-        .operatediv{position:absolute;border:1px #000000;background-color:#FFFFCC;z-index:2;}
+        .operatediv{position:absolute;border:1px #000000;background-color:rgba(0,0,0,0.3);z-index:2;}
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(0,0,0,0.3);}
@@ -668,7 +668,7 @@ echo  'IPv4: ' ,$ip, "\n";
         );
     }
     function createDplayers(videos) {
-        var url = '<?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_path'] . '/' . $path), '/'))); ?>' , subtitle = url.replace(/\.[^\.]+?(\?|$)/,'.vtt$1');
+        var url = '<?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?>' , subtitle = url.replace(/\.[^\.]+?(\?|$)/,'.vtt$1');
         var dp = new DPlayer({
             container: document.getElementById('video-a0'),
             autoplay: false,
