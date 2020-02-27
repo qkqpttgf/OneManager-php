@@ -33,7 +33,6 @@ function GetPathSetting($event, $context)
     $host_name = $event['headers']['host'];
     $_SERVER['HTTP_HOST'] = $host_name;
     $serviceId = $event['requestContext']['serviceId'];
-    $Region = $event['requestContext']['Region'];
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
         $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
