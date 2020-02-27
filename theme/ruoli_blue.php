@@ -642,7 +642,7 @@
         );
     }
     function createDplayers(videos) {
-        var url = '<?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_path'] . '/' . $path), '/'))); ?>' , subtitle = url.replace(/\.[^\.]+?(\?|$)/,'.vtt$1');
+        var url = '<?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?>' , subtitle = url.replace(/\.[^\.]+?(\?|$)/,'.vtt$1');
         var dp = new DPlayer({
             container: document.getElementById('video-a0'),
             autoplay: false,
