@@ -83,8 +83,8 @@ function setConfig($arr, $disktag = '')
             $envs[$v] = '';
             $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $tmp[$k] = equal_replace($v);
-            else $tmp[$k] = $v;
+            if (in_array($k, $Base64Env)) $envs[$k] = equal_replace($v);
+            else $envs[$k] = $v;
         }
     }
     /*if ($indisk) {
