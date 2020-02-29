@@ -191,7 +191,9 @@ function equal_replace($str, $add = false)
 {
     if ($add) {
         while(strlen($str)%4) $str .= '=';
+        $str = urldecode(base64_decode($str));
     } else {
+        $str = base64_encode(urlencode($str));
         while(substr($str,-1)=='=') $str=substr($str,0,-1);
     }
     return $str;
