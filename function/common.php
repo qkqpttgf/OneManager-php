@@ -1,5 +1,30 @@
 <?php
 
+$Base64Env = [
+    //'APIKey', // used in heroku.
+    //'Region', // used in SCF.
+    //'SecretId', // used in SCF.
+    //'SecretKey', // used in SCF.
+    //'admin',
+    //'adminloginpage',
+    'background',
+    //'disktag',
+    //'function_name', // used in heroku.
+    //'language',
+    //'passfile',
+    'sitename',
+    //'theme',
+    //'Onedrive_ver',
+    //'client_id',
+    'client_secret',
+    'domain_path',
+    'guestup_path',
+    'diskname',
+    'public_path',
+    //'refresh_token',
+    //'token_expires',
+];
+
 $CommonEnv = [
     'APIKey', // used in heroku.
     'Region', // used in SCF.
@@ -105,8 +130,7 @@ function config_oauth()
         // MS Customer
         // https://portal.azure.com
         $_SERVER['client_id'] = getConfig('client_id');
-        $_SERVER['client_secret'] = base64_decode(equal_replace(getConfig('client_secret'),1));
-        //getConfig('client_secret');
+        $_SERVER['client_secret'] = getConfig('client_secret');
         $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
@@ -523,6 +547,7 @@ function main($path)
         $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
         if ($response['stat']==200) $ret = json_decode($response['body'], true);
         if (!isset($ret['access_token'])) {
+            error_log($_SERVER['oauth_url'] . 'token'.'?client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token);
             error_log('failed to get access_token. response' . json_encode($ret));
             throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
         }
@@ -536,6 +561,7 @@ function main($path)
     if ($_SERVER['ajax']) {
         if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
             // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
+            error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
             $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
             savecache('path_' . $path1, json_decode('{}',true), 1);
