@@ -280,14 +280,14 @@ function gethiddenpass($path,$passfile)
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
             $password=md5($password);
-            savecache($path . '/password', $password);
+            savecache('path_' . $path . '/?password', $password);
             return $password;
         } else {
             //return md5('DefaultP@sswordWhenNetworkError');
             return md5( md5(time()).rand(1000,9999) );
         }
     } else {
-        savecache($path . '/password', 'null');
+        savecache('path_' . $path . '/?password', 'null');
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
             return gethiddenpass($path,$passfile);
