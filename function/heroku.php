@@ -40,16 +40,20 @@ function getGET()
 function getConfig($str, $disktag = '')
 {
     global $InnerEnv;
+    global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     if (in_array($str, $InnerEnv)) {
-        return json_decode(getenv($disktag), true)[$str];
+        if (in_array($str, $Base64Env)) return equal_replace(json_decode(getenv($disktag), true)[$str],1);
+        else return json_decode(getenv($disktag), true)[$str];
     }
-    return getenv($str);
+    if (in_array($str, $Base64Env)) return equal_replace(getenv($str),1);
+    else return getenv($str);
 }
 
 function setConfig($arr, $disktag = '')
 {
     global $InnerEnv;
+    global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     $disktags = explode("|",getConfig('disktag'));
     $diskconfig = json_decode(getenv($disktag), true);
@@ -58,7 +62,8 @@ function setConfig($arr, $disktag = '')
     $oparetdisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
-            $diskconfig[$k] = $v;
+            if (in_array($k, $Base64Env)) $diskconfig[$k] = equal_replace($v);
+            else $diskconfig[$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
@@ -68,7 +73,8 @@ function setConfig($arr, $disktag = '')
             $tmp[$v] = '';
             $oparetdisk = 1;
         } else {
-            $tmp[$k] = $v;
+            if (in_array($k, $Base64Env)) $tmp[$k] = equal_replace($v);
+            else $tmp[$k] = $v;
         }
     }
     if ($indisk) {
@@ -158,7 +164,7 @@ function get_refresh_token()
             $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
             if ($_POST['Onedrive_ver']=='MSC') {
                 $tmp['client_id'] = $_POST['client_id'];
-                $tmp['client_secret'] = equal_replace(base64_encode($_POST['client_secret']));
+                $tmp['client_secret'] = $_POST['client_secret'];
                 //$_POST['client_secret'];
             }
             $response = json_decode( setConfig($tmp, $_COOKIE['disktag']), true )['Response'];

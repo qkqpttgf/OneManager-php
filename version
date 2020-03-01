@@ -1,7 +1,10 @@
+20200229-1300.13
+In SCF, some config can input Special symbols now, like ?&= 。
+在SCF中，某些配置可以输入特殊符号了，像background可以用?&=之类的了。
+
 20200225-1310.12
 Can update by one click any time. fix bugs: special tag, reupload.
 可以不管版本直接一键更新（覆盖）了。修复可以使用特殊onedrive标签的bug，修复断网续传的问题。
-
 20200222-2130.11
 you can set background now. fix bug: 2nd disk upload.
 可以设置背景图片了。第2个盘上传后链接不对。

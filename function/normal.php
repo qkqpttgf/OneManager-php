@@ -39,6 +39,7 @@ function getGET()
 function getConfig($str, $disktag = '')
 {
     global $InnerEnv;
+    global $Base64Env;
     //include 'config.php';
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     $s = file_get_contents('config.php');
@@ -46,8 +47,12 @@ function getConfig($str, $disktag = '')
     if ($configs!='') {
         $envs = json_decode($configs, true);
         if (in_array($str, $InnerEnv)) {
-            if (isset($envs[$disktag][$str])) return $envs[$disktag][$str];
-        } else if (isset($envs[$str])) return $envs[$str];
+            if (in_array($str, $Base64Env)) return equal_replace($envs[$disktag][$str],1);
+            else return $envs[$disktag][$str];
+        } else {
+            if (in_array($str, $Base64Env)) return equal_replace($envs[$str],1);
+            else return $envs[$str];
+        }
     }
     return '';
 }
@@ -55,6 +60,7 @@ function getConfig($str, $disktag = '')
 function setConfig($arr, $disktag = '')
 {
     global $InnerEnv;
+    global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     //include 'config.php';
     $s = file_get_contents('config.php');
@@ -65,7 +71,8 @@ function setConfig($arr, $disktag = '')
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
-            $envs[$disktag][$k] = $v;
+            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = equal_replace($v);
+            else $envs[$disktag][$k] = $v;
             /*$diskconfig[$k] = $v;
             $indisk = 1;*/
         } elseif ($k=='disktag_add') {
@@ -76,7 +83,8 @@ function setConfig($arr, $disktag = '')
             $envs[$v] = '';
             $operatedisk = 1;
         } else {
-            $envs[$k] = $v;
+            if (in_array($k, $Base64Env)) $envs[$k] = equal_replace($v);
+            else $envs[$k] = $v;
         }
     }
     /*if ($indisk) {
@@ -171,8 +179,7 @@ function get_refresh_token()
             $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
             if ($_POST['Onedrive_ver']=='MSC') {
                 $tmp['client_id'] = $_POST['client_id'];
-                $tmp['client_secret'] = equal_replace(base64_encode($_POST['client_secret']));
-                //$_POST['client_secret'];
+                $tmp['client_secret'] = $_POST['client_secret'];
             }
             $response = setConfig($tmp, $_COOKIE['disktag']);
             $title = getconstStr('MayinEnv');
