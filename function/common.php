@@ -594,7 +594,7 @@ function main($path)
             return $tmp;
         }
     } else {
-        if ($_SERVER['ajax']) return output(getconstStr('RefleshtoLogin'),401);
+        if ($_SERVER['ajax']) return output(getconstStr('RefreshtoLogin'),401);
     }
     $_SERVER['ishidden'] = passhidden($path);
     if ($_GET['thumbnails']) {
