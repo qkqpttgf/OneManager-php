@@ -156,7 +156,7 @@ function get_refresh_token()
     if ($_GET['install0']) {
         if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
             if (in_array($_COOKIE['disktag'], $CommonEnv)) {
-                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
             }
             $_SERVER['disktag'] = $_COOKIE['disktag'];
             $tmp['disktag_add'] = $_POST['disktag_add'];
@@ -174,7 +174,7 @@ function get_refresh_token()
             $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+<button onclick="location.href = location.href;">'.$constStr['Refresh'][$constStr['language']].'</button>';
             $title = 'Error';
             }
             return message($html, $title, 201);
@@ -253,7 +253,7 @@ function install()
                 $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+<button onclick="location.href = location.href;">'.$constStr['Refresh'][$constStr['language']].'</button>';
                 $title = 'Error';
             } else {
                 return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
@@ -372,11 +372,11 @@ function EnvOpt($function_name, $needUpdate = 0)
             $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+<button onclick="location.href = location.href;">'.$constStr['Refresh'][$constStr['language']].'</button>';
             $title = 'Error';
         } else {
             $html .= getconstStr('UpdateSuccess') . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
         }
         return message($html, $title);
@@ -411,7 +411,7 @@ function_name:' . $_SERVER['function_name'] . '<br>
             $html = $response['id'] . '<br>
 ' . $response['message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
-<button onclick="location.href = location.href;">'.$constStr['Reflesh'][$constStr['language']].'</button>';
+<button onclick="location.href = location.href;">'.$constStr['Refresh'][$constStr['language']].'</button>';
             $title = 'Error';
         } else {
             $html .= '<script>location.href=location.href</script>';
