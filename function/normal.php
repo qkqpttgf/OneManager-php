@@ -171,7 +171,7 @@ function get_refresh_token()
     if ($_GET['install0']) {
         if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
             if (in_array($_COOKIE['disktag'], $CommonEnv)) {
-                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
             }
             $_SERVER['disktag'] = $_COOKIE['disktag'];
             $tmp['disktag_add'] = $_POST['disktag_add'];
@@ -187,7 +187,7 @@ function get_refresh_token()
             if (!$response) {
                 $html = $response . '<br>
 Can not write config to file.<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
             }
             return message($html, $title, 201);
@@ -252,7 +252,7 @@ function install()
             if (!$response) {
                 $html = $response . '<br>
 Can not write config to file.<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
@@ -343,11 +343,11 @@ function EnvOpt($function_name, $needUpdate = 0)
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
 namespace:' . $namespace . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = 'Error';
         } else {
             $html .= getconstStr('UpdateSuccess') . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
         }
         return message($html, $title);
@@ -372,7 +372,7 @@ namespace:' . $namespace . '<br>
         $response = setConfig($tmp, $_SERVER['disk_oprating']);
         if (!$response) {
             $html = $response . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = 'Error';
         } else {
             $html .= '<script>location.href=location.href</script>';
