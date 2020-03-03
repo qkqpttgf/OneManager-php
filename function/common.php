@@ -270,7 +270,8 @@ function encode_str_replace($str)
 
 function gethiddenpass($path,$passfile)
 {
-    $password=getcache('path_' . $path . '/?password');
+    $path1 = path_format($_SERVER['list_path'] . path_format($path));
+    $password = getcache('path_' . $path1 . '/?password');
     if ($password=='') {
     $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
@@ -280,14 +281,14 @@ function gethiddenpass($path,$passfile)
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
             $password=md5($password);
-            savecache('path_' . $path . '/?password', $password);
+            savecache('path_' . $path1 . '/?password', $password);
             return $password;
         } else {
             //return md5('DefaultP@sswordWhenNetworkError');
             return md5( md5(time()).rand(1000,9999) );
         }
     } else {
-        savecache('path_' . $path . '/?password', 'null');
+        savecache('path_' . $path1 . '/?password', 'null');
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
             return gethiddenpass($path,$passfile);
@@ -793,8 +794,8 @@ function adminoperate($path)
         return output($result['body'], $result['stat']);
     }
     if ($_GET['RefreshCache']) {
+        $path1 = path_format($_SERVER['list_path'] . path_format($path));
         savecache('path_' . $path1 . '/?password', '', 1);
-        savecache('path_' . $path . '/?password', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
