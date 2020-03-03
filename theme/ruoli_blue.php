@@ -6,9 +6,9 @@
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
-    <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,林的小窝,onedrive">
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/ldxw/CDN@0.003/favicon/64x64/favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ldxw/CDN@0.003/favicon/64x64/favicon.ico" type="image/x-icon" />
     <style type="text/css">
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:16px;line-height:1em;color:#1E90FF;background:url("http://www.qqzzz.net/www/images/bj.png")}
         a{color:#1E90FF;cursor:pointer;text-decoration:none}
@@ -934,7 +934,7 @@
                     } else {
                         StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     }
-                    var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
+                    var chunksize=15*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                     if (totalsize>200*1024*1024) chunksize=10*1024*1024;
                     function readblob(start) {
                         var end=start+chunksize;
