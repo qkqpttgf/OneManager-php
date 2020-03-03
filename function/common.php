@@ -271,16 +271,16 @@ function encode_str_replace($str)
 function gethiddenpass($path,$passfile)
 {
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
-    $password = getcache('path_' . $path1 . '/?password');
+    $password=getcache('path_' . $path1 . '/?password');
     if ($password=='') {
-    $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
+    $ispassfile = fetch_files(path_format($path . '/' . urlencode($passfile)));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
     if (isset($ispassfile['file'])) {
         $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
         if ($arr['stat']==200) {
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
-            $password=md5($password);
+            if ($password!='') $password=md5($password);
             savecache('path_' . $path1 . '/?password', $password);
             return $password;
         } else {
@@ -395,6 +395,7 @@ function passhidden($path)
     $path = str_replace('+','%2B',$path);
     $path = str_replace('&amp;','&', path_format(urldecode($path)));
     if (getConfig('passfile') != '') {
+        $path = spurlencode($path,'/');
         if (substr($path,-1)=='/') $path=substr($path,0,-1);
         $hiddenpass=gethiddenpass($path,getConfig('passfile'));
         if ($hiddenpass != '') {
@@ -707,7 +708,8 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
-        //savecache('path_' . $path1, json_decode('{}',true), 1);
+        $path1 = path_format($path1 . '/' . $foldername );
+        savecache('path_' . $path1 . '/?password', '', 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['move_folder']!='') {
