@@ -35,8 +35,11 @@ function GetPathSetting($event, $context)
     $serviceId = $event['requestContext']['serviceId'];
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
-        $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
-        $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
+        $_SERVER['Region'] = getenv('Region');
+        if ($_SERVER['Region'] == '') {
+            $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
+            $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
+        }
         $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
     } else {
         $_SERVER['base_path'] = $event['requestContext']['path'];
