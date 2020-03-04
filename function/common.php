@@ -270,24 +270,25 @@ function encode_str_replace($str)
 
 function gethiddenpass($path,$passfile)
 {
-    $password=getcache('path_' . $path . '/?password');
+    $path1 = path_format($_SERVER['list_path'] . path_format($path));
+    $password=getcache('path_' . $path1 . '/?password');
     if ($password=='') {
-    $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
+    $ispassfile = fetch_files(path_format($path . '/' . urlencode($passfile)));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
     if (isset($ispassfile['file'])) {
         $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
         if ($arr['stat']==200) {
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
-            $password=md5($password);
-            savecache('path_' . $path . '/?password', $password);
+            if ($password!='') $password=md5($password);
+            savecache('path_' . $path1 . '/?password', $password);
             return $password;
         } else {
             //return md5('DefaultP@sswordWhenNetworkError');
             return md5( md5(time()).rand(1000,9999) );
         }
     } else {
-        savecache('path_' . $path . '/?password', 'null');
+        savecache('path_' . $path1 . '/?password', 'null');
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
             return gethiddenpass($path,$passfile);
@@ -348,12 +349,15 @@ function get_timezone($timezone = '8')
 function message($message, $title = 'Message', $statusCode = 200)
 {
     return output('
+<html lang="' . $_SERVER['language'] . '">
 <html>
     <meta charset=utf-8>
     <body>
         <h1>' . $title . '</h1>
         <p>
+
 ' . $message . '
+
         </p>
     </body>
 </html>', $statusCode);
@@ -391,6 +395,7 @@ function passhidden($path)
     $path = str_replace('+','%2B',$path);
     $path = str_replace('&amp;','&', path_format(urldecode($path)));
     if (getConfig('passfile') != '') {
+        $path = spurlencode($path,'/');
         if (substr($path,-1)=='/') $path=substr($path,0,-1);
         $hiddenpass=gethiddenpass($path,getConfig('passfile'));
         if ($hiddenpass != '') {
@@ -482,6 +487,7 @@ function main($path)
     $constStr['language'] = $_COOKIE['language'];
     if ($constStr['language']=='') $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
+    $_SERVER['language'] = $constStr['language'];
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     $disktags = explode("|",getConfig('disktag'));
@@ -702,7 +708,8 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
-        //savecache('path_' . $path1, json_decode('{}',true), 1);
+        $path1 = path_format($path1 . '/' . $foldername );
+        savecache('path_' . $path1 . '/?password', '', 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['move_folder']!='') {
@@ -789,8 +796,8 @@ function adminoperate($path)
         return output($result['body'], $result['stat']);
     }
     if ($_GET['RefreshCache']) {
-        //savecache('path_' . $path1, json_decode('{}',true), 1);
-        savecache('path_' . $path . '/?password', '', 1);
+        $path1 = path_format($_SERVER['list_path'] . path_format($path));
+        savecache('path_' . $path1 . '/?password', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
@@ -1072,7 +1079,7 @@ function render_list($path = '', $files = '')
     $htmlpage = include 'theme/'.$theme;
 
     $html = '<!--
-    Github ： https://github.com/ldxw/OneManager-php
+    Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
     if (isset($htmlpage['statusCode'])) return $htmlpage;
     if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
