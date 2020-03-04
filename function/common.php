@@ -8,7 +8,9 @@ $Base64Env = [
     //'admin',
     //'adminloginpage',
     'background',
+    'diskname',
     //'disktag',
+    //'downloadencrypt',
     //'function_name', // used in heroku.
     //'language',
     //'passfile',
@@ -19,7 +21,6 @@ $Base64Env = [
     'client_secret',
     'domain_path',
     'guestup_path',
-    'diskname',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -61,9 +62,10 @@ $InnerEnv = [
     'Onedrive_ver',
     'client_id',
     'client_secret',
-    'domain_path',
-    'guestup_path',
     'diskname',
+    'domain_path',
+    'downloadencrypt',
+    'guestup_path',
     'public_path',
     'refresh_token',
     'token_expires',
@@ -73,9 +75,10 @@ $ShowedInnerEnv = [
     //'Onedrive_ver',
     //'client_id',
     //'client_secret',
-    'domain_path',
-    'guestup_path',
     'diskname',
+    'domain_path',
+    'downloadencrypt',
+    'guestup_path',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -613,7 +616,7 @@ function main($path)
     $files = list_files($path);
     if (isset($files['file']) && !$_GET['preview']) {
         // is file && not preview mode
-        if ($_SERVER['ishidden']<4) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        if ( $_SERVER['ishidden']<4 || (getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
     }
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
@@ -628,8 +631,8 @@ function list_files($path)
     $path = path_format($path);
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {
         $files = json_decode('{"folder":{}}', true);
-    } elseif ($_SERVER['ishidden']==4) {
-        $files = json_decode('{"folder":{}}', true);
+    } elseif (!getConfig('downloadencrypt')) {
+        if ($_SERVER['ishidden']==4) $files = json_decode('{"folder":{}}', true);
     } else {
         $files = fetch_files($path);
     }
