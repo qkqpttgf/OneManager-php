@@ -83,7 +83,7 @@
             <option value="">Language</option>
 <?php
     foreach ($constStr['languages'] as $key1 => $value1) { ?>
-            <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
+            <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?><?php echo $value1; ?></option>
 <?php
     } ?>
         </select>
@@ -535,7 +535,7 @@
 <?php   }
     } ?>
     <div style="color:#FF6666;text-align:center;height:30px;"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
-	<div style="color:#FF6666;text-align:center;height:30px;">Powred by <!--<a href="http://wpa.qq.com/msgrd?v=3&uin=212088653&site=qq&menu=yes">-->逸笙<!--</a>--> | Theme by <!--<a href="http://wpa.qq.com/msgrd?v=3&uin=2909998156&site=qq&menu=yes">-->若离<!--</a>--></div>
+	<div style="color:#FF6666;text-align:center;height:30px;"><a href="https://github.com/qkqpttgf/OneManager-php" target=_blank>Powred by 逸笙</a> | Theme by <a href="http://wpa.qq.com/msgrd?v=3&uin=2909998156&site=qq&menu=yes">若离</a></div>
 </body>
 <?php if ($files) { ?>
 <?php if ($head||$readme) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
