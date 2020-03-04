@@ -7,15 +7,16 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,林的小窝,onedrive">
-    <link rel="icon" href="https://cdn.jsdelivr.net/gh/ldxw/CDN@0.003/favicon/64x64/favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="https://cdn.jsdelivr.net/gh/ldxw/CDN@0.003/favicon/64x64/favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
         body{cursor:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-1.cur"),auto;font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:16px;line-height:1em;color:#9966CC;background-image:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/bj.png");margin:0;}
-        a{text-decoration:none;cursor:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur"),auto;}
+        .href{text-decoration:none;cursor:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur"),auto; color:#9966CC;}
+		.href:hover{text-decoration:underline;color:#FF6666;}
         ion-icon{font-size:15px;vertical-align:bottom}
 		.login{float:left;}
         .changelanguage{float:right;}
-		.button{border-radius:3px;border:1px solid #663399;color:white;background-color:#9966CC;padding:5px 15px;text-align:center;transition:background-color 0.4s;transition:box-shadow 0.4s;cursor:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur"),auto;}
+		.button{border-radius:2px;border:1px solid #663399;color:white;background-color:#9966CC;padding:3px 10px;text-align:center;transition:background-color 0.4s;transition:box-shadow 0.4s;cursor:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-.cur"),auto;}
 		.button:hover{background-color:#663399;box-shadow:1px 1px 8px rgba(153,102,204,0.4);color:#FF6666;}
 		.ERR{background-color:#9966CC; }
 		.FOC{background-color:#FF6666; box-shadow:2px 2px 12px #FF6666;}
@@ -30,11 +31,12 @@
         .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#9966CC;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
         .more-disk{margin:0;border:0 none;padding-top:30px;text-align:left;font-weight:400;color:#9966CC;background-color:rgba(245,245,245,0.5);white-space:nowrap;overflow:auto;}
-        .more-disk a{padding:7px 15px;transition-duration: 0.4s;border-radius: 3px; color: white; border: 2px solid #663399; float:left;margin:0 0 30px 30px}
+        .more-disk a{text-decoration:none;padding:7px 15px;transition-duration: 0.4s;border-radius: 3px; color: white; border: 2px solid #663399; float:left;margin:0 0 30px 30px}
         .more-disk a:hover{ background-color:#CC3333}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:40px}
-        .list-table tr[data-to]:hover{background:rgba(204,204,255,0.7);color:#FF6666;}
+        .list-table tr[data-to]:hover , .list-table tr[data-to]:hover a[class="download href"],.list-table tr[data-to]:hover a[class="href"]{background:rgba(204,204,255,0.7);color:#FF6666;}
+		.list-table tr[data-to]:hover
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
@@ -227,7 +229,7 @@
                         // Folders
                         if (isset($file['folder'])) { 
                             $filenum++; ?>
-                    <tr data-to  id="tr<?php echo $filenum;?>" style="cursor:url('https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur'),auto" onclick="location.href='<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name']) . '/'); ?>'">
+                    <tr data-to  id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                       if ($_SERVER['admin']) { ?>
                             <li class="operate button"><ion-icon name="construct"></ion-icon><a><?php echo getconstStr('Operate'); ?></a>
@@ -241,7 +243,7 @@
                             </li>
 <?php                       } ?>
                             <ion-icon name="folder"></ion-icon>
-                           <?php echo str_replace('&','&amp;', $file['name']);?>
+                           <a class="href" style="cursor:url('https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur'),auto" id="file_a<?php echo $filenum;?>" name="filelist" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name']) . '/'); ?>"><?php echo str_replace('&','&amp;', $file['name']);?></a>
                         </td>
                         <td class="updated_at" id="folder_time<?php echo $filenum;?>"><?php echo time_format($file['lastModifiedDateTime']); ?></td>
                         <td class="size" id="folder_size<?php echo $filenum;?>"><?php echo size_format($file['size']); ?></td>
@@ -261,7 +263,7 @@
                                 }
                                 $filenum++; ?>
 								<?php if(strtolower($file['name']) !== 'head.md' && strtolower($file['name']) !== 'readme.md') {?>
-                    <tr data-to id="tr<?php echo $filenum;?>" style="cursor:url('https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/XSSB-2.cur'),auto" onclick="location.href='<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])); ?>?preview'">
+                    <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
 <?php                           if ($_SERVER['admin']) { ?>
                             <li class="operate button"><ion-icon name="construct"></ion-icon><a><?php echo getconstStr('Operate'); ?></a>
@@ -295,8 +297,9 @@
 <?php                           } else { ?>
                             <ion-icon name="document"></ion-icon>
 <?php                           } ?>
-                            <?php echo str_replace('&','&amp;', $file['name']); ?>
-                        </td>
+                            <a class="download href" id="file_a<?php echo $filenum;?>" name="filelist" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])); ?>?preview" target=_blank><?php echo str_replace('&','&amp;', $file['name']); ?></a>
+							
+						</td>
                         <td class="updated_at" id="file_time<?php echo $filenum;?>"><?php echo time_format($file['lastModifiedDateTime']); ?></td>
                         <td class="size" id="file_size<?php echo $filenum;?>"><?php echo size_format($file['size']); ?></td>
 						</tr><?php }?>
@@ -535,7 +538,7 @@
 <?php   }
     } ?>
     <div style="color:#FF6666;text-align:center;height:30px;"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
-	<div style="color:#FF6666;text-align:center;height:30px;"><a href="https://github.com/qkqpttgf/OneManager-php" target=_blank>Powred by 逸笙</a> | Theme by <a href="http://wpa.qq.com/msgrd?v=3&uin=2909998156&site=qq&menu=yes">若离</a></div>
+	<div style="color:#FF6666;text-align:center;height:30px;">Poweredred by <a class="href" href="http://wpa.qq.com/msgrd?v=3&uin=212088653&site=qq&menu=yes">逸笙</a> | Theme by <a class="href" href="http://wpa.qq.com/msgrd?v=3&uin=2909998156&site=qq&menu=yes">若离</a></div>
 </body>
 <?php if ($files) { ?>
 <?php if ($head||$readme) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
@@ -726,7 +729,8 @@
         document.body.appendChild(tmptextarea);
         tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
         document.querySelectorAll('.download').forEach(function (e) {
-            tmptextarea.innerHTML+=e.href+"\r\n";
+			var str=e.href.substr(0,e.href.length-8)+"\r\n";
+            tmptextarea.innerHTML+=str;
         });
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
