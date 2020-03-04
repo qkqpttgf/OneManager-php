@@ -1082,7 +1082,7 @@ function render_list($path = '', $files = '')
     $htmlpage = include 'theme/'.$theme;
 
     $html = '<!--
-    Github ： https://github.com/ldxw/OneManager-php
+    Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
     if (isset($htmlpage['statusCode'])) return $htmlpage;
     if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
