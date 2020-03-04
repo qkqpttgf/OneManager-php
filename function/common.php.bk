@@ -616,7 +616,7 @@ function main($path)
     $files = list_files($path);
     if (isset($files['file']) && !$_GET['preview']) {
         // is file && not preview mode
-        if ( $_SERVER['ishidden']<4 || (getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
     }
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
@@ -633,6 +633,7 @@ function list_files($path)
         $files = json_decode('{"folder":{}}', true);
     } elseif (!getConfig('downloadencrypt')) {
         if ($_SERVER['ishidden']==4) $files = json_decode('{"folder":{}}', true);
+        else $files = fetch_files($path);
     } else {
         $files = fetch_files($path);
     }
