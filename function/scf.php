@@ -35,8 +35,11 @@ function GetPathSetting($event, $context)
     $serviceId = $event['requestContext']['serviceId'];
     if ( $serviceId === substr($host_name,0,strlen($serviceId)) ) {
         $_SERVER['base_path'] = '/'.$event['requestContext']['stage'].'/'.$_SERVER['function_name'].'/';
-        $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
-        $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
+        $_SERVER['Region'] = getenv('Region');
+        if ($_SERVER['Region'] == '') {
+            $_SERVER['Region'] = substr($host_name, strpos($host_name, '.')+1);
+            $_SERVER['Region'] = substr($_SERVER['Region'], 0, strpos($_SERVER['Region'], '.'));
+        }
         $path = substr($event['path'], strlen('/'.$_SERVER['function_name'].'/'));
     } else {
         $_SERVER['base_path'] = $event['requestContext']['path'];
@@ -178,7 +181,7 @@ function get_refresh_token()
     if ($_GET['install0']) {
         if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
             if (in_array($_COOKIE['disktag'], $CommonEnv)) {
-                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
             }
             $_SERVER['disktag'] = $_COOKIE['disktag'];
             $tmp['disktag_add'] = $_POST['disktag_add'];
@@ -197,7 +200,7 @@ function get_refresh_token()
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
 namespace:' . $_SERVER['namespace'] . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
             }
             return message($html, $title, 201);
@@ -275,7 +278,7 @@ function install()
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
 namespace:' . $_SERVER['namespace'] . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
             } else {
                 $trynum = 0;
@@ -514,12 +517,12 @@ function EnvOpt($function_name, $needUpdate = 0)
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
 namespace:' . $namespace . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = 'Error';
         } else {
             WaitSCFStat();
             $html .= getconstStr('UpdateSuccess') . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
         }
         return message($html, $title);
@@ -548,7 +551,7 @@ namespace:' . $namespace . '<br>
 function_name:' . $_SERVER['function_name'] . '<br>
 Region:' . $_SERVER['Region'] . '<br>
 namespace:' . $_SERVER['namespace'] . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Reflesh').'</button>';
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
             } else {
                 WaitSCFStat();

@@ -8,7 +8,9 @@ $Base64Env = [
     //'admin',
     //'adminloginpage',
     'background',
+    'diskname',
     //'disktag',
+    //'downloadencrypt',
     //'function_name', // used in heroku.
     //'language',
     //'passfile',
@@ -19,7 +21,6 @@ $Base64Env = [
     'client_secret',
     'domain_path',
     'guestup_path',
-    'diskname',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -61,9 +62,10 @@ $InnerEnv = [
     'Onedrive_ver',
     'client_id',
     'client_secret',
-    'domain_path',
-    'guestup_path',
     'diskname',
+    'domain_path',
+    'downloadencrypt',
+    'guestup_path',
     'public_path',
     'refresh_token',
     'token_expires',
@@ -73,9 +75,10 @@ $ShowedInnerEnv = [
     //'Onedrive_ver',
     //'client_id',
     //'client_secret',
-    'domain_path',
-    'guestup_path',
     'diskname',
+    'domain_path',
+    'downloadencrypt',
+    'guestup_path',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -270,24 +273,25 @@ function encode_str_replace($str)
 
 function gethiddenpass($path,$passfile)
 {
-    $password=getcache('path_' . $path . '/?password');
+    $path1 = path_format($_SERVER['list_path'] . path_format($path));
+    $password=getcache('path_' . $path1 . '/?password');
     if ($password=='') {
-    $ispassfile = fetch_files(spurlencode(path_format($path . '/' . $passfile),'/'));
+    $ispassfile = fetch_files(path_format($path . '/' . urlencode($passfile)));
     //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
     if (isset($ispassfile['file'])) {
         $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
         if ($arr['stat']==200) {
             $passwordf=explode("\n",$arr['body']);
             $password=$passwordf[0];
-            $password=md5($password);
-            savecache('path_' . $path . '/?password', $password);
+            if ($password!='') $password=md5($password);
+            savecache('path_' . $path1 . '/?password', $password);
             return $password;
         } else {
             //return md5('DefaultP@sswordWhenNetworkError');
             return md5( md5(time()).rand(1000,9999) );
         }
     } else {
-        savecache('path_' . $path . '/?password', 'null');
+        savecache('path_' . $path1 . '/?password', 'null');
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
             return gethiddenpass($path,$passfile);
@@ -348,12 +352,15 @@ function get_timezone($timezone = '8')
 function message($message, $title = 'Message', $statusCode = 200)
 {
     return output('
+<html lang="' . $_SERVER['language'] . '">
 <html>
     <meta charset=utf-8>
     <body>
         <h1>' . $title . '</h1>
         <p>
+
 ' . $message . '
+
         </p>
     </body>
 </html>', $statusCode);
@@ -391,6 +398,7 @@ function passhidden($path)
     $path = str_replace('+','%2B',$path);
     $path = str_replace('&amp;','&', path_format(urldecode($path)));
     if (getConfig('passfile') != '') {
+        $path = spurlencode($path,'/');
         if (substr($path,-1)=='/') $path=substr($path,0,-1);
         $hiddenpass=gethiddenpass($path,getConfig('passfile'));
         if ($hiddenpass != '') {
@@ -482,6 +490,7 @@ function main($path)
     $constStr['language'] = $_COOKIE['language'];
     if ($constStr['language']=='') $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
+    $_SERVER['language'] = $constStr['language'];
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     $disktags = explode("|",getConfig('disktag'));
@@ -594,7 +603,7 @@ function main($path)
             return $tmp;
         }
     } else {
-        if ($_SERVER['ajax']) return output(getconstStr('RefleshtoLogin'),401);
+        if ($_SERVER['ajax']) return output(getconstStr('RefreshtoLogin'),401);
     }
     $_SERVER['ishidden'] = passhidden($path);
     if ($_GET['thumbnails']) {
@@ -607,7 +616,7 @@ function main($path)
     $files = list_files($path);
     if (isset($files['file']) && !$_GET['preview']) {
         // is file && not preview mode
-        if ($_SERVER['ishidden']<4) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
     }
     if ( isset($files['folder']) || isset($files['file']) ) {
         return render_list($path, $files);
@@ -622,8 +631,9 @@ function list_files($path)
     $path = path_format($path);
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {
         $files = json_decode('{"folder":{}}', true);
-    } elseif ($_SERVER['ishidden']==4) {
-        $files = json_decode('{"folder":{}}', true);
+    } elseif (!getConfig('downloadencrypt')) {
+        if ($_SERVER['ishidden']==4) $files = json_decode('{"folder":{}}', true);
+        else $files = fetch_files($path);
     } else {
         $files = fetch_files($path);
     }
@@ -702,7 +712,8 @@ function adminoperate($path)
         $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
-        //savecache('path_' . $path1, json_decode('{}',true), 1);
+        $path1 = path_format($path1 . '/' . $foldername );
+        savecache('path_' . $path1 . '/?password', '', 1);
         return output($result['body'], $result['stat']);
     }
     if ($_GET['move_folder']!='') {
@@ -789,8 +800,8 @@ function adminoperate($path)
         return output($result['body'], $result['stat']);
     }
     if ($_GET['RefreshCache']) {
-        //savecache('path_' . $path1, json_decode('{}',true), 1);
-        savecache('path_' . $path . '/?password', '', 1);
+        $path1 = path_format($_SERVER['list_path'] . path_format($path));
+        savecache('path_' . $path1 . '/?password', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
