@@ -355,6 +355,7 @@ function message($message, $title = 'Message', $statusCode = 200)
 <html lang="' . $_SERVER['language'] . '">
 <html>
     <meta charset=utf-8>
+    <meta name=viewport content="width=device-width,initial-scale=1">
     <body>
         <h1>' . $title . '</h1>
         <p>
@@ -1275,9 +1276,9 @@ function EnvOpt($needUpdate = 0)
     $html .= '
 <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
 <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
-    if (!$_SERVER['USER']==='qcloud'&&!$_SERVER['HEROKU_APP_DIR']==='/app') {
+    if (!($_SERVER['USER']==='qcloud'||$_SERVER['HEROKU_APP_DIR']==='/app')) {
         $html .= '
-In VPS， can not update by a click!<br>';
+In VPS can not update by a click!<br>';
     } else {
         $html .= '
 <form action="" method="post">
