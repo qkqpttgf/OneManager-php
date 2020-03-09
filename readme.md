@@ -27,6 +27,7 @@ Official: https://cloud.tencent.com/product/scf
 ~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
 
 先在环境变量添加Region，ap-hongkong或ap-guangzhou之类，再安装。  
+添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 
 DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
 
