@@ -617,7 +617,7 @@ function main($path)
 
     $files = list_files($path);
     //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
-    if ($_GET['random']!=='') {
+    if (isset($_GET['random'])&&$_GET['random']!=='') {
         if ($_SERVER['ishidden']<4) {
             $tmp = [];
             foreach (array_keys($files['children']) as $filename) {
