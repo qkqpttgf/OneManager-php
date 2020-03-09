@@ -624,7 +624,7 @@ function main($path)
                 if (strtolower(splitlast($filename,'.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['children'][$filename]['@microsoft.graph.downloadUrl'];
             }
             $tmp = array_values($tmp);
-            if (count($tmp)>0) return output($tmp[rand(0,count($tmp)-1)],200);
+            if (count($tmp)>0) return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
             else return output('',404);
         } else return output('',401);
     }
