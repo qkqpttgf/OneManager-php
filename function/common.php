@@ -614,7 +614,20 @@ function main($path)
             } else return output(json_encode($exts['img']),400);
         } else return output('',401);
     }
+
     $files = list_files($path);
+    //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
+    if (isset($_GET['random'])&&$_GET['random']!=='') {
+        if ($_SERVER['ishidden']<4) {
+            $tmp = [];
+            foreach (array_keys($files['children']) as $filename) {
+                if (strtolower(splitlast($filename,'.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['children'][$filename]['@microsoft.graph.downloadUrl'];
+            }
+            $tmp = array_values($tmp);
+            if (count($tmp)>0) return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
+            else return output('',404);
+        } else return output('',401);
+    }
     if (isset($files['file']) && !$_GET['preview']) {
         // is file && not preview mode
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
@@ -927,6 +940,13 @@ function fetch_files($path = '/')
                     $files=fetch_files_children($files, $path1, $page);
                 } else {
                 // files num < 200 , then cache
+                    if (isset($files['children'])) {
+                        $tmp = [];
+                        foreach ($files['children'] as $file) {
+                            $tmp[$file['name']] = $file;
+                        }
+                        $files['children'] = $tmp;
+                    }
                     savecache('path_' . $path, $files);
                 }
             }
@@ -938,6 +958,7 @@ function fetch_files($path = '/')
             $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
         }
     }
+
     return $files;
 }
 
