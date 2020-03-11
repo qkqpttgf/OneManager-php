@@ -1,7 +1,14 @@
+20200311-2150.14
+Add a switch, can download a known file or not, while the folder is encrypted.
+Hide time and size in mobile.
+Now, you can get a random 'jpg' from a folder when you type '?random=jpg' after the folder.
+增加一个开关，在目录加密后能否下载其中的某个文件。
+在手机上浏览时，隐藏修改时间跟大小。
+加入一个功能，现在可以在某个目录后面加上'?random=jpg'来得到本目录里面的一张随机jpg。
+
 20200229-1300.13
 In SCF, some config can input Special symbols now, like ?&= 。
 在SCF中，某些配置可以输入特殊符号了，像background可以用?&=之类的了。
-
 20200225-1310.12
 Can update by one click any time. fix bugs: special tag, reupload.
 可以不管版本直接一键更新（覆盖）了。修复可以使用特殊onedrive标签的bug，修复断网续传的问题。
