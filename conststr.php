@@ -13,7 +13,7 @@ $constStr = [
         'zh-cn' => '中文',
         'ja' => '日本語',
         'ko-kr' => '한국어',
-        'fa' => 'Persian',
+        'fa' => 'فارسی',
     ],
     'Week' => [
         'en-us' => [
