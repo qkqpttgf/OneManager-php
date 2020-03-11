@@ -1,2 +1,13 @@
+# apache
 RewriteEngine On
 RewriteRule ^(.*) index.php?/$1 [L]
+
+#-----------------------------------
+# nginx
+# rewrite ^(.*) index.php?/$1 last;
+
+# caddy (not sure)
+# rewrite {
+#     to /index.php?/$1
+# }
+#-----------------------------------
