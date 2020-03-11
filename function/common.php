@@ -91,7 +91,7 @@ function getcache($str)
     return $cache->fetch($str);
 }
 
-function savecache($key, $value, $exp = 3300)
+function savecache($key, $value, $exp = 1800)
 {
     $cache = null;
     $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
@@ -566,7 +566,7 @@ function main($path)
         error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         $_SERVER['access_token'] = $ret['access_token'];
         savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
-        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+30*24*60*60 ]);
+        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
     }
 
     $_SERVER['retry'] = 0;
