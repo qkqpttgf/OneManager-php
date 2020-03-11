@@ -51,6 +51,7 @@
             .list-wrapper{width:95%; margin-bottom:24px;}
             .list-table {padding:8px}
             .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
+            .size, .updated_at{display:none}
         }
     </style>
 </head>
