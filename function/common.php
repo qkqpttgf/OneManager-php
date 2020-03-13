@@ -86,14 +86,14 @@ $ShowedInnerEnv = [
 
 function getcache($str)
 {
-    $cache = null;
+    //$cache = null;
     $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     return $cache->fetch($str);
 }
 
 function savecache($key, $value, $exp = 1800)
 {
-    $cache = null;
+    //$cache = null;
     $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
     $cache->save($key, $value, $exp);
 }
