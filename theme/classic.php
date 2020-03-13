@@ -70,7 +70,7 @@
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><?php echo getconstStr('encrypt'); ?></a></li>
             <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><?php echo getconstStr('RefreshCache'); ?></a></li>
 <?php   } ?>
-            <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
+            <li><a href="<?php echo isset($_GET['preview'])?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
             <li><a onclick="logout()"><ion-icon name="log-out"></ion-icon><?php echo getconstStr('Logout'); ?></a></li>
         </ul></li>
 <?php
@@ -86,7 +86,7 @@
         </select>
     </div>
 <?php
-    if ($_SERVER['needUpdate']) { ?>
+    if (isset($_SERVER['needUpdate'])&&$_SERVER['needUpdate']) { ?>
     <div style='position:absolute;'><font color='red'><?php echo getconstStr('NeedUpdate'); ?></font></div>
 <?php } ?>
     <h1 class="title">
@@ -133,6 +133,10 @@
             </div>
             <div class="list-body-container">
 <?php
+    $head = false;
+    $readme = false;
+    $pdfurl = false;
+    $DPvideo = false;
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:10px">
                 <center>
@@ -155,8 +159,6 @@
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
-                    $DPvideo = '';
-                    $pdfurl = '';
                     if (in_array($ext, $exts['img'])) {
                         echo '                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
 ';
@@ -202,12 +204,12 @@
                     </div>
                 </div>
 <?php           } elseif (isset($files['folder'])) {
-                    $filenum = $_POST['filenum'];
-                    if (!$filenum and $files['folder']['page']) $filenum = ($files['folder']['page']-1)*200;
-                    $readme = false; ?>
+                    if (isset($_POST['filenum'])) $filenum = $_POST['filenum'];
+                    if (!isset($filenum) and isset($files['folder']['page'])) $filenum = ($files['folder']['page']-1)*200;
+                    else $filenum = 0; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if ($_SERVER['USER']!='qcloud') { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?><button onclick="CopyAllDownloadUrl();"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
+                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?><button onclick="CopyAllDownloadUrl();"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
                         <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
                         <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
@@ -406,7 +408,7 @@
     <div id="mask" class="mask" style="display:none;"></div>
 <?php
     if ($_SERVER['admin']) {
-        if (!$_GET['preview']) { ?>
+        if (!isset($_GET['preview'])) { ?>
     <div style="word-break: break-all;word-wrap: break-word;">
         <div id="rename_div" class="operatediv" style="display:none">
             <div>
@@ -515,7 +517,7 @@
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
 	        <center>
-	            <form action="<?php echo $_GET['preview']?'?preview&':'?';?>admin" method="post">
+	            <form action="<?php echo isset($_GET['preview'])?'?preview&':'?';?>admin" method="post">
 		        <input id="login_input" name="password1" type="password" placeholder="<?php echo getconstStr('InputPassword'); ?>">
 		        <input type="submit" value="<?php echo getconstStr('Login'); ?>">
 	            </form>
@@ -572,7 +574,7 @@
         $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
     }
 <?php
-    if ($_GET['preview']) { //is preview mode. 在预览时处理 ?>
+    if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
     var $url = document.getElementById('url');
     if ($url) {
         $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
@@ -821,7 +823,7 @@
         location.href=location.protocol + "//" + location.host + "<?php echo path_format($_SERVER['base_path'] . '/' . $path );?>" ;
     }
 <?php }
-    if ($files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
+    if (isset($files['folder']['childCount'])&&$files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
     function nextpage(num) {
         document.getElementById('pagenum').value=num;
         document.getElementById('nextpageform').submit();
@@ -1062,7 +1064,7 @@
         document.cookie = "admin=; path=/";
         location.href = location.href;
     }
-<?php   if (!$_GET['preview']) {?>
+<?php   if (!isset($_GET['preview'])) {?>
     function showdiv(event,action,num) {
         var $operatediv=document.getElementsByName('operatediv');
         for ($i=0;$i<$operatediv.length;$i++) {
