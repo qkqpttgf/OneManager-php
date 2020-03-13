@@ -518,8 +518,8 @@ function main($path)
     } else {
         $adminloginpage = getConfig('adminloginpage');
     }
-    if ($_GET[$adminloginpage]) {
-        if ($_GET['preview']) {
+    if (isset($_GET[$adminloginpage])) {
+        if (isset($_GET['preview'])) {
             $url = $_SERVER['PHP_SELF'] . '?preview';
         } else {
             $url = path_format($_SERVER['PHP_SELF'] . '/');
@@ -533,13 +533,13 @@ function main($path)
         }
     }
     if (getConfig('admin')!='')
-        if ( $_COOKIE['admin']==md5(getConfig('admin')) || $_POST['password1']==getConfig('admin') ) {
+        if ( (isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin'))) || (isset($_POST['password1'])&&$_POST['password1']==getConfig('admin')) ) {
             $_SERVER['admin']=1;
             $_SERVER['needUpdate'] = needUpdate();
         } else {
             $_SERVER['admin']=0;
         }
-    if ($_GET['setup'])
+    if (isset($_GET['setup']))
         if ($_SERVER['admin']) {
             // setup Environments. 设置，对环境变量操作
             return EnvOpt($_SERVER['needUpdate']);
@@ -550,7 +550,7 @@ function main($path)
     
     if (getConfig('admin')=='') return install();
     config_oauth();
-    if ($_SERVER['admin']) if ($_GET['AddDisk']||$_GET['authorization_code']) return get_refresh_token();
+    if ($_SERVER['admin']) if (isset($_GET['AddDisk'])||isset($_GET['authorization_code'])) return get_refresh_token();
     $refresh_token = getConfig('refresh_token');
     //if (!$refresh_token) return get_refresh_token();
     if (!$refresh_token) {
@@ -608,7 +608,7 @@ function main($path)
         if ($_SERVER['ajax']) return output(getconstStr('RefreshtoLogin'),401);
     }
     $_SERVER['ishidden'] = passhidden($path);
-    if ($_GET['thumbnails']) {
+    if (isset($_GET['thumbnails'])) {
         if ($_SERVER['ishidden']<4) {
             if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
                 return get_thumbnails_url($path);
@@ -631,7 +631,7 @@ function main($path)
             } else return output('',404);
         } else return output('',401);
     }
-    if (isset($files['file']) && !$_GET['preview']) {
+    if (isset($files['file']) && !isset($_GET['preview'])) {
         // is file && not preview mode
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
     }
@@ -702,7 +702,7 @@ function adminoperate($path)
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     $tmparr['statusCode'] = 0;
-    if ($_GET['rename_newname']!=$_GET['rename_oldname'] && $_GET['rename_newname']!='') {
+    if (isset($_GET['rename_newname'])&&$_GET['rename_newname']!=$_GET['rename_oldname'] && $_GET['rename_newname']!='') {
         // rename 重命名
         $oldname = spurlencode($_GET['rename_oldname']);
         $oldname = path_format($path1 . '/' . $oldname);
@@ -712,7 +712,7 @@ function adminoperate($path)
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
-    if ($_GET['delete_name']!='') {
+    if (isset($_GET['delete_name'])) {
         // delete 删除
         $filename = spurlencode($_GET['delete_name']);
         $filename = path_format($path1 . '/' . $filename);
@@ -721,7 +721,7 @@ function adminoperate($path)
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
-    if ($_GET['operate_action']==getconstStr('encrypt')) {
+    if (isset($_GET['operate_action'])&&$_GET['operate_action']==getconstStr('encrypt')) {
         // encrypt 加密
         if (getConfig('passfile')=='') return message(getconstStr('SetpassfileBfEncrypt'),'',403);
         if ($_GET['encrypt_folder']=='/') $_GET['encrypt_folder']=='';
@@ -733,7 +733,7 @@ function adminoperate($path)
         savecache('path_' . $path1 . '/?password', '', 1);
         return output($result['body'], $result['stat']);
     }
-    if ($_GET['move_folder']!='') {
+    if (isset($_GET['move_folder'])) {
         // move 移动
         $moveable = 1;
         if ($path == '/' && $_GET['move_folder'] == '/../') $moveable=0;
@@ -753,7 +753,7 @@ function adminoperate($path)
             return output('{"error":"'.getconstStr('CannotMove').'"}', 403);
         }
     }
-    if ($_GET['copy_name']!='') {
+    if (isset($_GET['copy_name'])) {
         // copy 复制
         $filename = spurlencode($_GET['copy_name']);
         $filename = path_format($path1 . '/' . $filename);
@@ -789,7 +789,7 @@ function adminoperate($path)
             //savecache('path_' . $path2, json_decode('{}',true), 1);
         return output($result['body'].json_encode($result['Location']), $result['stat']);
     }
-    if ($_POST['editfile']!='') {
+    if (isset($_POST['editfile'])) {
         // edit 编辑
         $data = $_POST['editfile'];
         /*TXT一般不会超过4M，不用二段上传
@@ -802,7 +802,7 @@ function adminoperate($path)
         $resultarry = json_decode($result,true);
         if (isset($resultarry['error'])) return message($resultarry['error']['message']. '<hr><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>','Error',403);
     }
-    if ($_GET['create_name']!='') {
+    if (isset($_GET['create_name'])) {
         // create 新建
         if ($_GET['create_type']=='file') {
             $filename = spurlencode($_GET['create_name']);
@@ -816,7 +816,7 @@ function adminoperate($path)
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
-    if ($_GET['RefreshCache']) {
+    if (isset($_GET['RefreshCache'])) {
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
         savecache('path_' . $path1 . '/?password', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
@@ -1111,7 +1111,7 @@ function render_list($path = '', $files = '')
     Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
     if (isset($htmlpage['statusCode'])) return $htmlpage;
-    if ($_SERVER['Set-Cookie']!='') return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
+    if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
 }
 
@@ -1119,9 +1119,10 @@ function get_refresh_token()
 {
     global $constStr;
     global $CommonEnv;
+    $envs = '';
     foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
     $url = path_format($_SERVER['PHP_SELF'] . '/');
-    if ($_GET['authorization_code'] && isset($_GET['code'])) {
+    if (isset($_GET['authorization_code']) && isset($_GET['code'])) {
         $_SERVER['disktag'] = $_COOKIE['disktag'];
         config_oauth();
         $tmp = curl_request($_SERVER['oauth_url'] . 'token', 'client_id=' . $_SERVER['client_id'] .'&client_secret=' . $_SERVER['client_secret'] . '&grant_type=authorization_code&requested_token_use=on_behalf_of&redirect_uri=' . $_SERVER['redirect_uri'] .'&code=' . $_GET['code']);
@@ -1151,7 +1152,7 @@ function get_refresh_token()
         return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
         //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
     }
-    if ($_GET['install1']) {
+    if (isset($_GET['install1'])) {
         $_SERVER['disk_oprating'] = $_COOKIE['disktag'];
         $_SERVER['disktag'] = $_COOKIE['disktag'];
         config_oauth();
@@ -1170,7 +1171,7 @@ function get_refresh_token()
             return message('something error, try after a few seconds.', 'retry', 201);
         }
     }
-    if ($_GET['install0']) {
+    if (isset($_GET['install0'])) {
         if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
             if (in_array($_COOKIE['disktag'], $CommonEnv)) {
                 return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
@@ -1249,7 +1250,7 @@ function EnvOpt($needUpdate = 0)
     asort($ShowedCommonEnv);
     asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
-    if ($_POST['updateProgram']==getconstStr('updateProgram')) {
+    if (isset($_POST['updateProgram'])&&$_POST['updateProgram']==getconstStr('updateProgram')) {
         $response = OnekeyUpate();
         if (api_error($response)) {
             $html = api_error_msg($response);
@@ -1262,7 +1263,7 @@ function EnvOpt($needUpdate = 0)
         }
         return message($html, $title);
     }
-    if ($_POST['submit1']) {
+    if (isset($_POST['submit1'])) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
             if (in_array($k, $ShowedCommonEnv)||in_array($k, $ShowedInnerEnv)||$k=='disktag_del' || $k=='disktag_add') {
@@ -1292,7 +1293,7 @@ function EnvOpt($needUpdate = 0)
         }
         return message($html, $title);
     }
-    if ($_GET['preview']) {
+    if (isset($_GET['preview'])) {
         $preurl = $_SERVER['PHP_SELF'] . '?preview';
     } else {
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
@@ -1300,7 +1301,7 @@ function EnvOpt($needUpdate = 0)
     $html .= '
 <a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
 <a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
-    if (!($_SERVER['USER']==='qcloud'||$_SERVER['HEROKU_APP_DIR']==='/app')) {
+    if (!((isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud')||(isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app'))) {
         $html .= '
 In VPS can not update by a click!<br>';
     } else {
