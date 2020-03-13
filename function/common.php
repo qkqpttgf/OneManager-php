@@ -489,8 +489,8 @@ function main($path)
     global $constStr;
 //echo 'main.enterpath:'.$path.'
 //';
-    $constStr['language'] = $_COOKIE['language'];
-    if ($constStr['language']=='') $constStr['language'] = getConfig('language');
+    if (isset($_COOKIE['language'])) $constStr['language'] = $_COOKIE['language'];
+    if (!isset($constStr['language'])) $constStr['language'] = getConfig('language');
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['language'] = $constStr['language'];
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
