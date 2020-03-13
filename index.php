@@ -4,9 +4,9 @@ include 'conststr.php';
 include 'function/common.php';
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
-if ($_SERVER['USER']==='qcloud') {
+if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     include 'function/scf.php';
-} elseif ($_SERVER['HEROKU_APP_DIR']==='/app') {
+} elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
     include 'function/heroku.php';
     $path = getpath();
     //echo 'path:'. $path;

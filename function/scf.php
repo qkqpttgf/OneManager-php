@@ -58,13 +58,18 @@ function getConfig($str, $disktag = '')
 {
     global $InnerEnv;
     global $Base64Env;
-    if ($disktag=='') $disktag = $_SERVER['disktag'];
     if (in_array($str, $InnerEnv)) {
-        if (in_array($str, $Base64Env)) return equal_replace(json_decode(getenv($disktag), true)[$str],1);
-        else return json_decode(getenv($disktag), true)[$str];
+        if ($disktag=='') $disktag = $_SERVER['disktag'];
+        $env = json_decode(getenv($disktag), true);
+        if (isset($env[$str])) {
+            if (in_array($str, $Base64Env)) return equal_replace($env[$str],1);
+            else return $env[$str];
+        }
+    } else {
+        if (in_array($str, $Base64Env)) return equal_replace(getenv($str),1);
+        else return getenv($str);
     }
-    if (in_array($str, $Base64Env)) return equal_replace(getenv($str),1);
-    else return getenv($str);
+    return '';
 }
 
 function setConfig($arr, $disktag = '')
