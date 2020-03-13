@@ -364,7 +364,8 @@ function message($message, $title = 'Message', $statusCode = 200)
 
         </p>
     </body>
-</html>', $statusCode);
+</html>
+', $statusCode);
 }
 
 function needUpdate()
