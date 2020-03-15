@@ -938,18 +938,15 @@ function fetch_files($path = '/')
             // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
             if (isset($files['folder'])) {
                 if ($files['folder']['childCount']>200) {
-                // files num > 200 , then get nextlink
+                    // files num > 200 , then get nextlink
                     $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                    $files=fetch_files_children($files, $path1, $page);
+                    if ($page>1) $files=fetch_files_children($files, $path1, $page);
+                    $files['children'] = children_name($files['children']);
                 } else {
                 // files num < 200 , then cache
-                    if (isset($files['children'])) {
-                        $tmp = [];
-                        foreach ($files['children'] as $file) {
-                            $tmp[$file['name']] = $file;
-                        }
-                        $files['children'] = $tmp;
-                    }
+                    //if (isset($files['children'])) {
+                        $files['children'] = children_name($files['children']);
+                    //}
                     savecache('path_' . $path, $files);
                 }
             }
@@ -963,6 +960,15 @@ function fetch_files($path = '/')
     }
 
     return $files;
+}
+
+function children_name($children)
+{
+    $tmp = [];
+    foreach ($children as $file) {
+        $tmp[$file['name']] = $file;
+    }
+    return $tmp;
 }
 
 function fetch_files_children($files, $path, $page)
