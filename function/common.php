@@ -502,7 +502,7 @@ function main($path)
         $_SERVER['disktag'] = $path;
         $pos = strpos($path, '/');
         if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
-        if (!in_array($_SERVER['disktag'], $disktags)) return message('Please visit from Home Page.', 'Error', 404);
+        if (!in_array($_SERVER['disktag'], $disktags)) return message('Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
         $path = substr($path, strlen('/'.$_SERVER['disktag']));
         if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
     } else $_SERVER['disktag'] = $disktags[0];
