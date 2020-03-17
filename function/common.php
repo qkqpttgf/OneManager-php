@@ -12,6 +12,7 @@ $Base64Env = [
     //'disktag',
     //'downloadencrypt',
     //'function_name', // used in heroku.
+    //'hideFunctionalityFile',
     //'language',
     //'passfile',
     'sitename',
@@ -36,6 +37,7 @@ $CommonEnv = [
     'background',
     'disktag',
     'function_name', // used in heroku.
+    'hideFunctionalityFile',
     'language',
     'passfile',
     'sitename',
@@ -52,6 +54,7 @@ $ShowedCommonEnv = [
     'background',
     //'disktag',
     //'function_name', // used in heroku.
+    'hideFunctionalityFile',
     'language',
     'passfile',
     'sitename',
@@ -83,6 +86,20 @@ $ShowedInnerEnv = [
     //'refresh_token',
     //'token_expires',
 ];
+
+function isHideFile($name)
+{
+    $FunctionalityFile = [
+        'head.md',
+        'readme.md',
+        'favicon.ico',
+    ];
+
+    if ($name == getConfig('passfile')) return true;
+    if (substr($name,0,1) == '.') return true;
+    if (getConfig('hideFunctionalityFile')) if (in_array(strtolower($name), $FunctionalityFile)) return true;
+    return false;
+}
 
 function getcache($str)
 {
