@@ -12,6 +12,7 @@ $Base64Env = [
     //'disktag',
     //'downloadencrypt',
     //'function_name', // used in heroku.
+    //'hideFunctionalityFile',
     //'language',
     //'passfile',
     'sitename',
@@ -36,6 +37,7 @@ $CommonEnv = [
     'background',
     'disktag',
     'function_name', // used in heroku.
+    'hideFunctionalityFile',
     'language',
     'passfile',
     'sitename',
@@ -52,6 +54,7 @@ $ShowedCommonEnv = [
     'background',
     //'disktag',
     //'function_name', // used in heroku.
+    'hideFunctionalityFile',
     'language',
     'passfile',
     'sitename',
@@ -83,6 +86,20 @@ $ShowedInnerEnv = [
     //'refresh_token',
     //'token_expires',
 ];
+
+function isHideFile($name)
+{
+    $FunctionalityFile = [
+        'head.md',
+        'readme.md',
+        'favicon.ico',
+    ];
+
+    if ($name == getConfig('passfile')) return true;
+    if (substr($name,0,1) == '.') return true;
+    if (getConfig('hideFunctionalityFile')) if (in_array(strtolower($name), $FunctionalityFile)) return true;
+    return false;
+}
 
 function getcache($str)
 {
@@ -502,6 +519,7 @@ function main($path)
         $_SERVER['disktag'] = $path;
         $pos = strpos($path, '/');
         if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+        if (!in_array($_SERVER['disktag'], $disktags)) return message('Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
         $path = substr($path, strlen('/'.$_SERVER['disktag']));
         if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
     } else $_SERVER['disktag'] = $disktags[0];
