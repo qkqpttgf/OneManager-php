@@ -13,7 +13,7 @@ How to Install:
     1.Start web service on your server (httpd or other), make sure you can visit it.  
     启动web服务器，确保你能访问到。  
     2.Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
-    开启伪静态(重写)功能，规则在.htaccess文件中，ngnix自行转换，我们的目的是不管访问什么都让index.php来处理。  
+    开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
     3.Upload code.  
     上传好代码。  
     4.Change the file config.php can be read&write (666 is suggested).  
@@ -26,7 +26,7 @@ Official: https://cloud.tencent.com/product/scf
 
 ~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
 
-先在环境变量添加Region，ap-hongkong或ap-guangzhou之类，再安装。  
+先手动在环境变量添加Region，ap-hongkong或ap-guangzhou之类，具体看 https://cloud.tencent.com/document/api/583/17238 最底下，然后再安装。  
 添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 
 DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
@@ -41,7 +41,7 @@ The XXX_path in setting is the path in Onedrive, not in url, program will find t
 LOGO ICON: put your 'favicon.ico' in the path you showed, make sure xxxxx.com/favicon.ico can be visited.   
 网站图标：将favicon.ico文件放在你要展示的目录中，确保 xxxxx.com/favicon.ico 可以访问到。  
 Program will show content of 'readme.md' & 'head.md'.  
-可以在文件列表下面显示readme.md文件的内容。  
+可以在文件列表显示head.md跟readme.md文件的内容。  
 guest up path, is a folder that the guest can upload files, but can not be list (exclude admin).  
 游客上传目录（也叫图床目录），是指定一个目录，让游客可以上传文件，不限格式，不限大小。这个目录里面的内容不列清单（除非管理登录）。  
 If there is 'index.html' file, program will only show the content of 'index.html', not list the files.  
