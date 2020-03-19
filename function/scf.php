@@ -112,7 +112,9 @@ function setConfig($arr, $disktag = '')
     }
 //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 //';
-    return updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
+    $response = updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
+    WaitSCFStat();
+    return $response;
 }
 
 function WaitSCFStat()
@@ -125,9 +127,17 @@ function WaitSCFStat()
 function install()
 {
     global $constStr;
+    if ($_GET['install2']) {
+        $tmp['admin'] = $_POST['admin'];
+        setConfig($tmp);
+        if (needUpdate()) {
+            updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+            return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
+        }
+        return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+    }
     if ($_GET['install1']) {
-        if ($_POST['admin']!='') {
-            $tmp['admin'] = $_POST['admin'];
+        //if ($_POST['admin']!='') {
             $tmp['language'] = $_POST['language'];
             $SecretId = getConfig('SecretId');
             if ($SecretId=='') {
@@ -145,18 +155,27 @@ function install()
                 $html .= '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
+                return message($html, $title, 201);
             } else {
-                $trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
-                if (needUpdate()) {
-                    updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-                    return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
-                }
-                return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+                $html .= '
+    <form action="?install2" method="post" onsubmit="return notnull(this);">
+        <label>'.getconstStr('SetAdminPassword').':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
+        <input type="submit" value="'.getconstStr('Submit').'">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.admin.value==\'\') {
+                alert(\'Input admin\');
+                return false;
             }
-            return message($html, $title, 201);
+            return true;
         }
+    </script>';
+                $title = getconstStr('SetAdminPassword');
+                return message($html, $title, 201);
+            }
+        //}
     }
     if ($_GET['install0']) {
         $html .= '
@@ -171,8 +190,6 @@ language:<br>';
         <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
         <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
         $html .= '
-        <label>Set admin password:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
-        $html .= '
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
     <script>
@@ -182,11 +199,7 @@ language:<br>';
             location.href = location.href;
         }
         function notnull(t)
-        {
-            if (t.admin.value==\'\') {
-                alert(\'input admin\');
-                return false;
-            }';
+        {';
         if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
             if (t.SecretId.value==\'\') {
                 alert(\'input SecretId\');
