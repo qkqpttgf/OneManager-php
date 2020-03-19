@@ -209,7 +209,7 @@
                     else $filenum = 0; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?><button onclick="CopyAllDownloadUrl();"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
+                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
                         <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
                         <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
@@ -712,17 +712,18 @@
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
-    function CopyAllDownloadUrl() {
+    function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
         tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
-        document.querySelectorAll('.download').forEach(function (e) {
+        document.querySelectorAll(str).forEach(function (e) {
             tmptextarea.innerHTML+=e.href+"\r\n";
         });
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
         alert(tmptextarea.innerHTML);
+        //alert('Success');
     }
     var sort=0;
     function sortby(string) {
@@ -1001,8 +1002,9 @@
                                 xhr4.onload = function(e){
                                     console.log(xhr4.responseText+','+xhr4.status);
                                     var filename;
-                                    if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
-                                    if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                    //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
+                                    //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                    filename = JSON.parse(xhr4.responseText)['name'];
                                     if (filename=='') {
                                         alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                         uploadbuttonshow();
@@ -1011,8 +1013,9 @@
                                     var lasturl = location.href;
                                     if (lasturl.substr(lasturl.length-1)!='/') lasturl += '/';
                                     lasturl += filename + '?preview';
-                                    //alert(lasturl);
-                                    window.open(lasturl);
+                                    //window.open(lasturl);
+                                    document.getElementById('upfile_a_'+tdnum).href = lasturl;
+                                    document.getElementById('upfile_a1_'+tdnum).href = filename;
                                 }
 <?php } ?>
                                 EndTime=new Date();
@@ -1022,7 +1025,7 @@
                                 } else {
                                     MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo getconstStr('UploadComplete'); ?></font>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');"><?php echo getconstStr('CopyUrl'); ?></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <?php if ($_SERVER['admin']) { ?>
