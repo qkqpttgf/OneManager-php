@@ -696,6 +696,10 @@ $constStr = [
         'en-us' => 'Success',
         'zh-cn' => '成功',
     ],
+    'SetAdminPassword' => [
+        'en-us' => 'Set Admin Password',
+        'zh-cn' => '设置管理密码',
+    ],
     'Refresh' => [
         'en-us' => 'Refresh',
         'zh-cn' => '刷新',
