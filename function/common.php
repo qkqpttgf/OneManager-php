@@ -608,7 +608,12 @@ function main($path)
                 $data = '{"name":"' . $_GET['filemd5'] . $ext . '"}';
                 //echo $oldname .'<br>'. $data;
                 $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
-                if ($tmp['stat']==409) MSAPI('DELETE',$oldname,'',$_SERVER['access_token'])['body'];
+                if ($tmp['stat']==409) {
+                    MSAPI('DELETE',$oldname,'',$_SERVER['access_token']);
+                    $tmpbody = json_decode($tmp['body'], true);
+                    $tmpbody['name'] = $_GET['filemd5'] . $ext;
+                    $tmp['body'] = json_encode($tmpbody);
+                }
                 $path1 = path_format($_SERVER['list_path'] . path_format($path));
                 savecache('path_' . $path1, json_decode('{}',true), 1);
                 return output($tmp['body'],$tmp['stat']);
