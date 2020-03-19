@@ -255,7 +255,7 @@ function curl_request($url, $data = false, $headers = [])
     $response['body'] = curl_exec($ch);
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
-    if ($response['stat']==0) return curl_request($url, $data, $headers);
+    //if ($response['stat']==0) return curl_request($url, $data, $headers);
     return $response;
 }
 
@@ -515,11 +515,11 @@ function main($path)
     $disktags = explode("|",getConfig('disktag'));
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
-        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['PHP_SELF'].'/'.$disktags[0]) ]);
+        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0]) ]);
         $_SERVER['disktag'] = $path;
         $pos = strpos($path, '/');
         if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
-        if (!in_array($_SERVER['disktag'], $disktags)) return message('Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
+        if (!in_array($_SERVER['disktag'], $disktags)) return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
         $path = substr($path, strlen('/'.$_SERVER['disktag']));
         if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
     } else $_SERVER['disktag'] = $disktags[0];
@@ -574,90 +574,90 @@ function main($path)
     if (!$refresh_token) {
         return render_list();
     } else {
-    if (!($_SERVER['access_token'] = getcache('access_token'))) {
-        $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
-        if ($response['stat']==200) $ret = json_decode($response['body'], true);
-        if (!isset($ret['access_token'])) {
-            error_log($_SERVER['oauth_url'] . 'token'.'?client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token);
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
-        }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
-        $_SERVER['access_token'] = $ret['access_token'];
-        savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
-        if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
-    }
-
-    $_SERVER['retry'] = 0;
-    if ($_SERVER['ajax']) {
-        if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
-            // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
-            error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
-            $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            savecache('path_' . $path1, json_decode('{}',true), 1);
-            return output($tmp['body'],$tmp['stat']);
-        }
-        if ($_GET['action']=='uploaded_rename') {
-            // rename .scfupload file without login.
-            // 无需登录即可重命名.scfupload后缀文件，filemd5为用户提交，可被构造，问题不大，以后处理
-            $oldname = spurlencode($_GET['filename']);
-            $pos = strrpos($oldname, '.');
-            if ($pos>0) $ext = strtolower(substr($oldname, $pos));
-            $oldname = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . $oldname . '.scfupload' );
-            $data = '{"name":"' . $_GET['filemd5'] . $ext . '"}';
-            //echo $oldname .'<br>'. $data;
-            $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
-            if ($tmp['stat']==409) MSAPI('DELETE',$oldname,'',$_SERVER['access_token'])['body'];
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            savecache('path_' . $path1, json_decode('{}',true), 1);
-            return output($tmp['body'],$tmp['stat']);
-        }
-        if ($_GET['action']=='upbigfile') return bigfileupload($path);
-    }
-    if ($_SERVER['admin']) {
-        $tmp = adminoperate($path);
-        if ($tmp['statusCode'] > 0) {
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            savecache('path_' . $path1, json_decode('{}',true), 1);
-            return $tmp;
-        }
-    } else {
-        if ($_SERVER['ajax']) return output(getconstStr('RefreshtoLogin'),401);
-    }
-    $_SERVER['ishidden'] = passhidden($path);
-    if (isset($_GET['thumbnails'])) {
-        if ($_SERVER['ishidden']<4) {
-            if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
-                return get_thumbnails_url($path);
-            } else return output(json_encode($exts['img']),400);
-        } else return output('',401);
-    }
-
-    $files = list_files($path);
-    //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
-    if (isset($_GET['random'])&&$_GET['random']!=='') {
-        if ($_SERVER['ishidden']<4) {
-            $tmp = [];
-            foreach (array_keys($files['children']) as $filename) {
-                if (strtolower(splitlast($filename,'.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['children'][$filename]['@microsoft.graph.downloadUrl'];
+        if (!($_SERVER['access_token'] = getcache('access_token'))) {
+            $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
+            if ($response['stat']==200) $ret = json_decode($response['body'], true);
+            if (!isset($ret['access_token'])) {
+                error_log($_SERVER['oauth_url'] . 'token'.'?client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token);
+                error_log('failed to get access_token. response' . json_encode($ret));
+                throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
             }
-            $tmp = array_values($tmp);
-            if (count($tmp)>0) {
-		if (isset($_GET['url'])) return output($tmp[rand(0,count($tmp)-1)], 200);
-		return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
-            } else return output('',404);
-        } else return output('',401);
-    }
-    if (isset($files['file']) && !isset($_GET['preview'])) {
-        // is file && not preview mode
-        if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
-    }
-    if ( isset($files['folder']) || isset($files['file']) ) {
-        return render_list($path, $files);
-    } else {
-        return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
-    }
+            error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+            $_SERVER['access_token'] = $ret['access_token'];
+            savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
+            if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
+        }
+
+        $_SERVER['retry'] = 0;
+        if ($_SERVER['ajax']) {
+            if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
+                // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
+                error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
+                $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
+                $path1 = path_format($_SERVER['list_path'] . path_format($path));
+                savecache('path_' . $path1, json_decode('{}',true), 1);
+                return output($tmp['body'],$tmp['stat']);
+            }
+            if ($_GET['action']=='uploaded_rename') {
+                // rename .scfupload file without login.
+                // 无需登录即可重命名.scfupload后缀文件，filemd5为用户提交，可被构造，问题不大，以后处理
+                $oldname = spurlencode($_GET['filename']);
+                $pos = strrpos($oldname, '.');
+                if ($pos>0) $ext = strtolower(substr($oldname, $pos));
+                $oldname = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . $oldname . '.scfupload' );
+                $data = '{"name":"' . $_GET['filemd5'] . $ext . '"}';
+                //echo $oldname .'<br>'. $data;
+                $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
+                if ($tmp['stat']==409) MSAPI('DELETE',$oldname,'',$_SERVER['access_token'])['body'];
+                $path1 = path_format($_SERVER['list_path'] . path_format($path));
+                savecache('path_' . $path1, json_decode('{}',true), 1);
+                return output($tmp['body'],$tmp['stat']);
+            }
+            if ($_GET['action']=='upbigfile') return bigfileupload($path);
+        }
+        if ($_SERVER['admin']) {
+            $tmp = adminoperate($path);
+            if ($tmp['statusCode'] > 0) {
+                $path1 = path_format($_SERVER['list_path'] . path_format($path));
+                savecache('path_' . $path1, json_decode('{}',true), 1);
+                return $tmp;
+            }
+        } else {
+            if ($_SERVER['ajax']) return output(getconstStr('RefreshtoLogin'),401);
+        }
+        $_SERVER['ishidden'] = passhidden($path);
+        if (isset($_GET['thumbnails'])) {
+            if ($_SERVER['ishidden']<4) {
+                if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
+                    return get_thumbnails_url($path);
+                } else return output(json_encode($exts['img']),400);
+            } else return output('',401);
+        }
+
+        $files = list_files($path);
+        //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
+        if (isset($_GET['random'])&&$_GET['random']!=='') {
+            if ($_SERVER['ishidden']<4) {
+                $tmp = [];
+                foreach (array_keys($files['children']) as $filename) {
+                    if (strtolower(splitlast($filename,'.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['children'][$filename]['@microsoft.graph.downloadUrl'];
+                }
+                $tmp = array_values($tmp);
+                if (count($tmp)>0) {
+            if (isset($_GET['url'])) return output($tmp[rand(0,count($tmp)-1)], 200);
+            return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
+                } else return output('',404);
+            } else return output('',401);
+        }
+        if (isset($files['file']) && !isset($_GET['preview'])) {
+            // is file && not preview mode
+            if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files['@microsoft.graph.downloadUrl'] ]);
+        }
+        if ( isset($files['folder']) || isset($files['file']) ) {
+            return render_list($path, $files);
+        } else {
+            return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+        }
     }
 }
 
@@ -672,7 +672,8 @@ function list_files($path)
     } else {
         $files = fetch_files($path);
     }
-    if ( isset($files['folder']) || isset($files['file']) || isset($files['error']) ) {
+    return $files;
+    /*if ( isset($files['folder']) || isset($files['file']) || isset($files['error']) ) {
         return $files;
     } else {
         error_log( json_encode($files) . ' Network Error<br>' );
@@ -680,7 +681,7 @@ function list_files($path)
         if ($_SERVER['retry'] < 3) {
             return list_files($path);
         } else return $files;
-    }
+    }*/
 }
 
 function adminform($name = '', $pass = '', $path = '')
@@ -950,7 +951,10 @@ function fetch_files($path = '/')
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
         $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl)';
-        $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
+        while ($retry<3&&!$arr['stat']) {
+            $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
+            $retry++;
+        }
         if ($arr['stat']<500) {
             $files = json_decode($arr['body'], true);
             // echo $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
@@ -972,8 +976,17 @@ function fetch_files($path = '/')
                 $files['error']['stat'] = $arr['stat'];
             }
         } else {
-            error_log($arr['body']);
-            $files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
+            //error_log($arr['body']);
+            $files = json_decode($arr['body'], true);
+            if (isset($files['error'])) {
+                $files['error']['stat'] = $arr['stat'];
+            } else {
+                $files['error']['stat'] = 503;
+                $files['error']['code'] = 'unknownError';
+                $files['error']['message'] = 'unknownError';
+            }
+            //$files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
+            //error_log(json_encode($files, JSON_PRETTY_PRINT));
         }
     }
 
@@ -1016,9 +1029,9 @@ function fetch_files_children($files, $path, $page)
                     if ($path !== '/') {
                         $url .= ':' . $path;
                         if (substr($url,-1)=='/') $url=substr($url,0,-1);
-                        $url .= ':/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime';
+                        $url .= ':/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl';
                     } else {
-                        $url .= '/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime';
+                        $url .= '/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl';
                     }
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
@@ -1227,7 +1240,7 @@ function get_refresh_token()
     $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
     $html = '
     <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
-        '.getconstStr('OnedriveDiskTag').':<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
+        '.getconstStr('OnedriveDiskTag').': ('.getConfig('disktag').')<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
         '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
         Onedrive_Ver：<br>
         <label><input type="radio" name="Onedrive_ver" value="MS" checked>MS: '.getconstStr('OndriveVerMS').'</label><br>
