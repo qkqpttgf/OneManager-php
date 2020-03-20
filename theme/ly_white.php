@@ -13,7 +13,7 @@
 <iframe width="300" scrolling="no" height="20" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=11&color=%2300B050&bgc=%23&icon=1&site=10"></iframe>
 </center>
     <style type="text/css">
-        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#FFF;background-image:url("https://cdn.jsdelivr.net/gh/ldxw/CDN@0.02.7/scfone-theme-js/img/bj.png")}
+        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#FFF;background-image:url("")}
         a{color:#000;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
         a:hover{color:#FFF;}
