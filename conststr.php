@@ -688,7 +688,18 @@ $constStr = [
         'ko-kr' => '다시 쓰기 (의사 정적) 기능이 활성화되어 있는지 확인하십시오.',
         'fa' => 'لطفاً مطمئن شوید که RewriteEngine روشن است.',
     ],
-    
+    'CopyUrl' => [
+        'en-us' => 'Copy URL',
+        'zh-cn' => '复制链接',
+    ],
+    'Success' => [
+        'en-us' => 'Success',
+        'zh-cn' => '成功',
+    ],
+    'SetAdminPassword' => [
+        'en-us' => 'Set Admin Password',
+        'zh-cn' => '设置管理密码',
+    ],
     'Refresh' => [
         'en-us' => 'Refresh',
         'zh-cn' => '刷新',

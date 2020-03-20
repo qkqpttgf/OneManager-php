@@ -6,7 +6,7 @@ RewriteRule ^(.*) index.php?/$1 [L]
 
 #-----------------------------------
 # nginx
-# rewrite ^(.*) index.php?/$1 last;
+# rewrite ^(.*) /index.php?/$1 last;
 #
 # caddy (not sure)
 # rewrite {

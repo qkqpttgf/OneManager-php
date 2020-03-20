@@ -93,6 +93,7 @@ function setConfig($arr, $disktag = '')
         if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
         else $tmp['disktag'] = '';
     }
+    foreach ($tmp as $key => $val) if ($val=='') $tmp[$key]=null;
 //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 //';
     return setHerokuConfig($tmp, getConfig('function_name'), getConfig('APIKey'));
