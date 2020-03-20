@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
-    <title><?php echo $pretitle;?> - <?php echo $_SERVER['sitename'];?></title>
+    <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) echo ' - ' . getConfig('diskname');?> - <?php echo $_SERVER['sitename'];?></title>
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
@@ -12,8 +12,8 @@
 <center>
 <iframe width="300" scrolling="no" height="20" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=11&color=%2300B050&bgc=%23&icon=1&site=10"></iframe>
 </center>
-    <style type="text/css">
-        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#FFF;background-image:url("http://www.qqzzz.net/www/images/bj.png")}
+<style type="text/css">
+        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#FFF;background-image:url("https://preview.cloud.189.cn/image/imageAction?param=644D1FDF3BCA66793B4EC8743DC719B301697B82B4CF1D65CADA04AE0EDC27272D6F8FAC5BB7C96F9E7B69323C350F5E2B4436C2B61E6C9E6714B04FB2A9F6CEE340D18744E86E16D3FCD63FA6392C05C9BB16ED35833327310E45AB")}
         a{color:#000;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
         a:hover{color:#FFF;}
@@ -73,7 +73,7 @@
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><?php echo getconstStr('encrypt'); ?></a></li>
             <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><?php echo getconstStr('RefreshCache'); ?></a></li>
 <?php   } ?>
-            <li><a href="<?php echo $_GET['preview']?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
+            <li><a href="<?php echo isset($_GET['preview'])?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
             <li><a onclick="logout()"><ion-icon name="log-out"></ion-icon><?php echo getconstStr('Logout'); ?></a></li>
         </ul></li>
 <?php
@@ -89,7 +89,7 @@
         </select>
     </div>
 <?php
-    if ($_SERVER['needUpdate']) { ?>
+    if (isset($_SERVER['needUpdate'])&&$_SERVER['needUpdate']) { ?>
     <div style='position:absolute;'><font color='red'><?php echo getconstStr('NeedUpdate'); ?></font></div>
 <?php } ?>
     <h1 class="title">
@@ -136,6 +136,10 @@
             </div>
             <div class="list-body-container">
 <?php
+    $head = false;
+    $readme = false;
+    $pdfurl = false;
+    $DPvideo = false;
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:10px">
                 <center>
@@ -158,8 +162,6 @@
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
-                    $DPvideo = '';
-                    $pdfurl = '';
                     if (in_array($ext, $exts['img'])) {
                         echo '                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
 ';
@@ -205,12 +207,12 @@
                     </div>
                 </div>
 <?php           } elseif (isset($files['folder'])) {
-                    $filenum = $_POST['filenum'];
-                    if (!$filenum and $files['folder']['page']) $filenum = ($files['folder']['page']-1)*200;
-                    $readme = false; ?>
+                    if (isset($_POST['filenum'])) $filenum = $_POST['filenum'];
+                    if (!isset($filenum) and isset($files['folder']['page'])) $filenum = ($files['folder']['page']-1)*200;
+                    else $filenum = 0; ?>
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if ($_SERVER['USER']!='qcloud') { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?><button onclick="CopyAllDownloadUrl();"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
+                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
                         <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
                         <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
@@ -245,13 +247,13 @@
                     foreach ($files['children'] as $file) {
                         // Files
                         if (isset($file['file'])) {
-                            if ($_SERVER['admin'] or (substr($file['name'],0,1) !== '.' and $file['name'] !== getConfig('passfile') ) ) {
-                                if (strtolower($file['name']) === 'head.md') $head = $file;
-                                if (strtolower($file['name']) === 'readme.md') $readme = $file;
-                                if (strtolower($file['name']) === 'index.html' && !$_SERVER['admin']) {
-                                    $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
-                                    return output($html,200);
-                                }
+                            if (strtolower($file['name']) === 'head.md') $head = $file;
+                            if (strtolower($file['name']) === 'readme.md') $readme = $file;
+                            if (strtolower($file['name']) === 'index.html' && !$_SERVER['admin']) {
+                                $html = curl_request(fetch_files(spurlencode(path_format($path . '/' .$file['name']),'/'))['@microsoft.graph.downloadUrl'])['body'];
+                                return output($html,200);
+                            }
+                            if ($_SERVER['admin'] or !isHideFile($file['name'])) {
                                 $filenum++; ?>
                     <tr data-to id="tr<?php echo $filenum;?>">
                         <td class="file">
@@ -409,7 +411,7 @@
     <div id="mask" class="mask" style="display:none;"></div>
 <?php
     if ($_SERVER['admin']) {
-        if (!$_GET['preview']) { ?>
+        if (!isset($_GET['preview'])) { ?>
     <div style="word-break: break-all;word-wrap: break-word;">
         <div id="rename_div" class="operatediv" style="display:none">
             <div>
@@ -518,7 +520,7 @@
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
 	        <center>
-	            <form action="<?php echo $_GET['preview']?'?preview&':'?';?>admin" method="post">
+	            <form action="<?php echo isset($_GET['preview'])?'?preview&':'?';?>admin" method="post">
 		        <input id="login_input" name="password1" type="password" placeholder="<?php echo getconstStr('InputPassword'); ?>">
 		        <input type="submit" value="<?php echo getconstStr('Login'); ?>">
 	            </form>
@@ -527,27 +529,6 @@
 	</div>
 <?php   }
     } ?>
-<body>
-<script type="text/javascript">
-document.addEventListener('DOMContentLoaded', function () {
-    function audioAutoPlay() {
-        var audio = document.getElementById('audio');
-            audio.play();
-        document.addEventListener("WeixinJSBridgeReady", function () {
-            audio.play();
-        }, false);
-    }
-    audioAutoPlay();
-});
-document.addEventListener('touchstart', function () {
-    function audioAutoPlay() {
-        var audio = document.getElementById('audio');
-            audio.play();
-    }
-    audioAutoPlay();
-});
-</script>
- </body>
 <center>
 <body>
     <span id="date1"></span>
@@ -594,9 +575,10 @@ echo  'IPv4: ' ,$ip, "\n";
 <center>
 <span id="clock"><span>  <!--顶部span的id为clock-->
 <div class="footer_copyright">
- Copyright © 2020 - <span id="footyear"></span> Bayd. All Rights Reserved.<em>彼岸云端 版权所有</em>                  <!--底部span的id为footyear-->
+ Copyright © 2019-2020 - <span id="footyear"></span>OneManager,Power_by_逸笙 <em> 主题归彼岸云端版权所有</em>                  <!--底部span的id为footyear-->
 </div>
 </center>
+</body>
 <?php if ($files) { ?>
 <?php if ($head||$readme) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><?php } ?>
@@ -643,7 +625,7 @@ echo  'IPv4: ' ,$ip, "\n";
         $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
     }
 <?php
-    if ($_GET['preview']) { //is preview mode. 在预览时处理 ?>
+    if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
     var $url = document.getElementById('url');
     if ($url) {
         $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
@@ -781,17 +763,18 @@ echo  'IPv4: ' ,$ip, "\n";
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
-    function CopyAllDownloadUrl() {
+    function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
         tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
-        document.querySelectorAll('.download').forEach(function (e) {
+        document.querySelectorAll(str).forEach(function (e) {
             tmptextarea.innerHTML+=e.href+"\r\n";
         });
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
         alert(tmptextarea.innerHTML);
+        //alert('Success');
     }
     var sort=0;
     function sortby(string) {
@@ -892,7 +875,7 @@ echo  'IPv4: ' ,$ip, "\n";
         location.href=location.protocol + "//" + location.host + "<?php echo path_format($_SERVER['base_path'] . '/' . $path );?>" ;
     }
 <?php }
-    if ($files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
+    if (isset($files['folder']['childCount'])&&$files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
     function nextpage(num) {
         document.getElementById('pagenum').value=num;
         document.getElementById('nextpageform').submit();
@@ -1070,8 +1053,9 @@ echo  'IPv4: ' ,$ip, "\n";
                                 xhr4.onload = function(e){
                                     console.log(xhr4.responseText+','+xhr4.status);
                                     var filename;
-                                    if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
-                                    if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                    //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
+                                    //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                    filename = JSON.parse(xhr4.responseText)['name'];
                                     if (filename=='') {
                                         alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                         uploadbuttonshow();
@@ -1080,8 +1064,9 @@ echo  'IPv4: ' ,$ip, "\n";
                                     var lasturl = location.href;
                                     if (lasturl.substr(lasturl.length-1)!='/') lasturl += '/';
                                     lasturl += filename + '?preview';
-                                    //alert(lasturl);
-                                    window.open(lasturl);
+                                    //window.open(lasturl);
+                                    document.getElementById('upfile_a_'+tdnum).href = lasturl;
+                                    document.getElementById('upfile_a1_'+tdnum).href = filename;
                                 }
 <?php } ?>
                                 EndTime=new Date();
@@ -1091,7 +1076,7 @@ echo  'IPv4: ' ,$ip, "\n";
                                 } else {
                                     MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<font color="green"><?php if (!$_SERVER['admin']) { ?>'+filemd5+'<br><?php } ?>'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'<br><?php echo getconstStr('UploadComplete'); ?></font>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');"><?php echo getconstStr('CopyUrl'); ?></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <?php if ($_SERVER['admin']) { ?>
@@ -1133,7 +1118,7 @@ echo  'IPv4: ' ,$ip, "\n";
         document.cookie = "admin=; path=/";
         location.href = location.href;
     }
-<?php   if (!$_GET['preview']) {?>
+<?php   if (!isset($_GET['preview'])) {?>
     function showdiv(event,action,num) {
         var $operatediv=document.getElementsByName('operatediv');
         for ($i=0;$i<$operatediv.length;$i++) {
