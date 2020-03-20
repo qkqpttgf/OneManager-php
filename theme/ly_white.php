@@ -9,10 +9,7 @@
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
-<center>
-<iframe width="300" scrolling="no" height="20" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=11&color=%2300B050&bgc=%23&icon=1&site=10"></iframe>
-</center>
-<style type="text/css">
+    <style type="text/css">
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#FFF;background-image:url("https://preview.cloud.189.cn/image/imageAction?param=644D1FDF3BCA66793B4EC8743DC719B301697B82B4CF1D65CADA04AE0EDC27272D6F8FAC5BB7C96F9E7B69323C350F5E2B4436C2B61E6C9E6714B04FB2A9F6CEE340D18744E86E16D3FCD63FA6392C05C9BB16ED35833327310E45AB")}
         a{color:#000;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
@@ -79,6 +76,9 @@
 <?php
     } ?>
         &nbsp;
+        <center>
+        <iframe width="300" scrolling="no" height="20" frameborder="0" allowtransparency="true" src="//i.tianqi.com/index.php?c=code&id=11&color=%2300B050&bgc=%23&icon=1&site=10"></iframe>
+        </center>
         <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
             <option value="">Language</option>
 <?php
