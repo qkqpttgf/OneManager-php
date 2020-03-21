@@ -859,7 +859,7 @@ function splitlast($str, $split)
         $tmp[1] = substr($str, $pos+1);
     } else {
         $tmp[0] = '';
-        $tmp[1] = $str;
+        $tmp[1] = substr($str, 1);
     }
     return $tmp;
 }
@@ -941,23 +941,22 @@ function fetch_files($path = '/')
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
         // https://developer.microsoft.com/zh-cn/graph/graph-explorer
-        $pos = strrpos($path, '/');
-        if ($pos>1) {
-            $parentpath = substr($path, 0, $pos);
-            $filename = strtolower(substr($path, $pos+1));
-            if ($parentfiles = getcache('path_' . $parentpath. '/')) {
-                if (isset($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl'])) {
-                    if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
-                        if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
-                            $content1 = curl_request($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl']);
-                            $parentfiles['children'][$filename]['content'] = $content1;
-                            savecache('path_' . $parentpath. '/', $parentfiles);
-                        }
+        $pos = splitlast($path, '/');
+        $parentpath = $pos[0];
+        $filename = $pos[1];
+        if ($parentfiles = getcache('path_' . $parentpath. '/')) {
+            if (isset($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl'])) {
+                if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
+                    if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
+                        $content1 = curl_request($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl']);
+                        $parentfiles['children'][$filename]['content'] = $content1;
+                        savecache('path_' . $parentpath. '/', $parentfiles);
                     }
-                    return $parentfiles['children'][$filename];
                 }
+                return $parentfiles['children'][$filename];
             }
         }
+
         $url = $_SERVER['api_url'];
         if ($path !== '/') {
             $url .= ':' . $path;
