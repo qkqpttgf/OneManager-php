@@ -934,6 +934,7 @@ function MSAPI($method, $path, $data = '', $access_token)
 
 function fetch_files($path = '/')
 {
+    global $exts;
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
     if (!($files = getcache('path_' . $path))) {
@@ -943,12 +944,19 @@ function fetch_files($path = '/')
         $pos = strrpos($path, '/');
         if ($pos>1) {
             $parentpath = substr($path, 0, $pos);
-            $filename = substr($path, $pos+1);
-            if ($parentfiles = getcache('path_' . $parentpath))
-                foreach ($parentfiles['children'] as $file)
-                    if ($file['name']==$filename)
-                        if (isset($file['@microsoft.graph.downloadUrl']))
-                            return $file;
+            $filename = strtolower(substr($path, $pos+1));
+            if ($parentfiles = getcache('path_' . $parentpath. '/')) {
+                if (isset($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl'])) {
+                    if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
+                        if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
+                            $content1 = curl_request($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl']);
+                            $parentfiles['children'][$filename]['content'] = $content1;
+                            savecache('path_' . $parentpath. '/', $parentfiles);
+                        }
+                    }
+                    return $parentfiles['children'][$filename];
+                }
+            }
         }
         $url = $_SERVER['api_url'];
         if ($path !== '/') {
@@ -956,6 +964,8 @@ function fetch_files($path = '/')
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
         $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime,@microsoft.graph.downloadUrl)';
+        $retry = 0;
+        $arr = [];
         while ($retry<3&&!$arr['stat']) {
             $arr = curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']]);
             $retry++;
@@ -1002,7 +1012,7 @@ function children_name($children)
 {
     $tmp = [];
     foreach ($children as $file) {
-        $tmp[$file['name']] = $file;
+        $tmp[strtolower($file['name'])] = $file;
     }
     return $tmp;
 }
@@ -1115,6 +1125,10 @@ function render_list($path = '', $files = '')
     global $exts;
     global $constStr;
 
+    if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
+        $htmlcontent = fetch_files(spurlencode(path_format($path . '/index.html'),'/'))['content'];
+        return output($htmlcontent['body'], $htmlcontent['stat']);
+    }
     $path = str_replace('%20','%2520',$path);
     $path = str_replace('+','%2B',$path);
     $path = str_replace('&','&amp;',path_format(urldecode($path))) ;
@@ -1147,12 +1161,12 @@ function render_list($path = '', $files = '')
 
     $theme = getConfig('theme');
     if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
-    $htmlpage = include 'theme/'.$theme;
+    include 'theme/'.$theme;
 
     $html = '<!--
     Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
-    if (isset($htmlpage['statusCode'])) return $htmlpage;
+    //if (isset($htmlpage['statusCode'])) return $htmlpage;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
 }
