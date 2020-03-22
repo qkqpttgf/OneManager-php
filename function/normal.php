@@ -125,7 +125,7 @@ function install()
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
-                return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+                return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
             }
         }
     }
