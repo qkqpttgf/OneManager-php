@@ -937,6 +937,7 @@ function fetch_files($path = '/')
     global $exts;
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
+    if ($path!='/'&&substr($path,-1)=='/') $path=substr($path,0,-1);
     if (!($files = getcache('path_' . $path))) {
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
@@ -944,13 +945,13 @@ function fetch_files($path = '/')
         $pos = splitlast($path, '/');
         $parentpath = $pos[0];
         $filename = $pos[1];
-        if ($parentfiles = getcache('path_' . $parentpath. '/')) {
+        if ($parentfiles = getcache('path_' . $parentpath)) {
             if (isset($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl'])) {
                 if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
                     if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
                         $content1 = curl_request($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl']);
                         $parentfiles['children'][$filename]['content'] = $content1;
-                        savecache('path_' . $parentpath. '/', $parentfiles);
+                        savecache('path_' . $parentpath, $parentfiles);
                     }
                 }
                 return $parentfiles['children'][$filename];
@@ -1163,7 +1164,7 @@ function render_list($path = '', $files = '')
     include 'theme/'.$theme;
 
     $html = '<!--
-    Github ： https://github.com/ldxw/OneManager-php
+    Github ： https://github.com/qkqpttgf/OneManager-php
 -->' . ob_get_clean();
     //if (isset($htmlpage['statusCode'])) return $htmlpage;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
