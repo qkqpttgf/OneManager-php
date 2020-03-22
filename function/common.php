@@ -1261,8 +1261,8 @@ function get_refresh_token()
         '.getconstStr('OnedriveDiskTag').': ('.getConfig('disktag').')<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
         '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
         Onedrive_Ver：<br>
-        <label><input type="radio" name="Onedrive_ver" value="MS" checked>MS: '.getconstStr('OndriveVerMS').'</label><br>
-        <label><input type="radio" name="Onedrive_ver" value="CN">CN: '.getconstStr('OndriveVerCN').'</label><br>
+        <label><input type="radio" name="Onedrive_ver" value="MS" checked onclick="document.getElementById(\'secret\').style.display=\'none\';">MS: '.getconstStr('OndriveVerMS').'</label><br>
+        <label><input type="radio" name="Onedrive_ver" value="CN" onclick="document.getElementById(\'secret\').style.display=\'none\';">CN: '.getconstStr('OndriveVerCN').'</label><br>
         <label><input type="radio" name="Onedrive_ver" value="MSC" onclick="document.getElementById(\'secret\').style.display=\'\';">MSC: '.getconstStr('OndriveVerMSC').'
             <div id="secret" style="display:none">
                 <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>

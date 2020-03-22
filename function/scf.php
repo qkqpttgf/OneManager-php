@@ -132,9 +132,9 @@ function install()
         setConfig($tmp);
         if (needUpdate()) {
             updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-            return message('update to github version, reinstall.<meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
+            return message('update to github version, reinstall.<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
         }
-        return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+        return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
     }
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
@@ -166,7 +166,7 @@ function install()
         function notnull(t)
         {
             if (t.admin.value==\'\') {
-                alert(\'Input admin\');
+                alert(\''.getconstStr('SetAdminPassword').'\');
                 return false;
             }
             return true;

@@ -115,7 +115,7 @@ function setConfig($arr, $disktag = '')
 function install()
 {
     global $constStr;
-    if ($_GET['install1']) {
+    if ($_GET['install2']) {
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
             $tmp['language'] = $_POST['language'];
@@ -125,30 +125,73 @@ function install()
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
-                return output('Jump<meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+                return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
             }
         }
     }
-    if ($_GET['install0']) {
+    if ($_GET['install1']) {
         if (!ConfigWriteable()) {
             $html .= getconstStr('MakesuerWriteable');
             $title = 'Error';
             return message($html, $title, 201);
         }
-        if (!RewriteEngineOn()) {
+        /*if (!RewriteEngineOn()) {
             $html .= getconstStr('MakesuerRewriteOn');
             $title = 'Error';
             return message($html, $title, 201);
+        }*/
+        $html .= '<button id="checkrewritebtn" onclick="checkrewrite();">'.getconstStr('MakesuerRewriteOn').'</button>
+<div id="formdiv" style="display: none">
+    <form action="?install2" method="post" onsubmit="return notnull(this);">
+        <input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"><br>
+        <input id="submitbtn" type="submit" value="'.getconstStr('Submit').'" disabled>
+    </form>
+</div>
+    <script>
+        function notnull(t)
+        {
+            if (t.admin.value==\'\') {
+                alert(\''.getconstStr('SetAdminPassword').'\');
+                return false;
+            }
+            return true;
         }
+        function checkrewrite()
+        {
+            url=location.protocol + "//" + location.host;
+            if (location.port!="") url += ":" + location.port;
+            url += location.pathname;
+            if (url.substr(-1)!="/") url += "/";
+            url += "config.php";
+            //alert(url);
+            var xhr4 = new XMLHttpRequest();
+            xhr4.open("GET", url);
+            xhr4.setRequestHeader("x-requested-with","XMLHttpRequest");
+            xhr4.send(null);
+            xhr4.onload = function(e){
+                console.log(xhr4.responseText+","+xhr4.status);
+                //filename = JSON.parse(xhr4.responseText);
+                if (xhr4.status==201) {
+                    document.getElementById("checkrewritebtn").style.display = "none";
+                    document.getElementById("submitbtn").disabled = false;
+                    document.getElementById("formdiv").style.display = "";
+                } else {
+                    alert(xhr4.status);
+                }
+            }
+        }
+    </script>';
+        $title = getconstStr('SetAdminPassword');
+        return message($html, $title, 201);
+    }
+    if ($_GET['install0']) {
         $html .= '
-    <form action="?install1" method="post" onsubmit="return notnull(this);">
+    <form action="?install1" method="post">
 language:<br>';
         foreach ($constStr['languages'] as $key1 => $value1) {
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        $html .= '
-        <label>Set admin password:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
         $html .= '
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
@@ -157,14 +200,6 @@ language:<br>';
         {
             document.cookie=\'language=\'+str+\'; path=/\';
             location.href = location.href;
-        }
-        function notnull(t)
-        {
-            if (t.admin.value==\'\') {
-                alert(\'input admin\');
-                return false;
-            }
-            return true;
         }
     </script>';
         $title = getconstStr('SelectLanguage');
