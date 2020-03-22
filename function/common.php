@@ -937,7 +937,7 @@ function fetch_files($path = '/')
     global $exts;
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
-    if (substr($path,-1)=='/') $path=substr($path,0,-1);
+    if ($path!='/'&&substr($path,-1)=='/') $path=substr($path,0,-1);
     if (!($files = getcache('path_' . $path))) {
         // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
         // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
