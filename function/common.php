@@ -935,6 +935,7 @@ function MSAPI($method, $path, $data = '', $access_token)
 function fetch_files($path = '/')
 {
     global $exts;
+    if (substr($path,-1)=='/') $path=substr($path,0,-1);
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
     if (!($files = getcache('path_' . $path))) {
@@ -944,13 +945,13 @@ function fetch_files($path = '/')
         $pos = splitlast($path, '/');
         $parentpath = $pos[0];
         $filename = $pos[1];
-        if ($parentfiles = getcache('path_' . $parentpath. '/')) {
+        if ($parentfiles = getcache('path_' . $parentpath)) {
             if (isset($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl'])) {
                 if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
                     if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
                         $content1 = curl_request($parentfiles['children'][$filename]['@microsoft.graph.downloadUrl']);
                         $parentfiles['children'][$filename]['content'] = $content1;
-                        savecache('path_' . $parentpath. '/', $parentfiles);
+                        savecache('path_' . $parentpath, $parentfiles);
                     }
                 }
                 return $parentfiles['children'][$filename];
