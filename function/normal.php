@@ -159,7 +159,7 @@ function install()
         function checkrewrite()
         {
             url=location.protocol + "//" + location.host;
-            if (location.port!="") url += ":" + location.port;
+            //if (location.port!="") url += ":" + location.port;
             url += location.pathname;
             if (url.substr(-1)!="/") url += "/";
             url += "config.php";
@@ -170,13 +170,12 @@ function install()
             xhr4.send(null);
             xhr4.onload = function(e){
                 console.log(xhr4.responseText+","+xhr4.status);
-                //filename = JSON.parse(xhr4.responseText);
                 if (xhr4.status==201) {
                     document.getElementById("checkrewritebtn").style.display = "none";
                     document.getElementById("submitbtn").disabled = false;
                     document.getElementById("formdiv").style.display = "";
                 } else {
-                    alert(xhr4.status);
+                    alert(url+"\n"+xhr4.status);
                 }
             }
         }
