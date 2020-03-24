@@ -175,7 +175,7 @@ function install()
                     document.getElementById("submitbtn").disabled = false;
                     document.getElementById("formdiv").style.display = "";
                 } else {
-                    alert(url+'\n'+xhr4.status);
+                    alert(url+"\n"+xhr4.status);
                 }
             }
         }
