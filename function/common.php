@@ -294,29 +294,29 @@ function gethiddenpass($path,$passfile)
     if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     $password=getcache('path_' . $path1 . '/?password');
     if ($password=='') {
-    $ispassfile = fetch_files(path_format($path . '/' . urlencode($passfile)));
-    //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
-    if (isset($ispassfile['file'])) {
-        $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
-        if ($arr['stat']==200) {
-            $passwordf=explode("\n",$arr['body']);
-            $password=$passwordf[0];
-            if ($password!='') $password=md5($password);
-            savecache('path_' . $path1 . '/?password', $password);
-            return $password;
+        $ispassfile = fetch_files(path_format($path . '/' . urlencode($passfile)));
+        //echo $path . '<pre>' . json_encode($ispassfile, JSON_PRETTY_PRINT) . '</pre>';
+        if (isset($ispassfile['file'])) {
+            $arr = curl_request($ispassfile['@microsoft.graph.downloadUrl']);
+            if ($arr['stat']==200) {
+                $passwordf=explode("\n",$arr['body']);
+                $password=$passwordf[0];
+                if ($password!='') $password=md5($password);
+                savecache('path_' . $path1 . '/?password', $password);
+                return $password;
+            } else {
+                //return md5('DefaultP@sswordWhenNetworkError');
+                return md5( md5(time()).rand(1000,9999) );
+            }
         } else {
-            //return md5('DefaultP@sswordWhenNetworkError');
-            return md5( md5(time()).rand(1000,9999) );
+            savecache('path_' . $path1 . '/?password', 'null');
+            if ($path !== '' ) {
+                $path = substr($path,0,strrpos($path,'/'));
+                return gethiddenpass($path,$passfile);
+            } else {
+                return '';
+            }
         }
-    } else {
-        savecache('path_' . $path1 . '/?password', 'null');
-        if ($path !== '' ) {
-            $path = substr($path,0,strrpos($path,'/'));
-            return gethiddenpass($path,$passfile);
-        } else {
-            return '';
-        }
-    }
     } elseif ($password==='null') {
         if ($path !== '' ) {
             $path = substr($path,0,strrpos($path,'/'));
@@ -517,7 +517,7 @@ function main($path)
     $disktags = explode("|",getConfig('disktag'));
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
-        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0]) ]);
+        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
         $_SERVER['disktag'] = $path;
         $pos = strpos($path, '/');
         if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
@@ -590,7 +590,6 @@ function main($path)
             if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
         }
 
-        $_SERVER['retry'] = 0;
         if ($_SERVER['ajax']) {
             if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
                 // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
@@ -666,7 +665,12 @@ function main($path)
         if ( isset($files['folder']) || isset($files['file']) ) {
             return render_list($path, $files);
         } else {
-            return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;">' . $files['error']['message'] . '</div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+            if (!isset($files['error'])) {
+                $files['error']['message'] = json_encode($files, JSON_PRETTY_PRINT);
+                $files['error']['code'] = 'unknownError';
+                $files['error']['stat'] = 500;
+            }
+            return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
         }
     }
 }
@@ -683,15 +687,6 @@ function list_files($path)
         $files = fetch_files($path);
     }
     return $files;
-    /*if ( isset($files['folder']) || isset($files['file']) || isset($files['error']) ) {
-        return $files;
-    } else {
-        error_log( json_encode($files) . ' Network Error<br>' );
-        $_SERVER['retry']++;
-        if ($_SERVER['retry'] < 3) {
-            return list_files($path);
-        } else return $files;
-    }*/
 }
 
 function adminform($name = '', $pass = '', $path = '')
@@ -759,6 +754,7 @@ function adminoperate($path)
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
         $path1 = path_format($path1 . '/' . $foldername );
+        if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
         savecache('path_' . $path1 . '/?password', '', 1);
         return output($result['body'], $result['stat']);
     }
@@ -817,7 +813,7 @@ function adminoperate($path)
             //if ($_GET['move_folder'] == '/../') $path2 = path_format( substr($path1, 0, strrpos($path1, '/')) . '/' );
             //else $path2 = path_format( $path1 . '/' . $_GET['move_folder'] . '/' );
             //savecache('path_' . $path2, json_decode('{}',true), 1);
-        return output($result['body'].json_encode($result['Location']), $result['stat']);
+        return output($result['body'], $result['stat']);
     }
     if (isset($_POST['editfile'])) {
         // edit 编辑
@@ -1218,7 +1214,6 @@ function get_refresh_token()
         //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
     }
     if (isset($_GET['install1'])) {
-        $_SERVER['disk_oprating'] = $_COOKIE['disktag'];
         $_SERVER['disktag'] = $_COOKIE['disktag'];
         config_oauth();
         if (getConfig('Onedrive_ver')=='MS' || getConfig('Onedrive_ver')=='CN' || getConfig('Onedrive_ver')=='MSC') {
@@ -1250,11 +1245,12 @@ function get_refresh_token()
                 $tmp['client_secret'] = $_POST['client_secret'];
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
-            $title = getconstStr('MayinEnv');
-            $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk&install1">';
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
+            } else {
+                $title = getconstStr('MayinEnv');
+                $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk&install1">';
             }
             return message($html, $title, 201);
         }
