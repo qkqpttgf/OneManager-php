@@ -101,7 +101,7 @@
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
-        echo '                    <a href="'.path_format($_SERVER['base_path'].'/'.$disk).'"'.($_SERVER['disktag']==$disk?' now':'').'>'.$diskname.'</a>
+        echo '                    <a href="'.path_format($_SERVER['base_path'].'/'.$disk.'/').'"'.($_SERVER['disktag']==$disk?' now':'').'>'.$diskname.'</a>
 ';
     } ?>
                 </div>
