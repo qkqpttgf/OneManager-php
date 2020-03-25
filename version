@@ -1,9 +1,12 @@
-20200321-1830.15
-<font color=red>本次更新后，'index.html'功能在其它主题会导致bug。</font>
-文本类文件将缓存；添加hideFunctionalityFile开关；在添加网盘时会显示已经在用的标签。
-<font color=red>after this update, then 'index.html' function will bug in other theme.</font>
-cache text file content;add hideFunctionalityFile;list exist disktags when AddDisk。
+20200326-0001.16
+You can add sharepoint site drive as a disk, <font color=red>you must reinstall after update</font>.
+可以将sharepoint网站添加成一个盘，<font color=red>由于结构改变，升级后只能重装</font>。
 
+20200321-1830.15
+本次更新后，'index.html'功能在其它主题会导致bug。
+文本类文件将缓存；添加hideFunctionalityFile开关；在添加网盘时会显示已经在用的标签。
+after this update, then 'index.html' function will bug in other theme.
+cache text file content;add hideFunctionalityFile;list exist disktags when AddDisk。
 20200311-2150.14
 Add a switch, can download a known file or not, while the folder is encrypted.
 Hide time and size in mobile.
