@@ -519,6 +519,12 @@
 <?php if ($pdfurl!='') { ?><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><?php } ?>
 <?php } ?>
 <script type="text/javascript">
+    function changelanguage(str)
+    {
+        if (str=='Language') str = '';
+        document.cookie='language='+str+'; path=/';
+        location.href = location.href;
+    }
 <?php if ($files) { ?>
     var root = '<?php echo $_SERVER["base_disk_path"]; ?>';
     function path_format(path) {
@@ -540,12 +546,6 @@
         e.innerHTML += paths[paths.length - 1];
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
     });
-    function changelanguage(str)
-    {
-        if (str=='Language') str = '';
-        document.cookie='language='+str+'; path=/';
-        location.href = location.href;
-    }
 <?php
     if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
     var $url = document.getElementById('url');
