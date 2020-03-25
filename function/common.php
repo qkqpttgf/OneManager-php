@@ -17,11 +17,15 @@ $Base64Env = [
     //'passfile',
     'sitename',
     //'theme',
-    //'Onedrive_ver',
+    //'Drive_ver',
+    //'Drive_custom',
     //'client_id',
     'client_secret',
     'domain_path',
     'guestup_path',
+    //'usesharepoint',
+    'sharepointname',
+    //'siteid',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -62,26 +66,34 @@ $ShowedCommonEnv = [
 ];
 
 $InnerEnv = [
-    'Onedrive_ver',
+    'Drive_ver',
+    'Drive_custom',
     'client_id',
     'client_secret',
     'diskname',
     'domain_path',
     'downloadencrypt',
     'guestup_path',
+    'usesharepoint',
+    'sharepointname',
+    'siteid',
     'public_path',
     'refresh_token',
     'token_expires',
 ];
 
 $ShowedInnerEnv = [
-    //'Onedrive_ver',
+    //'Drive_ver',
+    //'Drive_custom',
     //'client_id',
     //'client_secret',
     'diskname',
     'domain_path',
     'downloadencrypt',
     'guestup_path',
+    //'usesharepoint',
+    //'sharepointname',
+    //'siteid',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -127,17 +139,19 @@ function config_oauth()
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
     $_SERVER['redirect_uri'] = 'https://scfonedrive.github.io';
-
-    if (getConfig('Onedrive_ver')=='MS') {
+    if (getConfig('Drive_ver')=='MS') {
         // MS
         // https://portal.azure.com
-        $_SERVER['client_id'] = '4da3e7f2-bf6d-467c-aaf0-578078f0bf7c';
-        $_SERVER['client_secret'] = '7/+ykq2xkfx:.DWjacuIRojIaaWL0QI6';
+        //$_SERVER['client_id'] = '4da3e7f2-bf6d-467c-aaf0-578078f0bf7c';
+        //$_SERVER['client_secret'] = '7/+ykq2xkfx:.DWjacuIRojIaaWL0QI6';
+        $_SERVER['client_id'] = '734ef928-d74c-4555-8d1b-d942fa0a1a41';
+        $_SERVER['client_secret'] = ':EK[e0/4vQ@mQgma8LmnWb6j4_C1CSIW';
         $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
+        if (getConfig('usesharepoint')=='on') $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/sites/' . getConfig('siteid') . '/drive/root';
     }
-    if (getConfig('Onedrive_ver')=='CN') {
+    if (getConfig('Drive_ver')=='CN') {
         // CN
         // https://portal.azure.cn
         $_SERVER['client_id'] = '04c3ca0b-8d07-4773-85ad-98b037d25631';
@@ -145,19 +159,34 @@ function config_oauth()
         $_SERVER['oauth_url'] = 'https://login.partner.microsoftonline.cn/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://microsoftgraph.chinacloudapi.cn/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://microsoftgraph.chinacloudapi.cn/Files.ReadWrite.All offline_access';
-    }
-    if (getConfig('Onedrive_ver')=='MSC') {
-        // MS Customer
-        // https://portal.azure.com
-        $_SERVER['client_id'] = getConfig('client_id');
-        $_SERVER['client_secret'] = getConfig('client_secret');
-        $_SERVER['oauth_url'] = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
-        $_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/me/drive/root';
-        $_SERVER['scope'] = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
+        if (getConfig('usesharepoint')=='on') $_SERVER['api_url'] = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/' . getConfig('siteid') . '/drive/root';
     }
 
+    if (getConfig('Drive_custom')=='on') {
+        // Customer
+        $_SERVER['client_id'] = getConfig('client_id');
+        $_SERVER['client_secret'] = getConfig('client_secret');
+    }
     $_SERVER['client_secret'] = urlencode($_SERVER['client_secret']);
     $_SERVER['scope'] = urlencode($_SERVER['scope']);
+}
+
+function get_siteid($access_token)
+{
+    $i=0;
+    $response = [];
+    while ($response['stat']!=200&&$i<4) {
+        $response = curl_request('https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname'), false, ['Authorization' => 'Bearer ' . $access_token]);
+        $i++;
+        echo 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname').$response['stat'].$response['body'].'
+        ';
+    }
+    return json_decode($response['body'],true)['id'];
+        //$_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/sites/' . $tmp['siteid'] . '/drive/root';
+        //setConfig($tmp);
+    
+        //error_log('failed to get siteid. response' . json_encode($response));
+        //throw new Exception($response['stat'].', failed to get siteid.'.$response['body']);
 }
 
 function getListpath($domain)
@@ -1189,11 +1218,11 @@ function get_refresh_token()
         $tmp = curl_request($_SERVER['oauth_url'] . 'token', 'client_id=' . $_SERVER['client_id'] .'&client_secret=' . $_SERVER['client_secret'] . '&grant_type=authorization_code&requested_token_use=on_behalf_of&redirect_uri=' . $_SERVER['redirect_uri'] .'&code=' . $_GET['code']);
         if ($tmp['stat']==200) $ret = json_decode($tmp['body'], true);
         if (isset($ret['refresh_token'])) {
-            $tmptoken = $ret['refresh_token'];
+            $refresh_token = $ret['refresh_token'];
             $str = '
         refresh_token :<br>';
             $str .= '
-        <textarea readonly style="width: 95%">' . $tmptoken . '</textarea><br><br>
+        <textarea readonly style="width: 95%">' . $refresh_token . '</textarea><br><br>
         '.getconstStr('SavingToken').'
         <script>
             var texta=document.getElementsByTagName(\'textarea\');
@@ -1203,7 +1232,10 @@ function get_refresh_token()
             document.cookie=\'language=; path=/\';
             document.cookie=\'disktag=; path=/\';
         </script>';
-            setConfig([ 'refresh_token' => $tmptoken, 'token_expires' => time()+30*24*60*60 ], $_COOKIE['disktag']);
+            $tmptoken['refresh_token'] = $refresh_token;
+            $tmptoken['token_expires'] = time()+7*24*60*60;
+            if (getConfig('usesharepoint')=='on') $tmptoken['siteid'] = get_siteid($ret['access_token']);
+            setConfig($tmptoken, $_COOKIE['disktag']);
             savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
             //WaitSCFStat();
             $str .= '
@@ -1216,7 +1248,7 @@ function get_refresh_token()
     if (isset($_GET['install1'])) {
         $_SERVER['disktag'] = $_COOKIE['disktag'];
         config_oauth();
-        if (getConfig('Onedrive_ver')=='MS' || getConfig('Onedrive_ver')=='CN' || getConfig('Onedrive_ver')=='MSC') {
+        if (getConfig('Drive_ver')=='MS' || getConfig('Drive_ver')=='CN') {
             return message('
     <a href="" id="a1">'.getconstStr('JumptoOffice').'</a>
     <script>
@@ -1232,17 +1264,22 @@ function get_refresh_token()
         }
     }
     if (isset($_GET['install0'])) {
-        if ($_POST['disktag_add']!='' && ($_POST['Onedrive_ver']=='MS' || $_POST['Onedrive_ver']=='CN' || $_POST['Onedrive_ver']=='MSC')) {
+        if ($_POST['disktag_add']!='' && ($_POST['Drive_ver']=='MS' || $_POST['Drive_ver']=='CN')) {
             if (in_array($_COOKIE['disktag'], $CommonEnv)) {
                 return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
             }
             $_SERVER['disktag'] = $_COOKIE['disktag'];
             $tmp['disktag_add'] = $_POST['disktag_add'];
             $tmp['diskname'] = $_POST['diskname'];
-            $tmp['Onedrive_ver'] = $_POST['Onedrive_ver'];
-            if ($_POST['Onedrive_ver']=='MSC') {
+            $tmp['Drive_ver'] = $_POST['Drive_ver'];
+            if ($_POST['Drive_custom']=='on') {
+                $tmp['Drive_custom'] = $_POST['Drive_custom'];
                 $tmp['client_id'] = $_POST['client_id'];
                 $tmp['client_secret'] = $_POST['client_secret'];
+            }
+            if ($_POST['usesharepoint']=='on') {
+                $tmp['usesharepoint'] = $_POST['usesharepoint'];
+                $tmp['sharepointname'] = $_POST['sharepointname'];
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
             if (api_error($response)) {
@@ -1263,26 +1300,40 @@ function get_refresh_token()
     $deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
     $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
     $html = '
+<div>
     <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
         '.getconstStr('OnedriveDiskTag').': ('.getConfig('disktag').')<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
         '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
-        Onedrive_Ver：<br>
-        <label><input type="radio" name="Onedrive_ver" value="MS" checked onclick="document.getElementById(\'secret\').style.display=\'none\';">MS: '.getconstStr('OndriveVerMS').'</label><br>
-        <label><input type="radio" name="Onedrive_ver" value="CN" onclick="document.getElementById(\'secret\').style.display=\'none\';">CN: '.getconstStr('OndriveVerCN').'</label><br>
-        <label><input type="radio" name="Onedrive_ver" value="MSC" onclick="document.getElementById(\'secret\').style.display=\'\';">MSC: '.getconstStr('OndriveVerMSC').'
-            <div id="secret" style="display:none">
+        <br>
+        <div>
+            <label><input type="radio" name="Drive_ver" value="MS" checked>MS: '.getconstStr('DriveVerMS').'</label><br>
+            <label><input type="radio" name="Drive_ver" value="CN">CN: '.getconstStr('DriveVerCN').'</label>
+        </div>
+        <br>
+        <div>
+            <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(document.getElementById(\'secret\').style.display==\'\'?\'none\':\'\');">'.getconstStr('CustomIdSecret').'</label>
+            <div id="secret" style="display:none;margin:10px 35px">
                 <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
                 client_secret:<input type="text" name="client_secret"><br>
                 client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
             </div>
-        </label><br>
+        </div>
+        <div>
+            <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(document.getElementById(\'sharepoint\').style.display==\'\'?\'none\':\'\');">'.getconstStr('UseSharepointInstead').'</label><br>
+            <div id="sharepoint" style="display:none;margin:10px 35px">
+                '.getconstStr('GetSharepointName').'<br>
+                <input type="text" name="sharepointname" placeholder="'.getconstStr('InputSharepointName').'"><br>
+            </div>
+        </div>
+        <br>
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
+</div>
     <script>
         function notnull(t)
         {
             if (t.disktag_add.value==\'\') {
-                alert(\'Input Disk Tag\');
+                alert(\''.getconstStr('OnedriveDiskTag').'\');
                 return false;
             }
             envs = [' . $envs . '];
@@ -1294,6 +1345,18 @@ function get_refresh_token()
             if (!reg.test(t.disktag_add.value)) {
                 alert(\''.getconstStr('TagFormatAlert').'\');
                 return false;
+            }
+            if (t.Drive_custom.checked==true) {
+                if (t.client_secret.value==\'\'||t.client_id.value==\'\') {
+                    alert(\'client_id & client_secret\');
+                    return false;
+                }
+            }
+            if (t.usesharepoint.checked==true) {
+                if (t.sharepointname.value==\'\') {
+                    alert(\''.getconstStr('InputSharepointName').'\');
+                    return false;
+                }
             }
             document.cookie=\'disktag=\'+t.disktag_add.value+\'; path=/\';
             return true;
