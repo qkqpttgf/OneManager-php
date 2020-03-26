@@ -173,20 +173,21 @@ function config_oauth()
 
 function get_siteid($access_token)
 {
+    if (getConfig('Drive_ver')=='MS') $url = 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname');
+    if (getConfig('Drive_ver')=='CN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/sites/'.getConfig('sharepointname');
     $i=0;
     $response = [];
-    while ($response['stat']!=200&&$i<4) {
-        $response = curl_request('https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname'), false, ['Authorization' => 'Bearer ' . $access_token]);
+    while ($url!=''&&$response['stat']!=200&&$i<4) {
+        $response = curl_request($url, false, ['Authorization' => 'Bearer ' . $access_token]);
         $i++;
-        echo 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname').$response['stat'].$response['body'].'
-        ';
+        //echo 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname').$response['stat'].$response['body'].'
+        //';
+    }
+    if ($response['stat']!=200) {
+        error_log('failed to get siteid. response' . json_encode($response));
+        throw new Exception($response['stat'].', failed to get siteid.'.$response['body']);
     }
     return json_decode($response['body'],true)['id'];
-        //$_SERVER['api_url'] = 'https://graph.microsoft.com/v1.0/sites/' . $tmp['siteid'] . '/drive/root';
-        //setConfig($tmp);
-    
-        //error_log('failed to get siteid. response' . json_encode($response));
-        //throw new Exception($response['stat'].', failed to get siteid.'.$response['body']);
 }
 
 function getListpath($domain)
