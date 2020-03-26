@@ -1411,7 +1411,7 @@ function EnvOpt($needUpdate = 0)
             } else {
                 //WaitSCFStat();
                 //sleep(3);
-            $html .= 'Success!<br>
+            $html .= getconstStr('Success') . '!<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
         }
