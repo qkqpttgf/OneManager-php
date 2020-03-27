@@ -260,7 +260,7 @@ function array_value_isnot_null($arr)
     return $arr!=='';
 }
 
-function curl_request($url, $data = false, $headers = [])
+function curl_request($url, $data = false, $headers = [], $returnheader = 0)
 {
     if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
     //if (!isset($headers['Referer'])) $headers['Referer'] = $url;
@@ -278,14 +278,23 @@ function curl_request($url, $data = false, $headers = [])
     curl_setopt($ch, CURLOPT_TIMEOUT, 5);
     curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 10);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_HEADER, $returnheader);
     curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, 0);
     curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
     curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
-    $response['body'] = curl_exec($ch);
+    //$response['body'] = curl_exec($ch);
+    if ($returnheader) {
+        list($returnhead, $response['body']) = explode("\r\n\r\n", curl_exec($ch));
+        foreach (explode("\r\n", $returnhead) as $head) {
+            $tmp = explode(': ', $head);
+            $heads[$tmp[0]] = $tmp[1];
+        }
+        $response['returnhead'] = $heads;
+    } else {
+        $response['body'] = curl_exec($ch);
+    }
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
-    //if ($response['stat']==0) return curl_request($url, $data, $headers);
     return $response;
 }
 
@@ -543,26 +552,8 @@ function main($path)
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['language'] = $constStr['language'];
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
-    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
-    $disktags = explode("|",getConfig('disktag'));
-//    echo 'count$disk:'.count($disktags);
-    if (count($disktags)>1) {
-        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
-        $_SERVER['disktag'] = $path;
-        $pos = strpos($path, '/');
-        if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
-        if (!in_array($_SERVER['disktag'], $disktags)) return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
-        $path = substr($path, strlen('/'.$_SERVER['disktag']));
-        if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
-    } else $_SERVER['disktag'] = $disktags[0];
-//    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
-//';
-    $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
-    if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
-    $_SERVER['is_guestup_path'] = is_guestup_path($path);
-    $_SERVER['ajax']=0;
-    if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
 
+    if (getConfig('admin')=='') return install();
     if (getConfig('adminloginpage')=='') {
         $adminloginpage = 'admin';
     } else {
@@ -597,8 +588,27 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
-    
-    if (getConfig('admin')=='') return install();
+
+    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
+    $disktags = explode("|",getConfig('disktag'));
+//    echo 'count$disk:'.count($disktags);
+    if (count($disktags)>1) {
+        if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+        $_SERVER['disktag'] = $path;
+        $pos = strpos($path, '/');
+        if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+        if (!in_array($_SERVER['disktag'], $disktags)) return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
+        $path = substr($path, strlen('/'.$_SERVER['disktag']));
+        if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
+    } else $_SERVER['disktag'] = $disktags[0];
+//    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
+//';
+    $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
+    if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
+    $_SERVER['is_guestup_path'] = is_guestup_path($path);
+    $_SERVER['ajax']=0;
+    if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
+
     config_oauth();
     if ($_SERVER['admin']) if (isset($_GET['AddDisk'])||isset($_GET['authorization_code'])) return get_refresh_token();
     $refresh_token = getConfig('refresh_token');
@@ -1312,7 +1322,7 @@ function get_refresh_token()
         </div>
         <br>
         <div>
-            <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(document.getElementById(\'secret\').style.display==\'\'?\'none\':\'\');">'.getconstStr('CustomIdSecret').'</label>
+            <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('CustomIdSecret').'</label>
             <div id="secret" style="display:none;margin:10px 35px">
                 <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
                 client_secret:<input type="text" name="client_secret"><br>
@@ -1320,7 +1330,7 @@ function get_refresh_token()
             </div>
         </div>
         <div>
-            <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(document.getElementById(\'sharepoint\').style.display==\'\'?\'none\':\'\');">'.getconstStr('UseSharepointInstead').'</label><br>
+            <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
             <div id="sharepoint" style="display:none;margin:10px 35px">
                 '.getconstStr('GetSharepointName').'<br>
                 <input type="text" name="sharepointname" placeholder="'.getconstStr('InputSharepointName').'"><br>
