@@ -152,8 +152,6 @@ function install()
             $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
             if (api_error($response)) {
                 $html = api_error_msg($response);
-                $html .= '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
