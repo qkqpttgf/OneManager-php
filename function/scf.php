@@ -139,6 +139,7 @@ function install()
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
             $tmp['language'] = $_POST['language'];
+            $tmp['Region'] = $_POST['Region'];
             $SecretId = getConfig('SecretId');
             if ($SecretId=='') {
                 $SecretId = $_POST['SecretId'];
@@ -149,7 +150,7 @@ function install()
                 $SecretKey = $_POST['SecretKey'];
                 $tmp['SecretKey'] = $SecretKey;
             }
-            $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
+            $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_POST['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -188,6 +189,21 @@ language:<br>';
         <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
         <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
         $html .= '
+        <select class="changelanguage" name="Region">
+            <option value="">选择区域</option>
+            <option value="ap-beijing">华北地区(北京)</option>
+            <option value="ap-chengdu">西南地区(成都)</option>
+            <option value="ap-guangzhou">华南地区(广州)</option>
+            <option value="ap-guangzhou-open">华南地区(广州Open)</option>
+            <option value="ap-hongkong">港澳台地区(中国香港)</option>
+            <option value="ap-mumbai">亚太南部(孟买)</option>
+            <option value="ap-shanghai">华东地区(上海)</option>
+            <option value="ap-shanghai-fsi">华东地区(上海金融)</option>
+            <option value="ap-singapore">亚太东南(新加坡)</option>
+            <option value="ap-tokyo">亚太东北(东京)</option>
+            <option value="na-siliconvalley">美国西部(硅谷)</option>
+            <option value="na-toronto">北美地区(多伦多)</option>
+        </select>（腾讯几个月了还不做出来，只能先弄选择了）<br>
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
     <script>
