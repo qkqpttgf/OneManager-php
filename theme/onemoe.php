@@ -2,57 +2,18 @@
 <!DOCTYPE html>
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
-    <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) { if (getConfig('diskname')!='') $diskname = getConfig('diskname'); else $diskname = $_SERVER['disktag']; echo ' - ' . $diskname; } ?> - <?php echo $_SERVER['sitename'];?></title>
+    <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) echo ' - ' . getConfig('diskname');?> - <?php echo $_SERVER['sitename'];?></title>
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="https://cloud.tencent.com/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="https://www.2bboy.com/usr/uploads/onemoe.min.css" type="text/css">
     <style type="text/css">
-        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
-        a{color:#24292e;cursor:pointer;text-decoration:none}
-        ion-icon{font-size:15px;vertical-align:bottom}
-        .changelanguage{position:absolute;right:5px;}
-        .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
-        .title a{color:#333;text-decoration:none}
-        .list-wrapper{width:80%;margin:0 auto 30px;position:relative;box-shadow:0 0 32px 0 rgb(128,128,128);border-radius:15px;}
-        .list-container{position:relative;overflow:hidden;border-radius:15px;}
-        .list-header-container{position:relative}
-        .list-header-container a.back-link{color:#000;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;padding:10px 10px;vertical-align:middle;text-decoration:none}
-        .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
-        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
-        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);white-space:nowrap;overflow:auto;}
-        .more-disk a{margin:0 10px;padding:5px;transition-duration: 0.4s;border-radius: 12px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
-        .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.7); color: white; }
-        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:40px}
-        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
-        .list-table tr[data-to]:hover a{color:white}
-        .list-table tr:first-child{background:rgba(245,245,245,0)}
-        .list-table td,.list-table th{padding:0 10px;text-align:left}
-        .list-table .size,.list-table .updated_at{text-align:right}
-        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
-<?php if ($_SERVER['admin']) { ?>
-        .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
-        .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
-        .operate:hover ul{position:absolute;display:inline-table;}
-        .operate ul li{padding:7px;list-style:none;display:block;}
-        .list-table tr[data-to]:hover .operate ul li a{color:black}
-<?php } ?>
-        .operatediv{position:absolute;border:1px #CCCCCC;background-color:#FFFFCC;z-index:2;}
-        .operatediv div{margin:16px}
-        .operatediv_close{position:absolute;right:3px;top:3px;}
-        .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
-        .markdown-body{padding:20px;text-align:left}
-        @media only screen and (max-width:480px){
-            .title{margin-bottom:24px}
-            .list-wrapper{width:95%; margin-bottom:24px;}
-            .list-table {padding:8px}
-            .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
-            .size, .updated_at{display:none}
-        }
+        :root{font-size:10px;font-family:Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif}body{background-color:#8ec5fc;background-image:linear-gradient(62deg,#8ec5fc 0,#e0c3fc 100%);min-height:100vh;margin:auto;padding:0 .5rem;max-width:960px;display:flex;flex-direction:column;justify-content:center}body div[style="color: rgba(247,247,249,0);"]{margin-top:4rem;flex:1 0;display:flex;align-items:flex-end}body a.login,body li.operate{font-size:1.2rem;color:#399;position:relative;list-style:none;width:5rem}body a.login ion-icon,body li.operate ion-icon{vertical-align:middle}body a.login:hover ul,body li.operate:hover ul{display:flex}body a.login ul,body li.operate ul{width:2rem;list-style-type:none;display:none;position:absolute;margin-top:0;top:0}body a.login ul li,body li.operate ul li{display:flex;padding:.2rem;z-index:99;border-radius:2px;background-color:#ffefd5;border:dashed 1px #9acd32}body a.login ul li:hover,body li.operate ul li:hover{background-color:#fff}body a.login ul li a,body li.operate ul li a{margin-left:.8rem;width:1.7rem;color:#399;text-decoration:none}body a.login ul li a:hover,body li.operate ul li a:hover{cursor:pointer}body div[style="padding:1px"]{height:4rem}body div.operatediv{position:fixed;background-color:#ddd;border:solid 2px #8a2be2;box-shadow:0 0 10px #399;border-radius:2px;z-index:999}body div.operatediv div{color:#399;font-size:1.5rem;display:flex;flex-direction:column;padding:1rem}body div.operatediv div a.operatediv_close,body div.operatediv div input[type=submit]{align-self:flex-end;width:auto;padding:1px 5px;margin:5px 0;border:solid 2px #399;border-radius:2px;text-align:center;font-size:1.5rem;color:#399}body div.operatediv div a.operatediv_close:hover,body div.operatediv div input[type=submit]:hover{background-color:#399;cursor:pointer;color:#fff}body div.operatediv div label{color:#333;font-size:1.8rem;float:left}body div.operatediv div input,body div.operatediv div select{font-size:1.6rem}body div.mask{display:none}body div[style="position:absolute;"]{top:2rem;background-color:#ff0;border-radius:2px;padding:5px}body h1.title{margin:auto;font-size:3.5rem}body h1.title a{font-family:Cursive;text-decoration:none;color:#3290e7;text-shadow:2px 2px 5px rgba(50,144,231,.5);transition:.2s}body h1.title a:hover{text-shadow:none;font-size:3.8rem}body select.changelanguage{display:none}body div.onemoe-more-disk{margin:auto;margin-top:1rem}body div.onemoe-more-disk div.more-disk{background:#f2f5fa;border-radius:5px;display:flex;flex-wrap:wrap;justify-content:center;padding-left:10px;padding-right:10px}body div.onemoe-more-disk div.more-disk:hover{box-shadow:0 0 5px #399}body div.onemoe-more-disk div.more-disk a{text-decoration:none;font-weight:700;font-size:1.3rem;padding:8px 16px;margin:0;color:#999;transition:.4s;box-sizing:border-box}body div.onemoe-more-disk div.more-disk a[now]{color:#399;background-color:#dbc3fc;border-bottom:solid 3px #399}body div.onemoe-more-disk div.more-disk a:hover{color:#fff;background-color:#399;box-shadow:0 0 5px #9c9}body div.list-wrapper#head-div div.list-header-container{margin-top:1rem}body div.list-wrapper#head-div div.list-header-container div.readme p{font-size:large;padding:0 2rem}body div.list-wrapper#list-div{border-radius:5px;border:solid 5px rgba(137,43,226,.2);margin-top:1rem;font-size:1.5rem}body div.list-wrapper#list-div div.list-header-container{border-radius:2px;border-bottom:dashed 1px rgba(59,66,107,.3);display:flex;align-items:center;background-color:#e0c3fc98}body div.list-wrapper#list-div div.list-header-container a.back-link{margin-left:1rem}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon{margin-top:2px;color:#399;width:20px;height:20px}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon:hover{color:#f90}body div.list-wrapper#list-div div.list-header-container h3.table-header{font-size:1.5rem;margin:10px;color:#399;word-break:break-all}body div.list-wrapper#list-div div.list-header-container h3.table-header a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-header-container h3.table-header a:hover{color:#f90;text-decoration:underline}body div.list-wrapper#list-div div.list-body-container table.list-table{margin:auto;min-width:100%}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{color:#333;background-color:#fff;margin:.6rem;border:solid 1px #399;border-radius:5px;display:grid;grid-template-columns:6fr 2fr 1fr}@media screen and (max-width:768px){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:6fr 2fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-last-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-last-of-type(2){display:none}}@media screen and (orientation:portrait){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:1fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{display:none}}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type{border:none;background:rgba(0,0,0,0);margin:-2px 1.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button{display:none;color:#399;font-size:1.2rem;margin-left:1rem;padding:.3rem .8rem;border:solid 2px #399;border-radius:1.2rem;background:rgba(221,221,221,.25)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button:hover{box-shadow:0 0 5px #399;cursor:pointer;color:#f5f5f5;border:solid 2px #399;background-color:rgba(137,43,226,.1)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:nth-of-type(2){margin-top:0}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type){height:40px;box-sizing:border-box;transition:.2s;border:solid 1px #399}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type):hover{border-width:2px;background-color:rgba(137,43,226,.1);transform:translateY(-2px);box-shadow:0 5px 10px rgba(73,90,47,.4)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th{padding:1rem;align-items:center;display:flex;white-space:nowrap;overflow:hidden}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a{color:#333;margin-left:.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a:not([onclick]):hover,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a:not([onclick]):hover{color:#399;text-decoration:underline}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type>ion-icon,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type>ion-icon{color:#333}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-of-type(2){justify-content:flex-end;text-align:right}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{justify-content:flex-end;text-align:right}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li{list-style:none}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th a{text-decoration:none;overflow:hidden;text-overflow:ellipsis}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate{display:flex;align-items:center}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul{top:-.7rem;left:1rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li{padding:.5rem;font-size:1.3rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li a{width:auto;padding-right:.8rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li:hover a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li:hover a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div#upload_div center{margin-top:1rem;display:flex;justify-content:space-evenly;align-items:center}body div.list-wrapper#list-div div.list-body-container div#upload_div center input{font-size:1.2rem;vertical-align:middle;padding:.5rem;min-width:5rem;border:solid 2px #696969;border-radius:4px;background-color:#dcdcdc}body div.list-wrapper#list-div div.list-body-container div#upload_div center input:hover{color:#399;box-shadow:0 0 10px #6495ed;cursor:pointer}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div{display:flex;flex-direction:column;align-items:center}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea{border:#999 solid 2px;padding:5px}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea:hover{border:#399 solid 2px;box-shadow:0 0 5px #399}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea:focus{outline-color:#999}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a{color:#399;text-decoration:none;font-size:1.6rem;margin-top:15px;padding:3px 14px 3px 10px;width:auto;border:solid 2px #399;border-radius:5px;transition:.4s;background:#fff}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a:hover{font-weight:700;color:#fff;background:#399;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a .hydrated{display:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div img{width:100%}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div #txt{width:100%}body div.list-wrapper#list-div:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}body div.onemoe-readme{width:100%;margin:2rem auto 0;border-radius:3px;border:solid 5px rgba(137,43,226,.2);box-sizing:border-box}body div.onemoe-readme div.markdown-body{padding:1rem}body div.onemoe-readme:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}
+        body{<?php if (getConfig('background')) { ?><?php echo getConfig('background'); ?><?php } ?>}
     </style>
 </head>
 
@@ -94,14 +55,14 @@
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper">
+    <div class="list-wrapper onemoe-more-disk">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="more-disk">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
-        echo '                    <a href="'.path_format($_SERVER['base_path'].'/'.$disk.'/').'"'.($_SERVER['disktag']==$disk?' now':'').'>'.$diskname.'</a>
+        echo '                    <a href="'.path_format($_SERVER['base_path'].'/'.$disk).'"'.($_SERVER['disktag']==$disk?' now':'').'>'.$diskname.'</a>
 ';
     } ?>
                 </div>
@@ -221,8 +182,8 @@
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
                         <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
-                        <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
-                        <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
+                        <th class="updated_at"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
+                        <th class="size"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
                     <!-- Dirs -->
 <?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
@@ -361,7 +322,7 @@
             </div>
         </div>
     </div>
-    <div class="list-wrapper">
+    <div class="list-wrapper onemoe-readme">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="readme">
@@ -519,12 +480,6 @@
 <?php if ($pdfurl!='') { ?><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><?php } ?>
 <?php } ?>
 <script type="text/javascript">
-    function changelanguage(str)
-    {
-        if (str=='Language') str = '';
-        document.cookie='language='+str+'; path=/';
-        location.href = location.href;
-    }
 <?php if ($files) { ?>
     var root = '<?php echo $_SERVER["base_disk_path"]; ?>';
     function path_format(path) {
@@ -546,6 +501,12 @@
         e.innerHTML += paths[paths.length - 1];
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
     });
+    function changelanguage(str)
+    {
+        if (str=='Language') str = '';
+        document.cookie='language='+str+'; path=/';
+        location.href = location.href;
+    }
 <?php
     if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
     var $url = document.getElementById('url');
@@ -705,7 +666,8 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        alert(tmptextarea.innerHTML+'<?php echo getconstStr('Success'); ?>');
+        //alert(tmptextarea.innerHTML);
+        alert('Success');
     }
     var sort=0;
     function sortby(string) {
@@ -1008,7 +970,7 @@
                                 } else {
                                     MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <?php if ($_SERVER['admin']) { ?>
