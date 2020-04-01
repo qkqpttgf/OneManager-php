@@ -36,23 +36,27 @@
         .more-disk a{display:block;float:left;width:20%;height:38px;text-align:center;font-weight: bold;font-size: 18px;line-height:38px;color:#A6AAB4; }
         .more-disk a:hover, .more-disk a[now]{ color: #3B414B;border-bottom:2px solid #FF7D00;}
         .list-table{width:100%;border-spacing:0;margin-bottom:20px;}
-        .list-table tr{display:block;margin:10px 20px;height:60px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
+        .list-table tr{display:block;margin:10px 20px;width:96%;float:left;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
         .list-table tr[data-to]:hover{background:#10C971;color:white;}
         .list-table tr[data-to]:hover a{color:white}
-        .list-table tr:first-child{background:#F9FAFB;box-shadow:none;}
-        .list-table td,.list-table th{display:block;float:left;height:60px;line-height:60px;text-align:left;}
+        .list-table td,.list-table th{display:block;float:left;line-height:60px;text-align:left;}
         .list-table td button,.list-table th button{cursor:pointer;color:#ffffff;height:30px;background:#FF7D00;padding:0 20px;border-width:0;border-radius:6px;box-shadow: 0px 4px 12px rgba(255, 125, 0, 0.5);}
         .list-table td.file,.list-table th.file{width:60%;color:#171D33;padding-left:20px;}
+        .list-table td.file ion-icon{float:left;margin-top:22px;margin-right:5px;}
+        .list-table td.file:hover>ion-icon,.list-table td.file:hover .operate>ion-icon{color:#fff;}
+        .list-table td.file a[name="filelist"]{float:left;}
+        .list-table td.file a[name="filelist"] img{border-radius:6px;margin-top:20px;}
         .list-table td.updated_at,.list-table th.updated_at{width:25%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
-        .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
+        .operate{display:inline-table;margin:0;margin-right:5px;list-style:none;float:left;}
         .operate ul{position:absolute;display:none;background:#fffaaa;border:0;border-radius:5px;margin:0;padding:0 7px;color:#205D67;z-index:1;box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);}
         .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{list-style:none;display:block;line-height:40px;}
         .list-table tr[data-to]:hover .operate ul li a{color:black}
+        .list-table tr[data-to]:hover .operate ul li a ion-icon{margin-top:12px;}
 <?php } ?>
         .operatediv{position:absolute;background-color:#ffffff;z-index:2;border-radius:10px;background-color:#F9FAFB;}
         .loginstyle{width:250px;height:124px;}
@@ -71,10 +75,12 @@
             .size, .updated_at{display:none}
         }
         .update_notice{position:absolute;color:#A6AAB4;left:10%;margin-top:10px;}
-        .upload_style{height:60px;margin:20px 20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
+        .upload_style{height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
         .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: inline-block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;}
         .upload_style input[type="file"]{color:#A6AAB4;float:left;height:38px;margin-left:-100px;outline:none;font-size:14px;padding:22px 0 0 38px;}
         .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;}
+        .upload_style .list-table tr td{line-height:30px;margin:10px 20px;}
+        .upload_style .list-table tr td button{margin-left:10px;}
         
     </style>
 </head>
@@ -174,7 +180,7 @@
     $DPvideo = false;
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" class="upload_style">
-                    <a href="javascript:;" class="file">选择文件</a>
+                    <a href="javascript:;" class="file"><?php echo getconstStr('FileSelected'); ?></a>
                     <input id="upload_file" type="file" name="upload_filename">
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </div>
@@ -368,7 +374,7 @@
                     }
                     if ($_SERVER['admin']) { ?>
                 <div id="upload_div" class="upload_style">
-                    <a href="javascript:;" class="file">选择文件</a>
+                    <a href="javascript:;" class="file"><?php echo getconstStr('FileSelected'); ?></a>
                     <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
                     
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
@@ -868,7 +874,7 @@
             tr1.setAttribute('data-to',1);
             var td1=document.createElement('td');
             tr1.appendChild(td1);
-            td1.setAttribute('style','width:30%');
+            td1.setAttribute('class','uplist');
             td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
             td1.innerHTML=file.name+'<br>'+size_format(file.size);
             var td2=document.createElement('td');
