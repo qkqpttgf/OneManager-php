@@ -408,9 +408,9 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($auth = 'ldxw', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/qkqpttgf/OneManager-php/tree/v2-MultiDisk';
+    //'https://github.com/ldxw/OneManager-php/tree/v2-MultiDisk';
     $source = 'https://github.com/' . $auth . '/' . $project . '/tree/' . $branch;
     return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
 }
