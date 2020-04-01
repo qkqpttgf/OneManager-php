@@ -76,7 +76,7 @@
 <?php
     } ?>
         &nbsp;
-        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)" style="display:none !important">
+        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)" style="display:none !important;">
             <option value="">Language</option>
 <?php
     foreach ($constStr['languages'] as $key1 => $value1) { ?>
