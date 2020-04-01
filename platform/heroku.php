@@ -219,9 +219,9 @@ function setHerokuConfig($env, $function_name, $apikey)
     return HerokuAPI('PATCH', 'https://api.heroku.com/apps/' . $function_name . '/config-vars', $data, $apikey);
 }
 
-function updateHerokuapp($function_name, $apikey)
+function updateHerokuapp($function_name, $apikey, $source)
 {
-    $tmp['source_blob']['url'] = 'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
+    $tmp['source_blob']['url'] = $source;
     $data = json_encode($tmp);
     return HerokuAPI('POST', 'https://api.heroku.com/apps/' . $function_name . '/builds', $data, $apikey);
 }
@@ -239,9 +239,11 @@ function_name:' . $_SERVER['function_name'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate()
+function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    return json_decode(updateHerokuapp(getConfig('function_name'), getConfig('APIKey'))['body'], true);
+    //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
+    $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
+    return json_decode(updateHerokuapp(getConfig('function_name'), getConfig('APIKey'), $source)['body'], true);
 }
 
 function setConfigResponse($response)

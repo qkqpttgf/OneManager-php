@@ -166,33 +166,33 @@
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?></textarea>
-                        <a href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
+                        <a href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path);//$files[$_SERVER['DownurlStrName']] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
                     </div>
                     <div style="margin: 24px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
                     if (in_array($ext, $exts['img'])) {
-                        echo '                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
+                        echo '                        <img src="' . $files[$_SERVER['DownurlStrName']] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
 ';
                     } elseif (in_array($ext, $exts['video'])) {
-                    //echo '<video src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></video>';
-                        $DPvideo=$files['@microsoft.graph.downloadUrl'];
+                    //echo '<video src="' . $files[$_SERVER['DownurlStrName']] . '" controls="controls" style="width: 100%"></video>';
+                        $DPvideo=$files[$_SERVER['DownurlStrName']];
                         echo '                        <div id="video-a0"></div>
 ';
                     } elseif (in_array($ext, $exts['music'])) {
-                        echo '                        <audio src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></audio>
+                        echo '                        <audio src="' . $files[$_SERVER['DownurlStrName']] . '" controls="controls" style="width: 100%"></audio>
 ';
                     } elseif (in_array($ext, ['pdf'])) {
                         /*echo '
-                        <embed src="' . $files['@microsoft.graph.downloadUrl'] . '" type="application/pdf" width="100%" height=800px">
+                        <embed src="' . $files[$_SERVER['DownurlStrName']] . '" type="application/pdf" width="100%" height=800px">
 ';*/
-                        $pdfurl = $files['@microsoft.graph.downloadUrl'];
+                        $pdfurl = $files[$_SERVER['DownurlStrName']];
                         echo '                        <div id="pdf-d"></div>
 ';
                     } elseif (in_array($ext, $exts['office'])) {
-                        echo '                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
+                        echo '                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files[$_SERVER['DownurlStrName']]) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
 ';
                     } elseif (in_array($ext, $exts['txt'])) {
-                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl'])['body']);
+                        $txtstr = htmlspecialchars(curl_request($files[$_SERVER['DownurlStrName']])['body']);
 ?>
                         <div id="txt">
 <?php                   if ($_SERVER['admin']) { ?>
@@ -206,7 +206,7 @@
                         </div>
 <?php               } /*elseif (in_array($ext, ['md'])) {
                         echo '                        <div class="markdown-body" id="readme">
-                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
+                            <textarea id="readme-md" style="display:none;">' . curl_request($files[$_SERVER['DownurlStrName']])['body'] . '</textarea>
                         </div>
 ';
                     }*/ else {
@@ -705,7 +705,8 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        alert(tmptextarea.innerHTML+'<?php echo getconstStr('Success'); ?>');
+        //alert(tmptextarea.innerHTML);
+        alert('Success');
     }
     var sort=0;
     function sortby(string) {

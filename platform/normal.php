@@ -118,7 +118,7 @@ function install()
     if ($_GET['install2']) {
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
-            $tmp['language'] = $_COOKIE['language'];
+            $tmp['language'] = $_POST['language'];
             $response = setConfig($tmp);
             if (api_error($response)) {
                 $html = api_error_msg($response);
