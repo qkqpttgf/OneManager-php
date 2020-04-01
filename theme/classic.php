@@ -97,7 +97,7 @@
     <div class="list-wrapper">
         <div class="list-container">
             <div class="list-header-container">
-                <div class="more-disk">
+                <div class="more-disk" style="display:none !important;">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
@@ -123,7 +123,7 @@
         </div>
     </div>
 <?php   } ?>
-    <div class="list-wrapper" id="list-div" style="display:none !important;">
+    <div class="list-wrapper" id="list-div" >
         <div class="list-container">
             <div class="list-header-container">
 <?php
