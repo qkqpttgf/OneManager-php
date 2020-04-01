@@ -25,11 +25,11 @@
         .list-wrapper{width:80%;margin:0 auto;position:relative;}
         .list-container{position:relative;}
         .list-header-container{position:relative;width:100%;}
-        .list-header-container a.back-link{float:left;color:#ffffff;display:block;margin:10px;height:40px;width:40px;background:#613EEA;line-height:40px;text-decoration:none;text-align:center;border-radius:20px;box-shadow: 0px 4px 12px rgba(97, 62, 234, 0.5);}
+        .list-header-container a.back-link{position:absolute;float:left;color:#ffffff;display:inline-block;margin:10px;height:40px;width:40px;background:#613EEA;line-height:40px;text-decoration:none;text-align:center;border-radius:20px;box-shadow: 0px 4px 12px rgba(97, 62, 234, 0.5);}
         .list-header-container a.back-link ion-icon{font-size:20px;}
         .list-header-container a.back-link:hover{color:white}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{display:block;float:left;margin:10px 0;height:40px;line-height:40px;text-align:left;font-weight:400;color:#A0A4B0;word-break: break-all;word-wrap: break-word;}
+        .table-header{display:block;float:left;margin:10px 0 0 60px;height:40px;line-height:40px;text-align:left;font-weight:400;color:#A0A4B0;word-break: break-all;word-wrap: break-word;}
         .fix{height:60px;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;}
         .more-disk{border-bottom:1px solid #E8E9EC;height:40px;white-space:nowrap;overflow:auto;}
@@ -75,10 +75,10 @@
             .size, .updated_at{display:none}
         }
         .update_notice{position:absolute;color:#A6AAB4;left:10%;margin-top:10px;}
-        .upload_style{height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
-        .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: inline-block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;}
-        .upload_style input[type="file"]{color:#A6AAB4;float:left;height:38px;margin-left:-100px;outline:none;font-size:14px;padding:22px 0 0 38px;}
-        .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;}
+        .upload_style{display:table;height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
+        .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;}
+        .upload_style input[type="file"]{display:inline-block;vertical-align:middle;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
+        .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
         .upload_style .list-table tr td{line-height:30px;margin:10px 20px;}
         .upload_style .list-table tr td button{margin-left:10px;}
         
@@ -180,8 +180,7 @@
     $DPvideo = false;
     if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
                 <div id="upload_div" class="upload_style">
-                    <a href="javascript:;" class="file"><?php echo getconstStr('FileSelected'); ?></a>
-                    <input id="upload_file" type="file" name="upload_filename">
+                    <input id="upload_file" type="file" name="upload_filename" value="<?php echo getconstStr('FileSelected'); ?>">
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </div>
 <?php } else {
@@ -374,8 +373,7 @@
                     }
                     if ($_SERVER['admin']) { ?>
                 <div id="upload_div" class="upload_style">
-                    <a href="javascript:;" class="file"><?php echo getconstStr('FileSelected'); ?></a>
-                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
+                    <input id="upload_file" type="file" name="upload_filename"  value="<?php echo getconstStr('FileSelected'); ?>" multiple="multiple">
                     
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </div>
