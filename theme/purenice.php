@@ -75,9 +75,9 @@
             .size, .updated_at{display:none}
         }
         .update_notice{position:absolute;color:#A6AAB4;left:10%;margin-top:10px;}
-        .upload_style{display:table;height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
-        .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;}
-        .upload_style input[type="file"]{display:inline-block;vertical-align:middle;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
+        .upload_style{height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
+        /* .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;} */
+        .upload_style input[type="file"]{display:block;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
         .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
         .upload_style .list-table tr td{line-height:30px;margin:10px 20px;}
         .upload_style .list-table tr td button{margin-left:10px;}
