@@ -123,7 +123,7 @@
         </div>
     </div>
 <?php   } ?>
-    <div class="list-wrapper" id="list-div" style="display:none!important">
+    <div class="list-wrapper" id="list-div" style="display:none !important;">
         <div class="list-container">
             <div class="list-header-container">
 <?php
