@@ -28,7 +28,8 @@
         .more-disk a{margin:0 10px;padding:5px;transition-duration: 0.4s;border-radius: 6px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.4); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px;border-radius:3px}
+	.list-table ::-webkit-scrollbar {display: none}
+        .list-table tr{height:32px}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
