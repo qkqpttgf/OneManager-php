@@ -28,6 +28,7 @@ function GetGlobalVariable($event)
 
 function GetPathSetting($event, $context)
 {
+    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($event['headers']['accept-language'],';')[0],',')[0]);
     $_SERVER['function_name'] = $context['function_name'];
     $_SERVER['namespace'] = $context['namespace'];
     $host_name = $event['headers']['host'];
@@ -132,7 +133,6 @@ function install()
         setConfig($tmp);
         if (needUpdate()) {
             OnekeyUpate();
-            //updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
             return message('update to github version, reinstall.<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
         }
         return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
@@ -370,13 +370,14 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
-function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source = '')
+function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source)
 {
     WaitSCFStat();
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = $source;
+    $tmpdata['Code.GitUrl'] = $source['url'];
+    $tmpdata['Code.GitBranch'] = $source['branch'];
     $tmpdata['CodeSource'] = 'Git';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Handler'] = 'index.main_handler';
@@ -408,10 +409,10 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'ldxw', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/ldxw/OneManager-php/tree/v2-MultiDisk';
-    $source = 'https://github.com/' . $auth . '/' . $project . '/tree/' . $branch;
+    $source['url'] = 'https://github.com/' . $auth . '/' . $project;
+    $source['branch'] = $branch;
     return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
 }
 
