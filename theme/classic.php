@@ -10,10 +10,10 @@
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
-        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:100% 99.9%;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
+        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
-	::-webkit-scrollbar{width:.5rem;height:.5rem;background:hsla(0,0%,100%,0.2)}::-webkit-scrollbar-track{border-radius:0}::-webkit-scrollbar-thumb{border-radius:0;background-color:rgba(95,95,95,.2);transition:all .2s;border-radius:.2rem;&:hover{background-color:rgba(95,95,95,.4)}}
+	::-webkit-scrollbar{width:.5rem;height:.5rem;background:hsla(0,0%,100%,0.2);display:none}::-webkit-scrollbar-track{border-radius:0}::-webkit-scrollbar-thumb{border-radius:0;background-color:rgba(95,95,95,.2);transition:all .2s;border-radius:.2rem;&:hover{background-color:rgba(95,95,95,.4)}}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#333;text-decoration:none}
@@ -28,7 +28,6 @@
         .more-disk a{margin:0 10px;padding:5px;transition-duration: 0.4s;border-radius: 6px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.4); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-	.list-table ::-webkit-scrollbar {display: none}
         .list-table tr{height:32px}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white}
         .list-table tr[data-to]:hover a{color:white}
