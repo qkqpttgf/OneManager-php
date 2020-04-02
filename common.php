@@ -483,8 +483,8 @@ function equal_replace($str, $add = false)
 
 function is_guestup_path($path)
 {
-    $a1 = path_format(path_format(urldecode($_SERVER['list_path'].path_format($path))).'/')
-    $a2 = path_format(path_format(getConfig('guestup_path')).'/')
+    $a1 = path_format(path_format(urldecode($_SERVER['list_path'].path_format($path))).'/');
+    $a2 = path_format(path_format(getConfig('guestup_path')).'/');
     if (getConfig('guestup_path')!=''&&strtolower($a1)==strtolower($a2)) return 1;
     return 0;
 }
