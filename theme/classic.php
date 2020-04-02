@@ -33,7 +33,7 @@
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
-        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=80);opacity:0.8;z-index:2;}
+        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
