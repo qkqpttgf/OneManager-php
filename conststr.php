@@ -633,6 +633,10 @@ $constStr = [
         'ko-kr' => '중국 Onedrive',
         'fa' => 'Onedrive در چین',
     ],
+    'UseShareLink' => [
+        'en-us' => 'Share a folder in Onedrive (enable EDIT for everyone), input the link url below.',
+        'zh-cn' => '对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
+    ],
     'CustomIdSecret' => [
         'en-us' => 'Use custom client id & secret',
         'zh-cn' => '自己申请应用ID与机密',
