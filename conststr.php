@@ -726,4 +726,12 @@ $constStr = [
         'ko-kr' => '캐시 플러시',
         'fa' => 'رفرش cache',
     ],
+    'VPSnotupdate' => [
+        'en-us' => 'In VPS can not update by a click! run update.sh',
+        'zh-cn' => '在VPS中不能一键更新，可以运行update.sh',
+    ],
+    'QueryBranchs' => [
+        'en-us' => 'Query Branchs',
+        'zh-cn' => '查询分支',
+    ],
 ];
