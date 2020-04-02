@@ -370,13 +370,14 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
-function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source = '')
+function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source)
 {
     WaitSCFStat();
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = $source;
+    $tmpdata['Code.GitUrl'] = $source['url'];
+    $tmpdata['Code.GitBranch'] = $source['branch'];
     $tmpdata['CodeSource'] = 'Git';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Handler'] = 'index.main_handler';
@@ -410,8 +411,8 @@ namespace:' . $_SERVER['namespace'] . '<br>
 
 function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/qkqpttgf/OneManager-php/tree/v2-MultiDisk';
-    $source = 'https://github.com/' . $auth . '/' . $project . '/tree/' . $branch;
+    $source['url'] = 'https://github.com/' . $auth . '/' . $project;
+    $source['branch'] = $branch;
     return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
 }
 
