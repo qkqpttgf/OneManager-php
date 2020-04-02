@@ -47,12 +47,14 @@ do
   fi
 done
 
+if [ g"$install" == g"1" -a g"$update" == g"1" ]; then
+  echo "Both install & update, exit"
+  exit
+fi
 if [ g"$install" != g"1" -a g"$update" != g"1" ]; then
   echo "Not install & Not update, exit"
   exit
 fi
-#echo $branch
-#echo $install
 
 gitsource='https://github.com/qkqpttgf/OneManager-php'
 
