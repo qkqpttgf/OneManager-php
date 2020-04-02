@@ -1393,6 +1393,7 @@ function get_refresh_token()
         </div>
         <br>
         <div id="inputshareurl" style="display:none;margin:10px 35px">
+            '.getconstStr('UseShareLink').'
             <input type="text" name="shareurl" style="width:100%" placeholder="https://xxxx.sharepoint.com/:f:/g/personal/xxxxxxxx/mmmmmmmmm?e=XXXX"><br>
         </div>
         <div id="morecustom">
