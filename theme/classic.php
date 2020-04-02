@@ -6,14 +6,14 @@
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,Li-Share-Storage-Mini,auth_by_BingoKingo,power_by_逸笙">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
-        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
+        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:100% 99.9%;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
-	::-webkit-scrollbar{width:.5rem;height:.5rem;background:hsla(0,0%,100%,0.4)}::-webkit-scrollbar-track{border-radius:0}::-webkit-scrollbar-thumb{border-radius:0;background-color:rgba(95,95,95,.4);transition:all .2s;border-radius:.5rem;&:hover{background-color:rgba(95,95,95,.7)}}
+	::-webkit-scrollbar{width:.5rem;height:.5rem;background:hsla(0,0%,100%,0.2)}::-webkit-scrollbar-track{border-radius:0}::-webkit-scrollbar-thumb{border-radius:0;background-color:rgba(95,95,95,.2);transition:all .2s;border-radius:.2rem;&:hover{background-color:rgba(95,95,95,.4)}}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#333;text-decoration:none}
@@ -28,8 +28,8 @@
         .more-disk a{margin:0 10px;padding:5px;transition-duration: 0.4s;border-radius: 6px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.4); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px}
-        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white;border-radius:3px;}
+        .list-table tr{height:32px;border-radius:3px}
+        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 8px;text-align:left}
