@@ -49,7 +49,7 @@
         .markdown-body{padding:20px;text-align:left}
         @media only screen and (max-width:480px){
             .title{margin-bottom:24px}
-            .list-wrapper{width:96%; margin-bottom:24px;}
+            .list-wrapper{width:96%; margin-bottom:0 auto 10px;}
             .list-table {padding:8px}
             .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
             .size, .updated_at{display:none}
