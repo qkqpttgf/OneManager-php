@@ -14,7 +14,7 @@
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
 	input{border:none;transition-duration: 0.3s;border-radius:16px;sbackground-color:transparent; color:#24292e}
-    	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(245,245,245,0.8)}
+    	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(205,205,245,0.8)}
 	::-webkit-scrollbar{display:none}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
