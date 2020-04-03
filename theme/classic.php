@@ -13,7 +13,7 @@
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
-	input{border:none;transition-duration: 0.3s;border-radius:16px;sbackground-color:transparent; color:#24292e}
+	input{border:none;transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(205,205,245,0.8)}
 	::-webkit-scrollbar{display:none}
         .changelanguage{position:absolute;right:5px;}
@@ -24,11 +24,11 @@
         .list-header-container{position:relative;box-shadow:0 2px 3px #000000bd}
         .list-header-container a.back-link{color:#000;display:inline-block;position:absolute;font-size:16px;margin:8px 18px;padding:8px 8px;vertical-align:middle;text-decoration:none}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:18px 48px;text-align:left;font-weight:400;color:white;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
+        .table-header{margin:0;border:0 none;padding:18px 48px;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.3)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;box-shadow:inset 0 1px 3px #000000bd;background-color:transparent; color: #24292e}
-        .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4); color: white; }
+        .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4); color: white}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:32px;transition-duration: 0.3s}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white}
