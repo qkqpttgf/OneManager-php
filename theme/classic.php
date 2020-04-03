@@ -58,6 +58,22 @@
 </head>
 
 <body>
+	<script>
+		window.onload=function(){
+    		var colorList  = ['#a9ddccbd','#ff6867bd','#809b9cbd','#00cccbbd','#bcbdc1bd','#f6c500bd','#767386bd','#4cda64bd'];
+    		var div = document.getElementsByClassName('list-header-container');
+   		 for(var i=0;i<div.length;i++){  
+         	  var bgColor = getColorByRandom(colorList);  
+          	   div[i].style.background=bgColor;
+   						 }
+   		 function getColorByRandom(colorList){
+       		 var colorIndex = Math.floor(Math.random()*colorList.length);  
+       		 var color = colorList[colorIndex];  
+       		 colorList.splice(colorIndex,1); 
+       		 return color; 
+   		 }
+		}
+</script>
     <div style="padding:1px">
 <?php
     if (getConfig('admin')!='') if (!$_SERVER['admin']) {
