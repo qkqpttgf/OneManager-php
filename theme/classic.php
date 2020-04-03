@@ -24,11 +24,11 @@
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
-        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);white-space:nowrap;overflow:auto;}
-        .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.4s;border-radius: 6px; background-color: white; color: #24292e; border: 2px solid rgba(85,85,85,0.7); }
+        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);white-space:nowrap;overflow:auto;}
+        .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.6s;border-radius: 6px; background-color: white; color: #24292e; border: 2px solid rgba(85,85,85,0.7); }
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.4); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px}
+        .list-table tr{height:32px;transition-duration: 0.6s}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
