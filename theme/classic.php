@@ -19,10 +19,10 @@
         .title a{color:#24292e;text-decoration:none}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 0 6px 0 rgb(128,128,128);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px;}
-        .list-header-container{position:relative;background-color:#24292e;box-shadow:0 2px 3px 0px #000000}
+        .list-header-container{position:relative;background-color:#24292ebd;box-shadow:0 2px 3px 0px #000000bd}
         .list-header-container a.back-link{color:#000;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;padding:10px 10px;vertical-align:middle;text-decoration:none}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:18px 32px;text-align:left;font-weight:400;color:#24292e;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
+        .table-header{margin:0;border:0 none;padding:18px 32px;text-align:left;font-weight:400;color:white;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.3)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px; background-color:transparent; color: #24292e}
@@ -46,7 +46,7 @@
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
-        .markdown-body{padding:20px;text-align:left}
+        .markdown-body{padding:20px;text-align:left;font-size:14px !important}
         @media only screen and (max-width:480px){
             .title{margin-bottom:24px}
             .list-wrapper{width:96%; margin-bottom:0 auto 10px;}
