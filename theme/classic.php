@@ -13,6 +13,8 @@
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
+	input{border:none;transition-duration: 0.3s;border-radius:16px;sbackground-color:transparent; color:#24292e}
+    	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(245,245,245,0.8)}
 	::-webkit-scrollbar{display:none}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
