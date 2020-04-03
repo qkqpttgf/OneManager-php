@@ -63,7 +63,7 @@
 echo '<script language="javascript">';
 ?>
 <?php 
-echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd","f44336bd","e91e63bd","9c27b0bd","673ab7bd","3f51b5bd","2196f3bd","03a9f4bd","00bcd4bd","009688bd","4caf50bd","8b34abd","cddc39bd","c5b73cbd","e4ad08bd","ff5722bd","795548bd","9e9e9ebd","607d8bbd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
 ?>
 <?php 
 echo '</script>';
