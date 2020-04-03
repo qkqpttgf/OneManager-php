@@ -37,12 +37,12 @@
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
-        .operate ul{position:absolute;display:none;background:rgba(85,85,85,0.8);transition-duration: 0.3s;border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
+        .operate ul{position:absolute;display:none;background:#24292e;transition-duration: 0.3s;border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
         .operate:hover ul{position:absolute;display:inline-table;}
-        .operate ul li{padding:7px;list-style:none;display:block;}
-        .list-table tr[data-to]:hover .operate ul li a{color:black}
+        .operate ul li{padding:6px;list-style:none;display:block;}
+        .list-table tr[data-to]:hover .operate ul li a{color:white}
 <?php } ?>
-        .operatediv{position:absolute;border:1px #CCCCCC;background-color:#FFFFCC;z-index:2;}
+        .operatediv{position:absolute;border:0px #CCCCCC;transition-duration: 0.3s;border-radius:6px;background-color:#FFFFCC;background:#24292e;color:white;z-index:3;}
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
