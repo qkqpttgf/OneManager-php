@@ -6,7 +6,8 @@
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,Li-Share-Storage-Mini,auth_by_BingoKingo,power_by_逸笙">
+    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>">
+    <meta name="description" content="<?php if ($_GET['preview']) echo 'Preview of '.$n_path; else echo 'List of '.$n_path; ?>. Li-Share-Storage-Mini,auth_by_BingoKingo,power_by_ysun.">
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
@@ -87,7 +88,7 @@ echo '</script>';
 <?php
     } ?>
         &nbsp;
-        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)" style="display:none !important;">
+        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)"  style="display:none !important">
             <option value="">Language</option>
 <?php
     foreach ($constStr['languages'] as $key1 => $value1) { ?>
@@ -124,7 +125,7 @@ echo '</script>';
         if (isset($files['children']['head.md'])) { ?>
     <div class="list-wrapper" id="head-div">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-body-container">
                 <div class="readme">
                     <div class="markdown-body" id="head">
                         <textarea id="head-md" style="display:none;"><?php echo fetch_files(spurlencode(path_format($path . '/head.md'),'/'))['content']['body']; ?></textarea>
@@ -134,7 +135,7 @@ echo '</script>';
         </div>
     </div>
 <?php   } ?>
-    <div class="list-wrapper" id="list-div" >
+    <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
 <?php
@@ -482,22 +483,22 @@ echo '</script>';
                             <td><label id="create_label"></label></td>
                         </tr>
                         <tr>
-                            <td>　　　</td>
+                            <td>ããã</td>
                             <td>
                                 <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><?php echo getconstStr('Folder'); ?></label>
                                 <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><?php echo getconstStr('File'); ?></label>
                             <td>
                         </tr>
                         <tr>
-                            <td><?php echo getconstStr('Name'); ?>：</td>
+                            <td><?php echo getconstStr('Name'); ?>ï¼</td>
                             <td><input id="create_input" name="create_name" type="text" value=""></td>
                         </tr>
                         <tr id="create_text_div">
-                            <td><?php echo getconstStr('Content'); ?>：</td>
+                            <td><?php echo getconstStr('Content'); ?>ï¼</td>
                             <td><textarea id="create_text" name="create_text" rows="6" cols="40"></textarea></td>
                         </tr>
                         <tr>
-                            <td>　　　</td>
+                            <td>ããã</td>
                             <td><input name="operate_action" type="submit" value="<?php echo getconstStr('Create'); ?>"></td>
                         </tr>
                     </table>
@@ -668,7 +669,7 @@ echo '</script>';
         });
     }
 <?php   }
-    } else { // view folder. 不预览，即浏览目录时?>
+    } else { // view folder. ä¸é¢è§ï¼å³æµè§ç®å½æ¶?>
     var $head = document.getElementById('head');
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
@@ -806,7 +807,7 @@ echo '</script>';
     }
 <?php
     }
-    if ($_COOKIE['timezone']=='') { // cookie timezone. 无时区写时区 ?>
+    if ($_COOKIE['timezone']=='') { // cookie timezone. æ æ¶åºåæ¶åº ?>
     var nowtime= new Date();
     var timezone = 0-nowtime.getTimezoneOffset()/60;
     var expd = new Date();
@@ -818,13 +819,13 @@ echo '</script>';
         location.href=location.protocol + "//" + location.host + "<?php echo path_format($_SERVER['base_path'] . '/' . $path );?>" ;
     }
 <?php }
-    if (isset($files['folder']['childCount'])&&$files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
+    if (isset($files['folder']['childCount'])&&$files['folder']['childCount']>200) { // more than 200. æä¸ä¸é¡µ ?>
     function nextpage(num) {
         document.getElementById('pagenum').value=num;
         document.getElementById('nextpageform').submit();
     }
 <?php }
-    if (isset($files['folder']) && ($_SERVER['is_guestup_path'] || $_SERVER['admin'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
+    if (isset($files['folder']) && ($_SERVER['is_guestup_path'] || $_SERVER['admin'])) { // is folder and is admin or guest upload path. å½åæ¯adminç»å½æå¾åºç®å½æ¶ ?>
     function uploadbuttonhide() {
         document.getElementById('upload_submit').disabled='disabled';
         document.getElementById('upload_file').disabled='disabled';
@@ -940,7 +941,7 @@ echo '</script>';
                     } else {
                         StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                     }
-                    var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
+                    var chunksize=5*1024*1024; // chunk size, max 60M. æ¯å°åä¸ä¼ å¤§å°ï¼æå¤§60Mï¼å¾®è½¯å»ºè®®10M
                     if (totalsize>200*1024*1024) chunksize=10*1024*1024;
                     function readblob(start) {
                         var end=start+chunksize;
@@ -979,7 +980,7 @@ echo '</script>';
                             if (xhr.status<500) {
                             var response=JSON.parse(xhr.responseText);
                             if (response['size']>0) {
-                                // contain size, upload finish. 有size说明是最终返回，上传结束
+                                // contain size, upload finish. æsizeè¯´ææ¯æç»è¿åï¼ä¸ä¼ ç»æ
                                 var xhr3 = new XMLHttpRequest();
                                 xhr3.open("GET", '?action=del_upload_cache&filename=.'+file.lastModified+ '_' +file.size+ '_' +encodeURIComponent(file.name)+'.tmp');
                                 xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
@@ -1051,13 +1052,13 @@ echo '</script>';
     }
 <?php }
 }
-    if (getConfig('admin')!='') { // close div. 有登录或操作，需要关闭DIV时 ?>
+    if (getConfig('admin')!='') { // close div. æç»å½ææä½ï¼éè¦å³é­DIVæ¶ ?>
     function operatediv_close(operate) {
         document.getElementById(operate+'_div').style.display='none';
         document.getElementById('mask').style.display='none';
     }
 <?php }
-    if ($_SERVER['admin']) { // admin login. 管理登录后 ?>
+    if ($_SERVER['admin']) { // admin login. ç®¡çç»å½å ?>
     function logout() {
         document.cookie = "admin=; path=/";
         location.href = location.href;
