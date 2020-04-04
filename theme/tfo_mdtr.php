@@ -107,7 +107,7 @@ echo '</script>';
     if (count($disktags)>1) { ?>
     <div class="list-wrapper">
         <div class="list-container">
-            <div class="list-body-container">
+            <div class="list-header-container">
                 <div class="more-disk" style="display:none !important;">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
@@ -374,7 +374,7 @@ echo '</script>';
     </div>
     <div class="list-wrapper">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-body-container">
                 <div class="readme">
                     <div class="markdown-body" id="readme">
                         <textarea id="readme-md" style="display:none;">' . fetch_files(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'] . '</textarea>
