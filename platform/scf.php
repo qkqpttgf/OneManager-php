@@ -409,22 +409,11 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-<<<<<<< HEAD:platform/scf.php
 function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
-=======
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
->>>>>>> upstream/master:function/scf.php
 {
     $source['url'] = 'https://github.com/' . $auth . '/' . $project;
     $source['branch'] = $branch;
     return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
-<<<<<<< HEAD:platform/scf.php
-}
-
-function setConfigResponse($response)
-
-=======
->>>>>>> upstream/master:function/scf.php
 }
 
 function setConfigResponse($response)
