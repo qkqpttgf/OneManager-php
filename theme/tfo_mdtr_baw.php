@@ -21,7 +21,7 @@
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#24292e;text-decoration:none}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 0 6px 0 rgb(128,128,128);border-radius:6px;}
-        .list-container{position:relative;overflow:hidden;border-radius:6px;}
+        .list-container{position:relative;overflow:hidden;border-radius:6px}
         .list-header-container{position:relative;box-shadow:0px 2px 6px rgba(128,128,128,0.8)}
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
