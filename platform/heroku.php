@@ -240,11 +240,7 @@ function_name:' . $_SERVER['function_name'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-<<<<<<< HEAD:platform/heroku.php
 function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
-=======
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
->>>>>>> upstream/master:function/heroku.php
 {
     //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
     $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
