@@ -26,7 +26,7 @@ $Base64Env = [
     //'usesharepoint',
     'sharepointname',
     'shareurl',
-    'sharecookie',
+    //'sharecookie',
     'shareapiurl',
     //'siteid',
     'public_path',
@@ -81,7 +81,7 @@ $InnerEnv = [
     'sharepointname',
     'siteid',
     'shareurl',
-    'sharecookie',
+    //'sharecookie',
     'shareapiurl',
     'public_path',
     'refresh_token',
@@ -113,7 +113,17 @@ function main($path)
     global $exts;
     global $constStr;
 
-    if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) $constStr['language'] = $_SERVER['firstacceptlanguage'];
+    if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) {
+        $constStr['language'] = $_SERVER['firstacceptlanguage'];
+    } else {
+        $prelang = splitfirst($_SERVER['firstacceptlanguage'], '-')[0];
+        foreach ( array_keys($constStr['languages']) as $lang) {
+            if ($prelang == splitfirst($lang, '-')[0]) {
+                $constStr['language'] = $lang;
+                break;
+            }
+        }
+    }
     if (isset($_COOKIE['language'])&&$_COOKIE['language']!='') $constStr['language'] = $_COOKIE['language'];
     //if (!$constStr['language']) $constStr['language'] = getConfig('language');
     /*echo 'firstacceptlanguage:'.$_SERVER['firstacceptlanguage'].'
@@ -1247,15 +1257,28 @@ function render_list($path = '', $files = '')
     if ($path !== '/') {
         if (isset($files['file'])) {
             $pretitle = str_replace('&','&amp;', $files['name']);
-            $n_path=$pretitle;
+            $n_path = $pretitle;
+            $tmp = splitlast(splitlast($path,'/')[0],'/');
+            if ($tmp[1]=='') {
+                $p_path = $tmp[0];
+            } else {
+                $p_path = $tmp[1];
+            }
         } else {
-            $pretitle = substr($path,-1)=='/'?substr($path,0,-1):$path;
-            $n_path=substr($pretitle,strrpos($pretitle,'/')+1);
-            $pretitle = substr($pretitle,1);
-        }
-        if (strrpos($path,'/')!=0) {
-            $p_path=substr($path,0,strrpos($path,'/'));
-            $p_path=substr($p_path,strrpos($p_path,'/')+1);
+            if (substr($path,0,1)=='/') $pretitle = substr($path,1);
+            if (substr($path,-1)=='/') $pretitle = substr($path,0,-1);
+            $tmp=splitlast($pretitle,'/');
+            if ($tmp[1]=='') {
+                $n_path = $tmp[0];
+            } else {
+                $n_path = $tmp[1];
+                $tmp = splitlast($tmp[0],'/');
+                if ($tmp[1]=='') {
+                    $p_path = $tmp[0];
+                } else {
+                    $p_path = $tmp[1];
+                }
+            }
         }
     } else {
       $pretitle = getconstStr('Home');
