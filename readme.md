@@ -2,11 +2,23 @@ Tfo:
 
 List of files changed:
 
-Information	app.json,version,readme.md
+Information
 
-UpdateAddress	heroku.php,scf.php
+app.json,version,readme.md
 
-Theme	tfo_mdtr.php(Transparent Material Design),tfo_md.php(Material Design),tfo_mdtr_baw.php(Black & White Material Design for Tomb-Sweeping Day) (based on classic.php,latest at 2020.4.4)
+UpdateAddress
+
+heroku.php,scf.php
+
+Theme
+
+tfo_mdtr.php(Transparent Material Design),
+
+tfo_md.php(Material Design),
+
+tfo_mdtr_baw.php(Black & White Material Design for Tomb-Sweeping Day)
+
+(All based on classic.php,latest at 2020.4.4)
 
 Original:
 
