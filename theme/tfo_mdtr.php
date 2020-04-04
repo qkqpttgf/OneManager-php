@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
       body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
-        a{color:#24292e;cursor:pointer;text-decoration:none}
+   a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
 	input{border:none;transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(85,85,85,0.6);color:white}

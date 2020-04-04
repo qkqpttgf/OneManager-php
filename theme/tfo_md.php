@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
       body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
-        a{color:#24292e;cursor:pointer;text-decoration:none}
+   a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
 	input{border:none;transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgb(85,85,85);color:white}
@@ -25,7 +25,7 @@
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
-        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgb(245,245,245)}
+        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,1)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgb(245,245,245);white-space:nowrap;overflow:auto;}
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent; color: #24292e}
         .more-disk a:hover, .more-disk a[now]{ background-color:rgb(85,85,85);box-shadow:inset 0 1px 3px #000000bd;color: white}
@@ -558,7 +558,7 @@ echo '</script>';
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
     });
 <?php
-    if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
+    if (isset($_GET['preview'])) { //is preview mode. å¨é¢è§æ¶å¤ç ?>
     var $url = document.getElementById('url');
     if ($url) {
         $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
