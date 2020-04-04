@@ -1,7 +1,7 @@
 {
-  "name": "OneManager",
-  "description": "Deploy OneManager to heroku",
-  "website": "https://github.com/qkqpttgf/OneManager-php",
-  "repository": "https://github.com/qkqpttgf/OneManager-php",
+  "name": "Tfo",
+  "description": "Deploy Tfo to heroku",
+  "website": "https://github.com/BingoKingo/Tfo",
+  "repository": "https://github.com/BingoKingo/Tfo",
   "success_url": "/"
 }

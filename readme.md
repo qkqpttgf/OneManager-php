@@ -1,3 +1,10 @@
+Tfo:
+List of files changed:
+Information	app.json,version,readme.md
+UpdateAddress	heroku.php,scf.php
+Theme			tfo_md_tr.php ,tfo_md.php (based on classic.php,latest at 2020.4.4)
+
+Original:
 Install program first, then add onedrive in setup after login.  
 先安装程序，登录后在设置中添加onedrive。  
 
