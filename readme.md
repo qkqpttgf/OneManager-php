@@ -6,7 +6,7 @@ Information	app.json,version,readme.md
 
 UpdateAddress	heroku.php,scf.php
 
-Theme	tfo_md_tr.php ,tfo_md.php (based on classic.php,latest at 2020.4.4)
+Theme	tfo_mdtr.php(Transparent Material Design),tfo_md.php(Material Design),tfo_mdtr_baw.php(Black & White Material Design for Tomb-Sweeping Day) (based on classic.php,latest at 2020.4.4)
 
 Original:
 
