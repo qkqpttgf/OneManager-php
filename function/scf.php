@@ -28,6 +28,7 @@ function GetGlobalVariable($event)
 
 function GetPathSetting($event, $context)
 {
+    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($event['headers']['accept-language'],';')[0],',')[0]);
     $_SERVER['function_name'] = $context['function_name'];
     $_SERVER['namespace'] = $context['namespace'];
     $host_name = $event['headers']['host'];
@@ -131,7 +132,7 @@ function install()
         $tmp['admin'] = $_POST['admin'];
         setConfig($tmp);
         if (needUpdate()) {
-            updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+            OnekeyUpate();
             return message('update to github version, reinstall.<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
         }
         return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
@@ -369,13 +370,14 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
-function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey)
+function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source)
 {
     WaitSCFStat();
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = 'https://github.com/BingoKingo/Tfo';
+    $tmpdata['Code.GitUrl'] = $source['url'];
+    $tmpdata['Code.GitBranch'] = $source['branch'];
     $tmpdata['CodeSource'] = 'Git';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Handler'] = 'index.main_handler';
@@ -407,9 +409,15 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate()
+function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
 {
-    return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')), true)['Response'];
+    $source['url'] = 'https://github.com/' . $auth . '/' . $project;
+    $source['branch'] = $branch;
+    return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
+}
+
+function setConfigResponse($response)
+
 }
 
 function setConfigResponse($response)
