@@ -13,7 +13,7 @@ $Base64Env = [
     //'downloadencrypt',
     //'function_name', // used in heroku.
     //'hideFunctionalityFile',
-    //'language',
+    //'timezone',
     //'passfile',
     'sitename',
     //'theme',
@@ -45,7 +45,7 @@ $CommonEnv = [
     'disktag',
     'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -62,7 +62,7 @@ $ShowedCommonEnv = [
     //'disktag',
     //'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -130,6 +130,9 @@ function main($path)
     '.'lan:'.$constStr['language'];*/
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['language'] = $constStr['language'];
+    $_SERVER['timezone'] = getConfig('timezone');
+    if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
+    if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -556,7 +559,7 @@ function comppass($pass)
     if ($_POST['password1'] !== '') if (md5($_POST['password1']) === $pass ) {
         date_default_timezone_set('UTC');
         $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
-        date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+        date_default_timezone_set(get_timezone($_SERVER['timezone']));
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
@@ -1288,7 +1291,7 @@ function render_list($path = '', $files = '')
     $p_path=str_replace('&amp;','&',$p_path);
     $pretitle = str_replace('%23','#',$pretitle);
     $statusCode=200;
-    date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+    date_default_timezone_set(get_timezone($_SERVER['timezone']));
     @ob_start();
 
     $theme = getConfig('theme');
@@ -1547,15 +1550,15 @@ function EnvOpt($needUpdate = 0)
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
         </tr>';
     foreach ($ShowedCommonEnv as $key) {
-        if ($key=='language') {
+        if ($key=='timezone') {
             $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%>
                 <select name="' . $key .'">';
-            foreach ($constStr['languages'] as $key1 => $value1) {
+            for ($i=-12;$i<13;$i++) {
                 $html .= '
-                    <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
+                    <option value="'.$i.'" '.($i==getConfig($key)?'selected="selected"':'').'>'.$i.'</option>';
             }
             $html .= '
                 </select>
