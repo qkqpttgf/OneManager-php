@@ -108,6 +108,40 @@ $ShowedInnerEnv = [
     //'token_expires',
 ];
 
+$timezones = array( 
+    '-12'=>'Pacific/Kwajalein', 
+    '-11'=>'Pacific/Samoa', 
+    '-10'=>'Pacific/Honolulu', 
+    '-9'=>'America/Anchorage', 
+    '-8'=>'America/Los_Angeles', 
+    '-7'=>'America/Denver', 
+    '-6'=>'America/Mexico_City', 
+    '-5'=>'America/New_York', 
+    '-4'=>'America/Caracas', 
+    '-3.5'=>'America/St_Johns', 
+    '-3'=>'America/Argentina/Buenos_Aires', 
+    '-2'=>'America/Noronha',
+    '-1'=>'Atlantic/Azores', 
+    '0'=>'UTC', 
+    '1'=>'Europe/Paris', 
+    '2'=>'Europe/Helsinki', 
+    '3'=>'Europe/Moscow', 
+    '3.5'=>'Asia/Tehran', 
+    '4'=>'Asia/Baku', 
+    '4.5'=>'Asia/Kabul', 
+    '5'=>'Asia/Karachi', 
+    '5.5'=>'Asia/Calcutta', //Asia/Colombo
+    '6'=>'Asia/Dhaka',
+    '6.5'=>'Asia/Rangoon', 
+    '7'=>'Asia/Bangkok', 
+    '8'=>'Asia/Shanghai', 
+    '9'=>'Asia/Tokyo', 
+    '9.5'=>'Australia/Darwin', 
+    '10'=>'Pacific/Guam', 
+    '11'=>'Asia/Magadan', 
+    '12'=>'Asia/Kamchatka'
+);
+
 function main($path)
 {
     global $exts;
@@ -616,39 +650,7 @@ function gethiddenpass($path,$passfile)
 
 function get_timezone($timezone = '8')
 {
-    $timezones = array( 
-        '-12'=>'Pacific/Kwajalein', 
-        '-11'=>'Pacific/Samoa', 
-        '-10'=>'Pacific/Honolulu', 
-        '-9'=>'America/Anchorage', 
-        '-8'=>'America/Los_Angeles', 
-        '-7'=>'America/Denver', 
-        '-6'=>'America/Mexico_City', 
-        '-5'=>'America/New_York', 
-        '-4'=>'America/Caracas', 
-        '-3.5'=>'America/St_Johns', 
-        '-3'=>'America/Argentina/Buenos_Aires', 
-        '-2'=>'America/Noronha',
-        '-1'=>'Atlantic/Azores', 
-        '0'=>'UTC', 
-        '1'=>'Europe/Paris', 
-        '2'=>'Europe/Helsinki', 
-        '3'=>'Europe/Moscow', 
-        '3.5'=>'Asia/Tehran', 
-        '4'=>'Asia/Baku', 
-        '4.5'=>'Asia/Kabul', 
-        '5'=>'Asia/Karachi', 
-        '5.5'=>'Asia/Calcutta', //Asia/Colombo
-        '6'=>'Asia/Dhaka',
-        '6.5'=>'Asia/Rangoon', 
-        '7'=>'Asia/Bangkok', 
-        '8'=>'Asia/Shanghai', 
-        '9'=>'Asia/Tokyo', 
-        '9.5'=>'Australia/Darwin', 
-        '10'=>'Pacific/Guam', 
-        '11'=>'Asia/Magadan', 
-        '12'=>'Asia/Kamchatka'
-    );
+    global $timezones;
     if ($timezone=='') $timezone = '8';
     return $timezones[$timezone];
 }
@@ -1488,6 +1490,7 @@ function EnvOpt($needUpdate = 0)
     global $constStr;
     global $ShowedCommonEnv;
     global $ShowedInnerEnv;
+    global $timezones;
     asort($ShowedCommonEnv);
     asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
@@ -1556,9 +1559,9 @@ function EnvOpt($needUpdate = 0)
             <td><label>' . $key . '</label></td>
             <td width=100%>
                 <select name="' . $key .'">';
-            for ($i=-12;$i<13;$i++) {
+            foreach (array_keys($timezones) as $zone) {
                 $html .= '
-                    <option value="'.$i.'" '.($i==getConfig($key)?'selected="selected"':'').'>'.$i.'</option>';
+                    <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
             }
             $html .= '
                 </select>
