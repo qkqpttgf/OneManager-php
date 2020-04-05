@@ -119,7 +119,8 @@ function install()
     if ($_GET['install2']) {
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
-            $tmp['language'] = $_POST['language'];
+            $tmp['language'] = $_COOKIE['language'];
+            $tmp['timezone'] = $_COOKIE['timezone'];
             $response = setConfig($tmp);
             if (api_error($response)) {
                 $html = api_error_msg($response);
@@ -149,6 +150,12 @@ function install()
     </form>
 </div>
     <script>
+        var nowtime= new Date();
+        var timezone = 0-nowtime.getTimezoneOffset()/60;
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie="timezone="+timezone+"; path=/; "+expires;
         function notnull(t)
         {
             if (t.admin.value==\'\') {

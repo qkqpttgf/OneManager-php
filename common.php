@@ -13,7 +13,7 @@ $Base64Env = [
     //'downloadencrypt',
     //'function_name', // used in heroku.
     //'hideFunctionalityFile',
-    //'language',
+    //'timezone',
     //'passfile',
     'sitename',
     //'theme',
@@ -26,7 +26,7 @@ $Base64Env = [
     //'usesharepoint',
     'sharepointname',
     'shareurl',
-    'sharecookie',
+    //'sharecookie',
     'shareapiurl',
     //'siteid',
     'public_path',
@@ -45,7 +45,7 @@ $CommonEnv = [
     'disktag',
     'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -62,7 +62,7 @@ $ShowedCommonEnv = [
     //'disktag',
     //'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -81,7 +81,7 @@ $InnerEnv = [
     'sharepointname',
     'siteid',
     'shareurl',
-    'sharecookie',
+    //'sharecookie',
     'shareapiurl',
     'public_path',
     'refresh_token',
@@ -108,18 +108,65 @@ $ShowedInnerEnv = [
     //'token_expires',
 ];
 
+$timezones = array( 
+    '-12'=>'Pacific/Kwajalein', 
+    '-11'=>'Pacific/Samoa', 
+    '-10'=>'Pacific/Honolulu', 
+    '-9'=>'America/Anchorage', 
+    '-8'=>'America/Los_Angeles', 
+    '-7'=>'America/Denver', 
+    '-6'=>'America/Mexico_City', 
+    '-5'=>'America/New_York', 
+    '-4'=>'America/Caracas', 
+    '-3.5'=>'America/St_Johns', 
+    '-3'=>'America/Argentina/Buenos_Aires', 
+    '-2'=>'America/Noronha',
+    '-1'=>'Atlantic/Azores', 
+    '0'=>'UTC', 
+    '1'=>'Europe/Paris', 
+    '2'=>'Europe/Helsinki', 
+    '3'=>'Europe/Moscow', 
+    '3.5'=>'Asia/Tehran', 
+    '4'=>'Asia/Baku', 
+    '4.5'=>'Asia/Kabul', 
+    '5'=>'Asia/Karachi', 
+    '5.5'=>'Asia/Calcutta', //Asia/Colombo
+    '6'=>'Asia/Dhaka',
+    '6.5'=>'Asia/Rangoon', 
+    '7'=>'Asia/Bangkok', 
+    '8'=>'Asia/Shanghai', 
+    '9'=>'Asia/Tokyo', 
+    '9.5'=>'Australia/Darwin', 
+    '10'=>'Pacific/Guam', 
+    '11'=>'Asia/Magadan', 
+    '12'=>'Asia/Kamchatka'
+);
+
 function main($path)
 {
     global $exts;
     global $constStr;
 
-    if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) $constStr['language'] = $_SERVER['firstacceptlanguage'];
+    if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) {
+        $constStr['language'] = $_SERVER['firstacceptlanguage'];
+    } else {
+        $prelang = splitfirst($_SERVER['firstacceptlanguage'], '-')[0];
+        foreach ( array_keys($constStr['languages']) as $lang) {
+            if ($prelang == splitfirst($lang, '-')[0]) {
+                $constStr['language'] = $lang;
+                break;
+            }
+        }
+    }
     if (isset($_COOKIE['language'])&&$_COOKIE['language']!='') $constStr['language'] = $_COOKIE['language'];
     //if (!$constStr['language']) $constStr['language'] = getConfig('language');
     /*echo 'firstacceptlanguage:'.$_SERVER['firstacceptlanguage'].'
     '.'lan:'.$constStr['language'];*/
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['language'] = $constStr['language'];
+    $_SERVER['timezone'] = getConfig('timezone');
+    if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
+    if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -546,7 +593,7 @@ function comppass($pass)
     if ($_POST['password1'] !== '') if (md5($_POST['password1']) === $pass ) {
         date_default_timezone_set('UTC');
         $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
-        date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+        date_default_timezone_set(get_timezone($_SERVER['timezone']));
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
@@ -603,39 +650,7 @@ function gethiddenpass($path,$passfile)
 
 function get_timezone($timezone = '8')
 {
-    $timezones = array( 
-        '-12'=>'Pacific/Kwajalein', 
-        '-11'=>'Pacific/Samoa', 
-        '-10'=>'Pacific/Honolulu', 
-        '-9'=>'America/Anchorage', 
-        '-8'=>'America/Los_Angeles', 
-        '-7'=>'America/Denver', 
-        '-6'=>'America/Mexico_City', 
-        '-5'=>'America/New_York', 
-        '-4'=>'America/Caracas', 
-        '-3.5'=>'America/St_Johns', 
-        '-3'=>'America/Argentina/Buenos_Aires', 
-        '-2'=>'America/Noronha',
-        '-1'=>'Atlantic/Azores', 
-        '0'=>'UTC', 
-        '1'=>'Europe/Paris', 
-        '2'=>'Europe/Helsinki', 
-        '3'=>'Europe/Moscow', 
-        '3.5'=>'Asia/Tehran', 
-        '4'=>'Asia/Baku', 
-        '4.5'=>'Asia/Kabul', 
-        '5'=>'Asia/Karachi', 
-        '5.5'=>'Asia/Calcutta', //Asia/Colombo
-        '6'=>'Asia/Dhaka',
-        '6.5'=>'Asia/Rangoon', 
-        '7'=>'Asia/Bangkok', 
-        '8'=>'Asia/Shanghai', 
-        '9'=>'Asia/Tokyo', 
-        '9.5'=>'Australia/Darwin', 
-        '10'=>'Pacific/Guam', 
-        '11'=>'Asia/Magadan', 
-        '12'=>'Asia/Kamchatka'
-    );
+    global $timezones;
     if ($timezone=='') $timezone = '8';
     return $timezones[$timezone];
 }
@@ -1247,15 +1262,28 @@ function render_list($path = '', $files = '')
     if ($path !== '/') {
         if (isset($files['file'])) {
             $pretitle = str_replace('&','&amp;', $files['name']);
-            $n_path=$pretitle;
+            $n_path = $pretitle;
+            $tmp = splitlast(splitlast($path,'/')[0],'/');
+            if ($tmp[1]=='') {
+                $p_path = $tmp[0];
+            } else {
+                $p_path = $tmp[1];
+            }
         } else {
-            $pretitle = substr($path,-1)=='/'?substr($path,0,-1):$path;
-            $n_path=substr($pretitle,strrpos($pretitle,'/')+1);
-            $pretitle = substr($pretitle,1);
-        }
-        if (strrpos($path,'/')!=0) {
-            $p_path=substr($path,0,strrpos($path,'/'));
-            $p_path=substr($p_path,strrpos($p_path,'/')+1);
+            if (substr($path,0,1)=='/') $pretitle = substr($path,1);
+            if (substr($path,-1)=='/') $pretitle = substr($path,0,-1);
+            $tmp=splitlast($pretitle,'/');
+            if ($tmp[1]=='') {
+                $n_path = $tmp[0];
+            } else {
+                $n_path = $tmp[1];
+                $tmp = splitlast($tmp[0],'/');
+                if ($tmp[1]=='') {
+                    $p_path = $tmp[0];
+                } else {
+                    $p_path = $tmp[1];
+                }
+            }
         }
     } else {
       $pretitle = getconstStr('Home');
@@ -1265,7 +1293,7 @@ function render_list($path = '', $files = '')
     $p_path=str_replace('&amp;','&',$p_path);
     $pretitle = str_replace('%23','#',$pretitle);
     $statusCode=200;
-    date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+    date_default_timezone_set(get_timezone($_SERVER['timezone']));
     @ob_start();
 
     $theme = getConfig('theme');
@@ -1462,6 +1490,7 @@ function EnvOpt($needUpdate = 0)
     global $constStr;
     global $ShowedCommonEnv;
     global $ShowedInnerEnv;
+    global $timezones;
     asort($ShowedCommonEnv);
     asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
@@ -1524,15 +1553,15 @@ function EnvOpt($needUpdate = 0)
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
         </tr>';
     foreach ($ShowedCommonEnv as $key) {
-        if ($key=='language') {
+        if ($key=='timezone') {
             $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%>
                 <select name="' . $key .'">';
-            foreach ($constStr['languages'] as $key1 => $value1) {
+            foreach (array_keys($timezones) as $zone) {
                 $html .= '
-                    <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
+                    <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
             }
             $html .= '
                 </select>
