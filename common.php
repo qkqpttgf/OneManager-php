@@ -345,7 +345,9 @@ function get_access_token($refresh_token)
         }
         error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         savecache('access_token', $_SERVER['access_token']);
-        if (getConfig('sharecookie')==''||getConfig('shareapiurl')=='') setConfig([ 'sharecookie' => $_SERVER['sharecookie'], 'shareapiurl' => $_SERVER['api_url'] ]);
+        $tmp = [];
+        $tmp['shareapiurl'] = $_SERVER['api_url'];
+        if (getConfig('shareapiurl')=='') setConfig($tmp);
     } else {
         $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
         if ($response['stat']==200) $ret = json_decode($response['body'], true);
