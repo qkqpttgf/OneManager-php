@@ -13,7 +13,7 @@ $Base64Env = [
     //'downloadencrypt',
     //'function_name', // used in heroku.
     //'hideFunctionalityFile',
-    //'language',
+    //'timezone',
     //'passfile',
     'sitename',
     //'theme',
@@ -26,7 +26,7 @@ $Base64Env = [
     //'usesharepoint',
     'sharepointname',
     'shareurl',
-    //'sharecookie',
+    ////'sharecookie',
     'shareapiurl',
     //'siteid',
     'public_path',
@@ -41,11 +41,11 @@ $CommonEnv = [
     'SecretKey', // used in SCF.
     'admin',
     'adminloginpage',
-    'background',
+    'background',	
     'disktag',
     'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    //'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -62,7 +62,7 @@ $ShowedCommonEnv = [
     //'disktag',
     //'function_name', // used in heroku.
     'hideFunctionalityFile',
-    //'language',
+    //'timezone',
     'passfile',
     'sitename',
     'theme',
@@ -81,7 +81,7 @@ $InnerEnv = [
     'sharepointname',
     'siteid',
     'shareurl',
-    //'sharecookie',
+    ////'sharecookie',
     'shareapiurl',
     'public_path',
     'refresh_token',
@@ -101,12 +101,46 @@ $ShowedInnerEnv = [
     //'sharepointname',
     //'siteid',
     //'shareurl',
-    //'sharecookie',
+    ////'sharecookie',
     //'shareapiurl',
     'public_path',
     //'refresh_token',
     //'token_expires',
 ];
+
+$timezones = array( 
+    '-12'=>'Pacific/Kwajalein', 
+    '-11'=>'Pacific/Samoa', 
+    '-10'=>'Pacific/Honolulu', 
+    '-9'=>'America/Anchorage', 
+    '-8'=>'America/Los_Angeles', 
+    '-7'=>'America/Denver', 
+    '-6'=>'America/Mexico_City', 
+    '-5'=>'America/New_York', 
+    '-4'=>'America/Caracas', 
+    '-3.5'=>'America/St_Johns', 
+    '-3'=>'America/Argentina/Buenos_Aires', 
+    '-2'=>'America/Noronha',
+    '-1'=>'Atlantic/Azores', 
+    '0'=>'UTC', 
+    '1'=>'Europe/Paris', 
+    '2'=>'Europe/Helsinki', 
+    '3'=>'Europe/Moscow', 
+    '3.5'=>'Asia/Tehran', 
+    '4'=>'Asia/Baku', 
+    '4.5'=>'Asia/Kabul', 
+    '5'=>'Asia/Karachi', 
+    '5.5'=>'Asia/Calcutta', //Asia/Colombo
+    '6'=>'Asia/Dhaka',
+    '6.5'=>'Asia/Rangoon', 
+    '7'=>'Asia/Bangkok', 
+    '8'=>'Asia/Shanghai', 
+    '9'=>'Asia/Tokyo', 
+    '9.5'=>'Australia/Darwin', 
+    '10'=>'Pacific/Guam', 
+    '11'=>'Asia/Magadan', 
+    '12'=>'Asia/Kamchatka'
+);
 
 function main($path)
 {
@@ -130,6 +164,9 @@ function main($path)
     '.'lan:'.$constStr['language'];*/
     if ($constStr['language']=='') $constStr['language'] = 'en-us';
     $_SERVER['language'] = $constStr['language'];
+    $_SERVER['timezone'] = getConfig('timezone');
+    if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
+    if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -153,7 +190,7 @@ function main($path)
         }
     }
     if (getConfig('admin')!='')
-        if ( (isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin'))) || (isset($_POST['password1'])&&$_POST['password1']==getConfig('admin')) ) {
+        if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin')) ) {
             $_SERVER['admin']=1;
             $_SERVER['needUpdate'] = needUpdate();
         } else {
@@ -308,7 +345,9 @@ function get_access_token($refresh_token)
         }
         error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         savecache('access_token', $_SERVER['access_token']);
-        if (getConfig('sharecookie')==''||getConfig('shareapiurl')=='') setConfig([ 'sharecookie' => $_SERVER['sharecookie'], 'shareapiurl' => $_SERVER['api_url'] ]);
+        $tmp = [];
+        $tmp['shareapiurl'] = $_SERVER['api_url'];
+        if (getConfig('shareapiurl')=='') setConfig($tmp);
     } else {
         $response = curl_request( $_SERVER['oauth_url'] . 'token', 'client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token );
         if ($response['stat']==200) $ret = json_decode($response['body'], true);
@@ -556,7 +595,7 @@ function comppass($pass)
     if ($_POST['password1'] !== '') if (md5($_POST['password1']) === $pass ) {
         date_default_timezone_set('UTC');
         $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
-        date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+        date_default_timezone_set(get_timezone($_SERVER['timezone']));
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
@@ -613,39 +652,7 @@ function gethiddenpass($path,$passfile)
 
 function get_timezone($timezone = '8')
 {
-    $timezones = array( 
-        '-12'=>'Pacific/Kwajalein', 
-        '-11'=>'Pacific/Samoa', 
-        '-10'=>'Pacific/Honolulu', 
-        '-9'=>'America/Anchorage', 
-        '-8'=>'America/Los_Angeles', 
-        '-7'=>'America/Denver', 
-        '-6'=>'America/Mexico_City', 
-        '-5'=>'America/New_York', 
-        '-4'=>'America/Caracas', 
-        '-3.5'=>'America/St_Johns', 
-        '-3'=>'America/Argentina/Buenos_Aires', 
-        '-2'=>'America/Noronha',
-        '-1'=>'Atlantic/Azores', 
-        '0'=>'UTC', 
-        '1'=>'Europe/Paris', 
-        '2'=>'Europe/Helsinki', 
-        '3'=>'Europe/Moscow', 
-        '3.5'=>'Asia/Tehran', 
-        '4'=>'Asia/Baku', 
-        '4.5'=>'Asia/Kabul', 
-        '5'=>'Asia/Karachi', 
-        '5.5'=>'Asia/Calcutta', //Asia/Colombo
-        '6'=>'Asia/Dhaka',
-        '6.5'=>'Asia/Rangoon', 
-        '7'=>'Asia/Bangkok', 
-        '8'=>'Asia/Shanghai', 
-        '9'=>'Asia/Tokyo', 
-        '9.5'=>'Australia/Darwin', 
-        '10'=>'Pacific/Guam', 
-        '11'=>'Asia/Magadan', 
-        '12'=>'Asia/Kamchatka'
-    );
+    global $timezones;
     if ($timezone=='') $timezone = '8';
     return $timezones[$timezone];
 }
@@ -1288,7 +1295,7 @@ function render_list($path = '', $files = '')
     $p_path=str_replace('&amp;','&',$p_path);
     $pretitle = str_replace('%23','#',$pretitle);
     $statusCode=200;
-    date_default_timezone_set(get_timezone($_COOKIE['timezone']));
+    date_default_timezone_set(get_timezone($_SERVER['timezone']));
     @ob_start();
 
     $theme = getConfig('theme');
@@ -1485,6 +1492,7 @@ function EnvOpt($needUpdate = 0)
     global $constStr;
     global $ShowedCommonEnv;
     global $ShowedInnerEnv;
+    global $timezones;
     asort($ShowedCommonEnv);
     asort($ShowedInnerEnv);
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
@@ -1547,15 +1555,15 @@ function EnvOpt($needUpdate = 0)
             <td colspan="2">'.getconstStr('PlatformConfig').'</td>
         </tr>';
     foreach ($ShowedCommonEnv as $key) {
-        if ($key=='language') {
+        if ($key=='timezone') {
             $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%>
                 <select name="' . $key .'">';
-            foreach ($constStr['languages'] as $key1 => $value1) {
+            foreach (array_keys($timezones) as $zone) {
                 $html .= '
-                    <option value="'.$key1.'" '.($key1==getConfig($key)?'selected="selected"':'').'>'.$value1.'</option>';
+                    <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
             }
             $html .= '
                 </select>

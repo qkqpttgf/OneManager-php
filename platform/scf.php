@@ -141,6 +141,7 @@ function install()
         //if ($_POST['admin']!='') {
             $tmp['language'] = $_POST['language'];
             $tmp['Region'] = $_POST['Region'];
+            $tmp['timezone'] = $_COOKIE['timezone'];
             $SecretId = getConfig('SecretId');
             if ($SecretId=='') {
                 $SecretId = $_POST['SecretId'];
@@ -208,6 +209,12 @@ language:<br>';
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
     <script>
+        var nowtime= new Date();
+        var timezone = 0-nowtime.getTimezoneOffset()/60;
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie="timezone="+timezone+"; path=/; "+expires;
         function changelanguage(str)
         {
             document.cookie=\'language=\'+str+\'; path=/\';
