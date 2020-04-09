@@ -190,7 +190,7 @@ function main($path)
         }
     }
     if (getConfig('admin')!='')
-        if ( (isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin'))) || (isset($_POST['password1'])&&$_POST['password1']==getConfig('admin')) ) {
+        if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin')) ) {
             $_SERVER['admin']=1;
             $_SERVER['needUpdate'] = needUpdate();
         } else {
@@ -1252,7 +1252,7 @@ function render_list($path = '', $files = '')
     global $constStr;
 
     if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
-        $htmlcontent = fetch_files(spurlencode(path_format($path . '/index.html'),'/'))['content'];
+        $htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'),'/'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     $path = str_replace('%20','%2520',$path);
