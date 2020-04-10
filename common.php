@@ -1112,6 +1112,15 @@ function fetch_files($path = '/')
                     savecache('path_' . $path, $files);
                 }
             }
+            if (isset($files['file'])) {
+                if (in_array(splitlast($files['name'],'.')[1], $exts['txt'])) {
+                    if (!(isset($files['content'])&&$files['content']['stat']==200)) {
+                        $content1 = curl_request($files[$_SERVER['DownurlStrName']]);
+                        $files['content'] = $content1;
+                        savecache('path_' . $path, $files);
+                    }
+                }
+            }
             if (isset($files['error'])) {
                 $files['error']['stat'] = $arr['stat'];
             }
