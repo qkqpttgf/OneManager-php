@@ -8,13 +8,13 @@ app.json,version,readme.md
 
 UpdateAddress
 
-heroku.php,scf.php
+[heroku.php](/platform/heroku.php "heroku.php"),[scf.php](/platform/scf.php "scf.php")
 
 Theme
 
 Material Design for Classic Series(对默认主题的MD风格小优化，有对页宽度、按钮大小的适配调整):
 
-tfo_mdtr.php(Transparent Material Design), tfo_md.php(Material Design), tfo_mdtr_baw.php(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.4.8)
+[tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_mdtr.php "tfo_md.php")(Material Design), [tfo_mdtr_baw.php](/theme/tfo_mdtr_baw.php "tfo_mdtr_baw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.4.8)
 
 具体地，您可以体验一下或参考示例的tfo_mdtr.php主题。
 
