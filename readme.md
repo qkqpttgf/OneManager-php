@@ -12,6 +12,8 @@ heroku.php,scf.php
 
 Theme
 
+Material Design for Classic(对默认主题的MD风格小优化，有对页宽度、按钮大小的适配):
+
 tfo_mdtr.php(Transparent Material Design),
 
 tfo_md.php(Material Design),
@@ -19,6 +21,10 @@ tfo_md.php(Material Design),
 tfo_mdtr_baw.php(Black & White Material Design for Tomb-Sweeping Day)
 
 (All based on classic.php,latest at 2020.4.8)
+
+具体地，您可以体验一下或参考示例的tfo_mdtr.php主题。
+
+注意：以上系列主题默认隐藏多盘，请谨慎使用！若强迫开启多盘，可以自行定位修改#L111左右more-disk位置去掉display:none !important字符，仍存在诸多问题，请谅解。主题**将要实现**功能：背景模糊/标题随机赋色适应背景图片等，敬请期待...
 
 Original:
 
