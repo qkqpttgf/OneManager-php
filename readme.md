@@ -18,7 +18,7 @@ tfo_mdtr.php(Transparent Material Design), tfo_md.php(Material Design), tfo_mdtr
 
 具体地，您可以体验一下或参考示例的tfo_mdtr.php主题。
 
-注意：以上系列主题**默认隐藏多盘**，请谨慎使用！若强迫开启多盘，可以自行定位修改#L111左右more-disk位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题**将要实现**的功能有背景模糊/标题随机赋色适应背景图片等，敬请期待...
+注意：以上系列主题**默认隐藏多盘和右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改#L111左右more-disk位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题**将要实现**的功能有背景模糊/标题随机赋色适应背景图片等，敬请期待...
 
 Original:
 
