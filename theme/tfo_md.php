@@ -108,7 +108,7 @@ echo '</script>';
     <div class="list-wrapper">
         <div class="list-container">
             <div class="list-header-container">
-                <div class="more-disk" style="">
+                <div class="more-disk" style="display:none !important">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
