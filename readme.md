@@ -4,7 +4,7 @@ List of files changed:
 
 Information
 
-[app.json](/version "app.json"),[version](version "version"),[readme.md](/readme.md "readme.md")
+[app.json](/version "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md")
 
 UpdateAddress
 
