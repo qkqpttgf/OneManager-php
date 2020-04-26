@@ -706,8 +706,7 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        //alert(tmptextarea.innerHTML);
-        alert('Success');
+        alert(tmptextarea.innerHTML+"<?php echo getconstStr('Success');?>");
     }
     var sort=0;
     function sortby(string) {
