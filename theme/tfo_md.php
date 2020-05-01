@@ -18,9 +18,9 @@
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#24292e;text-decoration:none}
-        .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 0 6px 0 rgb(128,128,128);border-radius:6px;}
+        .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
-        .list-header-container{position:relative;box-shadow:0px 2px 6px rgba(128,128,128,0.8)}
+        .list-header-container{position:relative}
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
@@ -30,7 +30,7 @@
         .more-disk a:hover, .more-disk a[now]{ background-color:rgb(85,85,85);box-shadow:inset 0 1px 3px #000000bd;color: white}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:32px;transition-duration: 0.3s}
-        .list-table tr[data-to]:hover{background:rgb(85,85,85);color:white}
+        .list-table tr[data-to]:hover{background:rgb(85,85,85);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 8px;text-align:left}
@@ -38,7 +38,7 @@
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
-        .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 0 6px 0 rgb(128,128,128);border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
+        .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
         .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:6px;list-style:none;display:block;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
