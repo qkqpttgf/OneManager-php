@@ -14,8 +14,8 @@
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:bottom}
-	    input{border:none;transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
-    	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(85,85,85,0.6);color:white}
+        input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;background:transparent;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
+    	input:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#24292e;text-decoration:none}
@@ -35,11 +35,8 @@
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 8px;text-align:left}
-        .list-table td button,.list-table th button{cursor:pointer;color:#ffffff;height:30px;background:#FF7D00;padding:0 20px;border-width:0;border-radius:6px;box-shadow: 0px 4px 12px rgba(255, 125, 0, 0.5);}
-        .upload_style input[type="file"]{display:block;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
-        .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
-        .list-table .size,.list-table .updated_at{text-align:right}
-        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
+        .list-table td button,.list-table th button{cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
+        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgb(3,102,214);border-radius:16px;border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}

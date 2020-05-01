@@ -1,7 +1,7 @@
 Tfo:
 
 # List of files changed 文件更改
-Information [app.json](/app.json "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md")
+Information [app.json](/app.json "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md"),[conststr.php](/conststr.php "conststr.php")
 
 UpdateAddress [heroku.php](/platform/heroku.php "heroku.php"),[scf.php](/platform/scf.php "scf.php")
 

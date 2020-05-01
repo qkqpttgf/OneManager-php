@@ -424,11 +424,11 @@ $constStr = [
         'fa' => 'ارسال',
     ],
     'Close' => [
-        'en-us' => 'Close',
-        'zh-cn' => '关闭',
-        'ja' => '閉じる',
-        'ko-kr' => '닫기',
-        'fa' => 'بستن',
+        'en-us' => '×',
+        'zh-cn' => '×',
+        'ja' => '×',
+        'ko-kr' => '×',
+        'fa' => '×',
     ],
     'InputPasswordUWant' => [
         'en-us' => 'Input Password you Want',
