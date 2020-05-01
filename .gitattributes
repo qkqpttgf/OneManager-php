@@ -1,5 +1,3 @@
-*.js linguist-language=JavaScript
-*.css linguist-language=CSS
-*.html linguist-language=HTML
-*.php linguist-language=PHP
-*.md linguist-language=Markdown
+*.js linguist-language=PHP
+*.css linguist-language=PHP
+*.html linguist-language=PHP
