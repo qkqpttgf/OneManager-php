@@ -43,7 +43,7 @@
         .operate ul li{padding:6px;list-style:none;display:block;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <?php } ?>
-        .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 0 6px 0 rgb(128,128,128);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}
+        .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
@@ -104,10 +104,10 @@ echo '</script>';
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper">
+    <div class="list-wrapper" style="display:none !important">
         <div class="list-container">
             <div class="list-header-container">
-            <div class="more-disk" style="display:none !important">
+            <div class="more-disk">
 <?php foreach ($disktags as $disk) {
         $diskname = getConfig('diskname', $disk);
         if ($diskname=='') $diskname = $disk;
