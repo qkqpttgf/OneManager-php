@@ -32,7 +32,7 @@
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden}
         .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
-        .list-table tr[data-to]:hover{background:rgb(3,102,214);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
+        .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td.updated_at,.list-table th.updated_at{width:25%;}
