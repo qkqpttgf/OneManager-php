@@ -18,7 +18,7 @@
         textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
-        .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
+        .title{border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;border:0 none;padding: 16px 16px;text-align:center;background-color:rgba(245,245,245,0.8);white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
         .title a{color:#24292e;text-decoration:none}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
@@ -29,8 +29,8 @@
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.3)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
-        .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgb(3,102,214);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
-        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
+        .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
+        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden}
         .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:rgb(3,102,214);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
@@ -68,7 +68,16 @@
 echo '<script language="javascript">';
 ?>
 <?php 
-echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd","f44336bd","e91e63bd","9c27b0bd","673ab7bd","3f51b5bd","2196f3bd","03a9f4bd","00bcd4bd","009688bd","4caf50bd","8b34abd","cddc39bd","c5b73cbd","e4ad08bd","ff5722bd","795548bd","9e9e9ebd","607d8bbd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd","f44336bd","e91e63bd","9c27b0bd","673ab7bd","3f51b5bd","2196f3bd","03a9f4bd","00bcd4bd","009688bd","4caf50bd","8b34abbd","cddc39bd","c5b73cbd","e4ad08bd","ff5722bd","795548bd","9e9e9ebd","607d8bbd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+?>
+<?php 
+echo 'window.onload=function(){var colorList=["#a9ddcc","#ff6867","#809b9c","#00cccb","#bcbdc1","#f6c500","#767386","#4cda64","f44336","e91e63","9c27b0","673ab7","3f51b5","2196f3","03a9f4","00bcd4","009688","4caf50","8b34ab","cddc39","c5b73c","e4ad08","ff5722","795548","9e9e9e","607d8b"];var div=document.getElementsByTagName("input");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+?>
+<?php 
+echo 'window.onload=function(){var colorList=["#a9ddcc","#ff6867","#809b9c","#00cccb","#bcbdc1","#f6c500","#767386","#4cda64","f44336","e91e63","9c27b0","673ab7","3f51b5","2196f3","03a9f4","00bcd4","009688","4caf50","8b34ab","cddc39","c5b73c","e4ad08","ff5722","795548","9e9e9e","607d8b"];var div=document.getElementsByTagName("button");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+?>
+<?php 
+echo 'window.onload=function(){var colorList=["#a9ddcc","#ff6867","#809b9c","#00cccb","#bcbdc1","#f6c500","#767386","#4cda64","f44336","e91e63","9c27b0","673ab7","3f51b5","2196f3","03a9f4","00bcd4","009688","4caf50","8b34ab","cddc39","c5b73c","e4ad08","ff5722","795548","9e9e9e","607d8b"];var div=document.getElementsByTagName("tr");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
 ?>
 <?php 
 echo '</script>';
