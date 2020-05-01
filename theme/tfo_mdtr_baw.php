@@ -32,11 +32,14 @@
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent; color: #24292e}
         .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4);box-shadow:inset 0 1px 3px #000000bd;color: white}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px;float:left;transition-duration: 0.3s;border-radius:6px}
+        .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:6px}
         .list-table tr[data-to]:hover{background:rgb(3,102,214);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
-        .list-table td,.list-table th{padding:0 8px;text-align:left}
+        .list-table td.updated_at,.list-table th.updated_at{width:25%;}
+        .list-table td.file,.list-table th.file{width:60%;}
+        .list-table td.size,.list-table th.size{width:10%;}
+        .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px}
         .list-table td button,.list-table th button{transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
         .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgb(3,102,214);border-radius:16px;border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
