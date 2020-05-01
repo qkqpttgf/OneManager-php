@@ -30,11 +30,14 @@
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent; color: #24292e}
         .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4);box-shadow:inset 0 1px 3px #000000bd;color: white}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px;transition-duration: 0.3s}
+        .list-table tr{height:32px;transition-duration: 0.3s;;border-radius:6px}
         .list-table tr[data-to]:hover{background:rgba(85,85,85,0.4);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 8px;text-align:left}
+        .list-table td button,.list-table th button{cursor:pointer;color:#ffffff;height:30px;background:#FF7D00;padding:0 20px;border-width:0;border-radius:6px;box-shadow: 0px 4px 12px rgba(255, 125, 0, 0.5);}
+        .upload_style input[type="file"]{display:block;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
+        .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
         .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
@@ -136,7 +139,7 @@ echo '</script>';
 <?php   } ?>
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-header-container" style="box-shadow:0 1px 8px rgba(27,31,35,.3)">
 <?php
     if ($path !== '/') {
         $current_url = $_SERVER['PHP_SELF'];
