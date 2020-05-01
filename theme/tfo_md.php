@@ -59,6 +59,7 @@
             .title{margin-bottom:24px}
             .list-wrapper{width:96%; margin:0 auto 10px;}
             .list-table {padding:8px}
+            .list-table td.file,.list-table th.file{width:100%;}
             .list-table td, .list-table th{white-space:nowrap;overflow:auto}
             .size, .updated_at{display:none}
         }
