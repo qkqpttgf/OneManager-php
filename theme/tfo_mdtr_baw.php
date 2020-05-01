@@ -16,7 +16,7 @@
         ion-icon{font-size:16px;vertical-align:middle}
         input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
-        textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
+        textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
@@ -29,8 +29,8 @@
         .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.3)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
-        .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent; color: #24292e}
-        .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4);box-shadow:inset 0 1px 3px #000000bd;color: white}
+        .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
+        .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgb(3,102,214);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:rgb(3,102,214);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
@@ -40,8 +40,8 @@
         .list-table td.file,.list-table th.file{width:60%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px}
-        .list-table td button,.list-table th button{transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
-        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgb(3,102,214);border-radius:16px;border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
+        .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
+        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgb(3,102,214);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}

@@ -7,7 +7,7 @@ UpdateAddress [heroku.php](/platform/heroku.php "heroku.php"),[scf.php](/platfor
 
 Theme
 
-Material Design for Classic Series(对默认主题的MD风格小优化，有对页宽度、按钮大小、按钮外观的适配调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtr_baw.php](/theme/tfo_mdtr_baw.php "tfo_mdtr_baw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.1)
+Material Design for Classic Series(对默认主题的MD风格小优化，有对页宽度、按钮外观等的适配调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtr_baw.php](/theme/tfo_mdtr_baw.php "tfo_mdtr_baw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.1)
 
 具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏多盘和右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改#L107左右more-disk前几行位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题**将要实现**的功能有背景模糊/标题随机赋色适应背景图片等，敬请期待...
 
