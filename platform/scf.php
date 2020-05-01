@@ -416,7 +416,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
 {
     $source['url'] = 'https://github.com/' . $auth . '/' . $project;
     $source['branch'] = $branch;
