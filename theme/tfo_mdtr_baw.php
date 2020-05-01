@@ -16,7 +16,6 @@
         ion-icon{font-size:16px;vertical-align:bottom}
 	input{border:none;transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{shadow:0 0 6px 0 rgb(128,128,128);background-color:rgba(85,85,85,0.6);color:white}
-	::-webkit-scrollbar{display:none}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
         .title a{color:#24292e;text-decoration:none}
