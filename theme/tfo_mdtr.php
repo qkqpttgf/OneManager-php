@@ -71,9 +71,6 @@ echo '<script language="javascript">';
 echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd","f44336bd","e91e63bd","9c27b0bd","673ab7bd","3f51b5bd","2196f3bd","03a9f4bd","00bcd4bd","009688bd","4caf50bd","8b34abbd","cddc39bd","c5b73cbd","e4ad08bd","ff5722bd","795548bd","9e9e9ebd","607d8bbd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
 ?>
 <?php 
-echo 'window.onload=function(){var colorList=["#a9ddcc","#ff6867","#809b9c","#00cccb","#bcbdc1","#f6c500","#767386","#4cda64","f44336","e91e63","9c27b0","673ab7","3f51b5","2196f3","03a9f4","00bcd4","009688","4caf50","8b34ab","cddc39","c5b73c","e4ad08","ff5722","795548","9e9e9e","607d8b"];var div=document.getElementsByTagName("tr");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
-?>
-<?php 
 echo '</script>';
 ?>
     <div style="padding:1px">
