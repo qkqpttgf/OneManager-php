@@ -13,10 +13,10 @@
         html{filter: url("data:image/svg xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter: grayscale(1);}
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
-        ion-icon{font-size:16px;vertical-align:bottom}
-        input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,1);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
+        ion-icon{font-size:16px;vertical-align:middle}
+        input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
-        textarea{font-weight:bold;border:1px solid rgba(27,31,35,1);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
+        textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
         .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
@@ -32,7 +32,7 @@
         .more-disk a{margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent; color: #24292e}
         .more-disk a:hover, .more-disk a[now]{ background-color:rgba(85,85,85,0.4);box-shadow:inset 0 1px 3px #000000bd;color: white}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:6px}
+        .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:rgb(3,102,214);color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
@@ -46,7 +46,7 @@
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
         .operate:hover ul{position:absolute;display:inline-table;}
-        .operate ul li{padding:6px;list-style:none;display:block;}
+        .operate ul li{padding:6px;list-style:none;display:block;float:left}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <?php } ?>
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}
