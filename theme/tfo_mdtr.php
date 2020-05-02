@@ -18,10 +18,8 @@
         textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
-        .title{transition-duration: 0.3s;border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
-        .title:hover{background-color:rgba(245,245,245,0.6);box-shadow:0 1px 15px rgba(27,31,35,.15);}
-        .title a{transition-duration: 0.3s;text-shadow:0 1px 15px rgba(27,31,35,.8);color:#FFF;text-decoration:none}
-        .title a:hover{text-shadow:0 1px 15px rgba(27,31,35,0);color:#24292e}
+        .title{text-shadow:0 1px 15px rgba(27,31,35,.8);color:#FFF;text-decoration:none;transition-duration: 0.3s;border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
+        .title:hover{text-shadow:0 1px 15px rgba(27,31,35,0);color:#24292e;background-color:rgba(245,245,245,0.6);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
         .list-header-container{position:relative}
@@ -32,7 +30,7 @@
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
-        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden}
+        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden;table-layout:fixed}
         .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
@@ -60,7 +58,7 @@
             .title{margin-bottom:24px}
             .list-wrapper{width:96%; margin:0 auto 10px;}
             .list-table {padding:8px}
-            .list-table td.file,.list-table th.file{width:100%;}
+            .list-table td.file,.list-table th.file{width:95%;}
             .list-table td, .list-table th{white-space:nowrap;overflow:auto}
             .size, .updated_at{display:none}
         }
