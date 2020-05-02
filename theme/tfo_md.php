@@ -54,14 +54,6 @@
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgb(245,245,245);}
-        @media only screen and (max-width:495px){
-            .title{margin-bottom:24px}
-            .list-wrapper{width:96%; margin:0 auto 10px;}
-            .list-table {padding:8px}
-            .list-table td.file,.list-table th.file{width:95%;}
-            .size, .updated_at{display:none}
-            .list-table td,.list-table th{overflow:auto;text-overflow:unset}
-        }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
@@ -91,6 +83,14 @@
             .list-table td.file,.list-table th.file{width:calc(90% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
             .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:495px){
+            .title{margin-bottom:24px}
+            .list-wrapper{width:96%; margin:0 auto 10px;}
+            .list-table {padding:8px}
+            .list-table td.file,.list-table th.file{width:95%;}
+            .size, .updated_at{display:none}
+            .list-table td,.list-table th{overflow:auto;text-overflow:unset}
         }
     </style>
 </head>
@@ -873,217 +873,217 @@ echo '</script>';
         document.getElementById('upload_file').style.display='';
     }
     function preup() {
-        uploadbuttonhide();
-        var files=document.getElementById('upload_file').files;
-	if (files.length<1) {
-            uploadbuttonshow();
-            return;
-        };
-        var table1=document.createElement('table');
-        document.getElementById('upload_div').appendChild(table1);
-        table1.setAttribute('class','list-table');
-        var timea=new Date().getTime();
-        var i=0;
-        getuplink(i);
-        function getuplink(i) {
-            var file=files[i];
-            var tr1=document.createElement('tr');
-            table1.appendChild(tr1);
-            tr1.setAttribute('data-to',1);
-            var td1=document.createElement('td');
-            tr1.appendChild(td1);
-            td1.setAttribute('style','width:30%');
-            td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
-            td1.innerHTML=file.name+'<br>'+size_format(file.size);
-            var td2=document.createElement('td');
-            tr1.appendChild(td2);
-            td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
-            td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
-            if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><?php echo getconstStr('UpFileTooLarge'); ?></font>';
+            uploadbuttonhide();
+            var files=document.getElementById('upload_file').files;
+        if (files.length<1) {
                 uploadbuttonshow();
                 return;
-            }
-            var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ encodeURIComponent(file.name) +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
-            xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
-            xhr1.send(null);
-            xhr1.onload = function(e){
-                td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
-                if (xhr1.status==200) {
-                    console.log(xhr1.responseText);
-                    var html=JSON.parse(xhr1.responseText);
-                    if (!html['uploadUrl']) {
-                        td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
-                        uploadbuttonshow();
-                    } else {
-                        td2.innerHTML='<?php echo getconstStr('UploadStart'); ?> ...';
-                        binupfile(file,html['uploadUrl'],timea+'_'+i);
-                    }
-                }
-                if (i<files.length-1) {
-                    i++;
-                    getuplink(i);
-                }
-            }
-        }
-    }
-    function size_format(num) {
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' B';
-        }
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' KB';
-        }
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' MB';
-        }
-        return num.toFixed(2) + ' GB';
-    }
-    function binupfile(file,url,tdnum){
-        var label=document.getElementById('upfile_td2_'+tdnum);
-        var reader = new FileReader();
-        var StartStr='';
-        var MiddleStr='';
-        var StartTime;
-        var EndTime;
-        var newstartsize = 0;
-        if(!!file){
-            var asize=0;
-            var totalsize=file.size;
-            var xhr2 = new XMLHttpRequest();
-            xhr2.open("GET", url);
-                    //xhr2.setRequestHeader('x-requested-with','XMLHttpRequest');
-            xhr2.send(null);
-            xhr2.onload = function(e){
-                if (xhr2.status==200) {
-                    var html = JSON.parse(xhr2.responseText);
-                    var a = html['nextExpectedRanges'][0];
-                    newstartsize = Number( a.slice(0,a.indexOf("-")) );
-                    StartTime = new Date();
-<?php if ($_SERVER['admin']) { ?>
-                    asize = newstartsize;
-<?php } ?>
-                    if (newstartsize==0) {
-                        StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
-                    } else {
-                        StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
-                    }
-                    var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
-                    if (totalsize>200*1024*1024) chunksize=10*1024*1024;
-                    function readblob(start) {
-                        var end=start+chunksize;
-                        var blob = file.slice(start,end);
-                        reader.readAsArrayBuffer(blob);
-                    }
-                    readblob(asize);
-<?php if (!$_SERVER['admin']) { ?>
-                    var spark = new SparkMD5.ArrayBuffer();
-<?php } ?>
-                    reader.onload = function(e){
-                        var binary = this.result;
-<?php if (!$_SERVER['admin']) { ?>
-                        spark.append(binary);
-                        if (asize < newstartsize) {
-                            asize += chunksize;
-                            readblob(asize);
-                            return;
-                        }
-<?php } ?>
-                        var xhr = new XMLHttpRequest();
-                        xhr.open("PUT", url, true);
-                        //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
-                        bsize=asize+e.loaded-1;
-                        xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize +'/'+ totalsize);
-                        xhr.upload.onprogress = function(e){
-                            if (e.lengthComputable) {
-                                var tmptime = new Date();
-                                var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
-                                var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
-                            }
-                        }
-                        var C_starttime = new Date();
-                        xhr.onload = function(e){
-                            if (xhr.status<500) {
-                            var response=JSON.parse(xhr.responseText);
-                            if (response['size']>0) {
-                                // contain size, upload finish. 有size说明是最终返回，上传结束
-                                var xhr3 = new XMLHttpRequest();
-                                xhr3.open("GET", '?action=del_upload_cache&filename=.'+file.lastModified+ '_' +file.size+ '_' +encodeURIComponent(file.name)+'.tmp');
-                                xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
-                                xhr3.send(null);
-                                xhr3.onload = function(e){
-                                    console.log(xhr3.responseText+','+xhr3.status);
-                                }
-<?php if (!$_SERVER['admin']) { ?>
-                                var filemd5 = spark.end();
-                                var xhr4 = new XMLHttpRequest();
-                                xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent(file.name)+'&filemd5='+filemd5);
-                                xhr4.setRequestHeader('x-requested-with','XMLHttpRequest');
-                                xhr4.send(null);
-                                xhr4.onload = function(e){
-                                    console.log(xhr4.responseText+','+xhr4.status);
-                                    var filename;
-                                    //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
-                                    //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
-                                    filename = JSON.parse(xhr4.responseText)['name'];
-                                    if (filename=='') {
-                                        alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
-                                        uploadbuttonshow();
-                                        return;
-                                    }
-                                    var lasturl = location.href;
-                                    if (lasturl.substr(lasturl.length-1)!='/') lasturl += '/';
-                                    lasturl += filename + '?preview';
-                                    //window.open(lasturl);
-                                    document.getElementById('upfile_a_'+tdnum).href = lasturl;
-                                    document.getElementById('upfile_a1_'+tdnum).href = filename;
-                                    document.getElementById('upfile_cpbt_'+tdnum).style.display = "";
-                                }
-<?php } ?>
-                                EndTime=new Date();
-                                MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'<br>';
-                                if (newstartsize==0) {
-                                    MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
-                                } else {
-                                    MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
-                                }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
-                                label.innerHTML=StartStr+MiddleStr;
-                                uploadbuttonshow();
-<?php if ($_SERVER['admin']) { ?>
-                                addelement(response);
-<?php } ?>
-                            } else {
-                                if (!response['nextExpectedRanges']) {
-                                    label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
-                                } else {
-                                    var a=response['nextExpectedRanges'][0];
-                                    asize=Number( a.slice(0,a.indexOf("-")) );
-                                    readblob(asize);
-                                }
-                            } } else readblob(asize);
-                        }
-                        xhr.send(binary);
-                    }
-                } else {
-                    if (window.location.pathname.indexOf('%23')>0||file.name.indexOf('%23')>0) {
-                        label.innerHTML='<font color="red"><?php echo getconstStr('UploadFail23'); ?></font>';
-                    } else {
-                        label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
-                    }
+            };
+            var table1=document.createElement('table');
+            document.getElementById('upload_div').appendChild(table1);
+            table1.setAttribute('class','list-table');
+            var timea=new Date().getTime();
+            var i=0;
+            getuplink(i);
+            function getuplink(i) {
+                var file=files[i];
+                var tr1=document.createElement('tr');
+                table1.appendChild(tr1);
+                tr1.setAttribute('data-to',1);
+                var td1=document.createElement('td');
+                tr1.appendChild(td1);
+                td1.setAttribute('style','width:30%');
+                td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
+                td1.innerHTML=file.name+'&nbsp;'+size_format(file.size);
+                var td2=document.createElement('td');
+                tr1.appendChild(td2);
+                td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
+                td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
+                if (file.size>100*1024*1024*1024) {
+                    td2.innerHTML='<font color="red"><?php echo getconstStr('UpFileTooLarge'); ?></font>';
                     uploadbuttonshow();
+                    return;
+                }
+                var xhr1 = new XMLHttpRequest();
+                xhr1.open("GET", '?action=upbigfile&upbigfilename='+ encodeURIComponent(file.name) +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+                xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
+                xhr1.send(null);
+                xhr1.onload = function(e){
+                    td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                    if (xhr1.status==200) {
+                        console.log(xhr1.responseText);
+                        var html=JSON.parse(xhr1.responseText);
+                        if (!html['uploadUrl']) {
+                            td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                            uploadbuttonshow();
+                        } else {
+                            td2.innerHTML='<?php echo getconstStr('UploadStart'); ?> ...';
+                            binupfile(file,html['uploadUrl'],timea+'_'+i);
+                        }
+                    }
+                    if (i<files.length-1) {
+                        i++;
+                        getuplink(i);
+                    }
                 }
             }
         }
-    }
+        function size_format(num) {
+            if (num>1024) {
+                num=num/1024;
+            } else {
+                return num.toFixed(2) + ' B';
+            }
+            if (num>1024) {
+                num=num/1024;
+            } else {
+                return num.toFixed(2) + ' KB';
+            }
+            if (num>1024) {
+                num=num/1024;
+            } else {
+                return num.toFixed(2) + ' MB';
+            }
+            return num.toFixed(2) + ' GB';
+        }
+        function binupfile(file,url,tdnum){
+            var label=document.getElementById('upfile_td2_'+tdnum);
+            var reader = new FileReader();
+            var StartStr='';
+            var MiddleStr='';
+            var StartTime;
+            var EndTime;
+            var newstartsize = 0;
+            if(!!file){
+                var asize=0;
+                var totalsize=file.size;
+                var xhr2 = new XMLHttpRequest();
+                xhr2.open("GET", url);
+                        //xhr2.setRequestHeader('x-requested-with','XMLHttpRequest');
+                xhr2.send(null);
+                xhr2.onload = function(e){
+                    if (xhr2.status==200) {
+                        var html = JSON.parse(xhr2.responseText);
+                        var a = html['nextExpectedRanges'][0];
+                        newstartsize = Number( a.slice(0,a.indexOf("-")) );
+                        StartTime = new Date();
+    <?php if ($_SERVER['admin']) { ?>
+                        asize = newstartsize;
+    <?php } ?>
+                        if (newstartsize==0) {
+                            StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
+                        } else {
+                            StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '&nbsp;<?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
+                        }
+                        var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
+                        if (totalsize>200*1024*1024) chunksize=10*1024*1024;
+                        function readblob(start) {
+                            var end=start+chunksize;
+                            var blob = file.slice(start,end);
+                            reader.readAsArrayBuffer(blob);
+                        }
+                        readblob(asize);
+    <?php if (!$_SERVER['admin']) { ?>
+                        var spark = new SparkMD5.ArrayBuffer();
+    <?php } ?>
+                        reader.onload = function(e){
+                            var binary = this.result;
+    <?php if (!$_SERVER['admin']) { ?>
+                            spark.append(binary);
+                            if (asize < newstartsize) {
+                                asize += chunksize;
+                                readblob(asize);
+                                return;
+                            }
+    <?php } ?>
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("PUT", url, true);
+                            //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+                            bsize=asize+e.loaded-1;
+                            xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize +'/'+ totalsize);
+                            xhr.upload.onprogress = function(e){
+                                if (e.lengthComputable) {
+                                    var tmptime = new Date();
+                                    var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
+                                    var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
+                                    label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s&nbsp;<?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
+                                }
+                            }
+                            var C_starttime = new Date();
+                            xhr.onload = function(e){
+                                if (xhr.status<500) {
+                                var response=JSON.parse(xhr.responseText);
+                                if (response['size']>0) {
+                                    // contain size, upload finish. 有size说明是最终返回，上传结束
+                                    var xhr3 = new XMLHttpRequest();
+                                    xhr3.open("GET", '?action=del_upload_cache&filename=.'+file.lastModified+ '_' +file.size+ '_' +encodeURIComponent(file.name)+'.tmp');
+                                    xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                    xhr3.send(null);
+                                    xhr3.onload = function(e){
+                                        console.log(xhr3.responseText+','+xhr3.status);
+                                    }
+    <?php if (!$_SERVER['admin']) { ?>
+                                    var filemd5 = spark.end();
+                                    var xhr4 = new XMLHttpRequest();
+                                    xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent(file.name)+'&filemd5='+filemd5);
+                                    xhr4.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                    xhr4.send(null);
+                                    xhr4.onload = function(e){
+                                        console.log(xhr4.responseText+','+xhr4.status);
+                                        var filename;
+                                        //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
+                                        //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                        filename = JSON.parse(xhr4.responseText)['name'];
+                                        if (filename=='') {
+                                            alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
+                                            uploadbuttonshow();
+                                            return;
+                                        }
+                                        var lasturl = location.href;
+                                        if (lasturl.substr(lasturl.length-1)!='/') lasturl += '/';
+                                        lasturl += filename + '?preview';
+                                        //window.open(lasturl);
+                                        document.getElementById('upfile_a_'+tdnum).href = lasturl;
+                                        document.getElementById('upfile_a1_'+tdnum).href = filename;
+                                        document.getElementById('upfile_cpbt_'+tdnum).style.display = "";
+                                    }
+    <?php } ?>
+                                    EndTime=new Date();
+                                    MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'&nbsp;';
+                                    if (newstartsize==0) {
+                                        MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
+                                    } else {
+                                        MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
+                                    }
+                                    document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a>&nbsp;<a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
+                                    label.innerHTML=StartStr+MiddleStr;
+                                    uploadbuttonshow();
+    <?php if ($_SERVER['admin']) { ?>
+                                    addelement(response);
+    <?php } ?>
+                                } else {
+                                    if (!response['nextExpectedRanges']) {
+                                        label.innerHTML='<font color="red">'+xhr.responseText+'</font>&nbsp;';
+                                    } else {
+                                        var a=response['nextExpectedRanges'][0];
+                                        asize=Number( a.slice(0,a.indexOf("-")) );
+                                        readblob(asize);
+                                    }
+                                } } else readblob(asize);
+                            }
+                            xhr.send(binary);
+                        }
+                    } else {
+                        if (window.location.pathname.indexOf('%23')>0||file.name.indexOf('%23')>0) {
+                            label.innerHTML='<font color="red"><?php echo getconstStr('UploadFail23'); ?></font>';
+                        } else {
+                            label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
+                        }
+                        uploadbuttonshow();
+                    }
+                }
+            }
+        }
 <?php }
 }
     if (getConfig('admin')!='') { // close div. 有登录或操作，需要关闭DIV时 ?>

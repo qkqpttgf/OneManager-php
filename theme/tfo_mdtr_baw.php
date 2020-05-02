@@ -54,14 +54,6 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
-        @media only screen and (max-width:495px){
-            .title{margin-bottom:24px}
-            .list-wrapper{width:96%; margin:0 auto 10px;}
-            .list-table {padding:8px}
-            .list-table td.file,.list-table th.file{width:95%;}
-            .size, .updated_at{display:none}
-            .list-table td,.list-table th{overflow:auto;text-overflow:unset}
-        }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
@@ -91,6 +83,14 @@
             .list-table td.file,.list-table th.file{width:calc(90% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
             .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:495px){
+            .title{margin-bottom:24px}
+            .list-wrapper{width:96%; margin:0 auto 10px;}
+            .list-table {padding:8px}
+            .list-table td.file,.list-table th.file{width:95%;}
+            .size, .updated_at{display:none}
+            .list-table td,.list-table th{overflow:auto;text-overflow:unset}
         }
     </style>
 </head>
@@ -894,7 +894,7 @@ echo '</script>';
                 tr1.appendChild(td1);
                 td1.setAttribute('style','width:30%');
                 td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
-                td1.innerHTML=file.name+'<br>'+size_format(file.size);
+                td1.innerHTML=file.name+'&nbsp;'+size_format(file.size);
                 var td2=document.createElement('td');
                 tr1.appendChild(td2);
                 td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
@@ -971,9 +971,9 @@ echo '</script>';
                         asize = newstartsize;
     <?php } ?>
                         if (newstartsize==0) {
-                            StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
+                            StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
                         } else {
-                            StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
+                            StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '&nbsp;<?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
                         }
                         var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                         if (totalsize>200*1024*1024) chunksize=10*1024*1024;
@@ -1006,7 +1006,7 @@ echo '</script>';
                                     var tmptime = new Date();
                                     var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                     var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                    label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
+                                    label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s&nbsp;<?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
                                 }
                             }
                             var C_starttime = new Date();
@@ -1049,13 +1049,13 @@ echo '</script>';
                                     }
     <?php } ?>
                                     EndTime=new Date();
-                                    MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'<br>';
+                                    MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'&nbsp;';
                                     if (newstartsize==0) {
-                                        MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                        MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
                                     } else {
-                                        MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                        MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
                                     }
-                                    document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
+                                    document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a>&nbsp;<a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
                                     label.innerHTML=StartStr+MiddleStr;
                                     uploadbuttonshow();
     <?php if ($_SERVER['admin']) { ?>
@@ -1063,7 +1063,7 @@ echo '</script>';
     <?php } ?>
                                 } else {
                                     if (!response['nextExpectedRanges']) {
-                                        label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
+                                        label.innerHTML='<font color="red">'+xhr.responseText+'</font>&nbsp;';
                                     } else {
                                         var a=response['nextExpectedRanges'][0];
                                         asize=Number( a.slice(0,a.indexOf("-")) );
