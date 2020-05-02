@@ -54,7 +54,7 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
-        @media only screen and (max-width:605px){
+        @media only screen and (max-width:480px){
             .title{margin-bottom:24px}
             .list-wrapper{width:96%; margin:0 auto 10px;}
             .list-table {padding:8px}
@@ -63,23 +63,28 @@
         }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
-            .list-table td.size{width:70px !important}
-            .list-table td.updated_at{width:140px !important}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
         @media only screen and (max-width:925px){
             .list-table td.file,.list-table th.file{width:calc(94% - 220px)}
-            .list-table td.size{width:70px !important}
-            .list-table td.updated_at{width:140px !important}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
         @media only screen and (max-width:781px){
             .list-table td.file,.list-table th.file{width:calc(93% - 220px)}
-            .list-table td.size{width:70px !important}
-            .list-table td.updated_at{width:140px !important}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
         @media only screen and (max-width:679px){
             .list-table td.file,.list-table th.file{width:calc(92% - 220px)}
-            .list-table td.size{width:70px !important}
-            .list-table td.updated_at{width:140px !important}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:605px){
+            .list-table td.file,.list-table th.file{width:calc(91% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
     </style>
 </head>
