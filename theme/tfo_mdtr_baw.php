@@ -12,6 +12,7 @@
     <style type="text/css">
         html{filter: url("data:image/svg xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter: grayscale(1);}
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
+        .bkgd{<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>;width:100%;filter:blur(15px);position:absolute;left:0;top:0;}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:middle}
         ::selection{background-color:rgba(200,200,200,0.6)}
@@ -100,11 +101,12 @@
 echo '<script language="javascript">';
 ?>
 <?php 
-echo 'window.onload=function(){var colorList=["#a9ddccbd","#ff6867bd","#809b9cbd","#00cccbbd","#bcbdc1bd","#f6c500bd","#767386bd","#4cda64bd","f44336bd","e91e63bd","9c27b0bd","673ab7bd","3f51b5bd","2196f3bd","03a9f4bd","00bcd4bd","009688bd","4caf50bd","8b34abbd","cddc39bd","c5b73cbd","e4ad08bd","ff5722bd","795548bd","9e9e9ebd","607d8bbd"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
+echo 'window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
 ?>
 <?php 
 echo '</script>';
 ?>
+    <div class="bkgd"></div>
     <div style="padding:1px">
 <?php
     if (getConfig('admin')!='') if (!$_SERVER['admin']) {
