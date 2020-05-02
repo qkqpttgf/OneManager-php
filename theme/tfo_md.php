@@ -29,7 +29,7 @@
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,1)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgb(245,245,245);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
-        .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
+        .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(205,205,205);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden;table-layout:fixed}
         .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
