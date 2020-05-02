@@ -60,6 +60,7 @@
             .list-table {padding:8px}
             .list-table td.file,.list-table th.file{width:95%;}
             .size, .updated_at{display:none}
+            .list-table td,.list-table th{overflow:auto;text-overflow:unset}
         }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
