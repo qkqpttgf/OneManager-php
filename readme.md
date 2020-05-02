@@ -1,42 +1,41 @@
-Tfo:
+# **Tfo**
 
-# List of files changed 文件更改
+<img src="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Tfo.logo.svg" alt="Tfo's Logo" width="250" height="250"/>
+
+## List of feature files 特色文件表
 Information [app.json](/app.json "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md"),[conststr.php](/conststr.php "conststr.php")
 
 UpdateAddress [heroku.php](/platform/heroku.php "heroku.php"),[scf.php](/platform/scf.php "scf.php")
 
 Theme
 
-Material Design for Classic Series(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtr_baw.php](/theme/tfo_mdtr_baw.php "tfo_mdtr_baw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.1)
+Material Design for Classic Series(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtrbaw.php](/theme/tfo_mdtrbaw.php "tfo_mdtrbaw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.1)
 
-具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏多盘和右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改#L107左右more-disk前几行位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题**将要实现**的功能有狠多，敬请期待...
+具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏多盘和右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改more-disk前几行位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...
 
-Original:
-
+## Deploy 部署
 Install program first, then add onedrive in setup after login.  
 先安装程序，登录后在设置中添加onedrive。  
 
-# Deploy to heroku  
+### Deploy to heroku  部署到Heroku
 Official: https://heroku.com  
 
 How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
-DEMO:  https://herooneindex.herokuapp.com/  
-
-# Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
+### Deploy to VPS (Virtual Private Server) 部署到VPS或空间  
 How to Install:  
-    1.Start web service on your server (httpd or other), make sure you can visit it.  
+* 1.Start web service on your server (httpd or other), make sure you can visit it.  
     启动web服务器，确保你能访问到。  
-    2.Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
+* 2.Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
     开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
-    3.Upload code.  
+* 3.Upload code.  
     上传好代码。  
-    4.Change the file config.php can be read&write (666 is suggested).  
+* 4.Change the file config.php can be read&write (666 is suggested).  
     让代码中的config.php文件程序可读写，推荐chmod 666 config.php。  
-    5.View the website in chrome or other.  
+* 5.View the website in chrome or other.  
     在浏览器中访问。  
 
-# Deploy to SCF  
+### Deploy to SCF  部署到腾讯云函数
 Official: https://cloud.tencent.com/product/scf  
 
 ~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
@@ -44,9 +43,7 @@ Official: https://cloud.tencent.com/product/scf
 先手动在环境变量添加Region，ap-hongkong或ap-guangzhou之类，具体看 https://cloud.tencent.com/document/api/583/17238 最底下，然后再安装。  
 添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 
-DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
-
-# Features 特性  
+## Original Features 原始特性 
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
 下载时，由程序解析出直链，浏览器直接从微软Onedrive服务器下载文件，服务器只消耗与微软通信的少量流量。  
 When uploading files, the program produce a direct url, visitor upload files to MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
@@ -63,6 +60,3 @@ If there is 'index.html' file, program will only show the content of 'index.html
 如果目录中有index.html文件，只会输出显示html文件，不显示程序框架。  
 Click 'EditTime' or 'Size', the list will sort by time or size, Click 'File' can resume sort.  
 点击“时间”、“大小”，可以排序显示，点“文件”恢复原样。  
-
-QQ Group: 943919989 (请看完上面的中英双语再加群，谢谢！)  
-Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
