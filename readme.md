@@ -12,7 +12,7 @@ Theme
 
 Material Design for Classic Series(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtrbaw.php](/theme/tfo_mdtrbaw.php "tfo_mdtrbaw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.1)
 
-具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏多盘和右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改more-disk前几行位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...
+具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏右上角语言框**，请谨慎使用！若强迫开启多盘，可以自行定位修改more-disk前几行位置去掉display:none !important字符。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...
 
 ## Deploy 部署
 Install program first, then add onedrive in setup after login.  
