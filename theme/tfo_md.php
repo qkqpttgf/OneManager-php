@@ -57,6 +57,7 @@
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgb(245,245,245);}
+        .markdown-body{padding:20px;text-align:left;font-size:14px !important}
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
