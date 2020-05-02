@@ -1,4 +1,4 @@
-<!-- theme purenice designed & coded by wendale-->
+<!-- theme purenice designed & coded by wendale v1.1 Responsive fixed on May 1st-->
 <!DOCTYPE html>
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
@@ -33,10 +33,10 @@
         .fix{height:60px;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;}
         .more-disk{border-bottom:1px solid #E8E9EC;height:40px;white-space:nowrap;overflow:auto;}
-        .more-disk a{display:block;float:left;width:20%;height:38px;text-align:center;font-weight: bold;font-size: 18px;line-height:38px;color:#A6AAB4; }
+        .more-disk a{display:block;float:left;width:30%;height:38px;text-align:center;font-weight: bold;font-size: 18px;line-height:38px;color:#A6AAB4; }
         .more-disk a:hover, .more-disk a[now]{ color: #3B414B;border-bottom:2px solid #FF7D00;}
         .list-table{width:100%;border-spacing:0;margin-bottom:20px;}
-        .list-table tr{display:block;margin:10px 20px;width:96%;float:left;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
+        .list-table tr{display:block;margin:10px 10px;width:96%;float:left;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
         .list-table tr[data-to]:hover{background:#10C971;color:white;}
         .list-table tr[data-to]:hover a{color:white}
         .list-table td,.list-table th{display:block;float:left;line-height:60px;text-align:left;}
@@ -67,20 +67,28 @@
         .operatediv_close{position:absolute;right:15px;top:15px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
         .markdown-body{padding:20px;text-align:left}
-        @media only screen and (max-width:480px){
-            .title{margin-bottom:24px}
-            .list-wrapper{width:95%; margin-bottom:24px;}
-            .list-table {padding:8px}
-            .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
-            .size, .updated_at{display:none}
-        }
+        
         .update_notice{position:absolute;color:#A6AAB4;left:10%;margin-top:10px;}
-        .upload_style{height:60px;width:96%;margin:20px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
-        /* .upload_style .file{position: relative;float:left;width:100px;height:60px;;display: block;background: #FF7D00;border-radius: 6px;overflow: hidden;color: #fff;text-decoration: none;text-align:center;line-height: 60px;font-size:14px;pointer-events: none;} */
+        .upload_style{height:60px;width:96%;margin:10px;background:#ffffff;box-shadow: 0px 4px 26px rgba(0, 0, 0, 0.06);border-radius: 6px;}
         .upload_style input[type="file"]{display:block;color:#A6AAB4;float:left;height:38px;margin:20px 0 0 20px;outline:none;font-size:14px;text-align:center;}
         .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:160px;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
         .upload_style .list-table tr td{line-height:30px;margin:10px 20px;}
         .upload_style .list-table tr td button{margin-left:10px;}
+        @media only screen and (max-width:480px){
+            .title{margin-bottom:24px}
+            .list-wrapper{width:95%; margin-bottom:24px;}
+            .list-table {padding:8px}
+            .list-table td button,.list-table th button{cursor:pointer;color:#ffffff;height:24px;background:#FF7D00;padding:0 8px;border-width:0;border-radius:6px;box-shadow: 0px 2px 6px rgba(255, 125, 0, 0.5);}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto;line-height:40px;}
+            .list-table td.file,.list-table th.file{padding-left: 10px;width: 96%;}
+            .size, .updated_at{display:none}
+            .changelanguage{color:#fff;}
+            .list-table td.updated_at,.list-table th.updated_at{width:50%;text-align:left;margin-left:10px;}
+            .list-table td.size,.list-table th.size{width:30%;text-align:left;}
+            .list-table td.file ion-icon{float:left;margin-top:13px;margin-right:5px;}
+            .upload_style input[type="file"]{display:block;color:#A6AAB4;float:left;height:38px;margin:18px 0 0 10px;outline:none;font-size:14px;text-align:center;width:70%;}
+            .upload_style input[type="button"]{display:block;color:#fff;float:right;height:60px;width:25%;outline:none;font-size:16px;background:#613EEA;border-radius:6px;border:0;}
+        }
         
     </style>
 </head>
@@ -249,8 +257,8 @@
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
                         <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
-                        <th class="updated_at" width="25%"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
-                        <th class="size" width="15%"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
+                        <th class="updated_at"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
+                        <th class="size"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
                     </tr>
                     <!-- Dirs -->
 <?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
