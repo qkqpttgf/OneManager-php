@@ -13,6 +13,7 @@
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:middle}
+        ::selection{background-color:rgba(200,200,200,0.6)}
         input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
@@ -893,14 +894,13 @@ echo '</script>';
                 tr1.setAttribute('style','height:fit-content');
                 var td1=document.createElement('td');
                 tr1.appendChild(td1);
-                td1.setAttribute('style','width:24%');
+                td1.setAttribute('style','width:30%');
                 td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
                 td1.innerHTML=file.name+'&nbsp;'+size_format(file.size);
                 var td2=document.createElement('td');
                 tr1.appendChild(td2);
                 td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
                 td2.setAttribute('style','text-overflow:ellipsis');
-                td2.setAttribute('style','width:71%');
                 td2.setAttribute('style','white-space:nowrap');
                 td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
                 if (file.size>100*1024*1024*1024) {
