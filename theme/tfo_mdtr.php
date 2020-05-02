@@ -894,7 +894,7 @@ echo '</script>';
                 tr1.setAttribute('style','height:fit-content');
                 var td1=document.createElement('td');
                 tr1.appendChild(td1);
-                td1.setAttribute('style','width:30%');
+                td1.setAttribute('style','width:fit-content');
                 td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
                 td1.innerHTML=file.name+'&nbsp;'+size_format(file.size);
                 var td2=document.createElement('td');
@@ -975,9 +975,9 @@ echo '</script>';
                         asize = newstartsize;
     <?php } ?>
                         if (newstartsize==0) {
-                            StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
+                            StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                         } else {
-                            StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '&nbsp;<?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'&nbsp;' ;
+                            StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '&nbsp;<?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
                         }
                         var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                         if (totalsize>200*1024*1024) chunksize=10*1024*1024;
@@ -1055,9 +1055,9 @@ echo '</script>';
                                     EndTime=new Date();
                                     MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'&nbsp;';
                                     if (newstartsize==0) {
-                                        MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
+                                        MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                     } else {
-                                        MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s&nbsp;';
+                                        MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                     }
                                     document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a>&nbsp;<a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
                                     label.innerHTML=StartStr+MiddleStr;
