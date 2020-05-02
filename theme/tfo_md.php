@@ -13,14 +13,14 @@
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:middle}
-        input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
+        input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
     	input:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
-        textarea{font-weight:bold;border:1px solid rgba(27,31,35,1);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
+        textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgb(3,102,214);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}   
-        .title{border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
+        .title{transition-duration: 0.3s;border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
         .title:hover{background-color:rgba(245,245,245);box-shadow:0 1px 15px rgba(27,31,35,.15);}
-        .title a{text-shadow:0 1px 15px rgba(27,31,35,1);color:#FFF;text-decoration:none}
+        .title a{transition-duration: 0.3s;text-shadow:0 1px 15px rgba(27,31,35,1);color:#FFF;text-decoration:none}
         .title a:hover{text-shadow:0 1px 15px rgba(27,31,35,0);color:#24292e}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
