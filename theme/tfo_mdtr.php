@@ -145,7 +145,7 @@ echo '</script>';
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper" style="display:none !important">
+    <div class="list-wrapper">
         <div class="list-container">
             <div class="list-header-container">
             <div class="more-disk">

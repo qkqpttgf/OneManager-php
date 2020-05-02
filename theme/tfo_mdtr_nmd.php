@@ -10,21 +10,20 @@
     <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
-        html{filter: url("data:image/svg xml;utf8,<svg xmlns=\'http://www.w3.org/2000/svg\'><filter id=\'grayscale\'><feColorMatrix type=\'matrix\' values=\'0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0.3333 0.3333 0.3333 0 0 0 0 0 1 0\'/></filter></svg>#grayscale");filter:progid:DXImageTransform.Microsoft.BasicImage(grayscale=1);-webkit-filter: grayscale(1);}
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;}
         .bkgd{<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>;width:100%;height:100%;filter:blur(1px)brightness(88%);position:fixed;left:0;top:0;z-index:-1}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:middle}
         ::selection{background-color:rgba(200,200,200,0.6)}
         input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
-    	input:hover{background:rgb(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
+    	input:hover{background:rgba(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
         textarea:hover{background:rgba(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}
         .title{text-shadow:0 1px 15px rgba(27,31,35,1);text-decoration:none;transition-duration: 0.3s;border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
         .title:hover{text-shadow:0 1px 15px rgba(27,31,35,0);background-color:rgba(200,200,200,.6);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .title a{color:#FFF}
-        .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
+       .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
         .list-header-container{position:relative}
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
@@ -44,7 +43,8 @@
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
-        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
+        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .list-table .size,.list-table .updated_at{text-align:right}
+        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -145,7 +145,7 @@ echo '</script>';
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper">
+    <div class="list-wrapper" style="display:none !important">
         <div class="list-container">
             <div class="list-header-container">
             <div class="more-disk">
@@ -414,7 +414,7 @@ echo '</script>';
     </div>
     <div class="list-wrapper">
         <div class="list-container">
-        <div class="list-body-container">
+            <div class="list-body-container">
                 <div class="readme">
                     <div class="markdown-body" id="readme">
                         <textarea id="readme-md" style="display:none;">' . fetch_files(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'] . '</textarea>
