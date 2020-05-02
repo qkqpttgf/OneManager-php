@@ -36,8 +36,8 @@
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td.updated_at,.list-table th.updated_at{width:15%;}
-        .list-table td.file,.list-table th.file{width:75%;}
-        .list-table td.size,.list-table th.size{width:5%;}
+        .list-table td.file,.list-table th.file{width:70%;}
+        .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px}
         .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
         .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgb(3,102,214);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .list-table .size,.list-table .updated_at{text-align:right}
@@ -54,13 +54,37 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
-        @media only screen and (max-width:480px){
+        @media only screen and (max-width:605px){
             .title{margin-bottom:24px}
             .list-wrapper{width:96%; margin:0 auto 10px;}
             .list-table {padding:8px}
             .list-table td.file,.list-table th.file{width:95%;}
             .list-table td, .list-table th{white-space:nowrap;overflow:auto}
             .size, .updated_at{display:none}
+        }
+        @media only screen and (max-width:1152px){
+            .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
+            .size{width:140px}
+            .updated_at{width:70px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto}
+        }
+        @media only screen and (max-width:925px){
+            .list-table td.file,.list-table th.file{width:calc(94% - 220px)}
+            .size{width:140px}
+            .updated_at{width:70px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto}
+        }
+        @media only screen and (max-width:781px){
+            .list-table td.file,.list-table th.file{width:calc(93% - 220px)}
+            .size{width:140px}
+            .updated_at{width:70px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto}
+        }
+        @media only screen and (max-width:679px){
+            .list-table td.file,.list-table th.file{width:calc(92% - 220px)}
+            .size{width:140px}
+            .updated_at{width:70px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto}
         }
     </style>
 </head>
