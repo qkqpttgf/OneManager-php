@@ -1,6 +1,6 @@
 20200503-1848.18
-Rebuild theme.
-重建主题文件结构。
+Rebuild theme. Add custom Css & custom Script, add FunctionalityFile: head.omf & foot.omf.
+重建主题文件结构。增加自定义css与自定义script。增加2个功能文件：head.omf、foot.omf。
 
 20200402-1830.17
 Oneclick update can select which branch to update. Now use the accept language instead of the language config.
