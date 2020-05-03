@@ -11,7 +11,7 @@ example:
         "$0" -i
         "$0" -u
         "$0" -b master
-        "$0" - -b master
+        "$0" -u -b master
         "$0" -ib test
 "
 #  exit
