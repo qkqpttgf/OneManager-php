@@ -1,9 +1,9 @@
 <?php
 
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
-$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg'];
+$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg', 'm4a'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py'];
+$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py', 'omf'];
 $exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
@@ -66,6 +66,8 @@ $constStr = [
         'en-us' => [
             'admin' => 'The admin password, Login button will not show when empty',
             'adminloginpage' => 'if set, the Login button will not display, and the login page no longer \'?admin\', it is \'?{this value}\'.',
+            'customScript' => '<script> in all pages, e.g. http turn to https',
+            'customCss' => '<style> in <head>',
             'domain_path' => 'more custom domain, format is a1.com:/dirto/path1|b2.com:/path2',
             'diskname' => 'The disk name you want show.',
             'disktag' => 'A tag used in store config and url.',
@@ -81,6 +83,8 @@ $constStr = [
         'zh-cn' => [
             'admin' => '管理密码，不添加时不显示登录页面且无法登录。',
             'adminloginpage' => '如果设置，登录按钮及页面隐藏。管理登录的页面不再是\'?admin\'，而是\'?此设置的值\'。',
+            'customScript' => '<script>，在所有页都会存在,例如放一个http跳转https',
+            'customCss' => '<style>，在<head>最后面',
             'domain_path' => '使用多个自定义域名时，指定每个域名看到的目录。格式为a1.com:/dirto/path1|b1.com:/path2，比private_path优先。',
             'diskname' => '这个盘你想显示什么名称。',
             'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
@@ -178,7 +182,7 @@ $constStr = [
         'ko-kr' => '로그인',
         'fa' => 'ورود',
     ],
-    'encrypt' => [
+    'Encrypt' => [
         'en-us' => 'Encrypt',
         'zh-cn' => '加密',
         'ja' => '暗号化',
@@ -332,6 +336,10 @@ $constStr = [
         'ko-kr' => '모든 다운로드 링크 복사',
         'fa' => 'کپی از تمام لینک ها',
     ],
+    'Search' => [
+        'en-us' => 'Search',
+        'zh-cn' => '搜索',
+    ],
     'EditTime' => [
         'en-us' => 'EditTime',
         'zh-cn' => '修改时间',
@@ -401,6 +409,14 @@ $constStr = [
         'ja' => 'アップロードする',
         'ko-kr' => '업로드',
         'fa' => 'آپلود',
+    ],
+    'UploadFile' => [
+        'en-us' => 'Upload File(s)',
+        'zh-cn' => '上传文件',
+    ],
+    'UploadFolder' => [
+        'en-us' => 'Upload Folder',
+        'zh-cn' => '上传文件夹',
     ],
     'FileSelected' => [
         'en-us' => 'Select File',
@@ -581,11 +597,11 @@ $constStr = [
         'fa' => 'در حال ذخیره refresh_token!',
     ],
     'MayinEnv' => [
-        'en-us' => 'The \'Onedrive_ver\' may in Config',
-        'zh-cn' => 'Onedrive_ver应该已经写入',
-        'ja' => 'Onedrive_verは環境変数に書き込まれている必要があります',
-        'ko-kr' => 'Onedrive_verが書き込まれている必要があります',
-        'fa' => 'The \'Onedrive_ver\' may in Config',
+        'en-us' => 'The \'Drive_ver\' may in Config',
+        'zh-cn' => 'Drive_ver应该已经写入',
+        'ja' => 'Drive_verは環境変数に書き込まれている必要があります',
+        'ko-kr' => 'Drive_verが書き込まれている必要があります',
+        'fa' => 'The \'Drive_ver\' may in Config',
     ],
     'Wait' => [
         'en-us' => 'Wait',
@@ -633,6 +649,10 @@ $constStr = [
         'ko-kr' => '중국 Onedrive',
         'fa' => 'Onedrive در چین',
     ],
+    'DriveVerShareurl' => [
+        'en-us' => 'A share link of a folder',
+        'zh-cn' => '共享链接',
+    ],
     'UseShareLink' => [
         'en-us' => 'Share a folder in Onedrive (enable EDIT for everyone), input the link url below.',
         'zh-cn' => '对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
@@ -654,13 +674,12 @@ $constStr = [
         'en-us' => 'Use space in Sharepoint website instead of Onedrive',
         'zh-cn' => '使用Sharepoint网站的空间，不使用Onedrive',
     ],
-    'GetSharepointName' => [
-        'en-us' => 'Login office.com and click the SharePoint, create a website or find an exist website, input the name below',
-        'zh-cn' => '登录office.com，点击Sharepoint，创建一个网站或使用原有网站，然后将它的名字填在下方',
+    'GetSharepointSiteAddress' => [
+        'en-us' => 'Login office.com and click the SharePoint, create a website or find an exist website, input the Site address below',
+        'zh-cn' => '登录office.com，点击Sharepoint，创建一个网站（或使用原有网站），然后将它的站点地址填在下方',
     ],
-    'InputSharepointName' => [
-        'en-us' => 'Input the name of Sharepoint website',
-        'zh-cn' => '输入Sharepoint网站的名称',
+    'InputSharepointSiteAddress' => [
+        'en-us' => 'https://xxxxx.sharepoint.com/sites(teams)/{name}',
     ],
     'TagFormatAlert' => [
         'en-us' => 'Tag must start with a letter, end with a letter or digit and can only contain lowercase letters, digits, and dashes， at least 2 letters!',
