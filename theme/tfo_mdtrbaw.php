@@ -35,7 +35,7 @@
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.3);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden;table-layout:fixed}
-        .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
+        .list-table tr{height:fit-content;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
@@ -45,6 +45,7 @@
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
         .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
+        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -397,7 +398,7 @@ echo '</script>';
                     if ($_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:0 0 16px 0">
                 <center>
-                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
+                    <input style="width:60%" id="upload_file" type="file" name="upload_filename" multiple="multiple">
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </center>
                 </div>
@@ -428,7 +429,7 @@ echo '</script>';
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
+		            <input style="width: 60%" name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
 		            <input type="submit" value="'.getconstStr('Submit').'">
 	                </form>
                 </center>
@@ -530,7 +531,7 @@ echo '</script>';
                         </tr>
                         <tr>
                         <td><?php echo getconstStr('Name'); ?>：</td>
-                            <td><input id="create_input" name="create_name" type="text" value=""></td>
+                        <td><input style="width: 94%" id="create_input" name="create_name" type="text" value=""></td>
                         </tr>
                         <tr id="create_text_div">
                             <td><?php echo getconstStr('Content'); ?>：</td>
@@ -561,6 +562,13 @@ echo '</script>';
 	</div>
 <?php   }
     } ?>
+        <div class="list-wrapper">
+        <div class="list-container">
+            <div class="list-header-container">
+            <div style="color: rgba(247,247,249,1);"><a href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
+            </div>
+        </div>
+    </div>
     <div style="color: rgba(247,247,249,0);"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
 </body>
 <?php if ($files) { ?>
@@ -894,7 +902,6 @@ echo '</script>';
                 var tr1=document.createElement('tr');
                 table1.appendChild(tr1);
                 tr1.setAttribute('data-to',1);
-                tr1.setAttribute('style','height:fit-content');
                 var td1=document.createElement('td');
                 tr1.appendChild(td1);
                 td1.setAttribute('style','width:fit-content');
