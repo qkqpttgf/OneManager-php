@@ -561,8 +561,8 @@ echo '</script>';
 	</div>
 <?php   }
     } ?>
-    <div style="color: rgba(247,247,249,1);text-align:center">The Website used <a href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
-    <div style="color: rgba(247,247,249,0);text-align:center"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
+    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">The Website used <a href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
+    <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:6px"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
 </body>
 <?php if ($files) { ?>
 <?php if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
