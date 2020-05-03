@@ -1,429 +1,394 @@
-
+<!--IconValuesStart-->
+{
+    "music":"musical-notes",
+    "video":"logo-youtube",
+    "img":"image",
+    "office":"paper",
+    "txt":"clipboard",
+    "zip":"filing",
+    "iso":"disc",
+    "apk":"logo-android",
+    "exe":"logo-windows",
+    "default":"document"
+}
+<!--IconValuesEnd-->
 <!DOCTYPE html>
-<html lang="<?php echo $constStr['language']; ?>">
+<html lang="<!--constStr@language-->">
 <head>
-    <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) { if (getConfig('diskname')!='') $diskname = getConfig('diskname'); else $diskname = $_SERVER['disktag']; echo ' - ' . $diskname; } ?> - <?php echo $_SERVER['sitename'];?></title>
+    <title><!--Title--></title>
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
-    <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
-    <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="https://cloud.tencent.com/favicon.ico" type="image/x-icon" />
-    <style type="text/css">
-        :root{font-size:10px;font-family:Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif}body{background-color:#8ec5fc;background-image:linear-gradient(62deg,#8ec5fc 0,#e0c3fc 100%);min-height:100vh;margin:auto;padding:0 .5rem;max-width:960px;display:flex;flex-direction:column;justify-content:center}body div[style="color: rgba(247,247,249,0);"]{margin-top:4rem;flex:1 0;display:flex;align-items:flex-end}body a.login,body li.operate{font-size:1.2rem;color:#399;position:relative;list-style:none;width:5rem}body a.login ion-icon,body li.operate ion-icon{vertical-align:middle}body a.login:hover ul,body li.operate:hover ul{display:flex}body a.login ul,body li.operate ul{width:2rem;list-style-type:none;display:none;position:absolute;margin-top:0;top:0}body a.login ul li,body li.operate ul li{display:flex;padding:.2rem;z-index:99;border-radius:2px;background-color:#ffefd5;border:dashed 1px #9acd32}body a.login ul li:hover,body li.operate ul li:hover{background-color:#fff}body a.login ul li a,body li.operate ul li a{margin-left:.8rem;width:1.7rem;color:#399;text-decoration:none}body a.login ul li a:hover,body li.operate ul li a:hover{cursor:pointer}body div[style="padding:1px"]{height:4rem}body div.operatediv{position:fixed;background-color:#ddd;border:solid 2px #8a2be2;box-shadow:0 0 10px #399;border-radius:2px;z-index:999}body div.operatediv div{color:#399;font-size:1.5rem;display:flex;flex-direction:column;padding:1rem}body div.operatediv div a.operatediv_close,body div.operatediv div input[type=submit]{align-self:flex-end;width:auto;padding:1px 5px;margin:5px 0;border:solid 2px #399;border-radius:2px;text-align:center;font-size:1.5rem;color:#399}body div.operatediv div a.operatediv_close:hover,body div.operatediv div input[type=submit]:hover{background-color:#399;cursor:pointer;color:#fff}body div.operatediv div label{color:#333;font-size:1.8rem;float:left}body div.operatediv div input,body div.operatediv div select{font-size:1.6rem}body div.mask{display:none}body div[style="position:absolute;"]{top:2rem;background-color:#ff0;border-radius:2px;padding:5px}body h1.title{margin:auto;font-size:3.5rem}body h1.title a{font-family:Cursive;text-decoration:none;color:#3290e7;text-shadow:2px 2px 5px rgba(50,144,231,.5);transition:.2s}body h1.title a:hover{text-shadow:none;font-size:3.8rem}body select.changelanguage{display:none}body div.onemoe-more-disk{margin:auto;margin-top:1rem}body div.onemoe-more-disk div.more-disk{background:#f2f5fa;border-radius:5px;display:flex;flex-wrap:wrap;justify-content:center;padding-left:10px;padding-right:10px}body div.onemoe-more-disk div.more-disk:hover{box-shadow:0 0 5px #399}body div.onemoe-more-disk div.more-disk a{text-decoration:none;font-weight:700;font-size:1.3rem;padding:8px 16px;margin:0;color:#999;transition:.4s;box-sizing:border-box}body div.onemoe-more-disk div.more-disk a[now]{color:#399;background-color:#dbc3fc;border-bottom:solid 3px #399}body div.onemoe-more-disk div.more-disk a:hover{color:#fff;background-color:#399;box-shadow:0 0 5px #9c9}body div.list-wrapper#head-div div.list-header-container{margin-top:1rem}body div.list-wrapper#head-div div.list-header-container div.readme p{font-size:large;padding:0 2rem}body div.list-wrapper#list-div{border-radius:5px;border:solid 5px rgba(137,43,226,.2);margin-top:1rem;font-size:1.5rem}body div.list-wrapper#list-div div.list-header-container{border-radius:2px;border-bottom:dashed 1px rgba(59,66,107,.3);display:flex;align-items:center;background-color:#e0c3fc98}body div.list-wrapper#list-div div.list-header-container a.back-link{margin-left:1rem}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon{margin-top:2px;color:#399;width:20px;height:20px}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon:hover{color:#f90}body div.list-wrapper#list-div div.list-header-container h3.table-header{font-size:1.5rem;margin:10px;color:#399;word-break:break-all}body div.list-wrapper#list-div div.list-header-container h3.table-header a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-header-container h3.table-header a:hover{color:#f90;text-decoration:underline}body div.list-wrapper#list-div div.list-body-container table.list-table{margin:auto;min-width:100%}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{color:#333;background-color:#fff;margin:.6rem;border:solid 1px #399;border-radius:5px;display:grid;grid-template-columns:6fr 2fr 1fr}@media screen and (max-width:768px){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:6fr 2fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-last-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-last-of-type(2){display:none}}@media screen and (orientation:portrait){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:1fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{display:none}}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type{border:none;background:rgba(0,0,0,0);margin:-2px 1.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button{color:#399;font-size:1.2rem;margin-left:1rem;padding:.3rem .8rem;border:solid 2px #399;border-radius:1.2rem;background:rgba(221,221,221,.25)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button:hover{box-shadow:0 0 5px #399;cursor:pointer;color:#f5f5f5;border:solid 2px #399;background-color:rgba(137,43,226,.1)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:nth-of-type(2){margin-top:0}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type){height:40px;box-sizing:border-box;transition:.2s;border:solid 1px #399}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type):hover{border-width:2px;background-color:rgba(137,43,226,.1);transform:translateY(-2px);box-shadow:0 5px 10px rgba(73,90,47,.4)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th{padding:1rem;align-items:center;display:flex;white-space:nowrap;overflow:hidden}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a{color:#333;margin-left:.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a:not([onclick]):hover,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a:not([onclick]):hover{color:#399;text-decoration:underline}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type>ion-icon,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type>ion-icon{color:#333}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-of-type(2){justify-content:flex-end;text-align:right}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{justify-content:flex-end;text-align:right}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li{list-style:none}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th a{text-decoration:none;overflow:hidden;text-overflow:ellipsis}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate{display:flex;align-items:center}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul{top:-.7rem;left:1rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li{padding:.5rem;font-size:1.3rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li a{width:auto;padding-right:.8rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li:hover a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li:hover a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div#upload_div center{margin-top:1rem;display:flex;justify-content:space-evenly;align-items:center}body div.list-wrapper#list-div div.list-body-container div#upload_div center input{font-size:1.2rem;vertical-align:middle;padding:.5rem;min-width:5rem;border:solid 2px #696969;border-radius:4px;background-color:#dcdcdc}body div.list-wrapper#list-div div.list-body-container div#upload_div center input:hover{color:#399;box-shadow:0 0 10px #6495ed;cursor:pointer}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div{display:flex;flex-direction:column;align-items:center}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea{border:#999 solid 2px;padding:5px}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea:hover{border:#399 solid 2px;box-shadow:0 0 5px #399}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div textarea:focus{outline-color:#999}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a{color:#399;text-decoration:none;font-size:1.6rem;margin-top:15px;padding:3px 14px 3px 10px;width:auto;border:solid 2px #399;border-radius:5px;transition:.4s;background:#fff}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a:hover{font-weight:700;color:#fff;background:#399;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div a .hydrated{display:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div img{width:100%}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] div #txt{width:100%}body div.list-wrapper#list-div:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}body div.onemoe-readme{width:100%;margin:2rem auto 0;border-radius:3px;border:solid 5px rgba(137,43,226,.2);box-sizing:border-box}body div.onemoe-readme div.markdown-body{padding:1rem}body div.onemoe-readme:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}
-        body{<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-size:cover;background-attachment:fixed;<?php } ?>}
-        body{<?php if (getConfig('background')) { ?><?php echo getConfig('background'); ?><?php } ?>}
-        <?php if (getConfig('background')) { ?><?php echo getConfig('background'); ?><?php } ?>
+    <meta name="keywords" content="<!--Keywords-->">
+    <meta name="description" content="<!--Description-->">
+    <link rel="icon" href="<!--base_disk_path-->favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<!--base_disk_path-->favicon.ico" type="image/x-icon" />
+    <style>
+	:root{font-size:10px;font-family:Helvetica Neue,Helvetica,Arial,Microsoft Yahei,Hiragino Sans GB,Heiti SC,WenQuanYi Micro Hei,sans-serif}body{background-color:#8ec5fc;background-image:linear-gradient(62deg,#8ec5fc 0,#e0c3fc 100%);min-height:100vh;margin:auto;padding:0 .5rem;max-width:1024px;display:flex;flex-direction:column;justify-content:center}body div#top-div{display:flex;height:25px}body div#top-div select.changelanguage{border:solid 1px #969696;border-radius:2px;margin-left:auto}body a.login,body li.operate{font-size:1.2rem;color:#399;position:relative;list-style:none;width:5rem}body a.login:hover,body li.operate:hover{cursor:pointer}body a.login ion-icon,body li.operate ion-icon{vertical-align:middle}body a.login:hover ul,body li.operate:hover ul{display:flex}body a.login ul,body li.operate ul{width:2rem;list-style-type:none;display:none;position:absolute;margin-top:0;top:0}body a.login ul li,body li.operate ul li{display:flex;padding:.2rem;z-index:99;border-radius:2px;background-color:#ffefd5;border:dashed 1px #9acd32}body a.login ul li:hover,body li.operate ul li:hover{background-color:#fff}body a.login ul li a,body li.operate ul li a{margin-left:.8rem;width:1.7rem;color:#399;text-decoration:none}body a.login ul li a:hover,body li.operate ul li a:hover{cursor:pointer}body div[style="padding:1px"]{height:4rem}body div.operatediv{position:fixed;background-color:#ddd;border:solid 2px rgba(137,43,226,.5);border-radius:4px;z-index:999}body div.operatediv:hover{box-shadow:0 0 10px #399}body div.operatediv div{color:#399;font-size:1.5rem;display:flex;flex-direction:column;padding:1rem}body div.operatediv div a.operatediv_close,body div.operatediv div input[type=submit]{align-self:flex-end;width:auto;padding:1px 5px;margin:5px 0;border:solid 2px #399;border-radius:2px;text-align:center;font-size:1.5rem;color:#399}body div.operatediv div a.operatediv_close:hover,body div.operatediv div input[type=submit]:hover{background-color:#399;cursor:pointer;color:#fff}body div.operatediv div label{color:#333;font-size:1.8rem;float:left}body div.operatediv div input,body div.operatediv div select{font-size:1.6rem}body div.mask{display:none}body>div[style="position:absolute;"]{top:2rem;background-color:#ff0;border-radius:2px;padding:5px}body>h1.title{margin:auto;font-size:3rem}body>h1.title a{font-family:Cursive;text-decoration:none;color:#3290e7;text-shadow:2px 2px 5px rgba(50,144,231,.3);transition:.2s}body>h1.title a:hover{text-shadow:none;font-size:3.5rem}body div.list-wrapper#more-disk-div{margin:auto;margin:5px auto}body div.list-wrapper#more-disk-div div.more-disk{background-color:rgba(255,255,255,.7);border-radius:5px;display:flex;flex-wrap:wrap;justify-content:center;padding-left:10px;padding-right:10px}body div.list-wrapper#more-disk-div div.more-disk:hover{box-shadow:0 0 5px #399}body div.list-wrapper#more-disk-div div.more-disk a{text-decoration:none;font-weight:700;font-size:1.3rem;padding:7px 15px;margin:0;color:#888;transition:.4s;box-sizing:border-box}body div.list-wrapper#more-disk-div div.more-disk a[now]{color:#399;background-color:#dbc3fc;border-bottom:solid 3px #399}body div.list-wrapper#more-disk-div div.more-disk a:hover{color:#fff;background-color:#399;box-shadow:0 0 5px #9c9}body div.list-wrapper#head-div div.list-header-container div.readme p,body div.list-wrapper#head-om-div div.list-header-container div.readme p{font-size:large;padding:0 1rem;margin:5px 0;color:#333}body div.list-wrapper#list-div{background-color:rgba(245,245,245,.3);border-radius:5px;border:solid 5px rgba(137,43,226,.3);font-size:1.5rem;margin:5px 0}body div.list-wrapper#list-div:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}body div.list-wrapper#list-div div.list-header-container{border-radius:2px;border-bottom:dashed 1px rgba(59,66,107,.3);display:flex;align-items:center;background-color:#e0c3fc98}body div.list-wrapper#list-div div.list-header-container a.back-link{margin-left:1rem}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon{margin-top:2px;color:#399;width:20px;height:20px;background-color:#eee;border-radius:50%;border:solid 2px #399;transition:.4s}body div.list-wrapper#list-div div.list-header-container a.back-link ion-icon:hover{background-color:#fff;box-shadow:0 0 5px #399;transform:scale(1.15) rotate(450deg)}body div.list-wrapper#list-div div.list-header-container h3.table-header{font-size:1.5rem;margin:10px;color:#399;word-break:break-all;color:#666}body div.list-wrapper#list-div div.list-header-container h3.table-header a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-header-container h3.table-header a:hover{color:#008b8b;text-decoration:underline}body div.list-wrapper#list-div div.list-body-container table.list-table{margin:auto;min-width:100%}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{color:#333;margin:.6rem;border:solid 1px #399;border-radius:4px;display:grid;grid-template-columns:6fr 2fr 1fr}@media screen and (max-width:768px){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:6fr 2fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-last-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-last-of-type(2){display:none}}@media screen and (orientation:portrait){body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr{grid-template-columns:1fr}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{display:none}}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type{border:none;background:rgba(0,0,0,0);margin:-2px 1.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button{color:#399;font-size:1.2rem;margin-left:1rem;padding:.3rem .8rem;border:solid 2px #399;border-radius:1.2rem;background:rgba(255,255,255,.25)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:first-of-type button:hover{box-shadow:0 0 5px #399;cursor:pointer;background-color:#f2f5fa}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:nth-of-type(2){margin-top:0}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type){height:40px;box-sizing:border-box;transition:.2s;border:solid 1px #399;background-color:rgba(255,255,255,.7)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr:not(:first-of-type):hover{background-color:rgba(255,255,255,.3);transform:translateY(-2px);box-shadow:0 5px 10px rgba(73,90,47,.4)}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th a:hover{cursor:n-resize}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th{padding:1rem;align-items:center;display:flex;white-space:nowrap;overflow:hidden}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a{color:#333;margin-left:.5rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type a:not([onclick]):hover,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type a:not([onclick]):hover{color:#399;text-decoration:underline;cursor:pointer}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:first-of-type>ion-icon,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:first-of-type>ion-icon{color:#333}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:nth-of-type(2),body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:nth-of-type(2){justify-content:flex-end;text-align:right;cursor:default}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td:last-of-type,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th:last-of-type{justify-content:flex-end;text-align:right;cursor:default}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li{list-style:none}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th a{text-decoration:none;overflow:hidden;text-overflow:ellipsis}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate{display:flex;align-items:center}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul{top:-.7rem;left:1rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li{padding:.5rem;font-size:1.3rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li a{width:auto;padding-right:.8rem}body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr td li.operate ul li:hover a,body div.list-wrapper#list-div div.list-body-container table.list-table tbody tr th li.operate ul li:hover a{color:#399;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div#upload_div div{margin-top:5px;display:flex;justify-content:space-evenly;align-items:center}body div.list-wrapper#list-div div.list-body-container div#upload_div div input,body div.list-wrapper#list-div div.list-body-container div#upload_div div select{font-size:1.2rem;vertical-align:middle;padding:.5rem;min-width:5rem;border:solid 2px #696969;border-radius:4px;background-color:#dcdcdc}body div.list-wrapper#list-div div.list-body-container div#upload_div div input:hover,body div.list-wrapper#list-div div.list-body-container div#upload_div div select:hover{box-shadow:0 0 10px #696969;background-color:#e9e9e9;cursor:pointer}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type{display:flex;flex-direction:column;align-items:center}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type textarea{border:#999 solid 2px;padding:5px}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type textarea:hover{border:solid 2px #777;box-shadow:0 0 10px #696969}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type textarea:focus{outline-color:rgba(251,251,251,0)}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type a{text-decoration:none;font-size:1.6rem;margin-top:15px;padding:2px 12px 3px 7px;width:auto;border:solid 2px #696969;background-color:#dcdcdc;color:#333;border-radius:2px;transition:.2s}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type a:hover{border:solid 2px #666;box-shadow:0 0 10px #696969;background-color:#f3f3f3;text-decoration:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"]>div:first-of-type a .hydrated{display:none}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] img{width:100%}body div.list-wrapper#list-div div.list-body-container div[style="margin: 12px 4px 4px; text-align: center"] #txt{width:100%}body div.list-wrapper#list-div div.list-body-container form#nextpageform{margin:0 10px 10px}body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td.updated_at{padding:0 10px}body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td.updated_at a{padding:0 5px;border:solid 1px #696969;border-radius:4px;background-color:#dcdcdc;color:#333}body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td.updated_at a:hover{cursor:pointer;color:#399;background-color:#fff}body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td:first-of-type,body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td:last-of-type{border:solid 2px #696969;border-radius:4px;background-color:#dcdcdc;color:#333}body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td:first-of-type:hover,body div.list-wrapper#list-div div.list-body-container form#nextpageform tbody tr td:last-of-type:hover{cursor:pointer;box-shadow:0 0 10px #696969;background-color:#fff}body div.list-wrapper#foot-om-div,body div.list-wrapper#readme-div{background-color:rgba(245,245,245,.3);width:100%;margin:15px auto 0;border-radius:3px;border:solid 5px rgba(137,43,226,.3);box-sizing:border-box}body div.list-wrapper#foot-om-div div.markdown-body,body div.list-wrapper#readme-div div.markdown-body{padding:5px}body div.list-wrapper#foot-om-div:hover,body div.list-wrapper#readme-div:hover{box-shadow:0 0 10px rgba(137,43,226,.25)}body div.list-wrapper#foot-om-div{margin-top:20px}body>div[style="color: rgba(247,247,249,0);"]{margin-top:1rem;flex:1 0;display:flex;align-items:flex-end}
+	</style>
+    <!--BackgroundStart-->
+    <style>
+        body {
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+            background-position-x: center;
+            background-image: url("<!--BackgroundUrl-->");
+        }
     </style>
+	<!--BackgroundEnd-->
+	<script type="text/javascript">
+    if (window.console && window.console.log) {
+        console.log("%c Onemoe Theme %c https://github.com/kizx/onemoe-theme ",
+            "color: #fff; margin: 1em 0; padding: 5px 0; background: #673ab7;",
+            "margin: 1em 0; padding: 5px 0; background: #efefef;");
+    }
+    </script>    
+    <!--customCss-->
 </head>
 
 <body>
-    <div style="padding:1px">
-<?php
-    if (getConfig('admin')!='') if (!$_SERVER['admin']) {
-        if (getConfig('adminloginpage')=='') { ?>
-        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><?php echo getconstStr('Login'); ?></a>
-<?php   }
-    } else { ?>
-        <li class="operate"><ion-icon name="construct"></ion-icon><?php echo getconstStr('Operate'); ?><ul>
-<?php   if (isset($files['folder'])) { ?>
-            <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><?php echo getconstStr('Create'); ?></a></li>
-            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><?php echo getconstStr('Encrypt'); ?></a></li>
-            <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><?php echo getconstStr('RefreshCache'); ?></a></li>
-<?php   } ?>
-            <li><a href="<?php echo isset($_GET['preview'])?'?preview&':'?';?>setup"><ion-icon name="settings"></ion-icon><?php echo getconstStr('Setup'); ?></a></li>
-            <li><a onclick="logout()"><ion-icon name="log-out"></ion-icon><?php echo getconstStr('Logout'); ?></a></li>
+    <div style="padding:1px" id="top-div">
+<!--LoginStart-->
+        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><!--constStr@Login--></a>
+<!--LoginEnd-->
+<!--AdminStart-->
+        <li class="operate"><ion-icon name="construct"></ion-icon><!--constStr@Operate--><ul>
+<!--IsFolderStart-->
+            <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><!--constStr@Create--></a></li>
+            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+            <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a></li>
+<!--IsFolderEnd-->
+            <li><a href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a></li>
+            <li><a onclick="logout();"><ion-icon name="log-out"></ion-icon><!--constStr@Logout--></a></li>
         </ul></li>
-<?php
-    } ?>
+<!--AdminEnd-->
         &nbsp;
         <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
             <option value="">Language</option>
-<?php
-    foreach ($constStr['languages'] as $key1 => $value1) { ?>
-            <option value="<?php echo $key1; ?>" <?php echo $key1==$constStr['language']?'selected="selected"':'' ?>><?php echo $value1; ?></option>
-<?php
-    } ?>
+<!--SelectLanguageStart-->
+                <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
+<!--SelectLanguageEnd-->
         </select>
     </div>
-<?php
-    if (isset($_SERVER['needUpdate'])&&$_SERVER['needUpdate']) { ?>
-    <div style='position:absolute;'><font color='red'><?php echo getconstStr('NeedUpdate'); ?></font></div>
-<?php } ?>
-    <h1 class="title">
-        <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
+<!--NeedUpdateStart-->
+    <div style='position:absolute;'><font color='red'><!--constStr@NeedUpdate--></font></div>
+<!--NeedUpdateEnd-->
+    <h1 class="title" id="title">
+        <a href="<!--base_path-->"><!--Sitename--></a>
     </h1>
-<?php $disktags = explode("|",getConfig('disktag'));
-    if (count($disktags)>1) { ?>
-    <div class="list-wrapper onemoe-more-disk">
+<!--MultiDiskAreaStart-->
+    <div class="list-wrapper" id="more-disk-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="more-disk">
-<?php foreach ($disktags as $disk) {
-        $diskname = getConfig('diskname', $disk);
-        if ($diskname=='') $diskname = $disk;
-        echo '                    <a href="'.path_format($_SERVER['base_path'].'/'.$disk.'/').'"'.($_SERVER['disktag']==$disk?' now':'').'>'.$diskname.'</a>
-';
-    } ?>
+<!--MultiDisksStart-->
+                    <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
+<!--MultiDisksEnd-->
                 </div>
             </div>
         </div>
     </div>
-<?php }
-    if ($files) {
-        if (isset($files['children']['head.md'])) { ?>
+<!--MultiDiskAreaEnd-->
+<!--HeadomfStart-->
+    <div class="list-wrapper" id="head-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="head-om">
+                        <!--HeadomfContent-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--HeadomfEnd-->
+<!--HeadmdStart-->
     <div class="list-wrapper" id="head-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="readme">
                     <div class="markdown-body" id="head">
-                        <textarea id="head-md" style="display:none;"><?php echo fetch_files(spurlencode(path_format($path . '/head.md'),'/'))['content']['body']; ?></textarea>
+                        <textarea id="head-md" style="display:none;"><!--HeadmdContent--></textarea>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-<?php   } ?>
+<!--HeadmdEnd-->
+<!--ListStart-->
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
-<?php
-    if ($path !== '/') {
-        $current_url = $_SERVER['PHP_SELF'];
-        while (substr($current_url, -1) === '/') {
-            $current_url = substr($current_url, 0, -1);
-        }
-        if (strpos($current_url, '/') !== FALSE) {
-            $parent_url = substr($current_url, 0, strrpos($current_url, '/'));
-        } else {
-            $parent_url = $current_url;
-        }
-?>
-                <a href="<?php echo $parent_url.'/'; ?>" class="back-link">
+<!--BackArrowStart-->
+                <a href="<!--BackArrowUrl-->" class="back-link">
                     <ion-icon name="arrow-back"></ion-icon>
                 </a>
-<?php } ?>
-                <h3 class="table-header"><?php echo str_replace('%23', '#', str_replace('&','&amp;', $path)); ?></h3>
+<!--BackArrowEnd-->
+                <h3 class="table-header"><!--Path--></h3>
             </div>
             <div class="list-body-container">
-<?php
-    $pdfurl = false;
-    $DPvideo = false;
-    if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) { ?>
+<!--EncryptedStart-->
+                <div style="padding:20px">
+	            <center>
+	                <form action="" method="post">
+		            <input name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		            <input type="submit" value="<!--constStr@Submit-->">
+	                </form>
+                </center>
+                </div>
+<!--EncryptedEnd-->
+<!--GuestUploadStart-->
                 <div id="upload_div" style="margin:10px">
                 <center>
                     <input id="upload_file" type="file" name="upload_filename">
-                    <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
+                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
                 <center>
                 </div>
-<?php } else {
-        if ($_SERVER['ishidden']<4) {
-            if (isset($files['error'])) {
-                    echo '<div style="margin:8px;">' . $files['error']['message'] . '</div>';
-                    $statusCode=404;
-            } else {
-                if (isset($files['file'])) {
-?>
+<!--GuestUploadEnd-->
+
+<!--IsFileStart-->
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
-                        <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?></textarea>
-                        <a href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path);//$files['@microsoft.graph.downloadUrl'] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
+                        <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><!--FileEncodeUrl--></textarea>
+                        <a href="<!--FileUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
                     </div>
                     <div style="margin: 24px">
-<?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
-                    if (in_array($ext, $exts['img'])) {
-                        echo '                        <img src="' . $files['@microsoft.graph.downloadUrl'] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
-';
-                    } elseif (in_array($ext, $exts['video'])) {
-                    //echo '<video src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></video>';
-                        $DPvideo=$files['@microsoft.graph.downloadUrl'];
-                        echo '                        <div id="video-a0"></div>
-';
-                    } elseif (in_array($ext, $exts['music'])) {
-                        echo '                        <audio src="' . $files['@microsoft.graph.downloadUrl'] . '" controls="controls" style="width: 100%"></audio>
-';
-                    } elseif (in_array($ext, ['pdf'])) {
-                        /*echo '
-                        <embed src="' . $files['@microsoft.graph.downloadUrl'] . '" type="application/pdf" width="100%" height=800px">
-';*/
-                        $pdfurl = $files['@microsoft.graph.downloadUrl'];
-                        echo '                        <div id="pdf-d"></div>
-';
-                    } elseif (in_array($ext, $exts['office'])) {
-                        echo '                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=' . urlencode($files['@microsoft.graph.downloadUrl']) . '" style="width: 100%;height: 800px" frameborder="0"></iframe>
-';
-                    } elseif (in_array($ext, $exts['txt'])) {
-                        $txtstr = htmlspecialchars(curl_request($files['@microsoft.graph.downloadUrl'])['body']);
-?>
+<!--IsimgFileStart-->
+                        <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
+<!--IsimgFileEnd-->
+<!--IsvideoFileStart-->
+                        <div id="video-a0"></div>
+<!--IsvideoFileEnd-->
+<!--IsmusicFileStart-->
+                        <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
+<!--IsmusicFileEnd-->
+<!--IspdfFileStart-->
+                        <div id="pdf-d"></div>
+<!--IspdfFileEnd-->
+<!--IsofficeFileStart-->
+                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->" style="width: 100%;height: 800px" frameborder="0"></iframe>
+<!--IsofficeFileEnd-->
+<!--IstxtFileStart-->
                         <div id="txt">
-<?php                   if ($_SERVER['admin']) { ?>
+<!--AdminStart-->
                         <form id="txt-form" action="" method="POST">
-                            <a onclick="document.getElementById('txt-a').readOnly='';document.getElementById('txt-save').style.display='';document.getElementById('txt-editbutton').style.display='none';document.getElementById('txt-cancelbutton').style.display='';" id="txt-editbutton"><ion-icon name="create"></ion-icon><?php echo getconstStr('ClicktoEdit'); ?></a>
-                            <a onclick="document.getElementById('txt-a').readOnly='readonly';document.getElementById('txt-save').style.display='none';document.getElementById('txt-editbutton').style.display='';document.getElementById('txt-cancelbutton').style.display='none';" id="txt-cancelbutton" style="display:none"><ion-icon name="close"></ion-icon><?php echo getconstStr('CancelEdit'); ?></a>&nbsp;&nbsp;&nbsp;
-                            <a id="txt-save" style="display:none"><ion-icon name="save"></ion-icon><?php echo getconstStr('Save'); ?></a>
-<?php                   } ?>
-                            <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <?php if ($_SERVER['admin']) echo 'onchange="document.getElementById(\'txt-save\').onclick=function(){document.getElementById(\'txt-form\').submit();}"';?> ><?php echo $txtstr;?></textarea>
-<?php                   if ($_SERVER['admin']) echo '</form>'; ?>
+                            <a onclick="document.getElementById('txt-a').readOnly='';document.getElementById('txt-save').style.display='';document.getElementById('txt-editbutton').style.display='none';document.getElementById('txt-cancelbutton').style.display='';" id="txt-editbutton"><ion-icon name="create"></ion-icon><!--constStr@ClicktoEdit--></a>
+                            <a onclick="document.getElementById('txt-a').readOnly='readonly';document.getElementById('txt-save').style.display='none';document.getElementById('txt-editbutton').style.display='';document.getElementById('txt-cancelbutton').style.display='none';" id="txt-cancelbutton" style="display:none"><ion-icon name="close"></ion-icon><!--constStr@CancelEdit--></a>&nbsp;&nbsp;&nbsp;
+                            <a id="txt-save" style="display:none"><ion-icon name="save"></ion-icon><!--constStr@Save--></a>
+<!--AdminEnd-->
+                            <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <!--AdminStart-->onchange="document.getElementById('txt-save').onclick=function(){document.getElementById('txt-form').submit();}"<!--AdminEnd--> ><!--TxtContent--></textarea>
+<!--AdminStart-->
+                            </form>
+<!--AdminEnd-->
                         </div>
-<?php               } /*elseif (in_array($ext, ['md'])) {
-                        echo '                        <div class="markdown-body" id="readme">
-                            <textarea id="readme-md" style="display:none;">' . curl_request($files['@microsoft.graph.downloadUrl'])['body'] . '</textarea>
-                        </div>
-';
-                    }*/ else {
-                        echo '<span>'.getconstStr('FileNotSupport').'</span>';
-                    } ?>
+<!--IstxtFileEnd-->
+<!--IsOtherFileStart-->
+                        <span><!--constStr@FileNotSupport--></span>
+<!--IsOtherFileEnd-->
                     </div>
                 </div>
-<?php           } elseif (isset($files['folder'])) {
-                    if (isset($_POST['filenum'])) $filenum = $_POST['filenum'];
-                    if (!isset($filenum) and isset($files['folder']['page'])) $filenum = ($files['folder']['page']-1)*200;
-                    else $filenum = 0; ?>
+<!--IsFileEnd-->
+<!--IsFolderStart-->
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
-                        <th class="file"><a onclick="sortby('a');"><?php echo getconstStr('File'); ?></a><?php if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) { ?>&nbsp;&nbsp;&nbsp;<button onclick="showthumbnails(this);"><?php echo getconstStr('ShowThumbnails'); ?></button><?php } ?>&nbsp;<button onclick="CopyAllDownloadUrl('.download');"><?php echo getconstStr('CopyAllDownloadUrl'); ?></button></th>
-                        <th class="updated_at"><a onclick="sortby('time');"><?php echo getconstStr('EditTime'); ?></a></th>
-                        <th class="size"><a onclick="sortby('size');"><?php echo getconstStr('Size'); ?></a></th>
+                        <th class="file">
+                            <a onclick="sortby('a');"><!--constStr@File--></a>
+<!--ShowThumbnailsStart-->
+                            &nbsp;&nbsp;&nbsp;
+                            <button onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
+<!--ShowThumbnailsEnd-->
+                            &nbsp;
+                            <button onclick="CopyAllDownloadUrl('.download');"><!--constStr@CopyAllDownloadUrl--></button>
+                        </th>
+                        <th class="updated_at"><a onclick="sortby('time');"><!--constStr@EditTime--></a></th>
+                        <th class="size"><a onclick="sortby('size');"><!--constStr@Size--></a></th>
                     </tr>
                     <!-- Dirs -->
-<?php               //echo json_encode($files['children'], JSON_PRETTY_PRINT);
-                    foreach ($files['children'] as $file) {
-                        // Folders
-                        if (isset($file['folder'])) { 
-                            $filenum++; ?>
-                    <tr data-to id="tr<?php echo $filenum;?>">
+<!--FolderListStart-->
+                    <tr data-to id="tr<!--filenum-->">
                         <td class="file">
-<?php                       if ($_SERVER['admin']) { ?>
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><?php echo getconstStr('Operate'); ?></a>
+<!--AdminStart-->
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
                             <ul>
-                                <li><a onclick="showdiv(event,'encrypt',<?php echo $filenum;?>);"><ion-icon name="lock"></ion-icon><?php echo getconstStr('Encrypt'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'copy',<?php echo $filenum;?>);"><ion-icon name="copy"></ion-icon><?php echo getconstStr('Copy'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
+                                <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
+                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
                             </ul>
                             </li>
-<?php                       } ?>
+<!--AdminEnd-->
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<?php echo $filenum;?>" name="filelist" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name']) . '/'); ?>"><?php echo str_replace('&','&amp;', $file['name']);?></a>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
                         </td>
-                        <td class="updated_at" id="folder_time<?php echo $filenum;?>"><?php echo time_format($file['lastModifiedDateTime']); ?></td>
-                        <td class="size" id="folder_size<?php echo $filenum;?>"><?php echo size_format($file['size']); ?></td>
+                        <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
+                        <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
                     </tr>
-<?php                   }
-                    }
-                    // if ($filenum) echo '<tr data-to></tr>';
-                    foreach ($files['children'] as $file) {
-                        // Files
-                        if (isset($file['file'])) {
-                            if ($_SERVER['admin'] or !isHideFile($file['name'])) {
-                                $filenum++; ?>
-                    <tr data-to id="tr<?php echo $filenum;?>">
+<!--FolderListEnd-->
+<!--FileListStart-->
+                    <tr data-to id="tr<!--filenum-->">
                         <td class="file">
-<?php                           if ($_SERVER['admin']) { ?>
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><?php echo getconstStr('Operate'); ?></a>
+<!--AdminStart-->
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
                             <ul>
-                                <li><a onclick="showdiv(event, 'rename',<?php echo $filenum;?>);"><ion-icon name="create"></ion-icon><?php echo getconstStr('Rename'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'move',<?php echo $filenum;?>);"><ion-icon name="move"></ion-icon><?php echo getconstStr('Move'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'copy',<?php echo $filenum;?>);"><ion-icon name="copy"></ion-icon><?php echo getconstStr('Copy'); ?></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<?php echo $filenum;?>);"><ion-icon name="trash"></ion-icon><?php echo getconstStr('Delete'); ?></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
+                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
                             </ul>
                             </li>
-<?php                           }
-                                $ext = strtolower(substr($file['name'], strrpos($file['name'], '.') + 1));
-                                if (in_array($ext, $exts['music'])) { ?>
-                            <ion-icon name="musical-notes"></ion-icon>
-<?php                           } elseif (in_array($ext, $exts['video'])) { ?>
-                            <ion-icon name="logo-youtube"></ion-icon>
-<?php                           } elseif (in_array($ext, $exts['img'])) { ?>
-                            <ion-icon name="image"></ion-icon>
-<?php                           } elseif (in_array($ext, $exts['office'])) { ?>
-                            <ion-icon name="paper"></ion-icon>
-<?php                           } elseif (in_array($ext, $exts['txt'])) { ?>
-                            <ion-icon name="clipboard"></ion-icon>
-<?php                           } elseif (in_array($ext, $exts['zip'])) { ?>
-                            <ion-icon name="filing"></ion-icon>
-<?php                           } elseif ($ext=='iso') { ?>
-                            <ion-icon name="disc"></ion-icon>
-<?php                           } elseif ($ext=='apk') { ?>
-                            <ion-icon name="logo-android"></ion-icon>
-<?php                           } elseif ($ext=='exe') { ?>
-                            <ion-icon name="logo-windows"></ion-icon>
-<?php                           } else { ?>
-                            <ion-icon name="document"></ion-icon>
-<?php                           } ?>
-                            <a id="file_a<?php echo $filenum;?>" name="filelist" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])); ?>?preview" target=_blank><?php echo str_replace('&','&amp;', $file['name']); ?></a>
-                            <a class="download" href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . str_replace('&','&amp;', $file['name']));?>"><ion-icon name="download"></ion-icon></a>
+<!--AdminEnd-->
+                            <ion-icon name="<!--IconValue-->"></ion-icon>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" target=_blank><!--FileEncodeReplaceName--></a>
+                            <a class="download" href="<!--FileEncodeReplaceUrl-->"><ion-icon name="download"></ion-icon></a>
                         </td>
-                        <td class="updated_at" id="file_time<?php echo $filenum;?>"><?php echo time_format($file['lastModifiedDateTime']); ?></td>
-                        <td class="size" id="file_size<?php echo $filenum;?>"><?php echo size_format($file['size']); ?></td>
+                        <td class="updated_at" id="file_time<!--filenum-->"><!--lastModifiedDateTime--></td>
+                        <td class="size" id="file_size<!--filenum-->"><!--size--></td>
                     </tr>
-<?php                       }
-                        }
-                    } ?>
+<!--FileListEnd-->
                 </table>
-<?php               if ($files['folder']['childCount']>200) {
-                        $pagenum = $files['folder']['page'];
-                        $maxpage = ceil($files['folder']['childCount']/200);
-                        $prepagenext = '
+<!--MorePageStart-->
                 <form action="" method="POST" id="nextpageform">
-                    <input type="hidden" id="pagenum" name="pagenum" value="'. $pagenum .'">
+                    <input type="hidden" id="pagenum" name="pagenum" value="">
                     <table width=100% border=0>
                         <tr>
-                            <td width=60px align=center>';
-                        if ($pagenum!=1) {
-                            $prepagenum = $pagenum-1;
-                            $prepagenext .= '
-                                <a onclick="nextpage('.$prepagenum.');">'.getconstStr('PrePage').'</a>';
-                        }
-                        $prepagenext .= '
+                            <td width=60px align=center>
+<!--PrePageStart-->
+                                <a onclick="nextpage(<!--PrePageNum-->);"><!--constStr@PrePage--></a>
+<!--PrePageEnd-->
                             </td>
-                            <td class="updated_at">';
-                        for ($page=1;$page<=$maxpage;$page++) {
-                            if ($page == $pagenum) {
-                                $prepagenext .= '
-                                <font color=red>' . $page . '</font> ';
-                            } else {
-                                $prepagenext .= '
-                                <a onclick="nextpage('.$page.');">' . $page . '</a> ';
-                            }
-                        }
-                        $prepagenext = substr($prepagenext,0,-1);
-                        $prepagenext .= '
+                            <td class="updated_at">
+<!--MorePageListStart-->
+                                <a onclick="nextpage(<!--PageNum-->);"><!--PageNum--></a>
+<!--MorePageListEnd-->
+<!--MorePageListNowStart-->
+                                <font color=red><!--PageNum--></font>
+<!--MorePageListNowEnd-->
                             </td>
-                            <td width=60px align=center>';
-                        if ($pagenum!=$maxpage) {
-                            $nextpagenum = $pagenum+1;
-                            $prepagenext .= '
-                                <a onclick="nextpage('.$nextpagenum.');">'.getconstStr('NextPage').'</a>';
-                        }
-                        $prepagenext .= '
+                            <td width=60px align=center>
+<!--NextPageStart-->
+                                <a onclick="nextpage(<!--NextPageNum-->);"><!--constStr@NextPage--></a>
+<!--NextPageEnd-->
                             </td>
                         </tr>
                     </table>
-                </form>';
-                        echo $prepagenext;
-                    }
-                    if ($_SERVER['admin']) { ?>
+                </form>
+<!--MorePageEnd-->
+<!--AdminStart-->
                 <div id="upload_div" style="margin:0 0 16px 0">
-                <center>
+                <div id="upload_btns" align="center">
+                    <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+                        <option value=""><!--constStr@UploadFile--></option>
+                        <option value="1"><!--constStr@UploadFolder--></option>
+                    </select>
                     <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
-                    <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
-                </center>
+                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
                 </div>
-<?php               }
-                } else {
-                    $statusCode=500;
-                    echo 'Unknown path or file.';
-                    echo json_encode($files, JSON_PRETTY_PRINT);
-                }
-                if (isset($files['children']['readme.md'])) {
-                    echo '
+                </div>
+<!--AdminEnd-->
+<!--IsFolderEnd-->
+<!--ListEnd-->
             </div>
         </div>
     </div>
-    <div class="list-wrapper onemoe-readme">
+<!--ReadmemdStart-->
+    <div class="list-wrapper" id="readme-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="readme">
                     <div class="markdown-body" id="readme">
-                        <textarea id="readme-md" style="display:none;">' . fetch_files(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'] . '</textarea>
+                        <textarea id="readme-md" style="display:none;"><!--ReadmemdContent--></textarea>
                     </div>
                 </div>
-';
-                }
-            }
-        } else {
-            echo '
-                <div style="padding:20px">
-	            <center>
-	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
-		            <input type="submit" value="'.getconstStr('Submit').'">
-	                </form>
-                </center>
-                </div>';
-            $statusCode = 401;
-        }
-    } ?>
             </div>
         </div>
     </div>
-<?php } ?>
+<!--ReadmemdEnd-->
+<!--FootomfStart-->
+    <div class="list-wrapper" id="foot-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="foot-om">
+                        <!--FootomfContent-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--FootomfEnd-->
+
     <div id="mask" class="mask" style="display:none;"></div>
-<?php
-    if ($_SERVER['admin']) {
-        if (!isset($_GET['preview'])) { ?>
+<!--AdminStart-->
+<!--IsFolderStart-->
     <div style="word-break: break-all;word-wrap: break-word;">
         <div id="rename_div" class="operatediv" style="display:none">
             <div>
-                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="rename_form" onsubmit="return submit_operate('rename');">
                 <input id="rename_sid" name="rename_sid" type="hidden" value="">
                 <input id="rename_hidden" name="rename_oldname" type="hidden" value="">
                 <input id="rename_input" name="rename_newname" type="text" value="">
-                <input name="operate_action" type="submit" value="<?php echo getconstStr('Rename'); ?>">
+                <input name="operate_action" type="submit" value="<!--constStr@Rename-->">
                 </form>
             </div>
         </div>
         <div id="delete_div" class="operatediv" style="display:none">
             <div>
-                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><!--constStr@Close--></a>
                 <label id="delete_label"></label>
                 <form id="delete_form" onsubmit="return submit_operate('delete');">
-                <label id="delete_input"><?php echo getconstStr('Delete'); ?>?</label>
+                <label id="delete_input"><!--constStr@Delete-->?</label>
                 <input id="delete_sid" name="delete_sid" type="hidden" value="">
                 <input id="delete_hidden" name="delete_name" type="hidden" value="">
-                <input name="operate_action" type="submit" value="<?php echo getconstStr('Submit'); ?>">
+                <input name="operate_action" type="submit" value="<!--constStr@Submit-->">
                 </form>
             </div>
         </div>
         <div id="encrypt_div" class="operatediv" style="display:none">
             <div>
-                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
-                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<?php echo getconstStr('InputPasswordUWant'); ?>">
-                <?php if (getConfig('passfile')!='') {?><input name="operate_action" type="submit" value="<?php echo getconstStr('Encrypt'); ?>"><?php } else { ?><br><label><?php echo getconstStr('SetpassfileBfEncrypt'); ?></label><?php } ?>
+                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
+                <!--EncryptBtnStart--><input name="operate_action" type="submit" value="<!--constStr@Encrypt-->"><!--EncryptBtnEnd--><!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
                 </form>
             </div>
         </div>
         <div id="copy_div" class="operatediv" style="display:none">
             <div>
-                <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="copy_form" onsubmit="return submit_operate('copy');">
                 <input id="copy_sid" name="copy_sid" type="hidden" value="">
                 <input id="copy_hidden" name="copy_name" type="hidden" value="">
                 <input id="copy_input" name="copy_input" type="hidden" value="">
-                <input name="operate_action" type="submit" value="<?php echo getconstStr('Copy'); ?>">
+                <input name="operate_action" type="submit" value="<!--constStr@Copy-->">
                 </form>
             </div>
         </div>
         <div id="move_div" class="operatediv" style="display:none">
             <div>
-                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="move_form" onsubmit="return submit_operate('move');">
                 <input id="move_sid" name="move_sid" type="hidden" value="">
                 <input id="move_hidden" name="move_name" type="hidden" value="">
                 <select id="move_input" name="move_folder">
-<?php   if ($path != '/') { ?>
-                    <option value="/../"><?php echo getconstStr('ParentDir'); ?></option>
-<?php   }
-        if (isset($files['children'])) foreach ($files['children'] as $file) {
-            if (isset($file['folder'])) { ?>
-                    <option value="<?php echo str_replace('&','&amp;', $file['name']);?>"><?php echo str_replace('&','&amp;', $file['name']);?></option>
-<?php       }
-        } ?>
+<!--MoveRootStart-->
+                    <option value="/../"><!--constStr@ParentDir--></option>
+<!--MoveRootEnd-->
+<!--MoveDirsStart-->
+                    <option value="<!--MoveDirsValue-->"><!--MoveDirsValue--></option>
+<!--MoveDirsEnd-->
                 </select>
-                <input name="operate_action" type="submit" value="<?php echo getconstStr('Move'); ?>">
+                <input name="operate_action" type="submit" value="<!--constStr@Move-->">
                 </form>
             </div>
         </div>
         <div id="create_div" class="operatediv" style="display:none">
             <div>
-                <a onclick="operatediv_close('create')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+                <a onclick="operatediv_close('create')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="create_form" onsubmit="return submit_operate('create');">
                     <input id="create_sid" name="create_sid" type="hidden" value="">
                     <input id="create_hidden" type="hidden" value="">
@@ -435,51 +400,51 @@
                         <tr>
                             <td>　　　</td>
                             <td>
-                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><?php echo getconstStr('Folder'); ?></label>
-                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><?php echo getconstStr('File'); ?></label>
+                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><!--constStr@Folder--></label>
+                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><!--constStr@File--></label>
                             <td>
                         </tr>
                         <tr>
-                            <td><?php echo getconstStr('Name'); ?>：</td>
+                            <td><!--constStr@Name-->：</td>
                             <td><input id="create_input" name="create_name" type="text" value=""></td>
                         </tr>
                         <tr id="create_text_div">
-                            <td><?php echo getconstStr('Content'); ?>：</td>
+                            <td><!--constStr@Content-->：</td>
                             <td><textarea id="create_text" name="create_text" rows="6" cols="40"></textarea></td>
                         </tr>
                         <tr>
                             <td>　　　</td>
-                            <td><input name="operate_action" type="submit" value="<?php echo getconstStr('Create'); ?>"></td>
+                            <td><input name="operate_action" type="submit" value="<!--constStr@Create-->"></td>
                         </tr>
                     </table>
                 </form>
             </div>
         </div>
     </div>
-<?php   }
-    } else {
-        if (getConfig('admin')!='') if (getConfig('adminloginpage')=='') { ?>
+<!--IsFolderEnd-->
+<!--AdminEnd-->
+<!--LoginStart-->
     <div id="login_div" class="operatediv" style="display:none">
         <div style="margin:50px">
-            <a onclick="operatediv_close('login')" class="operatediv_close"><?php echo getconstStr('Close'); ?></a>
+            <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
 	        <center>
-	            <form action="<?php echo isset($_GET['preview'])?'?preview&':'?';?>admin" method="post">
-		        <input id="login_input" name="password1" type="password" placeholder="<?php echo getconstStr('InputPassword'); ?>">
-		        <input type="submit" value="<?php echo getconstStr('Login'); ?>">
+	            <form action="<!--IsPreview?-->admin" method="post">
+		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		        <input type="submit" value="<!--constStr@Login-->">
 	            </form>
             </center>
         </div>
 	</div>
-<?php   }
-    } ?>
-    <div style="color: rgba(247,247,249,0);"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
+<!--LoginEnd-->
+    <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
 </body>
-<?php if ($files) { ?>
-<?php if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
-<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><?php } ?>
-<?php if (isset($files['folder']) && $_SERVER['is_guestup_path'] && !$_SERVER['admin']) { ?><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><?php } ?>
-<?php if ($pdfurl!='') { ?><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><?php } ?>
-<?php } ?>
+
+<!--ListStart-->
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
+<!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
+<!--ListEnd-->
 <script type="text/javascript">
     function changelanguage(str)
     {
@@ -487,8 +452,8 @@
         document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
-<?php if ($files) { ?>
-    var root = '<?php echo $_SERVER["base_disk_path"]; ?>';
+<!--ListStart-->
+    var root = '<!--base_disk_path-->';
     function path_format(path) {
         path = '/' + path + '/';
         while (path.indexOf('//') !== -1) {
@@ -498,9 +463,10 @@
     }
     document.querySelectorAll('.table-header').forEach(function (e) {
         var path = e.innerText;
+        if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
         var paths = path.split('/');
-        if (paths <= 2) return;
         e.innerHTML = '/ ';
+        if (paths <= 2) return;
         for (var i = 1; i < paths.length - 1; i++) {
             var to = path_format(root + paths.slice(0, i + 1).join('/'));
             e.innerHTML += '<a href="' + to + '">' + paths[i] + '</a> / '
@@ -508,22 +474,25 @@
         e.innerHTML += paths[paths.length - 1];
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
     });
-<?php
-    if (isset($_GET['preview'])) { //is preview mode. 在预览时处理 ?>
+<!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
         $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
         $url.style.height = $url.scrollHeight + 'px';
     }
+<!--IsofficeFileStart-->
     var $officearea=document.getElementById('office-a');
     if ($officearea) {
         $officearea.style.height = window.innerHeight + 'px';
     }
+<!--IsofficeFileEnd-->
+<!--IstxtFileStart-->
     var $textarea=document.getElementById('txt-a');
     if ($textarea) {
         $textarea.style.height = $textarea.scrollHeight + 'px';
     }
-<?php   if (!!$DPvideo) { ?>
+<!--IstxtFileEnd-->
+<!--IsvideoFileStart-->
     function loadResources(type, src, callback) {
         let script = document.createElement(type);
         let loaded = false;
@@ -587,11 +556,11 @@
             });
         }
     }
-    addVideos(['<?php echo $DPvideo;?>']);
-<?php   }
-        if ($pdfurl!='') { ?>
+    addVideos(['<!--FileDownUrl-->']);
+<!--IsvideoFileEnd-->
+<!--IspdfFileStart-->
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
-    var loadingTask = pdfjsLib.getDocument({ url: '<?php echo $pdfurl;?>', });
+    var loadingTask = pdfjsLib.getDocument({ url: '<!--FileDownUrl-->', });
     loadingTask.promise.then(function(pdf) {
         var pagenum =  pdf.numPages;
         var pdfContainer = document.getElementById('pdf-d');
@@ -618,18 +587,24 @@
             page.render(renderContext);
         });
     }
-<?php   }
-    } else { // view folder. 不预览，即浏览目录时?>
+<!--IspdfFileEnd-->
+<!--IsFileEnd-->
+<!--IsFolderStart-->
+<!--HeadmdStart-->
     var $head = document.getElementById('head');
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
         $head.innerHTML = marked(document.getElementById('head-md').innerText);
         
     }
+<!--HeadmdEnd-->
+<!--ReadmemdStart-->
     var $readme = document.getElementById('readme');
     if ($readme) {
         $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
     }
+<!--ReadmemdEnd-->
+<!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
         var files=document.getElementsByName('filelist');
         for ($i=0;$i<files.length;$i++) {
@@ -638,7 +613,7 @@
             if (!str) return;
             strarry=str.split('.');
             ext=strarry[strarry.length-1].toLowerCase();
-            images = [<?php foreach ($exts['img'] as $imgext) echo '\''.$imgext.'\', '; ?>];
+            images = [<!--ImgExts-->];
             if (images.indexOf(ext)>-1) get_thumbnails_url(str, files[$i]);
         }
         obj.disabled='disabled';
@@ -657,6 +632,7 @@
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
+<!--ShowThumbnailsEnd-->
     function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
@@ -667,12 +643,19 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        alert(tmptextarea.innerHTML+'<?php echo getconstStr('Success'); ?>');
+        alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
     }
+<!--MorePageStart-->
+    function nextpage(num) {
+        document.getElementById('pagenum').value=num;
+        document.getElementById('nextpageform').submit();
+    }
+<!--MorePageEnd-->
+<!--IsNotHiddenStart-->
     var sort=0;
     function sortby(string) {
         if (string=='a') if (sort!=0) {
-            for (i = 1; i <= <?php echo $filenum?$filenum:0;?>; i++) document.getElementById('tr'+i).parentNode.insertBefore(document.getElementById('tr'+i),document.getElementById('tr'+(i-1)).nextSibling);
+            for (i = 1; i <= <!--maxfilenum-->; i++) document.getElementById('tr'+i).parentNode.insertBefore(document.getElementById('tr'+i),document.getElementById('tr'+(i-1)).nextSibling);
             sort=0;
             return;
         } else return;
@@ -680,7 +663,7 @@
         sortby('a');
         sort=sort1;
         var a=[];
-        for (i = 1; i <= <?php echo $filenum?$filenum:0;?>; i++) {
+        for (i = 1; i <= <!--maxfilenum-->; i++) {
             a[i]=i;
             if (!!document.getElementById('folder_'+string+i)) {
                 var td1=document.getElementById('folder_'+string+i);
@@ -754,43 +737,39 @@
         if (str.substr(-2)==' B') num=str.substr(0,str.length-2);
         return num;
     }
-<?php
-    }
-    if ($_COOKIE['timezone']=='') { // cookie timezone. 无时区写时区 ?>
+<!--IsNotHiddenEnd-->
+<!--IsFolderEnd-->
+<!--WriteTimezoneStart-->
     var nowtime= new Date();
     var timezone = 0-nowtime.getTimezoneOffset()/60;
     var expd = new Date();
     expd.setTime(expd.getTime()+(2*60*60*1000));
     var expires = "expires="+expd.toGMTString();
     document.cookie="timezone="+timezone+"; path=/; "+expires;
-    if (timezone!='8') {
+    if (timezone!=<!--timezone-->) {
         alert('Your timezone is '+timezone+', reload local timezone.');
-        location.href=location.protocol + "//" + location.host + "<?php echo path_format($_SERVER['base_path'] . '/' . $path );?>" ;
+        location.href=location.href;
     }
-<?php }
-    if (isset($files['folder']['childCount'])&&$files['folder']['childCount']>200) { // more than 200. 有下一页 ?>
-    function nextpage(num) {
-        document.getElementById('pagenum').value=num;
-        document.getElementById('nextpageform').submit();
-    }
-<?php }
-    if (isset($files['folder']) && ($_SERVER['is_guestup_path'] || $_SERVER['admin'])) { // is folder and is admin or guest upload path. 当前是admin登录或图床目录时 ?>
+<!--WriteTimezoneEnd-->
+<!--UploadJsStart-->
     function uploadbuttonhide() {
-        document.getElementById('upload_submit').disabled='disabled';
+        document.getElementById('upload_btns').style.display='none';
+        /*document.getElementById('upload_submit').disabled='disabled';
         document.getElementById('upload_file').disabled='disabled';
         document.getElementById('upload_submit').style.display='none';
-        document.getElementById('upload_file').style.display='none';
+        document.getElementById('upload_file').style.display='none';*/
     }
     function uploadbuttonshow() {
-        document.getElementById('upload_file').disabled='';
+        document.getElementById('upload_btns').style.display='';
+        /*document.getElementById('upload_file').disabled='';
         document.getElementById('upload_submit').disabled='';
         document.getElementById('upload_submit').style.display='';
-        document.getElementById('upload_file').style.display='';
+        document.getElementById('upload_file').style.display='';*/
     }
     function preup() {
         uploadbuttonhide();
         var files=document.getElementById('upload_file').files;
-	if (files.length<1) {
+	    if (files.length<1) {
             uploadbuttonshow();
             return;
         };
@@ -809,18 +788,18 @@
             tr1.appendChild(td1);
             td1.setAttribute('style','width:30%');
             td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
-            td1.innerHTML=file.name+'<br>'+size_format(file.size);
+            td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
             var td2=document.createElement('td');
             tr1.appendChild(td2);
             td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
-            td2.innerHTML='<?php echo getconstStr('GetUploadLink'); ?> ...';
+            td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><?php echo getconstStr('UpFileTooLarge'); ?></font>';
+                td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
                 uploadbuttonshow();
                 return;
             }
             var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ encodeURIComponent(file.name) +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ encodeURIComponent((file.webkitRelativePath||file.name)) +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.send(null);
             xhr1.onload = function(e){
@@ -832,7 +811,7 @@
                         td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
                         uploadbuttonshow();
                     } else {
-                        td2.innerHTML='<?php echo getconstStr('UploadStart'); ?> ...';
+                        td2.innerHTML='<!--constStr@UploadStart--> ...';
                         binupfile(file,html['uploadUrl'],timea+'_'+i);
                     }
                 }
@@ -882,13 +861,13 @@
                     var a = html['nextExpectedRanges'][0];
                     newstartsize = Number( a.slice(0,a.indexOf("-")) );
                     StartTime = new Date();
-<?php if ($_SERVER['admin']) { ?>
+<!--AdminStart-->
                     asize = newstartsize;
-<?php } ?>
+<!--AdminEnd-->
                     if (newstartsize==0) {
-                        StartStr='<?php echo getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
                     } else {
-                        StartStr='<?php echo getconstStr('LastUpload'); ?>'+size_format(newstartsize)+ '<br><?php echo getconstStr('ThisTime').getconstStr('UploadStartAt'); ?>:' +StartTime.toLocaleString()+'<br>' ;
+                        StartStr='<!--constStr@LastUpload-->'+size_format(newstartsize)+ '<br><!--constStr@ThisTime--><!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
                     }
                     var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
                     if (totalsize>200*1024*1024) chunksize=10*1024*1024;
@@ -898,19 +877,19 @@
                         reader.readAsArrayBuffer(blob);
                     }
                     readblob(asize);
-<?php if (!$_SERVER['admin']) { ?>
+<!--LoginStart-->
                     var spark = new SparkMD5.ArrayBuffer();
-<?php } ?>
+<!--LoginEnd-->
                     reader.onload = function(e){
                         var binary = this.result;
-<?php if (!$_SERVER['admin']) { ?>
+<!--LoginStart-->
                         spark.append(binary);
                         if (asize < newstartsize) {
                             asize += chunksize;
                             readblob(asize);
                             return;
                         }
-<?php } ?>
+<!--LoginEnd-->
                         var xhr = new XMLHttpRequest();
                         xhr.open("PUT", url, true);
                         //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
@@ -921,7 +900,7 @@
                                 var tmptime = new Date();
                                 var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
+                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+remaintime.toFixed(1)+'s';
                             }
                         }
                         var C_starttime = new Date();
@@ -931,26 +910,26 @@
                             if (response['size']>0) {
                                 // contain size, upload finish. 有size说明是最终返回，上传结束
                                 var xhr3 = new XMLHttpRequest();
-                                xhr3.open("GET", '?action=del_upload_cache&filename=.'+file.lastModified+ '_' +file.size+ '_' +encodeURIComponent(file.name)+'.tmp');
+                                xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+encodeURIComponent((file.webkitRelativePath||file.name)));
                                 xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
                                 xhr3.send(null);
                                 xhr3.onload = function(e){
                                     console.log(xhr3.responseText+','+xhr3.status);
                                 }
-<?php if (!$_SERVER['admin']) { ?>
+<!--LoginStart-->
                                 var filemd5 = spark.end();
                                 var xhr4 = new XMLHttpRequest();
-                                xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent(file.name)+'&filemd5='+filemd5);
+                                xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent((file.webkitRelativePath||file.name))+'&filemd5='+filemd5);
                                 xhr4.setRequestHeader('x-requested-with','XMLHttpRequest');
                                 xhr4.send(null);
                                 xhr4.onload = function(e){
                                     console.log(xhr4.responseText+','+xhr4.status);
                                     var filename;
                                     //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
-                                    //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
+                                    //if (xhr4.status==409) filename = filemd5 + (file.webkitRelativePath||file.name).substr((file.webkitRelativePath||file.name).indexOf('.'));
                                     filename = JSON.parse(xhr4.responseText)['name'];
                                     if (filename=='') {
-                                        alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
+                                        alert('<!--constStr@UploadErrorUpAgain-->');
                                         uploadbuttonshow();
                                         return;
                                     }
@@ -962,20 +941,20 @@
                                     document.getElementById('upfile_a1_'+tdnum).href = filename;
                                     document.getElementById('upfile_cpbt_'+tdnum).style.display = "";
                                 }
-<?php } ?>
+<!--LoginEnd-->
                                 EndTime=new Date();
-                                MiddleStr = '<?php echo getconstStr('EndAt'); ?>:'+EndTime.toLocaleString()+'<br>';
+                                MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
                                 if (newstartsize==0) {
-                                    MiddleStr += '<?php echo getconstStr('AverageSpeed'); ?>:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<!--constStr@AverageSpeed-->:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 } else {
-                                    MiddleStr += '<?php echo getconstStr('ThisTime').getconstStr('AverageSpeed'); ?>:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                    MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<?php echo $_SERVER['base_disk_path']; ?>'+response.name+'" id="upfile_a1_'+tdnum+'"></a><?php echo getconstStr('UploadComplete'); ?><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <?php if (!$_SERVER['admin']) echo 'style="display:none"'; ?> ><?php echo getconstStr('CopyUrl'); ?></button></div>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path-->'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path-->'+response.name+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
-<?php if ($_SERVER['admin']) { ?>
+<!--AdminStart-->
                                 addelement(response);
-<?php } ?>
+<!--AdminEnd-->
                             } else {
                                 if (!response['nextExpectedRanges']) {
                                     label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
@@ -989,8 +968,8 @@
                         xhr.send(binary);
                     }
                 } else {
-                    if (window.location.pathname.indexOf('%23')>0||file.name.indexOf('%23')>0) {
-                        label.innerHTML='<font color="red"><?php echo getconstStr('UploadFail23'); ?></font>';
+                    if (window.location.pathname.indexOf('%23')>0||(file.webkitRelativePath||file.name).indexOf('%23')>0) {
+                        label.innerHTML='<font color="red"><!--constStr@UploadFail23--></font>';
                     } else {
                         label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
                     }
@@ -999,20 +978,18 @@
             }
         }
     }
-<?php }
-}
-    if (getConfig('admin')!='') { // close div. 有登录或操作，需要关闭DIV时 ?>
+<!--UploadJsEnd-->
+<!--ListEnd-->
     function operatediv_close(operate) {
         document.getElementById(operate+'_div').style.display='none';
         document.getElementById('mask').style.display='none';
     }
-<?php }
-    if ($_SERVER['admin']) { // admin login. 管理登录后 ?>
+<!--AdminStart-->
     function logout() {
         document.cookie = "admin=; path=/";
         location.href = location.href;
     }
-<?php   if (!isset($_GET['preview'])) {?>
+<!--IsFolderStart-->
     function showdiv(event,action,num) {
         var $operatediv=document.getElementsByName('operatediv');
         for ($i=0;$i<$operatediv.length;$i++) {
@@ -1028,7 +1005,7 @@
             if (str=='') {
                 str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
                 if (str=='') {
-                    alert('<?php echo getconstStr('GetFileNameFail'); ?>');
+                    alert('<!--constStr@GetFileNameFail-->');
                     operatediv_close(action);
                     return;
                 }
@@ -1096,7 +1073,7 @@
         var td1=document.createElement('td');
         td1.setAttribute('class','file');
         var a1=document.createElement('a');
-        a1.href='<?php echo $_SERVER['base_disk_path'];?>'+html.name.replace(/#/,'%23');
+        a1.href='<!--base_disk_path-->'+html.name.replace(/#/,'%23');
         a1.innerText=html.name;
         a1.target='_blank';
         var td2=document.createElement('td');
@@ -1181,8 +1158,9 @@
         }
         return queryComponents.join('&');
     }
-<?php   }
-    } else if (getConfig('admin')!='') if (getConfig('adminloginpage')=='') { ?>
+<!--IsFolderEnd-->
+<!--AdminEnd-->
+<!--LoginStart-->
     function login() {
         document.getElementById('mask').style.display='';
             //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
@@ -1192,7 +1170,8 @@
         document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
         document.getElementById('login_input').focus();
     }
-<?php } ?>
+<!--LoginEnd-->
 </script>
 <script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+<!--customScript-->
 </html>
