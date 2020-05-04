@@ -1757,41 +1757,38 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
         
-        $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
+        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
         
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
         $html = str_replace('<!--customScript-->', getConfig('customScript'), $html);
         
-        $html = str_replace('<!--constStr@Login-->', getconstStr('Login'), $html);
-        $html = str_replace('<!--constStr@Close-->', getconstStr('Close'), $html);
-        $html = str_replace('<!--constStr@InputPassword-->', getconstStr('InputPassword'), $html);
-        $html = str_replace('<!--constStr@InputPasswordUWant-->', getconstStr('InputPasswordUWant'), $html);
-        $html = str_replace('<!--constStr@Success-->', getconstStr('Success'), $html);
-        $html = str_replace('<!--constStr@GetUploadLink-->', getconstStr('GetUploadLink'), $html);
-        $html = str_replace('<!--constStr@UpFileTooLarge-->', getconstStr('UpFileTooLarge'), $html);
-        $html = str_replace('<!--constStr@UploadStart-->', getconstStr('UploadStart'), $html);
-        $html = str_replace('<!--constStr@UploadStartAt-->', getconstStr('UploadStartAt'), $html);
-        $html = str_replace('<!--constStr@LastUpload-->', getconstStr('LastUpload'), $html);
-        $html = str_replace('<!--constStr@ThisTime-->', getconstStr('ThisTime'), $html);
-        $html = str_replace('<!--constStr@UploadStartAt-->', getconstStr('UploadStartAt'), $html);
-        $html = str_replace('<!--constStr@Upload-->', getconstStr('Upload'), $html);
-        $html = str_replace('<!--constStr@AverageSpeed-->', getconstStr('AverageSpeed'), $html);
-        $html = str_replace('<!--constStr@CurrentSpeed-->', getconstStr('CurrentSpeed'), $html);
-        $html = str_replace('<!--constStr@Expect-->', getconstStr('Expect'), $html);
-        $html = str_replace('<!--constStr@UploadErrorUpAgain-->', getconstStr('UploadErrorUpAgain'), $html);
-        $html = str_replace('<!--constStr@EndAt-->', getconstStr('EndAt'), $html);
-        $html = str_replace('<!--constStr@AverageSpeed-->', getconstStr('AverageSpeed'), $html);
-        $html = str_replace('<!--constStr@ThisTime-->', getconstStr('ThisTime'), $html);
-        $html = str_replace('<!--constStr@AverageSpeed-->', getconstStr('AverageSpeed'), $html);
-        $html = str_replace('<!--constStr@UploadComplete-->', getconstStr('UploadComplete'), $html);
-        $html = str_replace('<!--constStr@CopyUrl-->', getconstStr('CopyUrl'), $html);
-        $html = str_replace('<!--constStr@UploadFail23-->', getconstStr('UploadFail23'), $html);
-        $html = str_replace('<!--constStr@GetFileNameFail-->', getconstStr('GetFileNameFail'), $html);
-        $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
-        $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
-        
+        while (strpos($html, '<!--constStr@Login-->')) $html = str_replace('<!--constStr@Login-->', getconstStr('Login'), $html);
+        while (strpos($html, '<!--constStr@Close-->')) $html = str_replace('<!--constStr@Close-->', getconstStr('Close'), $html);
+        while (strpos($html, '<!--constStr@InputPassword-->')) $html = str_replace('<!--constStr@InputPassword-->', getconstStr('InputPassword'), $html);
+        while (strpos($html, '<!--constStr@InputPasswordUWant-->')) $html = str_replace('<!--constStr@InputPasswordUWant-->', getconstStr('InputPasswordUWant'), $html);
+        while (strpos($html, '<!--constStr@Submit-->')) $html = str_replace('<!--constStr@Submit-->', getconstStr('Submit'), $html);
+        while (strpos($html, '<!--constStr@Success-->')) $html = str_replace('<!--constStr@Success-->', getconstStr('Success'), $html);
+        while (strpos($html, '<!--constStr@GetUploadLink-->')) $html = str_replace('<!--constStr@GetUploadLink-->', getconstStr('GetUploadLink'), $html);
+        while (strpos($html, '<!--constStr@UpFileTooLarge-->')) $html = str_replace('<!--constStr@UpFileTooLarge-->', getconstStr('UpFileTooLarge'), $html);
+        while (strpos($html, '<!--constStr@UploadStart-->')) $html = str_replace('<!--constStr@UploadStart-->', getconstStr('UploadStart'), $html);
+        while (strpos($html, '<!--constStr@UploadStartAt-->')) $html = str_replace('<!--constStr@UploadStartAt-->', getconstStr('UploadStartAt'), $html);
+        while (strpos($html, '<!--constStr@LastUpload-->')) $html = str_replace('<!--constStr@LastUpload-->', getconstStr('LastUpload'), $html);
+        while (strpos($html, '<!--constStr@ThisTime-->')) $html = str_replace('<!--constStr@ThisTime-->', getconstStr('ThisTime'), $html);
 
-        $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
+        while (strpos($html, '<!--constStr@Upload-->')) $html = str_replace('<!--constStr@Upload-->', getconstStr('Upload'), $html);
+        while (strpos($html, '<!--constStr@AverageSpeed-->')) $html = str_replace('<!--constStr@AverageSpeed-->', getconstStr('AverageSpeed'), $html);
+        while (strpos($html, '<!--constStr@CurrentSpeed-->')) $html = str_replace('<!--constStr@CurrentSpeed-->', getconstStr('CurrentSpeed'), $html);
+        while (strpos($html, '<!--constStr@Expect-->')) $html = str_replace('<!--constStr@Expect-->', getconstStr('Expect'), $html);
+        while (strpos($html, '<!--constStr@UploadErrorUpAgain-->')) $html = str_replace('<!--constStr@UploadErrorUpAgain-->', getconstStr('UploadErrorUpAgain'), $html);
+        while (strpos($html, '<!--constStr@EndAt-->')) $html = str_replace('<!--constStr@EndAt-->', getconstStr('EndAt'), $html);
+        
+        while (strpos($html, '<!--constStr@UploadComplete-->')) $html = str_replace('<!--constStr@UploadComplete-->', getconstStr('UploadComplete'), $html);
+        while (strpos($html, '<!--constStr@CopyUrl-->')) $html = str_replace('<!--constStr@CopyUrl-->', getconstStr('CopyUrl'), $html);
+        while (strpos($html, '<!--constStr@UploadFail23-->')) $html = str_replace('<!--constStr@UploadFail23-->', getconstStr('UploadFail23'), $html);
+        while (strpos($html, '<!--constStr@GetFileNameFail-->')) $html = str_replace('<!--constStr@GetFileNameFail-->', getconstStr('GetFileNameFail'), $html);
+        while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
+        while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
+        while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
         
 
         $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'], $html);
