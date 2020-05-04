@@ -633,18 +633,6 @@
         }
     }
 <!--ShowThumbnailsEnd-->
-    function CopyAllDownloadUrl(str) {
-        var tmptextarea=document.createElement('textarea');
-        document.body.appendChild(tmptextarea);
-        tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
-        document.querySelectorAll(str).forEach(function (e) {
-            tmptextarea.innerHTML+=e.href+"\r\n";
-        });
-        tmptextarea.select();
-        tmptextarea.setSelectionRange(0, tmptextarea.value.length);
-        document.execCommand("copy");
-        alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
-    }
 <!--MorePageStart-->
     function nextpage(num) {
         document.getElementById('pagenum').value=num;
@@ -751,6 +739,18 @@
         location.href=location.href;
     }
 <!--WriteTimezoneEnd-->
+    function CopyAllDownloadUrl(str) {
+        var tmptextarea=document.createElement('textarea');
+        document.body.appendChild(tmptextarea);
+        tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
+        document.querySelectorAll(str).forEach(function (e) {
+            tmptextarea.innerHTML+=e.href+"\r\n";
+        });
+        tmptextarea.select();
+        tmptextarea.setSelectionRange(0, tmptextarea.value.length);
+        document.execCommand("copy");
+        alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
+    }
 <!--UploadJsStart-->
     function uploadbuttonhide() {
         document.getElementById('upload_btns').style.display='none';
