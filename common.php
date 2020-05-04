@@ -880,7 +880,7 @@ function adminoperate($path)
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
-    if (isset($_GET['operate_action'])&&$_GET['operate_action']==getconstStr('encrypt')) {
+    if (isset($_GET['operate_action'])&&$_GET['operate_action']==getconstStr('Encrypt')) {
         // encrypt 加密
         if (getConfig('passfile')=='') return message(getconstStr('SetpassfileBfEncrypt'),'',403);
         if ($_GET['encrypt_folder']=='/') $_GET['encrypt_folder']=='';
