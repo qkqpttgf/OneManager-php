@@ -1699,7 +1699,8 @@ function render_list($path = '', $files = '')
             if (in_array($ext, $exts['img'])) $ext = 'img';
             elseif (in_array($ext, $exts['video'])) $ext = 'video';
             elseif (in_array($ext, $exts['music'])) $ext = 'music';
-            elseif (in_array($ext, $exts['pdf'])) $ext = 'pdf';
+            //elseif (in_array($ext, $exts['pdf'])) $ext = 'pdf';
+            elseif ($ext=='pdf') $ext = 'pdf';
             elseif (in_array($ext, $exts['office'])) $ext = 'office';
             elseif (in_array($ext, $exts['txt'])) $ext = 'txt';
             else $ext = 'Other';
@@ -1724,7 +1725,7 @@ function render_list($path = '', $files = '')
             $html = str_replace('<!--constStr@ClicktoEdit-->', getconstStr('ClicktoEdit'), $html);
             $html = str_replace('<!--constStr@CancelEdit-->', getconstStr('CancelEdit'), $html);
             $html = str_replace('<!--constStr@Save-->', getconstStr('Save'), $html);
-            $html = str_replace('<!--TxtContent-->', htmlspecialchars(curl_request($files[$_SERVER['DownurlStrName']])['body']), $html);
+            while (strpos($html, '<!--TxtContent-->')) $html = str_replace('<!--TxtContent-->', htmlspecialchars(curl_request($files[$_SERVER['DownurlStrName']])['body']), $html);
             $html = str_replace('<!--constStr@FileNotSupport-->', getconstStr('FileNotSupport'), $html);
 
 
