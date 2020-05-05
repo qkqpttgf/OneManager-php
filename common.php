@@ -2001,12 +2001,9 @@ function render_list($path = '', $files = '')
 
 
         // 最后清除换行
-        while (strpos($html, '
-
-')) $html = str_replace('
-
-', '
-', $html);
+        while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
+        //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
+        
     }
     
     $html = $authinfo . $html;
