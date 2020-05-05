@@ -1529,7 +1529,7 @@ function render_list($path = '', $files = '')
             }*/
         }
         
-        if (isset($files['folder'])) {
+        if (isset($files['children'])) {
             while (strpos($html, '<!--GuestUploadStart-->')) {
                 $tmp = splitfirst($html, '<!--GuestUploadStart-->');
                 $html = $tmp[0];
