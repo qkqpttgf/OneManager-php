@@ -142,7 +142,8 @@ function install()
             $title = 'Error';
             return message($html, $title, 201);
         }*/
-        $html .= '<button id="checkrewritebtn" onclick="checkrewrite();">'.getconstStr('MakesuerRewriteOn').'</button>
+        $html .= '<button class="checkrewritebtn" onclick="checkrewrite();">'.getconstStr('MakesuerRewriteOn').'</button>
+<button class="checkrewritebtn" onclick="showpassword();">'.getconstStr('SkipCheckingRewrite').'</button>
 <div id="formdiv" style="display: none">
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"><br>
@@ -164,6 +165,13 @@ function install()
             }
             return true;
         }
+        function showpassword()
+        {
+                    document.querySelectorAll(".checkrewritebtn").forEach(function(ele){ele.style.display = "none"});
+                    document.getElementById("submitbtn").disabled = false;
+                    document.getElementById("formdiv").style.display = "";
+        }
+
         function checkrewrite()
         {
             url=location.protocol + "//" + location.host;
@@ -179,9 +187,7 @@ function install()
             xhr4.onload = function(e){
                 console.log(xhr4.responseText+","+xhr4.status);
                 if (xhr4.status==201) {
-                    document.getElementById("checkrewritebtn").style.display = "none";
-                    document.getElementById("submitbtn").disabled = false;
-                    document.getElementById("formdiv").style.display = "";
+                    showpassword();
                 } else {
                     alert(url+"\n"+xhr4.status);
                 }
