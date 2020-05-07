@@ -1297,6 +1297,389 @@ function fetch_files_children($files, $path, $page)
     return $files;
 }
 
+function get_refresh_token()
+{
+    global $constStr;
+    global $CommonEnv;
+    $envs = '';
+    foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
+    $url = path_format($_SERVER['PHP_SELF'] . '/');
+    if (isset($_GET['authorization_code']) && isset($_GET['code'])) {
+        $_SERVER['disktag'] = $_COOKIE['disktag'];
+        config_oauth();
+        $tmp = curl_request($_SERVER['oauth_url'] . 'token', 'client_id=' . $_SERVER['client_id'] .'&client_secret=' . $_SERVER['client_secret'] . '&grant_type=authorization_code&requested_token_use=on_behalf_of&redirect_uri=' . $_SERVER['redirect_uri'] .'&code=' . $_GET['code']);
+        if ($tmp['stat']==200) $ret = json_decode($tmp['body'], true);
+        if (isset($ret['refresh_token'])) {
+            $refresh_token = $ret['refresh_token'];
+            $str = '
+        refresh_token :<br>';
+            $str .= '
+        <textarea readonly style="width: 95%">' . $refresh_token . '</textarea><br><br>
+        '.getconstStr('SavingToken').'
+        <script>
+            var texta=document.getElementsByTagName(\'textarea\');
+            for(i=0;i<texta.length;i++) {
+                texta[i].style.height = texta[i].scrollHeight + \'px\';
+            }
+            document.cookie=\'language=; path=/\';
+            document.cookie=\'disktag=; path=/\';
+        </script>';
+            $tmptoken['refresh_token'] = $refresh_token;
+            $tmptoken['token_expires'] = time()+7*24*60*60;
+            if (getConfig('usesharepoint')=='on') $tmptoken['siteid'] = get_siteid($ret['access_token']);
+            setConfig($tmptoken, $_COOKIE['disktag']);
+            savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
+            //WaitSCFStat();
+            $str .= '
+            <meta http-equiv="refresh" content="5;URL=' . $url . '">';
+            return message($str, getconstStr('WaitJumpIndex'));
+        }
+        return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
+        //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
+    }
+    if (isset($_GET['install1'])) {
+        $_SERVER['disktag'] = $_COOKIE['disktag'];
+        config_oauth();
+        if (getConfig('Drive_ver')=='MS' || getConfig('Drive_ver')=='CN') {
+            return message('
+    <a href="" id="a1">'.getconstStr('JumptoOffice').'</a>
+    <script>
+        url=location.protocol + "//" + location.host + "'.$url.'";
+        url="'. $_SERVER['oauth_url'] .'authorize?scope='. $_SERVER['scope'] .'&response_type=code&client_id='. $_SERVER['client_id'] .'&redirect_uri='. $_SERVER['redirect_uri'] . '&state=' .'"+encodeURIComponent(url);
+        document.getElementById(\'a1\').href=url;
+        //window.open(url,"_blank");
+        location.href = url;
+    </script>
+    ', getconstStr('Wait').' 1s', 201);
+        } else {
+            return message('Something error, retry after a few seconds.', 'retry', 201);
+        }
+    }
+    if (isset($_GET['install0'])) {
+        if ($_POST['disktag_add']!='') {
+            if (in_array($_COOKIE['disktag'], $CommonEnv)) {
+                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+            }
+            $_SERVER['disktag'] = $_COOKIE['disktag'];
+            $tmp['disktag_add'] = $_POST['disktag_add'];
+            $tmp['diskname'] = $_POST['diskname'];
+            $tmp['Drive_ver'] = $_POST['Drive_ver'];
+            if ($_POST['Drive_ver']=='shareurl') {
+                $tmp['shareurl'] = $_POST['shareurl'];
+                $tmp['refresh_token'] = 1;
+            } else {
+                if ($_POST['Drive_custom']=='on') {
+                    $tmp['Drive_custom'] = $_POST['Drive_custom'];
+                    $tmp['client_id'] = $_POST['client_id'];
+                    $tmp['client_secret'] = $_POST['client_secret'];
+                }
+                if ($_POST['usesharepoint']=='on') {
+                    $tmp['usesharepoint'] = $_POST['usesharepoint'];
+                    $tmp['sharepointSiteAddress'] = $_POST['sharepointSiteAddress'];
+                }
+            }
+            $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
+            if (api_error($response)) {
+                $html = api_error_msg($response);
+                $title = 'Error';
+            } else {
+                $title = getconstStr('MayinEnv');
+                $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk&install1">';
+                if ($_POST['Drive_ver']=='shareurl') $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '">';
+            }
+            return message($html, $title, 201);
+        }
+    }
+
+    if ($constStr['language']!='zh-cn') {
+        $linklang='en-us';
+    } else $linklang='zh-cn';
+    $ru = "https://developer.microsoft.com/".$linklang."/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl=".$_SERVER['redirect_uri']."&platform=option-php";
+    $deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
+    $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
+    $html = '
+<div>
+    <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
+        '.getconstStr('OnedriveDiskTag').': ('.getConfig('disktag').')<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
+        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
+        <br>
+        <div>
+            <label><input type="radio" name="Drive_ver" value="MS" checked onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">MS: '.getconstStr('DriveVerMS').'</label><br>
+            <label><input type="radio" name="Drive_ver" value="CN" onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">CN: '.getconstStr('DriveVerCN').'</label><br>
+            <label><input type="radio" name="Drive_ver" value="shareurl" onclick="document.getElementById(\'inputshareurl\').style.display=\'\';document.getElementById(\'morecustom\').style.display=\'none\';">ShareUrl: '.getconstStr('DriveVerShareurl').'</label><br>
+        </div>
+        <br>
+        <div id="inputshareurl" style="display:none;margin:10px 35px">
+            '.getconstStr('UseShareLink').'
+            <input type="text" name="shareurl" style="width:100%" placeholder="https://xxxx.sharepoint.com/:f:/g/personal/xxxxxxxx/mmmmmmmmm?e=XXXX"><br>
+        </div>
+        <div id="morecustom">
+            <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('CustomIdSecret').'</label><br>
+            <div id="secret" style="display:none;margin:10px 35px">
+                <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
+                client_secret:<input type="text" name="client_secret"><br>
+                client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
+            </div>
+            <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
+            <div id="sharepoint" style="display:none;margin:10px 35px">
+                '.getconstStr('GetSharepointSiteAddress').'<br>
+                <input type="text" name="sharepointSiteAddress" style="width:100%" placeholder="'.getconstStr('InputSharepointSiteAddress').'"><br>
+            </div>
+        </div>
+        <br>
+        <input type="submit" value="'.getconstStr('Submit').'">
+    </form>
+</div>
+    <script>
+        function notnull(t)
+        {
+            if (t.disktag_add.value==\'\') {
+                alert(\''.getconstStr('OnedriveDiskTag').'\');
+                return false;
+            }
+            envs = [' . $envs . '];
+            if (envs.indexOf(t.disktag_add.value)>-1) {
+                alert("Do not input ' . $envs . '");
+                return false;
+            }
+            var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
+            if (!reg.test(t.disktag_add.value)) {
+                alert(\''.getconstStr('TagFormatAlert').'\');
+                return false;
+            }
+            if (t.Drive_ver.value==\'shareurl\') {
+                if (t.shareurl.value==\'\') {
+                    alert(\'shareurl\');
+                    return false;
+                }
+            } else {
+                if (t.Drive_custom.checked==true) {
+                    if (t.client_secret.value==\'\'||t.client_id.value==\'\') {
+                        alert(\'client_id & client_secret\');
+                        return false;
+                    }
+                }
+                if (t.usesharepoint.checked==true) {
+                    if (t.sharepointSiteAddress.value==\'\') {
+                        alert(\''.getconstStr('InputSharepointSiteAddress').'\');
+                        return false;
+                    }
+                }
+            }
+            document.cookie=\'disktag=\'+t.disktag_add.value+\'; path=/\';
+            return true;
+        }
+    </script>';
+    $title = 'Bind Disk';
+    return message($html, $title, 201);
+}
+
+function EnvOpt($needUpdate = 0)
+{
+    global $constStr;
+    global $ShowedCommonEnv;
+    global $ShowedInnerEnv;
+    global $timezones;
+    asort($ShowedCommonEnv);
+    asort($ShowedInnerEnv);
+    $html = '<title>OneManager '.getconstStr('Setup').'</title>';
+    if (isset($_POST['updateProgram'])&&$_POST['updateProgram']==getconstStr('updateProgram')) {
+        $response = OnekeyUpate($_POST['auth'], $_POST['project'], $_POST['branch']);
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+        } else {
+            //WaitSCFStat();
+            $html .= getconstStr('UpdateSuccess') . '<br>
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+            $title = getconstStr('Setup');
+        }
+        return message($html, $title);
+    }
+    if (isset($_POST['submit1'])) {
+        $_SERVER['disk_oprating'] = '';
+        foreach ($_POST as $k => $v) {
+            if (in_array($k, $ShowedCommonEnv)||in_array($k, $ShowedInnerEnv)||$k=='disktag_del' || $k=='disktag_add') {
+                $tmp[$k] = $v;
+            }
+            if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
+        }
+        /*if ($tmp['domain_path']!='') {
+            $tmp1 = explode("|",$tmp['domain_path']);
+            $tmparr = [];
+            foreach ($tmp1 as $multidomain_paths){
+                $pos = strpos($multidomain_paths,":");
+                if ($pos>0) $tmparr[substr($multidomain_paths, 0, $pos)] = path_format(substr($multidomain_paths, $pos+1));
+            }
+            $tmp['domain_path'] = $tmparr;
+        }*/
+        $response = setConfigResponse( setConfig($tmp, $_SERVER['disk_oprating']) );
+        if (api_error($response)) {
+                $html = api_error_msg($response);
+                $title = 'Error';
+            } else {
+                //WaitSCFStat();
+                //sleep(3);
+            $html .= getconstStr('Success') . '!<br>
+<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+            $title = getconstStr('Setup');
+        }
+        return message($html, $title);
+    }
+    if (isset($_GET['preview'])) {
+        $preurl = $_SERVER['PHP_SELF'] . '?preview';
+    } else {
+        $preurl = path_format($_SERVER['PHP_SELF'] . '/');
+    }
+    $html .= '
+<a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
+<a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
+
+    $html .= '
+<table border=1 width=100%>
+    <form name="common" action="" method="post">
+        <tr>
+            <td colspan="2">'.getconstStr('PlatformConfig').'</td>
+        </tr>';
+    foreach ($ShowedCommonEnv as $key) {
+        if ($key=='timezone') {
+            $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%>
+                <select name="' . $key .'">';
+            foreach (array_keys($timezones) as $zone) {
+                $html .= '
+                    <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
+            }
+            $html .= '
+                </select>
+            </td>
+        </tr>';
+        } elseif ($key=='theme') {
+            $theme_arr = scandir('theme');
+            $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%>
+                <select name="' . $key .'">
+                    <option value=""></option>';
+            foreach ($theme_arr as $v1) {
+                if ($v1!='.' && $v1!='..') $html .= '
+                    <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
+            }
+            $html .= '
+                </select>
+            </td>
+        </tr>';
+        } /*elseif ($key=='domain_path') {
+            $tmp = getConfig($key);
+            $domain_path = '';
+            foreach ($tmp as $k1 => $v1) {
+                $domain_path .= $k1 . ':' . $v1 . '|';
+            }
+            $domain_path = substr($domain_path, 0, -1);
+            $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . $domain_path . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+        </tr>';
+        }*/ else $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . htmlspecialchars(getConfig($key)) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+        </tr>';
+    }
+    $html .= '
+        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+    </form>
+</table><br>';
+    foreach (explode("|",getConfig('disktag')) as $disktag) {
+        if ($disktag!='') {
+            $html .= '
+<table border=1 width=100%>
+    <form action="" method="post">
+        <tr>
+            <td colspan="2">'.$disktag.'：
+            <input type="hidden" name="disktag_del" value="'.$disktag.'">
+            <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
+            </td>
+        </tr>
+    </form>';
+            if (getConfig('refresh_token', $disktag)!='') {
+                $html .= '
+    <form name="'.$disktag.'" action="" method="post">
+        <input type="hidden" name="disk" value="'.$disktag.'">';
+                foreach ($ShowedInnerEnv as $key) {
+                    $html .= '
+        <tr>
+            <td><label>' . $key . '</label></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+        </tr>';
+                }
+                $html .= '
+        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+    </form>';
+            }
+            $html .= '
+</table><br>';
+        }
+    }
+    $html .= '
+<a href="?AddDisk">'.getconstStr('AddDisk').'</a><br><br>';
+    if (!((isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud')||(isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app'))) {
+        $html .= '
+'.getconstStr('VPSnotupdate').'<br>';
+    } else {
+        $html .= '
+<form name="updateform" action="" method="post">
+    <input type="text" name="auth" placeholder="auth" value="qkqpttgf">
+    <input type="text" name="project" placeholder="project" value="OneManager-php">
+    <button onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
+    <!--<input type="text" name="branch" placeholder="branch" value="master">-->
+    <select name="branch">
+        <option value="master">master</option>
+    </select>
+    <input type="submit" name="updateProgram" value="'.getconstStr('updateProgram').'">
+</form>
+<script>
+    function querybranchs()
+    {
+        //alert(document.updateform.auth.value);
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
+        //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
+        xhr.send(null);
+        xhr.onload = function(e){
+            console.log(xhr.responseText+","+xhr.status);
+            if (xhr.status==200) {
+                document.updateform.branch.options.length=0;
+                JSON.parse(xhr.responseText).forEach( function (e) {
+                    //alert(e.name);
+                    document.updateform.branch.options.add(new Option(e.name,e.name));
+                    if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
+                });
+            } else {
+                alert(xhr.responseText+"\n"+xhr.status);
+            }
+        }
+        xhr.onerror = function(e){
+            alert("Network Error "+xhr.status);
+        }
+    }
+</script>
+';
+    }
+    if ($needUpdate) {
+        $html .= '<div style="position:relative;word-wrap: break-word;">
+        ' . str_replace("\r", '<br>',$_SERVER['github_version']) . '
+</div>';
+    } else {
+        $html .= getconstStr('NotNeedUpdate');
+    }
+    return message($html, getconstStr('Setup'));
+}
+
 function render_list($path = '', $files = '')
 {
     global $exts;
@@ -1556,6 +1939,8 @@ function render_list($path = '', $files = '')
             $html = str_replace('<!--constStr@CopyAllDownloadUrl-->', getconstStr('CopyAllDownloadUrl'), $html);
             $html = str_replace('<!--constStr@EditTime-->', getconstStr('EditTime'), $html);
             $html = str_replace('<!--constStr@Size-->', getconstStr('Size'), $html);
+
+            $filenum = 0;
 
             $tmp = splitfirst($html, '<!--FolderListStart-->');
             $html = $tmp[0];
@@ -2009,387 +2394,4 @@ function render_list($path = '', $files = '')
     $html = $authinfo . $html;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
-}
-
-function get_refresh_token()
-{
-    global $constStr;
-    global $CommonEnv;
-    $envs = '';
-    foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
-    $url = path_format($_SERVER['PHP_SELF'] . '/');
-    if (isset($_GET['authorization_code']) && isset($_GET['code'])) {
-        $_SERVER['disktag'] = $_COOKIE['disktag'];
-        config_oauth();
-        $tmp = curl_request($_SERVER['oauth_url'] . 'token', 'client_id=' . $_SERVER['client_id'] .'&client_secret=' . $_SERVER['client_secret'] . '&grant_type=authorization_code&requested_token_use=on_behalf_of&redirect_uri=' . $_SERVER['redirect_uri'] .'&code=' . $_GET['code']);
-        if ($tmp['stat']==200) $ret = json_decode($tmp['body'], true);
-        if (isset($ret['refresh_token'])) {
-            $refresh_token = $ret['refresh_token'];
-            $str = '
-        refresh_token :<br>';
-            $str .= '
-        <textarea readonly style="width: 95%">' . $refresh_token . '</textarea><br><br>
-        '.getconstStr('SavingToken').'
-        <script>
-            var texta=document.getElementsByTagName(\'textarea\');
-            for(i=0;i<texta.length;i++) {
-                texta[i].style.height = texta[i].scrollHeight + \'px\';
-            }
-            document.cookie=\'language=; path=/\';
-            document.cookie=\'disktag=; path=/\';
-        </script>';
-            $tmptoken['refresh_token'] = $refresh_token;
-            $tmptoken['token_expires'] = time()+7*24*60*60;
-            if (getConfig('usesharepoint')=='on') $tmptoken['siteid'] = get_siteid($ret['access_token']);
-            setConfig($tmptoken, $_COOKIE['disktag']);
-            savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
-            //WaitSCFStat();
-            $str .= '
-            <meta http-equiv="refresh" content="5;URL=' . $url . '">';
-            return message($str, getconstStr('WaitJumpIndex'));
-        }
-        return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
-        //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
-    }
-    if (isset($_GET['install1'])) {
-        $_SERVER['disktag'] = $_COOKIE['disktag'];
-        config_oauth();
-        if (getConfig('Drive_ver')=='MS' || getConfig('Drive_ver')=='CN') {
-            return message('
-    <a href="" id="a1">'.getconstStr('JumptoOffice').'</a>
-    <script>
-        url=location.protocol + "//" + location.host + "'.$url.'";
-        url="'. $_SERVER['oauth_url'] .'authorize?scope='. $_SERVER['scope'] .'&response_type=code&client_id='. $_SERVER['client_id'] .'&redirect_uri='. $_SERVER['redirect_uri'] . '&state=' .'"+encodeURIComponent(url);
-        document.getElementById(\'a1\').href=url;
-        //window.open(url,"_blank");
-        location.href = url;
-    </script>
-    ', getconstStr('Wait').' 1s', 201);
-        } else {
-            return message('Something error, retry after a few seconds.', 'retry', 201);
-        }
-    }
-    if (isset($_GET['install0'])) {
-        if ($_POST['disktag_add']!='') {
-            if (in_array($_COOKIE['disktag'], $CommonEnv)) {
-                return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
-            }
-            $_SERVER['disktag'] = $_COOKIE['disktag'];
-            $tmp['disktag_add'] = $_POST['disktag_add'];
-            $tmp['diskname'] = $_POST['diskname'];
-            $tmp['Drive_ver'] = $_POST['Drive_ver'];
-            if ($_POST['Drive_ver']=='shareurl') {
-                $tmp['shareurl'] = $_POST['shareurl'];
-                $tmp['refresh_token'] = 1;
-            } else {
-                if ($_POST['Drive_custom']=='on') {
-                    $tmp['Drive_custom'] = $_POST['Drive_custom'];
-                    $tmp['client_id'] = $_POST['client_id'];
-                    $tmp['client_secret'] = $_POST['client_secret'];
-                }
-                if ($_POST['usesharepoint']=='on') {
-                    $tmp['usesharepoint'] = $_POST['usesharepoint'];
-                    $tmp['sharepointSiteAddress'] = $_POST['sharepointSiteAddress'];
-                }
-            }
-            $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
-            if (api_error($response)) {
-                $html = api_error_msg($response);
-                $title = 'Error';
-            } else {
-                $title = getconstStr('MayinEnv');
-                $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk&install1">';
-                if ($_POST['Drive_ver']=='shareurl') $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '">';
-            }
-            return message($html, $title, 201);
-        }
-    }
-
-    if ($constStr['language']!='zh-cn') {
-        $linklang='en-us';
-    } else $linklang='zh-cn';
-    $ru = "https://developer.microsoft.com/".$linklang."/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl=".$_SERVER['redirect_uri']."&platform=option-php";
-    $deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
-    $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
-    $html = '
-<div>
-    <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
-        '.getconstStr('OnedriveDiskTag').': ('.getConfig('disktag').')<input type="text" name="disktag_add" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '" style="width:100%"><br>
-        '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
-        <br>
-        <div>
-            <label><input type="radio" name="Drive_ver" value="MS" checked onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">MS: '.getconstStr('DriveVerMS').'</label><br>
-            <label><input type="radio" name="Drive_ver" value="CN" onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">CN: '.getconstStr('DriveVerCN').'</label><br>
-            <label><input type="radio" name="Drive_ver" value="shareurl" onclick="document.getElementById(\'inputshareurl\').style.display=\'\';document.getElementById(\'morecustom\').style.display=\'none\';">ShareUrl: '.getconstStr('DriveVerShareurl').'</label><br>
-        </div>
-        <br>
-        <div id="inputshareurl" style="display:none;margin:10px 35px">
-            '.getconstStr('UseShareLink').'
-            <input type="text" name="shareurl" style="width:100%" placeholder="https://xxxx.sharepoint.com/:f:/g/personal/xxxxxxxx/mmmmmmmmm?e=XXXX"><br>
-        </div>
-        <div id="morecustom">
-            <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('CustomIdSecret').'</label><br>
-            <div id="secret" style="display:none;margin:10px 35px">
-                <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
-                client_secret:<input type="text" name="client_secret"><br>
-                client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
-            </div>
-            <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
-            <div id="sharepoint" style="display:none;margin:10px 35px">
-                '.getconstStr('GetSharepointSiteAddress').'<br>
-                <input type="text" name="sharepointSiteAddress" style="width:100%" placeholder="'.getconstStr('InputSharepointSiteAddress').'"><br>
-            </div>
-        </div>
-        <br>
-        <input type="submit" value="'.getconstStr('Submit').'">
-    </form>
-</div>
-    <script>
-        function notnull(t)
-        {
-            if (t.disktag_add.value==\'\') {
-                alert(\''.getconstStr('OnedriveDiskTag').'\');
-                return false;
-            }
-            envs = [' . $envs . '];
-            if (envs.indexOf(t.disktag_add.value)>-1) {
-                alert("Do not input ' . $envs . '");
-                return false;
-            }
-            var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
-            if (!reg.test(t.disktag_add.value)) {
-                alert(\''.getconstStr('TagFormatAlert').'\');
-                return false;
-            }
-            if (t.Drive_ver.value==\'shareurl\') {
-                if (t.shareurl.value==\'\') {
-                    alert(\'shareurl\');
-                    return false;
-                }
-            } else {
-                if (t.Drive_custom.checked==true) {
-                    if (t.client_secret.value==\'\'||t.client_id.value==\'\') {
-                        alert(\'client_id & client_secret\');
-                        return false;
-                    }
-                }
-                if (t.usesharepoint.checked==true) {
-                    if (t.sharepointSiteAddress.value==\'\') {
-                        alert(\''.getconstStr('InputSharepointSiteAddress').'\');
-                        return false;
-                    }
-                }
-            }
-            document.cookie=\'disktag=\'+t.disktag_add.value+\'; path=/\';
-            return true;
-        }
-    </script>';
-    $title = 'Bind Disk';
-    return message($html, $title, 201);
-}
-
-function EnvOpt($needUpdate = 0)
-{
-    global $constStr;
-    global $ShowedCommonEnv;
-    global $ShowedInnerEnv;
-    global $timezones;
-    asort($ShowedCommonEnv);
-    asort($ShowedInnerEnv);
-    $html = '<title>OneManager '.getconstStr('Setup').'</title>';
-    if (isset($_POST['updateProgram'])&&$_POST['updateProgram']==getconstStr('updateProgram')) {
-        $response = OnekeyUpate($_POST['auth'], $_POST['project'], $_POST['branch']);
-        if (api_error($response)) {
-            $html = api_error_msg($response);
-            $title = 'Error';
-        } else {
-            //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
-            $title = getconstStr('Setup');
-        }
-        return message($html, $title);
-    }
-    if (isset($_POST['submit1'])) {
-        $_SERVER['disk_oprating'] = '';
-        foreach ($_POST as $k => $v) {
-            if (in_array($k, $ShowedCommonEnv)||in_array($k, $ShowedInnerEnv)||$k=='disktag_del' || $k=='disktag_add') {
-                $tmp[$k] = $v;
-            }
-            if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
-        }
-        /*if ($tmp['domain_path']!='') {
-            $tmp1 = explode("|",$tmp['domain_path']);
-            $tmparr = [];
-            foreach ($tmp1 as $multidomain_paths){
-                $pos = strpos($multidomain_paths,":");
-                if ($pos>0) $tmparr[substr($multidomain_paths, 0, $pos)] = path_format(substr($multidomain_paths, $pos+1));
-            }
-            $tmp['domain_path'] = $tmparr;
-        }*/
-        $response = setConfigResponse( setConfig($tmp, $_SERVER['disk_oprating']) );
-        if (api_error($response)) {
-                $html = api_error_msg($response);
-                $title = 'Error';
-            } else {
-                //WaitSCFStat();
-                //sleep(3);
-            $html .= getconstStr('Success') . '!<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
-            $title = getconstStr('Setup');
-        }
-        return message($html, $title);
-    }
-    if (isset($_GET['preview'])) {
-        $preurl = $_SERVER['PHP_SELF'] . '?preview';
-    } else {
-        $preurl = path_format($_SERVER['PHP_SELF'] . '/');
-    }
-    $html .= '
-<a href="'.$preurl.'">'.getconstStr('Back').'</a>&nbsp;&nbsp;&nbsp;<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><br>
-<a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
-
-    $html .= '
-<table border=1 width=100%>
-    <form name="common" action="" method="post">
-        <tr>
-            <td colspan="2">'.getconstStr('PlatformConfig').'</td>
-        </tr>';
-    foreach ($ShowedCommonEnv as $key) {
-        if ($key=='timezone') {
-            $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%>
-                <select name="' . $key .'">';
-            foreach (array_keys($timezones) as $zone) {
-                $html .= '
-                    <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
-            }
-            $html .= '
-                </select>
-            </td>
-        </tr>';
-        } elseif ($key=='theme') {
-            $theme_arr = scandir('theme');
-            $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%>
-                <select name="' . $key .'">
-                    <option value=""></option>';
-            foreach ($theme_arr as $v1) {
-                if ($v1!='.' && $v1!='..') $html .= '
-                    <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
-            }
-            $html .= '
-                </select>
-            </td>
-        </tr>';
-        } /*elseif ($key=='domain_path') {
-            $tmp = getConfig($key);
-            $domain_path = '';
-            foreach ($tmp as $k1 => $v1) {
-                $domain_path .= $k1 . ':' . $v1 . '|';
-            }
-            $domain_path = substr($domain_path, 0, -1);
-            $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . $domain_path . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
-        </tr>';
-        }*/ else $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . htmlspecialchars(getConfig($key)) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
-        </tr>';
-    }
-    $html .= '
-        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-    </form>
-</table><br>';
-    foreach (explode("|",getConfig('disktag')) as $disktag) {
-        if ($disktag!='') {
-            $html .= '
-<table border=1 width=100%>
-    <form action="" method="post">
-        <tr>
-            <td colspan="2">'.$disktag.'：
-            <input type="hidden" name="disktag_del" value="'.$disktag.'">
-            <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
-            </td>
-        </tr>
-    </form>';
-            if (getConfig('refresh_token', $disktag)!='') {
-                $html .= '
-    <form name="'.$disktag.'" action="" method="post">
-        <input type="hidden" name="disk" value="'.$disktag.'">';
-                foreach ($ShowedInnerEnv as $key) {
-                    $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
-        </tr>';
-                }
-                $html .= '
-        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-    </form>';
-            }
-            $html .= '
-</table><br>';
-        }
-    }
-    $html .= '
-<a href="?AddDisk">'.getconstStr('AddDisk').'</a><br><br>';
-    if (!((isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud')||(isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app'))) {
-        $html .= '
-'.getconstStr('VPSnotupdate').'<br>';
-    } else {
-        $html .= '
-<form name="updateform" action="" method="post">
-    <input type="text" name="auth" placeholder="auth" value="qkqpttgf">
-    <input type="text" name="project" placeholder="project" value="OneManager-php">
-    <button onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
-    <!--<input type="text" name="branch" placeholder="branch" value="master">-->
-    <select name="branch">
-        <option value="master">master</option>
-    </select>
-    <input type="submit" name="updateProgram" value="'.getconstStr('updateProgram').'">
-</form>
-<script>
-    function querybranchs()
-    {
-        //alert(document.updateform.auth.value);
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
-        //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
-        xhr.send(null);
-        xhr.onload = function(e){
-            console.log(xhr.responseText+","+xhr.status);
-            if (xhr.status==200) {
-                document.updateform.branch.options.length=0;
-                JSON.parse(xhr.responseText).forEach( function (e) {
-                    //alert(e.name);
-                    document.updateform.branch.options.add(new Option(e.name,e.name));
-                    if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
-                });
-            } else {
-                alert(xhr.responseText+"\n"+xhr.status);
-            }
-        }
-        xhr.onerror = function(e){
-            alert("Network Error "+xhr.status);
-        }
-    }
-</script>
-';
-    }
-    if ($needUpdate) {
-        $html .= '<div style="position:relative;word-wrap: break-word;">
-        ' . str_replace("\r", '<br>',$_SERVER['github_version']) . '
-</div>';
-    } else {
-        $html .= getconstStr('NotNeedUpdate');
-    }
-    return message($html, getconstStr('Setup'));
 }
