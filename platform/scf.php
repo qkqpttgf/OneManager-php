@@ -139,7 +139,7 @@ function install()
     }
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
-            $tmp['language'] = $_POST['language'];
+            //$tmp['language'] = $_POST['language'];
             $tmp['Region'] = $_POST['Region'];
             $tmp['timezone'] = $_COOKIE['timezone'];
             $SecretId = getConfig('SecretId');

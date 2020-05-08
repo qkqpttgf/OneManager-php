@@ -16,6 +16,8 @@ $Base64Env = [
     //'timezone',
     //'passfile',
     'sitename',
+    'customScript',
+    'customCss',
     //'theme',
     //'Drive_ver',
     //'Drive_custom',
@@ -24,7 +26,7 @@ $Base64Env = [
     'domain_path',
     'guestup_path',
     //'usesharepoint',
-    'sharepointname',
+    'sharepointSiteAddress',
     'shareurl',
     //'sharecookie',
     'shareapiurl',
@@ -48,6 +50,8 @@ $CommonEnv = [
     'timezone',
     'passfile',
     'sitename',
+    'customScript',
+    'customCss',
     'theme',
 ];
 
@@ -65,6 +69,8 @@ $ShowedCommonEnv = [
     'timezone',
     'passfile',
     'sitename',
+    'customScript',
+    'customCss',
     'theme',
 ];
 
@@ -78,7 +84,7 @@ $InnerEnv = [
     'downloadencrypt',
     'guestup_path',
     'usesharepoint',
-    'sharepointname',
+    'sharepointSiteAddress',
     'siteid',
     'shareurl',
     //'sharecookie',
@@ -98,7 +104,7 @@ $ShowedInnerEnv = [
     'downloadencrypt',
     'guestup_path',
     //'usesharepoint',
-    //'sharepointname',
+    //'sharepointSiteAddress',
     //'siteid',
     //'shareurl',
     //'sharecookie',
@@ -237,10 +243,17 @@ function main($path)
         }
 
         if ($_SERVER['ajax']) {
-            if ($_GET['action']=='del_upload_cache'&&substr($_GET['filename'],-4)=='.tmp') {
+            if ($_GET['action']=='del_upload_cache') {
                 // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
                 error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
-                $tmp = MSAPI('DELETE',path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($_GET['filename']) ),'',$_SERVER['access_token']);
+                $tmp = splitlast($_GET['filename'], '/');
+                if ($tmp[1]!='') {
+                    $filename = $tmp[0] . '/.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $tmp[1] . '.tmp';
+                } else {
+                    $filename = '.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $_GET['filename'] . '.tmp';
+                }
+                $filename = path_format( path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($filename, '/') );
+                $tmp = MSAPI('DELETE', $filename, '', $_SERVER['access_token']);
                 $path1 = path_format($_SERVER['list_path'] . path_format($path));
                 if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
                 savecache('path_' . $path1, json_decode('{}',true), 1);
@@ -382,7 +395,10 @@ function isHideFile($name)
     $FunctionalityFile = [
         'head.md',
         'readme.md',
+        'head.omf',
+        'foot.omf',
         'favicon.ico',
+        'index.html',
     ];
 
     if ($name == getConfig('passfile')) return true;
@@ -456,8 +472,15 @@ function config_oauth()
 
 function get_siteid($access_token)
 {
-    if (getConfig('Drive_ver')=='MS') $url = 'https://graph.microsoft.com/v1.0/sites/root:/sites/'.getConfig('sharepointname');
-    if (getConfig('Drive_ver')=='CN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/sites/'.getConfig('sharepointname');
+    $sharepointSiteAddress = getConfig('sharepointSiteAddress');
+    while (substr($sharepointSiteAddress, -1)=='/') $sharepointSiteAddress = substr($sharepointSiteAddress, 0, -1);
+    $tmp = splitlast($sharepointSiteAddress, '/');
+    $sharepointname = $tmp[1];
+    $tmp = splitlast($tmp[0], '/');
+    $sharepointname = $tmp[1] . '/' . $sharepointname;
+    if (getConfig('Drive_ver')=='MS') $url = 'https://graph.microsoft.com/v1.0/sites/root:/'.$sharepointname;
+    if (getConfig('Drive_ver')=='CN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/'.$sharepointname;
+
     $i=0;
     $response = [];
     while ($url!=''&&$response['stat']!=200&&$i<4) {
@@ -682,7 +705,10 @@ function needUpdate()
     $current_ver = substr($current_ver, strpos($current_ver, '.')+1);
     $current_ver = explode(urldecode('%0A'),$current_ver)[0];
     $current_ver = explode(urldecode('%0D'),$current_ver)[0];
-    $github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    //$github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    $tmp = curl_request('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
+    if ($tmp['stat']==0) return 0;
+    $github_version = $tmp['body'];
     $github_ver = substr($github_version, strpos($github_version, '.')+1);
     $github_ver = explode(urldecode('%0A'),$github_ver)[0];
     $github_ver = explode(urldecode('%0D'),$github_ver)[0];
@@ -769,11 +795,17 @@ function bigfileupload($path)
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     if ($_GET['upbigfilename']!=''&&$_GET['filesize']>0) {
-        $fileinfo['name'] = $_GET['upbigfilename'];
+        $tmp = splitlast($_GET['upbigfilename'], '/');
+        if ($tmp[1]!='') {
+            $fileinfo['name'] = $tmp[1];
+            $fileinfo['path'] = $tmp[0];
+        } else {
+            $fileinfo['name'] = $_GET['upbigfilename'];
+        }
         $fileinfo['size'] = $_GET['filesize'];
         $fileinfo['lastModified'] = $_GET['lastModified'];
-        $filename = spurlencode( $fileinfo['name'] );
-        $cachefilename = '.' . $fileinfo['lastModified'] . '_' . $fileinfo['size'] . '_' . $filename . '.tmp';
+        $filename = spurlencode($_GET['upbigfilename'],'/');
+        $cachefilename = spurlencode( $fileinfo['path'] . '/.' . $fileinfo['lastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
         $getoldupinfo=fetch_files(path_format($path . '/' . $cachefilename));
         //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
         if (isset($getoldupinfo['file'])&&$getoldupinfo['size']<5120) {
@@ -848,7 +880,7 @@ function adminoperate($path)
         //savecache('path_' . $path1, json_decode('{}',true), 1);
         return output($result['body'], $result['stat']);
     }
-    if (isset($_GET['operate_action'])&&$_GET['operate_action']==getconstStr('encrypt')) {
+    if (isset($_GET['operate_action'])&&$_GET['operate_action']==getconstStr('Encrypt')) {
         // encrypt 加密
         if (getConfig('passfile')=='') return message(getconstStr('SetpassfileBfEncrypt'),'',403);
         if ($_GET['encrypt_folder']=='/') $_GET['encrypt_folder']=='';
@@ -1088,7 +1120,7 @@ function fetch_files($path = '/')
             $url .= ':' . $path;
             if (substr($url,-1)=='/') $url=substr($url,0,-1);
         }
-        $url .= '?expand=children(select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'].')';
+        $url .= '?expand=children(select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'].')';
         $retry = 0;
         $arr = [];
         while ($retry<3&&!$arr['stat']) {
@@ -1104,6 +1136,16 @@ function fetch_files($path = '/')
                     $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
                     if ($page>1) $files=fetch_files_children($files, $path1, $page);
                     $files['children'] = children_name($files['children']);
+                    /*$url = $_SERVER['api_url'];
+                    if ($path !== '/') {
+                        $url .= ':' . $path;
+                        if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                        $url .= ':/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                    } else {
+                        $url .= '/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                    }
+                    $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
+                    $files['children'] = $children['value'];*/
                 } else {
                 // files num < 200 , then cache
                     //if (isset($files['children'])) {
@@ -1179,9 +1221,9 @@ function fetch_files_children($files, $path, $page)
                     if ($path !== '/') {
                         $url .= ':' . $path;
                         if (substr($url,-1)=='/') $url=substr($url,0,-1);
-                        $url .= ':/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                        $url .= ':/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
                     } else {
-                        $url .= '/children?$select=name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
+                        $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$_SERVER['DownurlStrName'];
                     }
                     $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
                     // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
@@ -1255,70 +1297,6 @@ function fetch_files_children($files, $path, $page)
     return $files;
 }
 
-function render_list($path = '', $files = '')
-{
-    global $exts;
-    global $constStr;
-
-    if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
-        $htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'),'/'))['content'];
-        return output($htmlcontent['body'], $htmlcontent['stat']);
-    }
-    $path = str_replace('%20','%2520',$path);
-    $path = str_replace('+','%2B',$path);
-    $path = str_replace('&','&amp;',path_format(urldecode($path))) ;
-    $path = str_replace('%20',' ',$path);
-    $path = str_replace('#','%23',$path);
-    $p_path='';
-    if ($path !== '/') {
-        if (isset($files['file'])) {
-            $pretitle = str_replace('&','&amp;', $files['name']);
-            $n_path = $pretitle;
-            $tmp = splitlast(splitlast($path,'/')[0],'/');
-            if ($tmp[1]=='') {
-                $p_path = $tmp[0];
-            } else {
-                $p_path = $tmp[1];
-            }
-        } else {
-            if (substr($path,0,1)=='/') $pretitle = substr($path,1);
-            if (substr($path,-1)=='/') $pretitle = substr($path,0,-1);
-            $tmp=splitlast($pretitle,'/');
-            if ($tmp[1]=='') {
-                $n_path = $tmp[0];
-            } else {
-                $n_path = $tmp[1];
-                $tmp = splitlast($tmp[0],'/');
-                if ($tmp[1]=='') {
-                    $p_path = $tmp[0];
-                } else {
-                    $p_path = $tmp[1];
-                }
-            }
-        }
-    } else {
-      $pretitle = getconstStr('Home');
-      $n_path=$pretitle;
-    }
-    $n_path=str_replace('&amp;','&',$n_path);
-    $p_path=str_replace('&amp;','&',$p_path);
-    $pretitle = str_replace('%23','#',$pretitle);
-    $statusCode=200;
-    date_default_timezone_set(get_timezone($_SERVER['timezone']));
-    @ob_start();
-
-    $theme = getConfig('theme');
-    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.php';
-    include 'theme/'.$theme;
-
-    $html = '<!--
-    Github ： https://github.com/qkqpttgf/OneManager-php
--->' . ob_get_clean();
-    //if (isset($htmlpage['statusCode'])) return $htmlpage;
-    if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
-    return output($html,$statusCode);
-}
-
 function get_refresh_token()
 {
     global $constStr;
@@ -1374,7 +1352,7 @@ function get_refresh_token()
     </script>
     ', getconstStr('Wait').' 1s', 201);
         } else {
-            return message('something error, try after a few seconds.', 'retry', 201);
+            return message('Something error, retry after a few seconds.', 'retry', 201);
         }
     }
     if (isset($_GET['install0'])) {
@@ -1397,7 +1375,7 @@ function get_refresh_token()
                 }
                 if ($_POST['usesharepoint']=='on') {
                     $tmp['usesharepoint'] = $_POST['usesharepoint'];
-                    $tmp['sharepointname'] = $_POST['sharepointname'];
+                    $tmp['sharepointSiteAddress'] = $_POST['sharepointSiteAddress'];
                 }
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
@@ -1428,7 +1406,7 @@ function get_refresh_token()
         <div>
             <label><input type="radio" name="Drive_ver" value="MS" checked onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">MS: '.getconstStr('DriveVerMS').'</label><br>
             <label><input type="radio" name="Drive_ver" value="CN" onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">CN: '.getconstStr('DriveVerCN').'</label><br>
-            <label><input type="radio" name="Drive_ver" value="shareurl" onclick="document.getElementById(\'inputshareurl\').style.display=\'\';document.getElementById(\'morecustom\').style.display=\'none\';">shareurl: '.getconstStr('DriveVerShareurl').'</label><br>
+            <label><input type="radio" name="Drive_ver" value="shareurl" onclick="document.getElementById(\'inputshareurl\').style.display=\'\';document.getElementById(\'morecustom\').style.display=\'none\';">ShareUrl: '.getconstStr('DriveVerShareurl').'</label><br>
         </div>
         <br>
         <div id="inputshareurl" style="display:none;margin:10px 35px">
@@ -1444,8 +1422,8 @@ function get_refresh_token()
             </div>
             <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
             <div id="sharepoint" style="display:none;margin:10px 35px">
-                '.getconstStr('GetSharepointName').'<br>
-                <input type="text" name="sharepointname" placeholder="'.getconstStr('InputSharepointName').'"><br>
+                '.getconstStr('GetSharepointSiteAddress').'<br>
+                <input type="text" name="sharepointSiteAddress" style="width:100%" placeholder="'.getconstStr('InputSharepointSiteAddress').'"><br>
             </div>
         </div>
         <br>
@@ -1482,8 +1460,8 @@ function get_refresh_token()
                     }
                 }
                 if (t.usesharepoint.checked==true) {
-                    if (t.sharepointname.value==\'\') {
-                        alert(\''.getconstStr('InputSharepointName').'\');
+                    if (t.sharepointSiteAddress.value==\'\') {
+                        alert(\''.getconstStr('InputSharepointSiteAddress').'\');
                         return false;
                     }
                 }
@@ -1609,7 +1587,7 @@ function EnvOpt($needUpdate = 0)
         }*/ else $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key .'" value="' . getConfig($key) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+            <td width=100%><input type="text" name="' . $key .'" value="' . htmlspecialchars(getConfig($key)) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
     }
     $html .= '
@@ -1700,4 +1678,726 @@ function EnvOpt($needUpdate = 0)
         $html .= getconstStr('NotNeedUpdate');
     }
     return message($html, getconstStr('Setup'));
+}
+
+function render_list($path = '', $files = '')
+{
+    global $exts;
+    global $constStr;
+
+    if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
+        $htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'),'/'))['content'];
+        return output($htmlcontent['body'], $htmlcontent['stat']);
+    }
+    $path = str_replace('%20','%2520',$path);
+    $path = str_replace('+','%2B',$path);
+    $path = str_replace('&','&amp;',path_format(urldecode($path))) ;
+    $path = str_replace('%20',' ',$path);
+    $path = str_replace('#','%23',$path);
+    $p_path='';
+    if ($path !== '/') {
+        if (isset($files['file'])) {
+            $pretitle = str_replace('&','&amp;', $files['name']);
+            $n_path = $pretitle;
+            $tmp = splitlast(splitlast($path,'/')[0],'/');
+            if ($tmp[1]=='') {
+                $p_path = $tmp[0];
+            } else {
+                $p_path = $tmp[1];
+            }
+        } else {
+            if (substr($path, 0, 1)=='/') $pretitle = substr($path, 1);
+            if (substr($path, -1)=='/') $pretitle = substr($pretitle, 0, -1);
+            $tmp=splitlast($pretitle,'/');
+            if ($tmp[1]=='') {
+                $n_path = $tmp[0];
+            } else {
+                $n_path = $tmp[1];
+                $tmp = splitlast($tmp[0],'/');
+                if ($tmp[1]=='') {
+                    $p_path = $tmp[0];
+                } else {
+                    $p_path = $tmp[1];
+                }
+            }
+        }
+    } else {
+      $pretitle = getconstStr('Home');
+      $n_path=$pretitle;
+    }
+    $n_path=str_replace('&amp;','&',$n_path);
+    $p_path=str_replace('&amp;','&',$p_path);
+    $pretitle = str_replace('%23','#',$pretitle);
+    $statusCode=200;
+    date_default_timezone_set(get_timezone($_SERVER['timezone']));
+    $authinfo = '<!--
+    OneManager: An index & manager of Onedrive auth by ysun.
+    Github ： https://github.com/qkqpttgf/OneManager-php
+-->';
+
+    $theme = getConfig('theme');
+    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
+    if (substr($theme,-4)=='.php') {
+        @ob_start();
+        include 'theme/'.$theme;
+        $html = ob_get_clean();
+    } else {
+        $file_path = 'theme/'.$theme;
+        $fp = fopen($file_path,"r");
+        $html = fread($fp,filesize($file_path));
+        fclose($fp);
+
+        $tmp = splitfirst($html, '<!--IconValuesStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--IconValuesEnd-->');
+        $IconValues = json_decode($tmp[0], true);
+        $html .= $tmp[1];
+
+        if (!$files) {
+            //$html = '<pre>'.json_encode($files, JSON_PRETTY_PRINT).'</pre>' . $html;
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFileStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFolderStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--ListStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--ListEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $tmp = splitfirst($html, '<!--EncryptedStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+                $html .= $tmp[1];
+            }
+        }
+        if ($_SERVER['admin']) {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--LoginStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--LoginEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--AdminStart-->')) {
+                $html = str_replace('<!--AdminStart-->', '', $html);
+                $html = str_replace('<!--AdminEnd-->', '', $html);
+            }
+            while (strpos($html, '<!--constStr@Operate-->')) $html = str_replace('<!--constStr@Operate-->', getconstStr('Operate'), $html);
+            while (strpos($html, '<!--constStr@Create-->')) $html = str_replace('<!--constStr@Create-->', getconstStr('Create'), $html);
+            while (strpos($html, '<!--constStr@Encrypt-->')) $html = str_replace('<!--constStr@Encrypt-->', getconstStr('Encrypt'), $html);
+            while (strpos($html, '<!--constStr@RefreshCache-->')) $html = str_replace('<!--constStr@RefreshCache-->', getconstStr('RefreshCache'), $html);
+            while (strpos($html, '<!--constStr@Setup-->')) $html = str_replace('<!--constStr@Setup-->', getconstStr('Setup'), $html);
+            while (strpos($html, '<!--constStr@Logout-->')) $html = str_replace('<!--constStr@Logout-->', getconstStr('Logout'), $html);
+            while (strpos($html, '<!--constStr@Rename-->')) $html = str_replace('<!--constStr@Rename-->', getconstStr('Rename'), $html);
+            while (strpos($html, '<!--constStr@Submit-->')) $html = str_replace('<!--constStr@Submit-->', getconstStr('Submit'), $html);
+            while (strpos($html, '<!--constStr@Delete-->')) $html = str_replace('<!--constStr@Delete-->', getconstStr('Delete'), $html);
+            while (strpos($html, '<!--constStr@Copy-->')) $html = str_replace('<!--constStr@Copy-->', getconstStr('Copy'), $html);
+            while (strpos($html, '<!--constStr@Move-->')) $html = str_replace('<!--constStr@Move-->', getconstStr('Move'), $html);
+            while (strpos($html, '<!--constStr@Folder-->')) $html = str_replace('<!--constStr@Folder-->', getconstStr('Folder'), $html);
+            while (strpos($html, '<!--constStr@File-->')) $html = str_replace('<!--constStr@File-->', getconstStr('File'), $html);
+            while (strpos($html, '<!--constStr@Name-->')) $html = str_replace('<!--constStr@Name-->', getconstStr('Name'), $html);
+            while (strpos($html, '<!--constStr@Content-->')) $html = str_replace('<!--constStr@Content-->', getconstStr('Content'), $html);
+            
+        } else {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--AdminStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--AdminEnd-->');
+                $html .= $tmp[1];
+            }
+            if (getConfig('adminloginpage')=='') {
+                while (strpos($html, '<!--LoginStart-->')) $html = str_replace('<!--LoginStart-->', '', $html);
+                while (strpos($html, '<!--LoginEnd-->')) $html = str_replace('<!--LoginEnd-->', '', $html);
+            } else {
+                $tmp[1] = 'a';
+                while ($tmp[1]!='') {
+                    $tmp = splitfirst($html, '<!--LoginStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--LoginEnd-->');
+                    $html .= $tmp[1];
+                }
+            }
+        }
+
+        if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFileStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFolderStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $tmp = splitfirst($html, '<!--EncryptedStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $html = str_replace('<!--GuestUploadStart-->', '', $html);
+                $html = str_replace('<!--GuestUploadEnd-->', '', $html);
+            }
+        }
+        if ($_SERVER['is_guestup_path']||$_SERVER['admin']) {
+            while (strpos($html, '<!--UploadJsStart-->')) {
+                $html = str_replace('<!--UploadJsStart-->', '', $html);
+                $html = str_replace('<!--UploadJsEnd-->', '', $html);
+            }
+        } else {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--UploadJsStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--UploadJsEnd-->');
+                $html .= $tmp[1];
+            }
+        }
+        if ($_SERVER['ishidden']==4) {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFileStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFolderStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
+                $html .= $tmp[1];
+            }
+            /*$tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--ListStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--ListEnd-->');
+                $html .= $tmp[1];
+            }*/
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsNotHiddenStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsNotHiddenEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $html = str_replace('<!--EncryptedStart-->', '', $html);
+                $html = str_replace('<!--EncryptedEnd-->', '', $html);
+            }
+            /*while (strpos($html, '<!--IsFolderStart-->')) {
+                $html = str_replace('<!--IsFolderStart-->', '', $html);
+                $html = str_replace('<!--IsFolderEnd-->', '', $html);
+            }*/
+        }
+        
+        if (isset($files['children'])) {
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp = splitfirst($html, '<!--EncryptedStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+            $html .= $tmp[1];
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFileStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--IsFolderStart-->')) {
+                $html = str_replace('<!--IsFolderStart-->', '', $html);
+                $html = str_replace('<!--IsFolderEnd-->', '', $html);
+            }
+            $html = str_replace('<!--constStr@File-->', getconstStr('File'), $html);
+            $html = str_replace('<!--constStr@ShowThumbnails-->', getconstStr('ShowThumbnails'), $html);
+            $html = str_replace('<!--constStr@CopyAllDownloadUrl-->', getconstStr('CopyAllDownloadUrl'), $html);
+            $html = str_replace('<!--constStr@EditTime-->', getconstStr('EditTime'), $html);
+            $html = str_replace('<!--constStr@Size-->', getconstStr('Size'), $html);
+
+            $filenum = 0;
+
+            $tmp = splitfirst($html, '<!--FolderListStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--FolderListEnd-->');
+            $FolderList = $tmp[0];
+            foreach ($files['children'] as $file) {
+                if (isset($file['folder'])) {
+                    if ($_SERVER['admin'] or !isHideFile($file['name'])) {
+                        $filenum++;
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])), $FolderList);
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['name']), $FolderListStr);
+                        $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
+                        $FolderListStr = str_replace('<!--size-->', size_format($file['size']), $FolderListStr);
+                        while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
+                        $html .= $FolderListStr;
+                    }
+                }
+            }
+            $html .= $tmp[1];
+
+            $tmp = splitfirst($html, '<!--FileListStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--FileListEnd-->');
+            $FolderList = $tmp[0];
+            foreach ($files['children'] as $file) {
+                if (isset($file['file'])) {
+                    if ($_SERVER['admin'] or !isHideFile($file['name'])) {
+                        $filenum++;
+                        $ext = strtolower(substr($file['name'], strrpos($file['name'], '.') + 1));
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])), $FolderList);
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['name']), $FolderListStr);
+                        //$FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . str_replace('&','&amp;', $file['name'])), $FolderListStr);
+                        $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
+                        $FolderListStr = str_replace('<!--size-->', size_format($file['size']), $FolderListStr);
+                        foreach ($IconValues as $key1 => $value1) {
+                            if (isset($exts[$key1])&&in_array($ext, $exts[$key1])) {
+                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                            }
+                            if ($ext==$key1) {
+                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                            }
+                        }
+                        $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
+                        while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
+                        $html .= $FolderListStr;
+                    }
+                }
+            }
+            $html .= $tmp[1];
+            while (strpos($html, '<!--maxfilenum-->')) $html = str_replace('<!--maxfilenum-->', $filenum, $html);
+
+            if ($files['folder']['childCount']>200) {
+                while (strpos($html, '<!--MorePageStart-->')) $html = str_replace('<!--MorePageStart-->', '', $html);
+                while (strpos($html, '<!--MorePageEnd-->')) $html = str_replace('<!--MorePageEnd-->', '', $html);
+                
+                $pagenum = $files['folder']['page'];
+                if ($pagenum=='') $pagenum = 1;
+                $maxpage = ceil($files['folder']['childCount']/200);
+
+                if ($pagenum!=1) {
+                    $html = str_replace('<!--PrePageStart-->', '', $html);
+                    $html = str_replace('<!--PrePageEnd-->', '', $html);
+                    $html = str_replace('<!--constStr@PrePage-->', getconstStr('PrePage'), $html);
+                    $html = str_replace('<!--PrePageNum-->', $pagenum-1, $html);
+                } else {
+                    $tmp = splitfirst($html, '<!--PrePageStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--PrePageEnd-->');
+                    $html .= $tmp[1];
+                }
+                //$html .= json_encode($files['folder']);
+                if ($pagenum!=$maxpage) {
+                    $html = str_replace('<!--NextPageStart-->', '', $html);
+                    $html = str_replace('<!--NextPageEnd-->', '', $html);
+                    $html = str_replace('<!--constStr@NextPage-->', getconstStr('NextPage'), $html);
+                    $html = str_replace('<!--NextPageNum-->', $pagenum+1, $html);
+                } else {
+                    $tmp = splitfirst($html, '<!--NextPageStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--NextPageEnd-->');
+                    $html .= $tmp[1];
+                }
+                $tmp = splitfirst($html, '<!--MorePageListNowStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--MorePageListNowEnd-->');
+                $MorePageListNow = str_replace('<!--PageNum-->', $pagenum, $tmp[0]);
+                $html .= $tmp[1];
+
+                $tmp = splitfirst($html, '<!--MorePageListStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--MorePageListEnd-->');
+                $MorePageList = $tmp[0];
+                for ($page=1;$page<=$maxpage;$page++) {
+                    if ($page == $pagenum) {
+                        $MorePageListStr = $MorePageListNow;
+                    } else {
+                        $MorePageListStr = str_replace('<!--PageNum-->', $page, $MorePageList);
+                        $MorePageListStr = str_replace('<!--PageNum-->', $page, $MorePageListStr);
+                    }
+                    $html .= $MorePageListStr;
+                }
+                $html .= $tmp[1];
+
+            } else {
+                while (strpos($html, '<!--MorePageStart-->')) {
+                    $tmp = splitfirst($html, '<!--MorePageStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--MorePageEnd-->');
+                    $html .= $tmp[1];
+                }
+            }
+            
+        } elseif (isset($files['file'])) {
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp = splitfirst($html, '<!--EncryptedStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+            $html .= $tmp[1];
+
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFolderStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--IsFileStart-->')) {
+                $html = str_replace('<!--IsFileStart-->', '', $html);
+                $html = str_replace('<!--IsFileEnd-->', '', $html);
+            }
+            $html = str_replace('<!--FileEncodeUrl-->', str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))), $html);
+            $html = str_replace('<!--FileUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
+            $html = str_replace('<!--constStr@Download-->', getconstStr('Download'), $html);
+            
+            $ext = strtolower(substr($path, strrpos($path, '.') + 1));
+            if (in_array($ext, $exts['img'])) $ext = 'img';
+            elseif (in_array($ext, $exts['video'])) $ext = 'video';
+            elseif (in_array($ext, $exts['music'])) $ext = 'music';
+            //elseif (in_array($ext, $exts['pdf'])) $ext = 'pdf';
+            elseif ($ext=='pdf') $ext = 'pdf';
+            elseif (in_array($ext, $exts['office'])) $ext = 'office';
+            elseif (in_array($ext, $exts['txt'])) $ext = 'txt';
+            else $ext = 'Other';
+            $previewext = ['img', 'video', 'music', 'pdf', 'office', 'txt', 'Other'];
+            $previewext = array_diff($previewext, [ $ext ]);
+            foreach ($previewext as $ext1) {
+                $tmp[1] = 'a';
+                while ($tmp[1]!='') {
+                    $tmp = splitfirst($html, '<!--Is'.$ext1.'FileStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--Is'.$ext1.'FileEnd-->');
+                    $html .= $tmp[1];
+                }
+            }
+            while (strpos($html, '<!--Is'.$ext.'FileStart-->')) {
+                $html = str_replace('<!--Is'.$ext.'FileStart-->', '', $html);
+                $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
+            }
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
+            $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files[$_SERVER['DownurlStrName']]), $html);
+            $html = str_replace('<!--constStr@ClicktoEdit-->', getconstStr('ClicktoEdit'), $html);
+            $html = str_replace('<!--constStr@CancelEdit-->', getconstStr('CancelEdit'), $html);
+            $html = str_replace('<!--constStr@Save-->', getconstStr('Save'), $html);
+            while (strpos($html, '<!--TxtContent-->')) $html = str_replace('<!--TxtContent-->', htmlspecialchars(curl_request($files[$_SERVER['DownurlStrName']])['body']), $html);
+            $html = str_replace('<!--constStr@FileNotSupport-->', getconstStr('FileNotSupport'), $html);
+
+
+            //$html = str_replace('<!--constStr@File-->', getconstStr('File'), $html);
+        }
+
+        $html = str_replace('<!--constStr@language-->', $constStr['language'], $html);
+
+        $title = $pretitle;
+        if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) {
+            if (getConfig('diskname')!='') $diskname = getConfig('diskname');
+            else $diskname = $_SERVER['disktag'];
+            $title .= ' - ' . $diskname;
+        }
+        $title .= ' - ' . $_SERVER['sitename'];
+        $html = str_replace('<!--Title-->', $title, $html);
+
+        $keywords = $n_path;
+        if ($p_path!='') $keywords .= ',' . $p_path;
+        $keywords .= ',' . $_SERVER['sitename'] . ',OneManager';
+        $html = str_replace('<!--Keywords-->', $keywords, $html);
+
+        if ($_GET['preview']) $description = 'Preview of '.$n_path.'. ';
+        elseif (isset($files['folder'])) $description = 'List of '.$n_path.'. ';
+        $description .= 'In '.$_SERVER['sitename'];
+        $html = str_replace('<!--Description-->', $description, $html);
+
+        while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', $_SERVER['base_disk_path'], $html);
+        while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
+        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
+        while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
+        
+        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
+        
+        $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
+        $html = str_replace('<!--customScript-->', getConfig('customScript'), $html);
+        
+        while (strpos($html, '<!--constStr@Login-->')) $html = str_replace('<!--constStr@Login-->', getconstStr('Login'), $html);
+        while (strpos($html, '<!--constStr@Close-->')) $html = str_replace('<!--constStr@Close-->', getconstStr('Close'), $html);
+        while (strpos($html, '<!--constStr@InputPassword-->')) $html = str_replace('<!--constStr@InputPassword-->', getconstStr('InputPassword'), $html);
+        while (strpos($html, '<!--constStr@InputPasswordUWant-->')) $html = str_replace('<!--constStr@InputPasswordUWant-->', getconstStr('InputPasswordUWant'), $html);
+        while (strpos($html, '<!--constStr@Submit-->')) $html = str_replace('<!--constStr@Submit-->', getconstStr('Submit'), $html);
+        while (strpos($html, '<!--constStr@Success-->')) $html = str_replace('<!--constStr@Success-->', getconstStr('Success'), $html);
+        while (strpos($html, '<!--constStr@GetUploadLink-->')) $html = str_replace('<!--constStr@GetUploadLink-->', getconstStr('GetUploadLink'), $html);
+        while (strpos($html, '<!--constStr@UpFileTooLarge-->')) $html = str_replace('<!--constStr@UpFileTooLarge-->', getconstStr('UpFileTooLarge'), $html);
+        while (strpos($html, '<!--constStr@UploadStart-->')) $html = str_replace('<!--constStr@UploadStart-->', getconstStr('UploadStart'), $html);
+        while (strpos($html, '<!--constStr@UploadStartAt-->')) $html = str_replace('<!--constStr@UploadStartAt-->', getconstStr('UploadStartAt'), $html);
+        while (strpos($html, '<!--constStr@LastUpload-->')) $html = str_replace('<!--constStr@LastUpload-->', getconstStr('LastUpload'), $html);
+        while (strpos($html, '<!--constStr@ThisTime-->')) $html = str_replace('<!--constStr@ThisTime-->', getconstStr('ThisTime'), $html);
+
+        while (strpos($html, '<!--constStr@Upload-->')) $html = str_replace('<!--constStr@Upload-->', getconstStr('Upload'), $html);
+        while (strpos($html, '<!--constStr@AverageSpeed-->')) $html = str_replace('<!--constStr@AverageSpeed-->', getconstStr('AverageSpeed'), $html);
+        while (strpos($html, '<!--constStr@CurrentSpeed-->')) $html = str_replace('<!--constStr@CurrentSpeed-->', getconstStr('CurrentSpeed'), $html);
+        while (strpos($html, '<!--constStr@Expect-->')) $html = str_replace('<!--constStr@Expect-->', getconstStr('Expect'), $html);
+        while (strpos($html, '<!--constStr@UploadErrorUpAgain-->')) $html = str_replace('<!--constStr@UploadErrorUpAgain-->', getconstStr('UploadErrorUpAgain'), $html);
+        while (strpos($html, '<!--constStr@EndAt-->')) $html = str_replace('<!--constStr@EndAt-->', getconstStr('EndAt'), $html);
+        
+        while (strpos($html, '<!--constStr@UploadComplete-->')) $html = str_replace('<!--constStr@UploadComplete-->', getconstStr('UploadComplete'), $html);
+        while (strpos($html, '<!--constStr@CopyUrl-->')) $html = str_replace('<!--constStr@CopyUrl-->', getconstStr('CopyUrl'), $html);
+        while (strpos($html, '<!--constStr@UploadFail23-->')) $html = str_replace('<!--constStr@UploadFail23-->', getconstStr('UploadFail23'), $html);
+        while (strpos($html, '<!--constStr@GetFileNameFail-->')) $html = str_replace('<!--constStr@GetFileNameFail-->', getconstStr('GetFileNameFail'), $html);
+        while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
+        while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
+        while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
+        
+
+        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'], $html);
+
+        $tmp = splitfirst($html, '<!--BackgroundStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--BackgroundEnd-->');
+        if (getConfig('background')) {
+            $background = str_replace('<!--BackgroundUrl-->', getConfig('background'), $tmp[0]);
+        }
+        $html .= $background . $tmp[1];
+        
+        $tmp = splitfirst($html, '<!--SelectLanguageStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--SelectLanguageEnd-->');
+        $SelectLanguage = $tmp[0];
+        foreach ($constStr['languages'] as $key1 => $value1) {
+            $SelectLanguageStr = str_replace('<!--SelectLanguageKey-->', $key1, $SelectLanguage);
+            $SelectLanguageStr = str_replace('<!--SelectLanguageValue-->', $value1, $SelectLanguageStr);
+            $SelectLanguageStr = str_replace('<!--SelectLanguageSelected-->', ($key1==$constStr['language']?'selected="selected"':''), $SelectLanguageStr);
+            $html .= $SelectLanguageStr;
+        }
+        $html .= $tmp[1];
+
+        $tmp = splitfirst($html, '<!--NeedUpdateStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--NeedUpdateEnd-->');
+        $NeedUpdateStr = $tmp[0];
+        if (isset($_SERVER['needUpdate'])&&$_SERVER['needUpdate']) $NeedUpdateStr = str_replace('<!--constStr@NeedUpdate-->', getconstStr('NeedUpdate'), $NeedUpdateStr);
+        else $NeedUpdateStr ='';
+        $html .= $NeedUpdateStr . $tmp[1];
+        
+        $tmp = splitfirst($html, '<!--BackArrowStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--BackArrowEnd-->');
+        if ($path !== '/') {
+            $current_url = $_SERVER['PHP_SELF'];
+            while (substr($current_url, -1) === '/') {
+                $current_url = substr($current_url, 0, -1);
+            }
+            if (strpos($current_url, '/') !== FALSE) {
+                $parent_url = substr($current_url, 0, strrpos($current_url, '/'));
+            } else {
+                $parent_url = $current_url;
+            }
+            $BackArrow = str_replace('<!--BackArrowUrl-->', $parent_url.'/', $tmp[0]);
+        }
+        $html .= $BackArrow . $tmp[1];
+
+        $tmp[1] = 'a';
+        while ($tmp[1]!='') {
+            $tmp = splitfirst($html, '<!--ShowThumbnailsStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--ShowThumbnailsEnd-->');
+            if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
+                $html .= $tmp[0] . $tmp[1];
+            } else $html .= $tmp[1];
+        }
+        $imgextstr = '';
+        foreach ($exts['img'] as $imgext) $imgextstr .= '\''.$imgext.'\', '; 
+        $html = str_replace('<!--ImgExts-->', $imgextstr, $html);
+        
+
+        $html = str_replace('<!--Sitename-->', $_SERVER['sitename'], $html);
+
+        $tmp = splitfirst($html, '<!--MultiDiskAreaStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--MultiDiskAreaEnd-->');
+        $disktags = explode("|",getConfig('disktag'));
+        if (count($disktags)>1) {
+            $tmp1 = $tmp[1];
+            $tmp = splitfirst($tmp[0], '<!--MultiDisksStart-->');
+            $MultiDiskArea = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--MultiDisksEnd-->');
+            $MultiDisks = $tmp[0];
+            foreach ($disktags as $disk) {
+                $diskname = getConfig('diskname', $disk);
+                if ($diskname=='') $diskname = $disk;
+                $MultiDisksStr = str_replace('<!--MultiDisksUrl-->', path_format($_SERVER['base_path'].'/'.$disk.'/'), $MultiDisks);
+                $MultiDisksStr = str_replace('<!--MultiDisksNow-->', ($_SERVER['disktag']==$disk?' now':''), $MultiDisksStr);
+                $MultiDisksStr = str_replace('<!--MultiDisksName-->', $diskname, $MultiDisksStr);
+                $MultiDiskArea .= $MultiDisksStr;
+            }
+            $MultiDiskArea .= $tmp[1];
+            $tmp[1] = $tmp1;
+        }
+        $html .= $MultiDiskArea . $tmp[1];
+        
+        $tmp = splitfirst($html, '<!--HeadomfStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
+        if (isset($files['children']['head.omf'])) {
+            $headomf = str_replace('<!--HeadomfContent-->', fetch_files(spurlencode(path_format(urldecode($path) . '/head.omf'),'/'))['content']['body'], $tmp[0]);
+        }
+        $html .= $headomf . $tmp[1];
+        
+        $tmp = splitfirst($html, '<!--HeadmdStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
+        if (isset($files['children']['head.md'])) {
+            $headmd = str_replace('<!--HeadmdContent-->', fetch_files(spurlencode(path_format(urldecode($path) . '/head.md'),'/'))['content']['body'], $tmp[0]);
+            $html .= $headmd . $tmp[1];
+            while (strpos($html, '<!--HeadmdStart-->')) {
+                $html = str_replace('<!--HeadmdStart-->', '', $html);
+                $html = str_replace('<!--HeadmdEnd-->', '', $html);
+            }
+        } else {
+            $html .= $tmp[1];
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--HeadmdStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
+                $html .= $tmp[1];
+            }
+        }
+
+        $tmp[1] = 'a';
+        while ($tmp[1]!='') {
+            $tmp = splitfirst($html, '<!--ListStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--ListEnd-->');
+            $html_aft = $tmp[1];
+            if ($files) {
+                $listarea = $tmp[0];
+            }
+            $html .= $listarea . $html_aft;
+        }
+
+        $tmp = splitfirst($html, '<!--ReadmemdStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
+        if (isset($files['children']['readme.md'])) {
+            $Readmemd = str_replace('<!--ReadmemdContent-->', fetch_files(spurlencode(path_format(urldecode($path) . '/readme.md'),'/'))['content']['body'], $tmp[0]);
+            $html .= $Readmemd . $tmp[1];
+            while (strpos($html, '<!--ReadmemdStart-->')) {
+                $html = str_replace('<!--ReadmemdStart-->', '', $html);
+                $html = str_replace('<!--ReadmemdEnd-->', '', $html);
+            }
+        } else {
+            $html .= $tmp[1];
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--ReadmemdStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
+                $html .= $tmp[1];
+            }
+        }
+
+        
+        $tmp = splitfirst($html, '<!--FootomfStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
+        if (isset($files['children']['foot.omf'])) {
+            $Footomf = str_replace('<!--FootomfContent-->', fetch_files(spurlencode(path_format(urldecode($path) . '/foot.omf'),'/'))['content']['body'], $tmp[0]);
+        }
+        $html .= $Footomf . $tmp[1];
+
+        
+        $tmp = splitfirst($html, '<!--MdRequireStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--MdRequireEnd-->');
+        if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) {
+            $html .= $tmp[0] . $tmp[1];
+        } else $html .= $tmp[1];
+
+        if (getConfig('passfile')!='') {
+            $tmp = splitfirst($html, '<!--EncryptBtnStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptBtnEnd-->');
+            $html .= str_replace('<!--constStr@Encrypt-->', getconstStr('Encrypt'), $tmp[0]) . $tmp[1];
+            $tmp = splitfirst($html, '<!--EncryptAlertStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptAlertEnd-->');
+            $html .= $tmp[1];
+        } else {
+            $tmp = splitfirst($html, '<!--EncryptAlertStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptAlertEnd-->');
+            $html .= str_replace('<!--constStr@SetpassfileBfEncrypt-->', getconstStr('SetpassfileBfEncrypt'), $tmp[0]) . $tmp[1];
+            $tmp = splitfirst($html, '<!--EncryptBtnStart-->');
+            $html = $tmp[0];
+            $tmp = splitfirst($tmp[1], '<!--EncryptBtnEnd-->');
+            $html .= $tmp[1];
+        }
+
+        $tmp = splitfirst($html, '<!--MoveRootStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--MoveRootEnd-->');
+        if ($path != '/') {
+            $html .= str_replace('<!--constStr@ParentDir-->', getconstStr('ParentDir'), $tmp[0]) . $tmp[1];
+        } else $html .= $tmp[1];
+
+        $tmp = splitfirst($html, '<!--MoveDirsStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--MoveDirsEnd-->');
+        $MoveDirs = $tmp[0];
+        if (isset($files['children'])) {
+            foreach ($files['children'] as $file) {
+                if (isset($file['folder'])) {
+                    $MoveDirsStr = str_replace('<!--MoveDirsValue-->', str_replace('&','&amp;', $file['name']), $MoveDirs);
+                    $MoveDirsStr = str_replace('<!--MoveDirsValue-->', str_replace('&','&amp;', $file['name']), $MoveDirsStr);
+                    $html .= $MoveDirsStr;
+                }
+            }
+        }
+        $html .= $tmp[1];
+
+
+        // 最后清除换行
+        while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
+        //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
+        
+    }
+    
+    $html = $authinfo . $html;
+    if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
+    return output($html,$statusCode);
 }

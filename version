@@ -1,7 +1,10 @@
+20200503-1848.18
+Rebuild theme. Add custom Css & custom Script, add FunctionalityFile: head.omf & foot.omf.
+重建主题文件结构。增加自定义css与自定义script。增加2个功能文件：head.omf、foot.omf。
+
 20200402-1830.17
 Oneclick update can select which branch to update. Now use the accept language instead of the language config.
 一键更新可以选择哪个分支了。现在开始使用浏览器语言，抛弃language设置。
-
 20200326-0001.16
 You can add sharepoint site drive as a disk, <font color=red>you must reinstall after update</font>.
 可以将sharepoint网站添加成一个盘，<font color=red>由于结构改变，升级后只能重装</font>。

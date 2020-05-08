@@ -72,14 +72,13 @@ function setConfig($arr, $disktag = '')
     $configs = substr($s, 18, -2);
     if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|",getConfig('disktag'));
-    //$indisk = 0;
+    $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
             if (in_array($k, $Base64Env)) $envs[$disktag][$k] = equal_replace($v);
             else $envs[$disktag][$k] = $v;
-            /*$diskconfig[$k] = $v;
-            $indisk = 1;*/
+            $indisk = 1;
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
             $operatedisk = 1;
@@ -92,11 +91,12 @@ function setConfig($arr, $disktag = '')
             else $envs[$k] = $v;
         }
     }
-    /*if ($indisk) {
+    if ($indisk) {
+        $diskconfig = $envs[$disktag];
         $diskconfig = array_filter($diskconfig, 'array_value_isnot_null');
         ksort($diskconfig);
-        $tmp[$disktag] = json_encode($diskconfig);
-    }*/
+        $envs[$disktag] = $diskconfig;
+    }
     if ($operatedisk) {
         $disktags = array_unique($disktags);
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
@@ -119,7 +119,7 @@ function install()
     if ($_GET['install2']) {
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
-            $tmp['language'] = $_COOKIE['language'];
+            //$tmp['language'] = $_COOKIE['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
             $response = setConfig($tmp);
             if (api_error($response)) {
