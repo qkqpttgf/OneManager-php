@@ -4,7 +4,7 @@ Install program first, then add onedrive in setup after login.
 # Deploy to heroku  
 Official: https://heroku.com  
 
-How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app, or create an app then deploy via connect to your github fork.  
+How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
 DEMO:  https://herooneindex.herokuapp.com/  
 
