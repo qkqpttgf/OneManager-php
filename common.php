@@ -1854,6 +1854,12 @@ function render_list($path = '', $files = '')
                 $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
                 $html .= $tmp[1];
             }
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $tmp = splitfirst($html, '<!--EncryptedStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+                $html .= $tmp[1];
+            }
             while (strpos($html, '<!--GuestUploadStart-->')) {
                 $html = str_replace('<!--GuestUploadStart-->', '', $html);
                 $html = str_replace('<!--GuestUploadEnd-->', '', $html);
