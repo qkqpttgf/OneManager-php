@@ -1797,6 +1797,13 @@ function render_list($path = '', $files = '')
                 $tmp = splitfirst($tmp[1], '<!--LoginEnd-->');
                 $html .= $tmp[1];
             }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--GuestStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestEnd-->');
+                $html .= $tmp[1];
+            }
             while (strpos($html, '<!--AdminStart-->')) {
                 $html = str_replace('<!--AdminStart-->', '', $html);
                 $html = str_replace('<!--AdminEnd-->', '', $html);
@@ -1837,6 +1844,8 @@ function render_list($path = '', $files = '')
                     $html .= $tmp[1];
                 }
             }
+            while (strpos($html, '<!--GuestStart-->')) $html = str_replace('<!--GuestStart-->', '', $html);
+            while (strpos($html, '<!--GuestEnd-->')) $html = str_replace('<!--GuestEnd-->', '', $html);
         }
 
         if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {

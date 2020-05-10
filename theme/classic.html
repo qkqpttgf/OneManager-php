@@ -903,19 +903,19 @@
                         reader.readAsArrayBuffer(blob);
                     }
                     readblob(asize);
-<!--LoginStart-->
+<!--GuestStart-->
                     var spark = new SparkMD5.ArrayBuffer();
-<!--LoginEnd-->
+<!--GuestEnd-->
                     reader.onload = function(e){
                         var binary = this.result;
-<!--LoginStart-->
+<!--GuestStart-->
                         spark.append(binary);
                         if (asize < newstartsize) {
                             asize += chunksize;
                             readblob(asize);
                             return;
                         }
-<!--LoginEnd-->
+<!--GuestEnd-->
                         var xhr = new XMLHttpRequest();
                         xhr.open("PUT", url, true);
                         //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
@@ -942,7 +942,7 @@
                                 xhr3.onload = function(e){
                                     console.log(xhr3.responseText+','+xhr3.status);
                                 }
-<!--LoginStart-->
+<!--GuestStart-->
                                 var filemd5 = spark.end();
                                 var xhr4 = new XMLHttpRequest();
                                 xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent((file.webkitRelativePath||file.name))+'&filemd5='+filemd5);
@@ -967,7 +967,7 @@
                                     document.getElementById('upfile_a1_'+tdnum).href = filename;
                                     document.getElementById('upfile_cpbt_'+tdnum).style.display = "";
                                 }
-<!--LoginEnd-->
+<!--GuestEnd-->
                                 EndTime=new Date();
                                 MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
                                 if (newstartsize==0) {
