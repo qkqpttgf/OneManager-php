@@ -1879,7 +1879,7 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--GuestUploadEnd-->', '', $html);
             }
         }
-        if ($_SERVER['is_guestup_path']||$_SERVER['admin']) {
+        if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&isset($files['folder'])&&$_SERVER['ishidden']<4 )) {
             while (strpos($html, '<!--UploadJsStart-->')) {
                 $html = str_replace('<!--UploadJsStart-->', '', $html);
                 $html = str_replace('<!--UploadJsEnd-->', '', $html);
@@ -1926,10 +1926,13 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--EncryptedStart-->', '', $html);
                 $html = str_replace('<!--EncryptedEnd-->', '', $html);
             }
-            /*while (strpos($html, '<!--IsFolderStart-->')) {
-                $html = str_replace('<!--IsFolderStart-->', '', $html);
-                $html = str_replace('<!--IsFolderEnd-->', '', $html);
-            }*/
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
         }
         
         if (isset($files['children'])) {
@@ -2162,9 +2165,7 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
         while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
-        
-        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
-        
+
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
         $html = str_replace('<!--customScript-->', getConfig('customScript'), $html);
         
@@ -2404,6 +2405,12 @@ function render_list($path = '', $files = '')
         }
         $html .= $tmp[1];
 
+        $tmp = splitfirst($html, '<!--WriteTimezoneStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--WriteTimezoneEnd-->');
+        if (!isset($_COOKIE['timezone'])) $html .= str_replace('<!--timezone-->', $_SERVER['timezone'], $tmp[0]);
+        $html .= $tmp[1];
+        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
 
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
