@@ -153,6 +153,7 @@ function main($path)
     global $exts;
     global $constStr;
 
+    $_SERVER['php_starttime'] = microtime(true);
     $path = path_format($path);
     if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) {
         $constStr['language'] = $_SERVER['firstacceptlanguage'];
@@ -1737,7 +1738,7 @@ function render_list($path = '', $files = '')
     date_default_timezone_set(get_timezone($_SERVER['timezone']));
     $authinfo = '<!--
     OneManager: An index & manager of Onedrive auth by ysun.
-    Github ： https://github.com/qkqpttgf/OneManager-php
+    Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
     $theme = getConfig('theme');
@@ -2005,8 +2006,10 @@ function render_list($path = '', $files = '')
                             if ($ext==$key1) {
                                 $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
                             }
+                            //error_log('file:'.$file['name'].':'.$key1);
+                            if (!strpos($FolderListStr, '<!--IconValue-->')) break;
                         }
-                        $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
+                        if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
                         $html .= $FolderListStr;
                     }
@@ -2196,9 +2199,6 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
         while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
         while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
-        
-
-        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'], $html);
 
         $tmp = splitfirst($html, '<!--BackgroundStart-->');
         $html = $tmp[0];
@@ -2415,9 +2415,11 @@ function render_list($path = '', $files = '')
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
         //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
-        
+
+        $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
+        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
     }
-    
+
     $html = $authinfo . $html;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);
