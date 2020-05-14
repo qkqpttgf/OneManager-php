@@ -1378,10 +1378,17 @@ function get_refresh_token()
                     $tmp['Drive_custom'] = $_POST['Drive_custom'];
                     $tmp['client_id'] = $_POST['client_id'];
                     $tmp['client_secret'] = $_POST['client_secret'];
+                } else {
+                    $tmp['Drive_custom'] = '';
+                    $tmp['client_id'] = '';
+                    $tmp['client_secret'] = '';
                 }
                 if ($_POST['usesharepoint']=='on') {
                     $tmp['usesharepoint'] = $_POST['usesharepoint'];
                     $tmp['sharepointSiteAddress'] = $_POST['sharepointSiteAddress'];
+                } else {
+                    $tmp['usesharepoint'] = '';
+                    $tmp['sharepointSiteAddress'] = '';
                 }
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
