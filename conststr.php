@@ -1,7 +1,7 @@
 <?php
 
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
-$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg', 'm4a'];
+$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 $exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py', 'omf'];
 $exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8'];
@@ -658,8 +658,8 @@ $constStr = [
         'zh-cn' => '对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
     ],
     'CustomIdSecret' => [
-        'en-us' => 'Use custom client id & secret',
-        'zh-cn' => '自己申请应用ID与机密',
+        'en-us' => 'Use custom client id & secret instead of OneManager default',
+        'zh-cn' => '自己申请应用ID与机密，不用OneManager默认的',
         'ja' => 'アプリケーションIDとシークレットを自分で申請する',
         'ko-kr' => '응용 프로그램 ID 및 비밀 신청',
         'fa' => 'به طور پیش فرض اما از شناسه برنامه و سکرت استفاده کنید',
