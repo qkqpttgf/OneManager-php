@@ -3,6 +3,7 @@
 function getpath()
 {
     $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($_SERVER['HTTP_ACCEPT_LANGUAGE'],';')[0],',')[0]);
+    if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
     $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);

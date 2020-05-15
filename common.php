@@ -153,6 +153,8 @@ function main($path)
     global $exts;
     global $constStr;
 
+    $_SERVER['php_starttime'] = microtime(true);
+    $path = path_format($path);
     if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) {
         $constStr['language'] = $_SERVER['firstacceptlanguage'];
     } else {
@@ -216,10 +218,14 @@ function main($path)
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/'||$path=='') return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
-        $_SERVER['disktag'] = $path;
-        $pos = strpos($path, '/');
-        if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
-        if (!in_array($_SERVER['disktag'], $disktags)) return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
+        $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
+        //$pos = strpos($path, '/');
+        //if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+        if (!in_array($_SERVER['disktag'], $disktags)) {
+            $tmp = path_format($_SERVER['base_path'].'/'.$disktags[0].'/'.$path);
+            return output('Please visit <a href="'.$tmp.'">'.$tmp.'</a>.', 302, [ 'Location' => $tmp ]);
+            //return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
+        }
         $path = substr($path, strlen('/'.$_SERVER['disktag']));
         if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path']. '/' . $_SERVER['disktag'] . '/');
     } else $_SERVER['disktag'] = $disktags[0];
@@ -1372,10 +1378,17 @@ function get_refresh_token()
                     $tmp['Drive_custom'] = $_POST['Drive_custom'];
                     $tmp['client_id'] = $_POST['client_id'];
                     $tmp['client_secret'] = $_POST['client_secret'];
+                } else {
+                    $tmp['Drive_custom'] = '';
+                    $tmp['client_id'] = '';
+                    $tmp['client_secret'] = '';
                 }
                 if ($_POST['usesharepoint']=='on') {
                     $tmp['usesharepoint'] = $_POST['usesharepoint'];
                     $tmp['sharepointSiteAddress'] = $_POST['sharepointSiteAddress'];
+                } else {
+                    $tmp['usesharepoint'] = '';
+                    $tmp['sharepointSiteAddress'] = '';
                 }
             }
             $response = setConfigResponse( setConfig($tmp, $_COOKIE['disktag']) );
@@ -1732,7 +1745,7 @@ function render_list($path = '', $files = '')
     date_default_timezone_set(get_timezone($_SERVER['timezone']));
     $authinfo = '<!--
     OneManager: An index & manager of Onedrive auth by ysun.
-    Github ： https://github.com/qkqpttgf/OneManager-php
+    Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
     $theme = getConfig('theme');
@@ -1874,7 +1887,7 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--GuestUploadEnd-->', '', $html);
             }
         }
-        if ($_SERVER['is_guestup_path']||$_SERVER['admin']) {
+        if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&isset($files['folder'])&&$_SERVER['ishidden']<4 )) {
             while (strpos($html, '<!--UploadJsStart-->')) {
                 $html = str_replace('<!--UploadJsStart-->', '', $html);
                 $html = str_replace('<!--UploadJsEnd-->', '', $html);
@@ -1921,10 +1934,13 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--EncryptedStart-->', '', $html);
                 $html = str_replace('<!--EncryptedEnd-->', '', $html);
             }
-            /*while (strpos($html, '<!--IsFolderStart-->')) {
-                $html = str_replace('<!--IsFolderStart-->', '', $html);
-                $html = str_replace('<!--IsFolderEnd-->', '', $html);
-            }*/
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
         }
         
         if (isset($files['children'])) {
@@ -1997,8 +2013,10 @@ function render_list($path = '', $files = '')
                             if ($ext==$key1) {
                                 $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
                             }
+                            //error_log('file:'.$file['name'].':'.$key1);
+                            if (!strpos($FolderListStr, '<!--IconValue-->')) break;
                         }
-                        $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
+                        if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
                         $html .= $FolderListStr;
                     }
@@ -2120,6 +2138,7 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
             while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files[$_SERVER['DownurlStrName']]), $html);
             $html = str_replace('<!--constStr@ClicktoEdit-->', getconstStr('ClicktoEdit'), $html);
@@ -2144,22 +2163,24 @@ function render_list($path = '', $files = '')
         $html = str_replace('<!--Title-->', $title, $html);
 
         $keywords = $n_path;
-        if ($p_path!='') $keywords .= ',' . $p_path;
-        $keywords .= ',' . $_SERVER['sitename'] . ',OneManager';
+        if ($p_path!='') $keywords .= ', ' . $p_path;
+        if ($_SERVER['sitename']!='OneManager') $keywords .= ', ' . $_SERVER['sitename'] . ', OneManager';
+        else $keywords .= ', OneManager';
         $html = str_replace('<!--Keywords-->', $keywords, $html);
 
-        if ($_GET['preview']) $description = 'Preview of '.$n_path.'. ';
-        elseif (isset($files['folder'])) $description = 'List of '.$n_path.'. ';
-        $description .= 'In '.$_SERVER['sitename'];
+        if ($_GET['preview']) {
+            $description = $n_path.', '.getconstStr('Preview');//'Preview of '.
+        } elseif (isset($files['folder'])) {
+            $description = $n_path.', '.getconstStr('List');//'List of '.$n_path.'. ';
+        }
+        //$description .= 'In '.$_SERVER['sitename'];
         $html = str_replace('<!--Description-->', $description, $html);
 
         while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', $_SERVER['base_disk_path'], $html);
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
         while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
-        
-        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
-        
+
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
         $html = str_replace('<!--customScript-->', getConfig('customScript'), $html);
         
@@ -2190,9 +2211,6 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
         while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
         while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
-        
-
-        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'], $html);
 
         $tmp = splitfirst($html, '<!--BackgroundStart-->');
         $html = $tmp[0];
@@ -2245,7 +2263,7 @@ function render_list($path = '', $files = '')
             $html = $tmp[0];
             $tmp = splitfirst($tmp[1], '<!--ShowThumbnailsEnd-->');
             if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
-                $html .= $tmp[0] . $tmp[1];
+                $html .= str_replace('<!--constStr@OriginalPic-->', getconstStr('OriginalPic'), $tmp[0]) . $tmp[1];
             } else $html .= $tmp[1];
         }
         $imgextstr = '';
@@ -2399,13 +2417,21 @@ function render_list($path = '', $files = '')
         }
         $html .= $tmp[1];
 
+        $tmp = splitfirst($html, '<!--WriteTimezoneStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--WriteTimezoneEnd-->');
+        if (!isset($_COOKIE['timezone'])) $html .= str_replace('<!--timezone-->', $_SERVER['timezone'], $tmp[0]);
+        $html .= $tmp[1];
+        while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
 
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
         //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
-        
+
+        $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
+        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
     }
-    
+
     $html = $authinfo . $html;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html,$statusCode);

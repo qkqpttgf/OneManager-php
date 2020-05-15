@@ -4,7 +4,7 @@ $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff'
 $exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg', 'm4a'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
 $exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py', 'omf'];
-$exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8'];
+$exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8', 'rm', 'rmvb'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
 $constStr = [
@@ -259,6 +259,14 @@ $constStr = [
         'ko-kr' => '홈',
         'fa' => 'خانه',
     ],
+    'Preview' => [
+        'en-us' => 'Preview',
+        'zh-cn' => '预览',
+    ],
+    'List' => [
+        'en-us' => 'List',
+        'zh-cn' => '列表',
+    ],
     'NeedUpdate' => [
         'en-us' => 'Program can update<br>Click setup in Operate at top.',
         'zh-cn' => '可以升级程序<br>在上方管理菜单中<br>进入设置页面升级',
@@ -328,6 +336,10 @@ $constStr = [
         'ja' => '画像のサムネイル',
         'ko-kr' => '사진 섬네일',
         'fa' => 'تصویر بندانگشتی',
+    ],
+    'OriginalPic' => [
+        'en-us' => 'OriginalPic',
+        'zh-cn' => '原图',
     ],
     'CopyAllDownloadUrl' => [
         'en-us' => 'CopyAllDownloadUrl',
@@ -658,8 +670,8 @@ $constStr = [
         'zh-cn' => '对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
     ],
     'CustomIdSecret' => [
-        'en-us' => 'Use custom client id & secret',
-        'zh-cn' => '自己申请应用ID与机密',
+        'en-us' => 'Use custom client id & secret instead of OneManager default',
+        'zh-cn' => '自己申请应用ID与机密，不用OneManager默认的',
         'ja' => 'アプリケーションIDとシークレットを自分で申請する',
         'ko-kr' => '응용 프로그램 ID 및 비밀 신청',
         'fa' => 'به طور پیش فرض اما از شناسه برنامه و سکرت استفاده کنید',
