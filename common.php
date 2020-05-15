@@ -2138,6 +2138,7 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
             while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files[$_SERVER['DownurlStrName']]), $html);
             $html = str_replace('<!--constStr@ClicktoEdit-->', getconstStr('ClicktoEdit'), $html);
@@ -2162,13 +2163,17 @@ function render_list($path = '', $files = '')
         $html = str_replace('<!--Title-->', $title, $html);
 
         $keywords = $n_path;
-        if ($p_path!='') $keywords .= ',' . $p_path;
-        $keywords .= ',' . $_SERVER['sitename'] . ',OneManager';
+        if ($p_path!='') $keywords .= ', ' . $p_path;
+        if ($_SERVER['sitename']!='OneManager') $keywords .= ', ' . $_SERVER['sitename'] . ', OneManager';
+        else $keywords .= ', OneManager';
         $html = str_replace('<!--Keywords-->', $keywords, $html);
 
-        if ($_GET['preview']) $description = 'Preview of '.$n_path.'. ';
-        elseif (isset($files['folder'])) $description = 'List of '.$n_path.'. ';
-        $description .= 'In '.$_SERVER['sitename'];
+        if ($_GET['preview']) {
+            $description = $n_path.', '.getconstStr('Preview');//'Preview of '.
+        } elseif (isset($files['folder'])) {
+            $description = $n_path.', '.getconstStr('List');//'List of '.$n_path.'. ';
+        }
+        //$description .= 'In '.$_SERVER['sitename'];
         $html = str_replace('<!--Description-->', $description, $html);
 
         while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', $_SERVER['base_disk_path'], $html);
@@ -2258,7 +2263,7 @@ function render_list($path = '', $files = '')
             $html = $tmp[0];
             $tmp = splitfirst($tmp[1], '<!--ShowThumbnailsEnd-->');
             if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
-                $html .= $tmp[0] . $tmp[1];
+                $html .= str_replace('<!--constStr@OriginalPic-->', getconstStr('OriginalPic'), $tmp[0]) . $tmp[1];
             } else $html .= $tmp[1];
         }
         $imgextstr = '';
