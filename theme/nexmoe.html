@@ -146,6 +146,16 @@
         position: absolute;
         top: 180px;
     }
+    .more-disk{
+        display: inline-block;
+    }
+    .more-disk div{
+        list-style:none;
+        position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;
+    }
+    .more-disk:hover div{display:block}
+    .more-disk div li{line-height:normal;}
+    .more-disk div li a[now]{background:#11faaa;}
     </style>
     <div class="nexmoe-item">
     <div class="mdui-row">
@@ -223,7 +233,11 @@
         var path = e.innerText;
         if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
         var paths = path.split('/');
+        //e.innerHTML = '<a href="<!--base_path-->"><!--Sitename--></a><i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>';
         e.innerHTML = '<a href="<!--base_path-->"><!--Sitename--></a><i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>';
+        <!--MultiDiskAreaStart-->
+        e.innerHTML += '<div class="more-disk"><span><!--DisktagNow--></span><div><!--MultiDisksStart--><li><a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a></li><!--MultiDisksEnd--></div></div><i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>';
+        <!--MultiDiskAreaEnd-->
         if (paths <= 2) return;
         for (var i = 1; i < paths.length - 1; i++) {
             var to = path_format(root + paths.slice(0, i + 1).join('/'));
@@ -321,6 +335,7 @@
     
     });
     </script>
-
+    
+  
 </body>
 </html>
