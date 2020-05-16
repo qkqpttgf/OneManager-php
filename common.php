@@ -2137,7 +2137,8 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--Is'.$ext.'FileStart-->', '', $html);
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
-            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files[$_SERVER['DownurlStrName']]), $html);
@@ -2295,6 +2296,7 @@ function render_list($path = '', $files = '')
             $tmp[1] = $tmp1;
         }
         $html .= $MultiDiskArea . $tmp[1];
+        while (strpos($html, '<!--DisktagNow-->')) $html = str_replace('<!--DisktagNow-->', $_SERVER['disktag'], $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
         $html = $tmp[0];
