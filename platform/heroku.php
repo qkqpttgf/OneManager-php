@@ -106,7 +106,7 @@ function install()
     if ($_GET['install1']) {
         if ($_POST['admin']!='') {
             $tmp['admin'] = $_POST['admin'];
-            $tmp['language'] = $_POST['language'];
+            //$tmp['language'] = $_POST['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
             $APIKey = getConfig('APIKey');
             if ($APIKey=='') {
