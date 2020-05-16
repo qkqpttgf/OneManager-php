@@ -23,8 +23,8 @@
     <meta name="description" content="<!--Description-->">
     <link rel="icon" href="<!--base_disk_path-->favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="<!--base_disk_path-->favicon.ico" type="image/x-icon" />
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="http://upcdn.b0.upaiyun.com/libs/jquery/jquery-2.0.2.min.js"></script>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
 
     <style>
     a {
@@ -619,14 +619,14 @@ $("#showDataForm").ajaxSubmit(function(message) {
           </div>
           <div class="modal-body">
             <div class="input-group mb-3">
-              <input type="text" id="create_input" name="create_name" class="form-control" placeholder="<!--constStr@Create--><!--constStr@File-->">
+              <input type="text" id="create_input" name="create_name" class="form-control" placeholder="<!--constStr@Create--><!--constStr@Folder-->">
               <div class="input-group-prepend">
                 <input type="hidden" id="create_type_folder" name="create_type" value="folder">
                 <input id="create_sid" name="create_sid" type="hidden" value="">
                 <input id="create_hidden" type="hidden" value="">
                 <div type="button" id="create_type_folder_button" class="btn btn-secondary" data-toggle="collapse"
                   data-target="#collapseExample" onclick="if(document.getElementById('create_input').placeholder == '<!--constStr@Create--><!--constStr@Folder-->'){
-                  document.getElementById('create_input').placeholder='请<!--constStr@Create--><!--constStr@File-->';document.getElementById('create_type_folder').value='file';
+                  document.getElementById('create_input').placeholder='<!--constStr@Create--><!--constStr@File-->';document.getElementById('create_type_folder').value='file';
                   }else {
                     document.getElementById('create_input').placeholder='<!--constStr@Create--><!--constStr@Folder-->';document.getElementById('create_type_folder').value='folder';
                     }"><!--constStr@File-->/<!--constStr@Folder--></div>
@@ -1407,8 +1407,8 @@ return false;
 <!--LoginEnd-->
 </script>
 <script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <!--customScript-->
 </html>
