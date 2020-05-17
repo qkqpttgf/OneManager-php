@@ -2,7 +2,7 @@
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
     <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) { if (getConfig('diskname')!='') $diskname = getConfig('diskname'); else $diskname = $_SERVER['disktag']; echo ' - ' . $diskname; } ?> - <?php echo $_SERVER['sitename'];?></title>
-    <meta charset=utf-8>
+    <meta charset="utf-8">
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1.0">
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>">
@@ -43,7 +43,8 @@
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
-        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}        .list-table .size,.list-table .updated_at{text-align:right}
+        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
+        .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
@@ -561,8 +562,9 @@ echo '</script>';
 	</div>
 <?php   }
     } ?>
-    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">The Website used <a href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
+    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">Power by<a style="rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 </body>
 <?php if ($files) { ?>
 <?php if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
@@ -721,6 +723,10 @@ echo '</script>';
             $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
         }
         function showthumbnails(obj) {
+            swal("Loading Thumbnails", {
+          buttons: false,
+          timer: 1000,
+        });
             var files=document.getElementsByName('filelist');
             for ($i=0;$i<files.length;$i++) {
                 str=files[$i].innerText;
@@ -757,8 +763,8 @@ echo '</script>';
             tmptextarea.select();
             tmptextarea.setSelectionRange(0, tmptextarea.value.length);
             document.execCommand("copy");
-            alert(tmptextarea.innerHTML+"<?php echo getconstStr('Success');?>");
-        }
+            swal(tmptextarea.innerHTML+'<?php echo getconstStr('Success'); ?>');
+    }
         var sort=0;
         function sortby(string) {
             if (string=='a') if (sort!=0) {
@@ -1042,7 +1048,7 @@ echo '</script>';
                                         //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
                                         filename = JSON.parse(xhr4.responseText)['name'];
                                         if (filename=='') {
-                                            alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
+                                            swal('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                             uploadbuttonshow();
                                             return;
                                         }
@@ -1176,7 +1182,7 @@ echo '</script>';
                     html=JSON.parse(xhr.responseText);
                     addelement(html);
                 }
-            } else alert(xhr.status+'\n'+xhr.responseText);
+            } else swal(xhr.status+'\n'+xhr.responseText);
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
