@@ -42,8 +42,8 @@
         .list-table td.file,.list-table th.file{width:70%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
-        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
+        .list-table td button,.list-table th button,.swal-button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
+        .list-table td button:hover,.list-table th button:hover,.swal-button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
@@ -58,7 +58,6 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
-        .swal-button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
