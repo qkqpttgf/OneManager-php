@@ -2211,6 +2211,7 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--constStr@GetFileNameFail-->')) $html = str_replace('<!--constStr@GetFileNameFail-->', getconstStr('GetFileNameFail'), $html);
         while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
         while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
+        while (strpos($html, '<!--constStr@FileSelected-->')) $html = str_replace('<!--constStr@FileSelected-->', getconstStr('FileSelected'), $html);
         while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
 
         $tmp = splitfirst($html, '<!--BackgroundStart-->');
@@ -2296,7 +2297,10 @@ function render_list($path = '', $files = '')
             $tmp[1] = $tmp1;
         }
         $html .= $MultiDiskArea . $tmp[1];
-        while (strpos($html, '<!--DisktagNow-->')) $html = str_replace('<!--DisktagNow-->', $_SERVER['disktag'], $html);
+        $diskname = getConfig('diskname');
+        if ($diskname=='') $diskname = $_SERVER['disktag'];
+        if (strlen($diskname)>10) $diskname = substr($diskname, 0, 7).'...';
+        while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
         $html = $tmp[0];
