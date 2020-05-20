@@ -222,7 +222,7 @@
                             <a onclick="sortby('a');"><!--constStr@File--></a>
 <!--ShowThumbnailsStart-->
                             &nbsp;&nbsp;&nbsp;
-                            <label style="display:none;"><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>
+                            <label><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>
                             <button onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
 <!--ShowThumbnailsEnd-->
                             &nbsp;
@@ -247,7 +247,7 @@
                             </li>
 <!--AdminEnd-->
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
                         </td>
                         <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
                         <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
@@ -672,7 +672,7 @@
     }*/
     function get_thumbnails_url(url, name, filea, thumb) {
         if (!thumb) {
-            filea.innerHTML='<img src="'+url+'" alt="'+name+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';">';
+            filea.parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+name+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
             return;
         }
         var xhr = new XMLHttpRequest();
