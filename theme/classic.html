@@ -21,8 +21,8 @@
     <meta name=viewport content="width=device-width,initial-scale=1">
     <meta name="keywords" content="<!--Keywords-->">
     <meta name="description" content="<!--Description-->">
-    <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon" />
-    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
     <style type="text/css">
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<!--BackgroundStart-->background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");<!--BackgroundEnd-->}
         a{color:#24292e;cursor:pointer;text-decoration:none}
@@ -222,6 +222,7 @@
                             <a onclick="sortby('a');"><!--constStr@File--></a>
 <!--ShowThumbnailsStart-->
                             &nbsp;&nbsp;&nbsp;
+                            <!--<label><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>-->
                             <button onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
 <!--ShowThumbnailsEnd-->
                             &nbsp;
@@ -640,11 +641,22 @@
             strarry=str.split('.');
             ext=strarry[strarry.length-1].toLowerCase();
             images = [<!--ImgExts-->];
-            if (images.indexOf(ext)>-1) get_thumbnails_url(str, files[$i]);
+            if (images.indexOf(ext)>-1) {
+                if (document.getElementById('originalpic').checked==true) {
+                    var url=files[$i].href;
+                    url=url.substr(0,url.length-8);
+                    get_thumbnails_url(url, str, files[$i], 0);
+                } else {
+                    var nurl=window.location.href;
+                    if (nurl.substr(-1)!="/") nurl+="/";
+                    var url=nurl+str+'?thumbnails';
+                    get_thumbnails_url(url, str, files[$i], 1);
+                }
+            }
         }
         obj.disabled='disabled';
     }
-    function get_thumbnails_url(str, filea) {
+    /*function get_thumbnails_url(str, filea) {
         if (!str) return;
         var nurl=window.location.href;
         if (nurl.substr(-1)!="/") nurl+="/";
@@ -655,6 +667,20 @@
         xhr.onload = function(e){
             if (xhr.status==200) {
                 if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+str+'">';
+            } else console.log(xhr.status+'\n'+xhr.responseText);
+        }
+    }*/
+    function get_thumbnails_url(url, name, filea, thumb) {
+        if (!thumb) {
+            filea.innerHTML='<img src="'+url+'" alt="'+name+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';">';
+            return;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.send('');
+        xhr.onload = function(e){
+            if (xhr.status==200) {
+                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+name+'">';
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
