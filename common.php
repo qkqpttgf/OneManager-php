@@ -2433,7 +2433,15 @@ function render_list($path = '', $files = '')
         $html .= $tmp[1];
         while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
 
-        $theme_arr = scandir('theme');
+        // 最后清除换行
+        while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
+        //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
+
+        $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
+        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
+    }
+
+    $theme_arr = scandir('theme');
         $html .= '
 <div style="position: fixed;right: 10px;bottom: 10px;/*color: rgba(247,247,249,0);*/">
     <select name="theme" onchange="changetheme(this.options[this.options.selectedIndex].value)">
@@ -2452,14 +2460,6 @@ function render_list($path = '', $files = '')
         location.href = location.href;
     }
 </script>';
-
-        // 最后清除换行
-        while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
-        //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
-
-        $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
-        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
-    }
 
     $html = $authinfo . $html;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
