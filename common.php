@@ -175,6 +175,8 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
+    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $_SERVER['theme'] = $_COOKIE['theme'];
+    else $_SERVER['theme'] = getConfig('theme');
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -1748,7 +1750,8 @@ function render_list($path = '', $files = '')
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
-    $theme = getConfig('theme');
+    //$theme = getConfig('theme');
+    $theme = $_SERVER['theme'];
     if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
     if (substr($theme,-4)=='.php') {
         @ob_start();
@@ -2429,6 +2432,26 @@ function render_list($path = '', $files = '')
         if (!isset($_COOKIE['timezone'])) $html .= str_replace('<!--timezone-->', $_SERVER['timezone'], $tmp[0]);
         $html .= $tmp[1];
         while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
+
+        $theme_arr = scandir('theme');
+        $html .= '
+<div style="position: fixed;right: 10px;bottom: 10px;/*color: rgba(247,247,249,0);*/">
+    <select name="theme" onchange="changetheme(this.options[this.options.selectedIndex].value)">
+        <option value="">'.getconstStr('Theme').'</option>';
+        foreach ($theme_arr as $v1) {
+            if ($v1!='.' && $v1!='..') $html .= '
+        <option value="'.$v1.'" '.($v1==$_SERVER['theme']?'selected="selected"':'').'>'.$v1.'</option>';
+        }
+        $html .= '
+        </select>
+</div>
+<script type="text/javascript">
+    function changetheme(str)
+    {
+        document.cookie=\'theme=\'+str+\'; path=/\';
+        location.href = location.href;
+    }
+</script>';
 
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
