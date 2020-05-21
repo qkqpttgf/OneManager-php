@@ -633,48 +633,31 @@
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
+        images = [<!--ImgExts-->];
         var files=document.getElementsByName('filelist');
         for ($i=0;$i<files.length;$i++) {
             str=files[$i].innerText;
             if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
-            if (!str) return;
+            if (!str) continue;
             strarry=str.split('.');
             ext=strarry[strarry.length-1].toLowerCase();
-            images = [<!--ImgExts-->];
             if (images.indexOf(ext)>-1) {
                 if (document.getElementById('originalpic').checked==true) {
                     var url=files[$i].href;
                     url=url.substr(0,url.length-8);
-                    get_thumbnails_url(url, str, files[$i], 0);
+                    files[$i].parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+str+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
+                    $i--;
                 } else {
                     var nurl=window.location.href;
                     if (nurl.substr(-1)!="/") nurl+="/";
                     var url=nurl+str+'?thumbnails';
-                    get_thumbnails_url(url, str, files[$i], 1);
+                    get_thumbnails_url(url, str, files[$i]);
                 }
             }
         }
         obj.disabled='disabled';
     }
-    /*function get_thumbnails_url(str, filea) {
-        if (!str) return;
-        var nurl=window.location.href;
-        if (nurl.substr(-1)!="/") nurl+="/";
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", nurl+str+'?thumbnails', true);
-                //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
-        xhr.send('');
-        xhr.onload = function(e){
-            if (xhr.status==200) {
-                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+str+'">';
-            } else console.log(xhr.status+'\n'+xhr.responseText);
-        }
-    }*/
-    function get_thumbnails_url(url, name, filea, thumb) {
-        if (!thumb) {
-            filea.parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+name+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
-            return;
-        }
+    function get_thumbnails_url(url, name, filea) {
         var xhr = new XMLHttpRequest();
         xhr.open("GET", url, true);
         xhr.send('');
