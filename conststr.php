@@ -224,6 +224,10 @@ $constStr = [
         'ko-kr' => '돌아 가기',
         'fa' => 'بازگشت',
     ],
+    'Theme' => [
+        'en-us' => 'Theme',
+        'zh-cn' => '主题',
+    ],
     'NotNeedUpdate' => [
         'en-us' => 'Not Need Update',
         'zh-cn' => '不需要更新',
