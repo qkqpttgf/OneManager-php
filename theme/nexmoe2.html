@@ -22,11 +22,12 @@
     <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
 
 	 <style>
+		body{<!--BackgroundStart-->background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");<!--BackgroundEnd-->}
 		.mdui-appbar .mdui-toolbar{
 			height:64px;
 			font-size: 15px;
 		}
-       	.mdui-toolbar>*{
+		.mdui-toolbar>*{
 			padding: 0 6px;
 			margin: 0 2px;
 			opacity:0.5;
@@ -66,13 +67,13 @@
         	}
 		.mdui-video-fluid {
             height: -webkit-fill-available;
-        }
+		}
 		.dplayer-video-wrap .dplayer-video {
 			height: -webkit-fill-available !important;
 		}
-        .gslide iframe, .gslide video {
+		.gslide iframe, .gslide video {
             height: -webkit-fill-available;
-        }
+		}
 		@media screen and (max-width:950px)	{		
 			.mdui-list-item .mdui-text-right{
 				display: none;
