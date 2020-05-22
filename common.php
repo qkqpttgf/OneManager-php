@@ -175,6 +175,8 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
+    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $_SERVER['theme'] = $_COOKIE['theme'];
+    else $_SERVER['theme'] = getConfig('theme');
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -1748,7 +1750,8 @@ function render_list($path = '', $files = '')
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
-    $theme = getConfig('theme');
+    //$theme = getConfig('theme');
+    $theme = $_SERVER['theme'];
     if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
     if (substr($theme,-4)=='.php') {
         @ob_start();
@@ -2137,7 +2140,8 @@ function render_list($path = '', $files = '')
                 $html = str_replace('<!--Is'.$ext.'FileStart-->', '', $html);
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
-            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files[$_SERVER['DownurlStrName']], $html);
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files[$_SERVER['DownurlStrName']]), $html);
@@ -2210,6 +2214,7 @@ function render_list($path = '', $files = '')
         while (strpos($html, '<!--constStr@GetFileNameFail-->')) $html = str_replace('<!--constStr@GetFileNameFail-->', getconstStr('GetFileNameFail'), $html);
         while (strpos($html, '<!--constStr@UploadFile-->')) $html = str_replace('<!--constStr@UploadFile-->', getconstStr('UploadFile'), $html);
         while (strpos($html, '<!--constStr@UploadFolder-->')) $html = str_replace('<!--constStr@UploadFolder-->', getconstStr('UploadFolder'), $html);
+        while (strpos($html, '<!--constStr@FileSelected-->')) $html = str_replace('<!--constStr@FileSelected-->', getconstStr('FileSelected'), $html);
         while (strpos($html, '<!--IsPreview?-->')) $html = str_replace('<!--IsPreview?-->', (isset($_GET['preview'])?'?preview&':'?'), $html);
 
         $tmp = splitfirst($html, '<!--BackgroundStart-->');
@@ -2219,6 +2224,25 @@ function render_list($path = '', $files = '')
             $background = str_replace('<!--BackgroundUrl-->', getConfig('background'), $tmp[0]);
         }
         $html .= $background . $tmp[1];
+
+        $tmp = splitfirst($html, '<!--PathArrayStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--PathArrayEnd-->');
+        $PathArrayStr = $tmp[0];
+        $tmp_path = str_replace('%23', '#', str_replace('&','&amp;', $path));
+        $tmp_url = $_SERVER['base_disk_path'];
+        while ($tmp_path!='') {
+            $tmp1 = splitfirst($tmp_path, '/');
+            $folder1 = $tmp1[0];
+            if ($folder1!='') {
+                $tmp_url .= $folder1 . '/';
+                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', $tmp_url, $PathArrayStr);
+                $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
+                $html .= $PathArrayStr1;
+            }
+            $tmp_path = $tmp1[1];
+        }
+        $html .= $tmp[1];
         
         $tmp = splitfirst($html, '<!--SelectLanguageStart-->');
         $html = $tmp[0];
@@ -2295,6 +2319,10 @@ function render_list($path = '', $files = '')
             $tmp[1] = $tmp1;
         }
         $html .= $MultiDiskArea . $tmp[1];
+        $diskname = getConfig('diskname');
+        if ($diskname=='') $diskname = $_SERVER['disktag'];
+        if (strlen($diskname)>10) $diskname = substr($diskname, 0, 7).'...';
+        while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
         $html = $tmp[0];
@@ -2431,6 +2459,26 @@ function render_list($path = '', $files = '')
         $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
         $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
     }
+
+    $theme_arr = scandir('theme');
+    $html .= '
+<div style="position: fixed;right: 10px;bottom: 10px;/*color: rgba(247,247,249,0);*/">
+    <select name="theme" onchange="changetheme(this.options[this.options.selectedIndex].value)">
+        <option value="">'.getconstStr('Theme').'</option>';
+    foreach ($theme_arr as $v1) {
+        if ($v1!='.' && $v1!='..') $html .= '
+        <option value="'.$v1.'" '.($v1==$_SERVER['theme']?'selected="selected"':'').'>'.$v1.'</option>';
+    }
+    $html .= '
+        </select>
+</div>
+<script type="text/javascript">
+    function changetheme(str)
+    {
+        document.cookie=\'theme=\'+str+\'; path=/\';
+        location.href = location.href;
+    }
+</script>';
 
     $html = $authinfo . $html;
     if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
