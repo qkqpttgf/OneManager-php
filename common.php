@@ -2224,6 +2224,25 @@ function render_list($path = '', $files = '')
             $background = str_replace('<!--BackgroundUrl-->', getConfig('background'), $tmp[0]);
         }
         $html .= $background . $tmp[1];
+
+        $tmp = splitfirst($html, '<!--PathArrayStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--PathArrayEnd-->');
+        $PathArrayStr = $tmp[0];
+        $tmp_path = str_replace('%23', '#', str_replace('&','&amp;', $path));
+        $tmp_url = $_SERVER['base_disk_path'];
+        while ($tmp_path!='') {
+            $tmp1 = splitfirst($tmp_path, '/');
+            $folder1 = $tmp1[0];
+            if ($folder1!='') {
+                $tmp_url .= $folder1 . '/';
+                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', $tmp_url, $PathArrayStr);
+                $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
+                $html .= $PathArrayStr1;
+            }
+            $tmp_path = $tmp1[1];
+        }
+        $html .= $tmp[1];
         
         $tmp = splitfirst($html, '<!--SelectLanguageStart-->');
         $html = $tmp[0];
@@ -2442,15 +2461,15 @@ function render_list($path = '', $files = '')
     }
 
     $theme_arr = scandir('theme');
-        $html .= '
+    $html .= '
 <div style="position: fixed;right: 10px;bottom: 10px;/*color: rgba(247,247,249,0);*/">
     <select name="theme" onchange="changetheme(this.options[this.options.selectedIndex].value)">
         <option value="">'.getconstStr('Theme').'</option>';
-        foreach ($theme_arr as $v1) {
-            if ($v1!='.' && $v1!='..') $html .= '
+    foreach ($theme_arr as $v1) {
+        if ($v1!='.' && $v1!='..') $html .= '
         <option value="'.$v1.'" '.($v1==$_SERVER['theme']?'selected="selected"':'').'>'.$v1.'</option>';
-        }
-        $html .= '
+    }
+    $html .= '
         </select>
 </div>
 <script type="text/javascript">
