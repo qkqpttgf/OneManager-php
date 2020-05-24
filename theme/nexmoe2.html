@@ -339,20 +339,24 @@
 <!--FileListEnd-->
 
 <!--MorePageStart-->
+<form action="" method="POST" id="nextpageform">
+    <input type="hidden" id="pagenum" name="pagenum" value="">
 		  <li class="mdui-list-item th">
 		    <div class="mdui-col-sm-6 mdui-left mdui-text-left">
 <!--PrePageStart-->
-		        <a href="<?php echo preg_replace('/\/$/', '', "$root"); ?><?php e($path) ?>.page-<?php e($page-1) ?>/" class="mdui-btn mdui-btn-raised">上一页</a>
+		        <a onclick="nextpage(<!--PrePageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@PrePage--></a>
 <!--PrePageEnd-->
 <!--NextPageStart-->
-		        <a href="<?php echo preg_replace('/\/$/', '', "$root"); ?><?php e($path) ?>.page-<?php e($page+1) ?>/" class="mdui-btn mdui-btn-raised">下一页</a>
+		        <a onclick="nextpage(<!--NextPageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@NextPage--></a>
 <!--NextPageEnd-->
 		    </div>
 		    <div class="mdui-col-sm-6 mdui-right mdui-text-right">
-		      <div class="mdui-right mdui-text-right"><span class="mdui-chip-title">Page: <?php e($page);?>/<?php e($totalpage);?></span></div>
-		    </div>
-		  </li>
+		      <div class="mdui-right mdui-text-right"><span class="mdui-chip-title">Page: <!--MorePageListStart--><!--MorePageListEnd--><!--MorePageListNowStart--><!--PageNum--><!--MorePageListNowEnd-->/<!--MaxPageNum--></span></div>
+            </div>
+          </li>
+        </form>
 <!--MorePageEnd-->
+
 	</ul>
 </div>
 </div>
@@ -377,6 +381,12 @@
 <script src="//cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
 <script>
+<!--MorePageStart-->
+    function nextpage(num) {
+        document.getElementById('pagenum').value=num;
+        document.getElementById('nextpageform').submit();
+    }
+<!--MorePageEnd-->
 var $$ = mdui.JQ;
 $$(function() {
     $$('.file .iframe').each(function() {
@@ -504,11 +514,14 @@ function thumb(){
 		$('#thumb i').text("apps");
 		$('.nexmoe-item').addClass('thumb');
 		$('.mdui-col-xs-12 i.mdui-icon').each(function(){
-			if($(this).text() == "image" || $(this).text() == "ondemand_video"){
-				var href = $(this).parent().parent().attr('href');
-				var thumb =(href.indexOf('?') == -1)?'?t=220':'&t=220';
+			//if($(this).text() == "image" || $(this).text() == "ondemand_video"){
+            if($(this).text() == "image"){
+				var thumbnails = $(this).parent().parent().attr('href');
+				//var thumb =(href.indexOf('?') == -1)?'?t=220':'&t=220';
+                thumbnails = thumbnails.substr(0, thumbnails.length-8)+'?thumbnails&location';
 				$(this).hide();
-				$(this).parent().parent().parent().css("background","url("+href+thumb+")  no-repeat center top");
+				//$(this).parent().parent().parent().css("background","url("+href+thumb+")  no-repeat center top");
+                $(this).parent().parent().parent().css("background","url("+thumbnails+")  no-repeat center top");
 			}
 		});
 	}
