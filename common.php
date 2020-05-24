@@ -9,6 +9,7 @@ $Base64Env = [
     //'adminloginpage',
     'background',
     'diskname',
+    //'disableShowThumb',
     //'disktag',
     //'downloadencrypt',
     //'function_name', // used in heroku.
@@ -46,6 +47,7 @@ $CommonEnv = [
     'adminloginpage',
     'background',
     'disktag',
+    'disableShowThumb',
     'function_name', // used in heroku.
     'hideFunctionalityFile',
     'timezone',
@@ -66,6 +68,7 @@ $ShowedCommonEnv = [
     'adminloginpage',
     'background',
     //'disktag',
+    'disableShowThumb',
     //'function_name', // used in heroku.
     'hideFunctionalityFile',
     'timezone',
@@ -2321,7 +2324,8 @@ function render_list($path = '', $files = '')
             $tmp = splitfirst($html, '<!--ShowThumbnailsStart-->');
             $html = $tmp[0];
             $tmp = splitfirst($tmp[1], '<!--ShowThumbnailsEnd-->');
-            if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
+            //if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
+            if (!getConfig('disableShowThumb')) {
                 $html .= str_replace('<!--constStr@OriginalPic-->', getconstStr('OriginalPic'), $tmp[0]) . $tmp[1];
             } else $html .= $tmp[1];
         }
@@ -2513,7 +2517,10 @@ function render_list($path = '', $files = '')
 <script type="text/javascript">
     function changetheme(str)
     {
-        document.cookie=\'theme=\'+str+\'; path=/\';
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie=\'theme=\'+str+\'; path=/; \'+expires;
         location.href = location.href;
     }
 </script>';
