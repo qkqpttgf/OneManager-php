@@ -306,7 +306,7 @@ function main($path)
         if (isset($_GET['thumbnails'])) {
             if ($_SERVER['ishidden']<4) {
                 if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
-                    return get_thumbnails_url($path);
+                    return get_thumbnails_url($path, $_GET['location']);
                 } else return output(json_encode($exts['img']),400);
             } else return output('',401);
         }
@@ -778,23 +778,28 @@ function time_format($ISO)
     return date('Y-m-d H:i:s',strtotime($ISO . " UTC"));
 }
 
-function get_thumbnails_url($path = '/')
+function get_thumbnails_url($path = '/', $location = 0)
 {
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
     if ($path!='/'&&substr($path,-1)=='/') $path=substr($path,0,-1);
     $thumb_url = getcache('thumb_'.$path);
-    if ($thumb_url!='') return output($thumb_url);
-    $url = $_SERVER['api_url'];
-    if ($path !== '/') {
-        $url .= ':' . $path;
-        if (substr($url,-1)=='/') $url=substr($url,0,-1);
+    if ($thumb_url=='') {
+        $url = $_SERVER['api_url'];
+        if ($path !== '/') {
+            $url .= ':' . $path;
+            if (substr($url,-1)=='/') $url=substr($url,0,-1);
+        }
+        $url .= ':/thumbnails/0/medium';
+        $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
+        if (isset($files['url'])) {
+            savecache('thumb_'.$path, $files['url']);
+            $thumb_url = $files['url'];
+        }
     }
-    $url .= ':/thumbnails/0/medium';
-    $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-    if (isset($files['url'])) {
-        savecache('thumb_'.$path, $files['url']);
-        return output($files['url']);
+    if ($thumb_url!='') {
+        if ($location) return output('', 302, [ 'Location' => $thumb_url ]);
+        else return output($thumb_url);
     }
     return output('', 404);
 }
@@ -2107,6 +2112,8 @@ function render_list($path = '', $files = '')
                     $html .= $MorePageListStr;
                 }
                 $html .= $tmp[1];
+
+                while (strpos($html, '<!--MaxPageNum-->')) $html = str_replace('<!--MaxPageNum-->', $maxpage, $html);
 
             } else {
                 while (strpos($html, '<!--MorePageStart-->')) {
