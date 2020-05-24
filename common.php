@@ -18,6 +18,7 @@ $Base64Env = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     //'theme',
     //'Drive_ver',
     //'Drive_custom',
@@ -52,6 +53,7 @@ $CommonEnv = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     'theme',
 ];
 
@@ -71,6 +73,7 @@ $ShowedCommonEnv = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     'theme',
 ];
 
@@ -175,8 +178,6 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
-    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $_SERVER['theme'] = $_COOKIE['theme'];
-    else $_SERVER['theme'] = getConfig('theme');
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -989,6 +990,7 @@ function adminoperate($path)
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
         if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
         savecache('path_' . $path1 . '/?password', '', 1);
+        savecache('customTheme', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
@@ -1750,18 +1752,40 @@ function render_list($path = '', $files = '')
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
-    //$theme = getConfig('theme');
-    $theme = $_SERVER['theme'];
-    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
+    
+    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
+    if ( $theme=='' ) {
+        $tmp = getConfig('customTheme');
+        if ( $tmp!='' ) $theme = $tmp;
+    }
+    if ( $theme=='' ) {
+        $theme = getConfig('theme');
+        if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
+    }
     if (substr($theme,-4)=='.php') {
         @ob_start();
         include 'theme/'.$theme;
         $html = ob_get_clean();
     } else {
-        $file_path = 'theme/'.$theme;
-        $fp = fopen($file_path,"r");
-        $html = fread($fp,filesize($file_path));
-        fclose($fp);
+        if (file_exists('theme/'.$theme)) {
+            $file_path = 'theme/'.$theme;
+            $html = file_get_contents($file_path);
+        } else {
+            if (!($html = getcache('customTheme'))) {
+                $file_path = $theme;
+                $tmp = curl_request($file_path, false, [], 1);
+                if ($tmp['stat']==302) {
+                    error_log(json_encode($tmp));
+                    $tmp = curl_request($tmp["returnhead"]["Location"]);
+                }
+                if (!!$tmp['body']) $html = $tmp['body'];
+                savecache('customTheme', $html, 9999);
+            }
+            
+        }
+        //$fp = fopen($file_path,"r");
+        //$html = fread($fp,filesize($file_path));
+        //fclose($fp);
 
         $tmp = splitfirst($html, '<!--IconValuesStart-->');
         $html = $tmp[0];
@@ -2009,17 +2033,19 @@ function render_list($path = '', $files = '')
                         //$FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . str_replace('&','&amp;', $file['name'])), $FolderListStr);
                         $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
                         $FolderListStr = str_replace('<!--size-->', size_format($file['size']), $FolderListStr);
-                        foreach ($IconValues as $key1 => $value1) {
-                            if (isset($exts[$key1])&&in_array($ext, $exts[$key1])) {
-                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                        if (!!$IconValues) {
+                            foreach ($IconValues as $key1 => $value1) {
+                                if (isset($exts[$key1])&&in_array($ext, $exts[$key1])) {
+                                    $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                                }
+                                if ($ext==$key1) {
+                                    $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                                }
+                                //error_log('file:'.$file['name'].':'.$key1);
+                                if (!strpos($FolderListStr, '<!--IconValue-->')) break;
                             }
-                            if ($ext==$key1) {
-                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
-                            }
-                            //error_log('file:'.$file['name'].':'.$key1);
-                            if (!strpos($FolderListStr, '<!--IconValue-->')) break;
+                            if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         }
-                        if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
                         $html .= $FolderListStr;
                     }
@@ -2236,7 +2262,7 @@ function render_list($path = '', $files = '')
             $folder1 = $tmp1[0];
             if ($folder1!='') {
                 $tmp_url .= $folder1 . '/';
-                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', $tmp_url, $PathArrayStr);
+                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', (isset($files['file'])?'':$tmp_url), $PathArrayStr);
                 $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                 $html .= $PathArrayStr1;
             }
@@ -2321,7 +2347,7 @@ function render_list($path = '', $files = '')
         $html .= $MultiDiskArea . $tmp[1];
         $diskname = getConfig('diskname');
         if ($diskname=='') $diskname = $_SERVER['disktag'];
-        if (strlen($diskname)>10) $diskname = substr($diskname, 0, 7).'...';
+        if (strlen($diskname)>15) $diskname = substr($diskname, 0, 12).'...';
         while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
@@ -2467,8 +2493,11 @@ function render_list($path = '', $files = '')
         <option value="">'.getconstStr('Theme').'</option>';
     foreach ($theme_arr as $v1) {
         if ($v1!='.' && $v1!='..') $html .= '
-        <option value="'.$v1.'" '.($v1==$_SERVER['theme']?'selected="selected"':'').'>'.$v1.'</option>';
+        <option value="'.$v1.'" '.($v1==$theme?'selected="selected"':'').'>'.$v1.'</option>';
     }
+    //$tmp = getConfig('customTheme');
+    //if ($tmp!='') $html .= '
+    //    <option value="" '.($tmp==$theme?'selected="selected"':'').'>customTheme</option>';
     $html .= '
         </select>
 </div>
