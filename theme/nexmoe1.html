@@ -289,7 +289,9 @@
 </div>
 <!--FootomfEnd-->
     </div>
+<!--ShowThumbnailsStart-->
     <a href="javascript:thumb();" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">format_list_bulleted</i></a>
+<!--ShowThumbnailsEnd-->
 <!--IsFolderEnd-->
 <!--ListEnd-->
     <script>
@@ -339,7 +341,7 @@
          a.click() // 模拟点击
          a.remove();
     }
-    
+<!--ShowThumbnailsStart-->
     function thumb(){
         if($('.mdui-fab i').text() == "apps"){
             $('.mdui-fab i').text("format_list_bulleted");
@@ -360,7 +362,7 @@
         }
     
     }	
-    
+<!--ShowThumbnailsEnd-->
     $(function(){
         $('.file a').each(function(){
             $(this).on('click', function () {
