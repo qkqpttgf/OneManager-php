@@ -368,7 +368,7 @@ function get_access_token($refresh_token)
             error_log('failed to get share access_token. response' . json_encode($ret));
             throw new Exception($response['stat'].', failed to get share access_token.'.$response['body']);
         }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        error_log('['.$_SERVER['disktag'].'] Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         savecache('access_token', $_SERVER['access_token']);
         $tmp = [];
         $tmp['shareapiurl'] = $_SERVER['api_url'];
@@ -378,10 +378,10 @@ function get_access_token($refresh_token)
         if ($response['stat']==200) $ret = json_decode($response['body'], true);
         if (!isset($ret['access_token'])) {
             error_log($_SERVER['oauth_url'] . 'token'.'?client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token);
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
+            error_log('failed to get ['.$_SERVER['disktag'].'] access_token. response' . json_encode($ret));
+            throw new Exception($response['stat'].', failed to get ['.$_SERVER['disktag'].'] access_token.'.$response['body']);
         }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        error_log('['.$_SERVER['disktag'].'] Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         $_SERVER['access_token'] = $ret['access_token'];
         savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
         if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
@@ -2274,7 +2274,7 @@ function render_list($path = '', $files = '')
             $folder1 = $tmp1[0];
             if ($folder1!='') {
                 $tmp_url .= $folder1 . '/';
-                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', (isset($files['file'])?'':$tmp_url), $PathArrayStr);
+                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', ($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                 $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                 $html .= $PathArrayStr1;
             }
