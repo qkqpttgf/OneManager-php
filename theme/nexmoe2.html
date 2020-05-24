@@ -110,7 +110,9 @@
                 <a href="<!--PathArrayLink-->"><!--PathArrayName--></a>
 <!--PathArrayEnd-->
             <div class="mdui-toolbar-spacer"></div>
+<!--ShowThumbnailsStart-->
             <a href="javascript:thumb();" id="thumb" class="mdui-btn mdui-btn-icon" mdui-tooltip="{content: '切换显示'}"><i class="mdui-icon material-icons">format_list_bulleted</i></a>
+<!--ShowThumbnailsEnd-->
         </div>
 	</header>
 
@@ -503,7 +505,7 @@ function downall() {
      a.click() // 模拟点击
      a.remove();
 }
-
+<!--ShowThumbnailsStart-->
 function thumb(){
 	if($('#thumb i').text() == "apps"){
 		$('#thumb i').text("format_list_bulleted");
@@ -526,8 +528,8 @@ function thumb(){
 		});
 	}
 
-}	
-
+}
+<!--ShowThumbnailsEnd-->
 $(function(){
 
 
