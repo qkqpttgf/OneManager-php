@@ -1571,6 +1571,7 @@ function EnvOpt($needUpdate = 0)
             }
             $html .= '
                 </select>
+                '.getconstStr('EnvironmentsDescription')[$key].'
             </td>
         </tr>';
         } elseif ($key=='theme') {
@@ -1587,6 +1588,7 @@ function EnvOpt($needUpdate = 0)
             }
             $html .= '
                 </select>
+                '.getconstStr('EnvironmentsDescription')[$key].'
             </td>
         </tr>';
         } /*elseif ($key=='domain_path') {
