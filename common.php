@@ -9,6 +9,7 @@ $Base64Env = [
     //'adminloginpage',
     'background',
     'diskname',
+    //'disableShowThumb',
     //'disktag',
     //'downloadencrypt',
     //'function_name', // used in heroku.
@@ -18,6 +19,7 @@ $Base64Env = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     //'theme',
     //'Drive_ver',
     //'Drive_custom',
@@ -45,6 +47,7 @@ $CommonEnv = [
     'adminloginpage',
     'background',
     'disktag',
+    'disableShowThumb',
     'function_name', // used in heroku.
     'hideFunctionalityFile',
     'timezone',
@@ -52,6 +55,7 @@ $CommonEnv = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     'theme',
 ];
 
@@ -64,6 +68,7 @@ $ShowedCommonEnv = [
     'adminloginpage',
     'background',
     //'disktag',
+    'disableShowThumb',
     //'function_name', // used in heroku.
     'hideFunctionalityFile',
     'timezone',
@@ -71,6 +76,7 @@ $ShowedCommonEnv = [
     'sitename',
     'customScript',
     'customCss',
+    'customTheme',
     'theme',
 ];
 
@@ -175,8 +181,6 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
-    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $_SERVER['theme'] = $_COOKIE['theme'];
-    else $_SERVER['theme'] = getConfig('theme');
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
 
     if (getConfig('admin')=='') return install();
@@ -305,7 +309,7 @@ function main($path)
         if (isset($_GET['thumbnails'])) {
             if ($_SERVER['ishidden']<4) {
                 if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
-                    return get_thumbnails_url($path);
+                    return get_thumbnails_url($path, $_GET['location']);
                 } else return output(json_encode($exts['img']),400);
             } else return output('',401);
         }
@@ -364,7 +368,7 @@ function get_access_token($refresh_token)
             error_log('failed to get share access_token. response' . json_encode($ret));
             throw new Exception($response['stat'].', failed to get share access_token.'.$response['body']);
         }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        error_log('['.$_SERVER['disktag'].'] Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         savecache('access_token', $_SERVER['access_token']);
         $tmp = [];
         $tmp['shareapiurl'] = $_SERVER['api_url'];
@@ -374,10 +378,10 @@ function get_access_token($refresh_token)
         if ($response['stat']==200) $ret = json_decode($response['body'], true);
         if (!isset($ret['access_token'])) {
             error_log($_SERVER['oauth_url'] . 'token'.'?client_id='. $_SERVER['client_id'] .'&client_secret='. $_SERVER['client_secret'] .'&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . $refresh_token);
-            error_log('failed to get access_token. response' . json_encode($ret));
-            throw new Exception($response['stat'].', failed to get access_token.'.$response['body']);
+            error_log('failed to get ['.$_SERVER['disktag'].'] access_token. response' . json_encode($ret));
+            throw new Exception($response['stat'].', failed to get ['.$_SERVER['disktag'].'] access_token.'.$response['body']);
         }
-        error_log('Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
+        error_log('['.$_SERVER['disktag'].'] Get access token:'.json_encode($ret, JSON_PRETTY_PRINT));
         $_SERVER['access_token'] = $ret['access_token'];
         savecache('access_token', $_SERVER['access_token'], $ret['expires_in'] - 300);
         if (time()>getConfig('token_expires')) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ]);
@@ -777,23 +781,28 @@ function time_format($ISO)
     return date('Y-m-d H:i:s',strtotime($ISO . " UTC"));
 }
 
-function get_thumbnails_url($path = '/')
+function get_thumbnails_url($path = '/', $location = 0)
 {
     $path1 = path_format($path);
     $path = path_format($_SERVER['list_path'] . path_format($path));
     if ($path!='/'&&substr($path,-1)=='/') $path=substr($path,0,-1);
     $thumb_url = getcache('thumb_'.$path);
-    if ($thumb_url!='') return output($thumb_url);
-    $url = $_SERVER['api_url'];
-    if ($path !== '/') {
-        $url .= ':' . $path;
-        if (substr($url,-1)=='/') $url=substr($url,0,-1);
+    if ($thumb_url=='') {
+        $url = $_SERVER['api_url'];
+        if ($path !== '/') {
+            $url .= ':' . $path;
+            if (substr($url,-1)=='/') $url=substr($url,0,-1);
+        }
+        $url .= ':/thumbnails/0/medium';
+        $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
+        if (isset($files['url'])) {
+            savecache('thumb_'.$path, $files['url']);
+            $thumb_url = $files['url'];
+        }
     }
-    $url .= ':/thumbnails/0/medium';
-    $files = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $_SERVER['access_token']])['body'], true);
-    if (isset($files['url'])) {
-        savecache('thumb_'.$path, $files['url']);
-        return output($files['url']);
+    if ($thumb_url!='') {
+        if ($location) return output('', 302, [ 'Location' => $thumb_url ]);
+        else return output($thumb_url);
     }
     return output('', 404);
 }
@@ -989,6 +998,7 @@ function adminoperate($path)
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
         if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
         savecache('path_' . $path1 . '/?password', '', 1);
+        savecache('customTheme', '', 1);
         return message('<meta http-equiv="refresh" content="2;URL=./">', getconstStr('RefreshCache'), 302);
     }
     return $tmparr;
@@ -1569,6 +1579,7 @@ function EnvOpt($needUpdate = 0)
             }
             $html .= '
                 </select>
+                '.getconstStr('EnvironmentsDescription')[$key].'
             </td>
         </tr>';
         } elseif ($key=='theme') {
@@ -1585,6 +1596,7 @@ function EnvOpt($needUpdate = 0)
             }
             $html .= '
                 </select>
+                '.getconstStr('EnvironmentsDescription')[$key].'
             </td>
         </tr>';
         } /*elseif ($key=='domain_path') {
@@ -1750,18 +1762,40 @@ function render_list($path = '', $files = '')
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
 
-    //$theme = getConfig('theme');
-    $theme = $_SERVER['theme'];
-    if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
+    
+    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
+    if ( $theme=='' ) {
+        $tmp = getConfig('customTheme');
+        if ( $tmp!='' ) $theme = $tmp;
+    }
+    if ( $theme=='' ) {
+        $theme = getConfig('theme');
+        if ( $theme=='' || !file_exists('theme/'.$theme) ) $theme = 'classic.html';
+    }
     if (substr($theme,-4)=='.php') {
         @ob_start();
         include 'theme/'.$theme;
         $html = ob_get_clean();
     } else {
-        $file_path = 'theme/'.$theme;
-        $fp = fopen($file_path,"r");
-        $html = fread($fp,filesize($file_path));
-        fclose($fp);
+        if (file_exists('theme/'.$theme)) {
+            $file_path = 'theme/'.$theme;
+            $html = file_get_contents($file_path);
+        } else {
+            if (!($html = getcache('customTheme'))) {
+                $file_path = $theme;
+                $tmp = curl_request($file_path, false, [], 1);
+                if ($tmp['stat']==302) {
+                    error_log(json_encode($tmp));
+                    $tmp = curl_request($tmp["returnhead"]["Location"]);
+                }
+                if (!!$tmp['body']) $html = $tmp['body'];
+                savecache('customTheme', $html, 9999);
+            }
+            
+        }
+        //$fp = fopen($file_path,"r");
+        //$html = fread($fp,filesize($file_path));
+        //fclose($fp);
 
         $tmp = splitfirst($html, '<!--IconValuesStart-->');
         $html = $tmp[0];
@@ -2009,17 +2043,19 @@ function render_list($path = '', $files = '')
                         //$FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . str_replace('&','&amp;', $file['name'])), $FolderListStr);
                         $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
                         $FolderListStr = str_replace('<!--size-->', size_format($file['size']), $FolderListStr);
-                        foreach ($IconValues as $key1 => $value1) {
-                            if (isset($exts[$key1])&&in_array($ext, $exts[$key1])) {
-                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                        if (!!$IconValues) {
+                            foreach ($IconValues as $key1 => $value1) {
+                                if (isset($exts[$key1])&&in_array($ext, $exts[$key1])) {
+                                    $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                                }
+                                if ($ext==$key1) {
+                                    $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
+                                }
+                                //error_log('file:'.$file['name'].':'.$key1);
+                                if (!strpos($FolderListStr, '<!--IconValue-->')) break;
                             }
-                            if ($ext==$key1) {
-                                $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
-                            }
-                            //error_log('file:'.$file['name'].':'.$key1);
-                            if (!strpos($FolderListStr, '<!--IconValue-->')) break;
+                            if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         }
-                        if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);
                         while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
                         $html .= $FolderListStr;
                     }
@@ -2079,6 +2115,8 @@ function render_list($path = '', $files = '')
                     $html .= $MorePageListStr;
                 }
                 $html .= $tmp[1];
+
+                while (strpos($html, '<!--MaxPageNum-->')) $html = str_replace('<!--MaxPageNum-->', $maxpage, $html);
 
             } else {
                 while (strpos($html, '<!--MorePageStart-->')) {
@@ -2236,7 +2274,7 @@ function render_list($path = '', $files = '')
             $folder1 = $tmp1[0];
             if ($folder1!='') {
                 $tmp_url .= $folder1 . '/';
-                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', $tmp_url, $PathArrayStr);
+                $PathArrayStr1 = str_replace('<!--PathArrayLink-->', ($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                 $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                 $html .= $PathArrayStr1;
             }
@@ -2286,7 +2324,8 @@ function render_list($path = '', $files = '')
             $tmp = splitfirst($html, '<!--ShowThumbnailsStart-->');
             $html = $tmp[0];
             $tmp = splitfirst($tmp[1], '<!--ShowThumbnailsEnd-->');
-            if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
+            //if (!(isset($_SERVER['USER'])&&$_SERVER['USER']=='qcloud')) {
+            if (!getConfig('disableShowThumb')) {
                 $html .= str_replace('<!--constStr@OriginalPic-->', getconstStr('OriginalPic'), $tmp[0]) . $tmp[1];
             } else $html .= $tmp[1];
         }
@@ -2321,7 +2360,7 @@ function render_list($path = '', $files = '')
         $html .= $MultiDiskArea . $tmp[1];
         $diskname = getConfig('diskname');
         if ($diskname=='') $diskname = $_SERVER['disktag'];
-        if (strlen($diskname)>10) $diskname = substr($diskname, 0, 7).'...';
+        if (strlen($diskname)>15) $diskname = substr($diskname, 0, 12).'...';
         while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
@@ -2467,15 +2506,21 @@ function render_list($path = '', $files = '')
         <option value="">'.getconstStr('Theme').'</option>';
     foreach ($theme_arr as $v1) {
         if ($v1!='.' && $v1!='..') $html .= '
-        <option value="'.$v1.'" '.($v1==$_SERVER['theme']?'selected="selected"':'').'>'.$v1.'</option>';
+        <option value="'.$v1.'" '.($v1==$theme?'selected="selected"':'').'>'.$v1.'</option>';
     }
+    //$tmp = getConfig('customTheme');
+    //if ($tmp!='') $html .= '
+    //    <option value="" '.($tmp==$theme?'selected="selected"':'').'>customTheme</option>';
     $html .= '
         </select>
 </div>
 <script type="text/javascript">
     function changetheme(str)
     {
-        document.cookie=\'theme=\'+str+\'; path=/\';
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie=\'theme=\'+str+\'; path=/; \'+expires;
         location.href = location.href;
     }
 </script>';

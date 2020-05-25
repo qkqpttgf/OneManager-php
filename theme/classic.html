@@ -151,7 +151,7 @@
                     <ion-icon name="arrow-back"></ion-icon>
                 </a>
 <!--BackArrowEnd-->
-                <h3 class="table-header"><!--Path--></h3>
+                <h3 class="table-header"><!--PathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--PathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -480,7 +480,7 @@
         location.href = location.href;
     }
 <!--ListStart-->
-    var root = '<!--base_disk_path-->';
+    /*var root = '<!--base_disk_path-->';
     function path_format(path) {
         path = '/' + path + '/';
         while (path.indexOf('//') !== -1) {
@@ -500,7 +500,7 @@
         }
         e.innerHTML += paths[paths.length - 1];
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
-    });
+    });*/
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
