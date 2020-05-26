@@ -319,8 +319,8 @@
 		</li>
 <!--FolderListEnd-->
 <!--FileListStart-->
-		<li class="mdui-list-item file mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->" data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->">
-			<a data-name="<!--FileEncodeReplaceName-->" href="<!--FileEncodeReplaceUrl-->?preview" target="_blank">
+		<li class="mdui-list-item file mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->" data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->" data-readypreview="<!--FileExt-->">
+			<a class="<!--FileExtType-->" data-name="<!--FileEncodeReplaceName-->" href="<!--FileEncodeReplaceUrl-->?preview" target="_blank">
               <!--<?php if(isImage($item['name']) and $_COOKIE["image_mode"] == "1"):?>
 			  <img class="mdui-img-fluid" src="<?php echo get_absolute_path($root.$path).rawurlencode($item['name']); ?>">
               <?php else:?>-->
@@ -333,7 +333,7 @@
 		  	</a>
 		  	
 			<div class="forcedownload "  >
- 			      <a title="直接下载" href="<!--FileEncodeReplaceUrl-->">
+ 			      <a title="<!--constStr@Download-->" href="<!--FileEncodeReplaceUrl-->">
 			          <button class="mdui-btn mdui-ripple mdui-btn-icon"><i class="mdui-icon material-icons">file_download</i></button>
 			      </a>
 			</div>
@@ -393,15 +393,17 @@ var $$ = mdui.JQ;
 $$(function() {
     $$('.file .iframe').each(function() {
         $$(this).on('click', function() {
+            url=$$(this).attr('href');
+            //url=url.substr(0,url.length-8);
             layer.open({
               type: 2,
-              title: '<a target="_blank" href="'+$$(this).attr('href')+"<?php echo ((config('root_path') == '?')?'&s':'?s'); ?>"+'">'+ $$(this).find('span').text()+'(点击新窗口打开)</a>', //jia,
+              title: '<a target="_blank" href="'+url+'">'+ $$(this).find('span').text()+'(点击新窗口打开)</a>', //jia,
               //shadeClose: true,
               move: false,
               shade: false,
               maxmin: true, 
               area: ['100%', '100%'],
-              content: $$(this).attr('href')+"<?php echo ((config('root_path') == '?')?'&s':'?s'); ?>" //le
+              content: url //le
               ,min: function(layero){
                   //zi;  
                   layero.css({top: '90%'})
@@ -439,7 +441,7 @@ TC.preview_audio = function(aud){
                 }
                 TC.aplayerList.push({
                     name:n,
-                    url:this.href,
+                    url:this.href.substr(0,this.href.length-8),
                     artist:" ",
                     lrc:lrc
                 });
