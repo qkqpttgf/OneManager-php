@@ -1979,7 +1979,8 @@ function render_list($path = '', $files = '')
                 $html .= $tmp[1];
             }
         }
-        
+        while (strpos($html, '<!--constStr@Download-->')) $html = str_replace('<!--constStr@Download-->', getconstStr('Download'), $html);
+
         if (isset($files['children'])) {
             while (strpos($html, '<!--GuestUploadStart-->')) {
                 $tmp = splitfirst($html, '<!--GuestUploadStart-->');
@@ -2039,6 +2040,10 @@ function render_list($path = '', $files = '')
                         $filenum++;
                         $ext = strtolower(substr($file['name'], strrpos($file['name'], '.') + 1));
                         $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])), $FolderList);
+                        $FolderListStr = str_replace('<!--FileExt-->', $ext, $FolderListStr);
+                        if (in_array($ext, $exts['music'])) $FolderListStr = str_replace('<!--FileExtType-->', 'audio', $FolderListStr);
+                        elseif (in_array($ext, $exts['video'])) $FolderListStr = str_replace('<!--FileExtType-->', 'iframe', $FolderListStr);
+                        else $FolderListStr = str_replace('<!--FileExtType-->', '', $FolderListStr);
                         $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['name']), $FolderListStr);
                         //$FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . str_replace('&','&amp;', $file['name'])), $FolderListStr);
                         $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
@@ -2152,7 +2157,6 @@ function render_list($path = '', $files = '')
             }
             $html = str_replace('<!--FileEncodeUrl-->', str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))), $html);
             $html = str_replace('<!--FileUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
-            $html = str_replace('<!--constStr@Download-->', getconstStr('Download'), $html);
             
             $ext = strtolower(substr($path, strrpos($path, '.') + 1));
             if (in_array($ext, $exts['img'])) $ext = 'img';
