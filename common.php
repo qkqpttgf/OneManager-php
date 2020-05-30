@@ -277,7 +277,8 @@ function main($path)
                 $oldname = spurlencode($_GET['filename']);
                 $pos = strrpos($oldname, '.');
                 if ($pos>0) $ext = strtolower(substr($oldname, $pos));
-                $oldname = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . $oldname . '.scfupload' );
+                //$oldname = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . $oldname . '.scfupload' );
+                $oldname = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . $oldname);
                 $data = '{"name":"' . $_GET['filemd5'] . $ext . '"}';
                 //echo $oldname .'<br>'. $data;
                 $tmp = MSAPI('PATCH',$oldname,$data,$_SERVER['access_token']);
@@ -830,7 +831,7 @@ function bigfileupload($path)
             $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
             if ( json_decode( curl_request($getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
         }
-        if (!$_SERVER['admin']) $filename = spurlencode( $fileinfo['name'] ) . '.scfupload';
+        //if (!$_SERVER['admin']) $filename = spurlencode( $fileinfo['name'] ) . '.scfupload';
         $response=MSAPI('createUploadSession',path_format($path1 . '/' . $filename),'{"item": { "@microsoft.graph.conflictBehavior": "fail"  }}',$_SERVER['access_token']);
         $responsearry = json_decode($response['body'],true);
         if (isset($responsearry['error'])) return output($response['body'], $response['stat']);
@@ -1926,8 +1927,9 @@ function render_list($path = '', $files = '')
         }
         if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&isset($files['folder'])&&$_SERVER['ishidden']<4 )) {
             while (strpos($html, '<!--UploadJsStart-->')) {
-                $html = str_replace('<!--UploadJsStart-->', '', $html);
-                $html = str_replace('<!--UploadJsEnd-->', '', $html);
+                while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
+                while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
+                while (strpos($html, '<!--constStr@Calculate-->')) $html = str_replace('<!--constStr@Calculate-->', getconstStr('Calculate'), $html);
             }
         } else {
             $tmp[1] = 'a';
@@ -2222,7 +2224,7 @@ function render_list($path = '', $files = '')
         //$description .= 'In '.$_SERVER['sitename'];
         $html = str_replace('<!--Description-->', $description, $html);
 
-        while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', $_SERVER['base_disk_path'], $html);
+        while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', (substr($_SERVER['base_disk_path'],-1)=='/'?substr($_SERVER['base_disk_path'],0,-1):$_SERVER['base_disk_path']), $html);
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
         while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
@@ -2364,7 +2366,7 @@ function render_list($path = '', $files = '')
         $html .= $MultiDiskArea . $tmp[1];
         $diskname = getConfig('diskname');
         if ($diskname=='') $diskname = $_SERVER['disktag'];
-        if (strlen($diskname)>15) $diskname = substr($diskname, 0, 12).'...';
+        //if (strlen($diskname)>15) $diskname = substr($diskname, 0, 12).'...';
         while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
         
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
@@ -2494,6 +2496,24 @@ function render_list($path = '', $files = '')
         if (!isset($_COOKIE['timezone'])) $html .= str_replace('<!--timezone-->', $_SERVER['timezone'], $tmp[0]);
         $html .= $tmp[1];
         while (strpos($html, '<!--timezone-->')) $html = str_replace('<!--timezone-->', $_SERVER['timezone'], $html);
+
+        while (strpos($html, '{{.RawData}}')) {
+            $str = '[';
+            $i = 0;
+            foreach ($files['children'] as $file) if ($_SERVER['admin'] or !isHideFile($file['name'])) {
+                $tmp = [];
+                $tmp['name'] = $file['name'];
+                $tmp['size'] = size_format($file['size']);
+                $tmp['date'] = time_format($file['lastModifiedDateTime']);
+                $tmp['@time'] = $file['date'];
+                $tmp['@type'] = isset($file['folder'])?'folder':'file';
+                $str .= json_encode($tmp).',';
+            }
+            if ($str == '[') {
+                $str = '';
+            } else $str = substr($str, 0, -1).']';
+            $html = str_replace('{{.RawData}}', base64_encode($str), $html);
+        }
 
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
