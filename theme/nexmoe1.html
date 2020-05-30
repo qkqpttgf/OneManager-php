@@ -34,14 +34,14 @@
         .mdui-list>.th{background-color:initial}
         .mdui-list-item>a{width:100%;line-height:48px}
         .mdui-toolbar>a:last-child{opacity:1;background-color:#1e89f2;color:#ffff}
-        .more-disk{display: inline-block;}
+        .more-disk{display: inline-block;max-width: 100px;}
         .more-disk div{
             list-style:none;
-            position:absolute;display:none;background:#ffffff;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;
+            position:absolute;display:none;background:#ffffff;border-radius:5px;margin:0 0 0 -10px;/*padding:0 7px;*/color:#205D67;z-index:1;
             box-shadow: 0 0.5em 3em rgba(161,177,204,.4);
         }
         .more-disk:hover div{display:block}
-        .more-disk div li{line-height:normal;padding: 5px 5px;}
+        .more-disk div li{line-height:normal;padding: 3px 10px;}
         .more-disk div li a{text-decoration: none; color:rgba(0,0,0,.3);}
         .more-disk div li a:hover{color:rgba(0,0,0,.87);}
         .more-disk div li a[now]{color:rgba(0,0,0,1);}
@@ -135,7 +135,7 @@
 <!--IsimgFileEnd-->
 <!--IstxtFileStart-->
             <div class="nexmoe-item">
-                <pre id="editor" ><!--TxtContent--></pre>
+                <pre id="editor" style="white-space: pre-wrap;"><!--TxtContent--></pre>
             </div>
 <!--IstxtFileEnd-->
 <!--IsmusicFileStart-->
