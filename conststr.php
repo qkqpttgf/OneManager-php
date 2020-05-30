@@ -526,6 +526,10 @@ $constStr = [
         'ko-kr' => '업로드 링크 받기',
         'fa' => 'دریافت لینک آپلود',
     ],
+    'Calculate' => [
+        'en-us' => 'Calculate',
+        'zh-cn' => '计算',
+    ],
     'UpFileTooLarge' => [
         'en-us' => 'The File is too Large!',
         'zh-cn' => '文件过大，终止上传。',
