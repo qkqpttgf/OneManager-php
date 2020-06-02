@@ -1541,11 +1541,10 @@ function EnvOpt($needUpdate = 0)
         }*/
         $response = setConfigResponse( setConfig($tmp, $_SERVER['disk_oprating']) );
         if (api_error($response)) {
-                $html = api_error_msg($response);
-                $title = 'Error';
-            } else {
+            $html = api_error_msg($response);
+            $title = 'Error';
+        } else {
                 //WaitSCFStat();
-                //sleep(3);
             $html .= getconstStr('Success') . '!<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
@@ -1655,7 +1654,7 @@ function EnvOpt($needUpdate = 0)
     }
     $html .= '
 <a href="?AddDisk">'.getconstStr('AddDisk').'</a><br><br>';
-    if (!((isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud')||(isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app'))) {
+    if (!( (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') || (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') || (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') )) {
         $html .= '
 '.getconstStr('VPSnotupdate').'<br>';
     } else {
