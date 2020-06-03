@@ -1671,7 +1671,7 @@ function EnvOpt($needUpdate = 0)
     }
     if (!$canOneKeyUpate) {
         $html .= '
-'.getconstStr('VPSnotupdate').'<br>';
+'.getconstStr('CannotOneKeyUpate').'<br>';
     } else {
         $html .= '
 <form name="updateform" action="" method="post">
