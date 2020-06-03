@@ -116,13 +116,6 @@ function setConfig($arr, $disktag = '')
     return $response;
 }
 
-function WaitSCFStat()
-{
-    $trynum = 0;
-    while( getfunctioninfo($_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], getConfig('AccessKeyID'), getConfig('AccessKeySecret')) ) echo '
-'.++$trynum;
-}
-
 function install()
 {
     global $constStr;
@@ -321,7 +314,7 @@ function updateProgram($accountId, $region, $service_name, $function_name, $Acce
 
 function api_error($response)
 {
-    return isset($response['Error']);
+    return !isset($response['data']);
 }
 
 function api_error_msg($response)
@@ -337,8 +330,7 @@ namespace:' . $_SERVER['namespace'] . '<br>
 
 function setConfigResponse($response)
 {
-    return json_encode($response, JSON_PRETTY_PRINT);
-    return json_decode( $response, true );
+    return $response;
 }
 
 function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
