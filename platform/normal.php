@@ -268,11 +268,11 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $githubfile = file_get_contents($url);
     if (!$githubfile) return 0;
     file_put_contents($tarfile, $githubfile);
-    //$phar = new PharData($tarfile);
-    //$html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
+    $phar = new PharData($tarfile);
+    @$phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
     @ob_start();
-    passthru('tar -xzvf '.$tarfile,$stat);
-    ob_get_clean();
+    @passthru('tar -xzvf '.$tarfile,$stat);
+    @ob_get_clean();
 
     unlink($tarfile);
 
@@ -306,6 +306,7 @@ function moveFolder($from, $to)
             }else{
                 if (file_exists($tofile)) unlink($tofile);
                 rename($fromfile, $tofile);
+                if (file_exists($fromfile)) unlink($fromfile);
             }
         }
     }
