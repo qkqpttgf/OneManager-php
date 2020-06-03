@@ -247,12 +247,12 @@ function updateEnvironment($Envs, $accountId, $region, $service_name, $function_
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     ksort($tmp_env);
 
-    $tmpdata['functionName'] = $function_name;
-    $tmpdata['description'] = 'Onedrive index and manager in Ali FC.';
-    $tmpdata['memorySize'] = 128;
-    $tmpdata['timeout'] = 30;
-    $tmpdata['runtime'] = 'php7.2';
-    $tmpdata['handler'] = 'index.handler';
+    $tmpdata['functionName'] = $tmp['functionName'];
+    $tmpdata['description'] = $tmp['description'];
+    $tmpdata['memorySize'] = $tmp['memorySize'];
+    $tmpdata['timeout'] = $tmp['timeout'];
+    $tmpdata['runtime'] = $tmp['runtime'];
+    $tmpdata['handler'] = $tmp['handler'];
     $tmpdata['environmentVariables'] = $tmp_env;
     $tmpdata['code']['zipFile'] = base64_encode( file_get_contents($fcClient->getFunctionCode($service_name, $function_name)['data']['url']) );
     return $fcClient->updateFunction($service_name, $function_name, $tmpdata);
@@ -298,15 +298,15 @@ function updateProgram($accountId, $region, $service_name, $function_name, $Acce
         "accessKeySecret" => $AccessKeySecret
     ]);
 
-    $tmp_env = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data']['environmentVariables'];
+    $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
 
-    $tmpdata['functionName'] = $function_name;
-    $tmpdata['description'] = 'Onedrive index and manager in Ali FC.';
-    $tmpdata['memorySize'] = 128;
-    $tmpdata['timeout'] = 30;
-    $tmpdata['runtime'] = 'php7.2';
-    $tmpdata['handler'] = 'index.handler';
-    $tmpdata['environmentVariables'] = $tmp_env;
+    $tmpdata['functionName'] = $tmp['functionName'];
+    $tmpdata['description'] = $tmp['description'];
+    $tmpdata['memorySize'] = $tmp['memorySize'];
+    $tmpdata['timeout'] = $tmp['timeout'];
+    $tmpdata['runtime'] = $tmp['runtime'];
+    $tmpdata['handler'] = $tmp['handler'];
+    $tmpdata['environmentVariables'] = $tmp['environmentVariables'];
     $tmpdata['code']['zipFile'] = base64_encode( file_get_contents($source) );
 
     return $fcClient->updateFunction($service_name, $function_name, $tmpdata);
@@ -336,7 +336,7 @@ function setConfigResponse($response)
 function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
     $source = '/tmp/code.zip';
-    $outPath = "/tmp/";
+    $outPath = '/tmp/';
 
     // 从github下载对应tar.gz，并解压
     $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
