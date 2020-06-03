@@ -268,14 +268,17 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $githubfile = file_get_contents($url);
     if (!$githubfile) return 0;
     file_put_contents($tarfile, $githubfile);
-    $phar = new PharData($tarfile);
-    @$phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
-    @ob_start();
-    @passthru('tar -xzvf '.$tarfile,$stat);
-    @ob_get_clean();
-
+    if (splitfirst(PHP_VERSION, '.')[0] == '7') {
+        $phar = new PharData($tarfile); // need php7
+        $phar->extractTo($projectPath, null, true);//路径 要解压的文件 是否覆盖
+    } else {
+        ob_start();
+        passthru('tar -xzvf '.$tarfile,$stat);
+        ob_get_clean();
+    }
     unlink($tarfile);
 
+    $outPath = '';
     $tmp = scandir($projectPath);
     $name = $auth.'-'.$project;
     foreach ($tmp as $f) {
@@ -285,7 +288,9 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
         }
     }
     //error_log($outPath);
-    unlink($outPath.'/config.php');
+    if ($outPath=='') return 0;
+
+    //unlink($outPath.'/config.php');
     rename($projectPath.'/config.php', $outPath.'/config.php');
 
     return moveFolder($outPath, $projectPath);
@@ -304,7 +309,7 @@ function moveFolder($from, $to)
             if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
                 moveFolder($fromfile, $tofile);
             }else{
-                if (file_exists($tofile)) unlink($tofile);
+                //if (file_exists($tofile)) unlink($tofile);
                 rename($fromfile, $tofile);
                 if (file_exists($fromfile)) unlink($fromfile);
             }
