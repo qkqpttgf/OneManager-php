@@ -1654,7 +1654,22 @@ function EnvOpt($needUpdate = 0)
     }
     $html .= '
 <a href="?AddDisk">'.getconstStr('AddDisk').'</a><br><br>';
-    if (!( (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') || (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') || (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') )) {
+
+    $canOneKeyUpate = 0;
+    if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
+        $canOneKeyUpate = 1;
+    } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
+        $canOneKeyUpate = 1;
+    } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+        $canOneKeyUpate = 1;
+    } else {
+        $tmp = time();
+        if ( mkdir(''.$tmp, 0777) ) {
+            rmdir(''.$tmp);
+            $canOneKeyUpate = 1;
+        }
+    }
+    if (!$canOneKeyUpate) {
         $html .= '
 '.getconstStr('VPSnotupdate').'<br>';
     } else {
@@ -1701,9 +1716,9 @@ function EnvOpt($needUpdate = 0)
         $html .= '<div style="position:relative;word-wrap: break-word;">
         ' . str_replace("\r", '<br>',$_SERVER['github_version']) . '
 </div>';
-    } else {
+    }/* else {
         $html .= getconstStr('NotNeedUpdate');
-    }
+    }*/
     return message($html, getconstStr('Setup'));
 }
 
