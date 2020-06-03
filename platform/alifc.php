@@ -230,14 +230,13 @@ function getfunctioninfo($accountId, $region, $service_name, $function_name, $Ac
 function updateEnvironment($Envs, $accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)
 {
     //print_r($Envs);
-    //WaitSCFStat();
     $fcClient = new Client([
         "endpoint" => 'https://'.$accountId.'.'.$region.'.fc.aliyuncs.com',
         "accessKeyID" => $AccessKeyID,
         "accessKeySecret" => $AccessKeySecret
     ]);
-
-    $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
+    //$tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
     foreach ($tmp['environmentVariables'] as $key => $value ) {
         $tmp_env[$key] = $value;
     }
@@ -266,9 +265,8 @@ function SetbaseConfig($Envs, $accountId, $region, $service_name, $function_name
         "accessKeyID" => $AccessKeyID,
         "accessKeySecret" => $AccessKeySecret
     ]);
-    //return $fcClient->getFunction($service_name, $function_name);
-
-    $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
+    // $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
     foreach ($tmp['environmentVariables'] as $key => $value ) {
         $tmp_env[$key] = $value;
     }
@@ -297,8 +295,8 @@ function updateProgram($accountId, $region, $service_name, $function_name, $Acce
         "accessKeyID" => $AccessKeyID,
         "accessKeySecret" => $AccessKeySecret
     ]);
-
-    $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
+    //$tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
 
     $tmpdata['functionName'] = $tmp['functionName'];
     $tmpdata['description'] = $tmp['description'];
@@ -382,7 +380,7 @@ function addFileToZip($zip, $rootpath, $path = '')
     if (substr($rootpath,-1)=='/') $rootpath = substr($rootpath, 0, -1);
     if (substr($path,0,1)=='/') $path = substr($path, 1);
     $handler=opendir(path_format($rootpath.'/'.$path)); //打开当前文件夹由$path指定。
-    while(($filename=readdir($handler))){
+    while($filename=readdir($handler)){
         if($filename != "." && $filename != ".."){//文件夹文件名字为'.'和‘..’，不要对他们进行操作
             $nowname = path_format($rootpath.'/'.$path."/".$filename);
             if(is_dir($nowname)){// 如果读取的某个对象是文件夹，则递归
