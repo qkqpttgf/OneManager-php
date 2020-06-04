@@ -1,14 +1,17 @@
 <?php
-//error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(E_ALL & ~E_NOTICE);
 include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
-    include 'platform/tencentscf.php';
+    include 'platform/TencentSCF.php';
+} elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+    //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
+    include 'platform/AliyunFC.php';
 } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
-    include 'platform/heroku.php';
+    include 'platform/Heroku.php';
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();
@@ -20,11 +23,8 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     }
     http_response_code($re['statusCode']);
     echo $re['body'];
-} elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
-    //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
-    include 'platform/alifc.php';
 } else {
-    include 'platform/normal.php';
+    include 'platform/Normal.php';
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();
@@ -39,6 +39,7 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     echo $re['body'];
 }
 
+// Tencent SCF
 function main_handler($event, $context)
 {
     $event = json_decode(json_encode($event), true);
@@ -55,6 +56,7 @@ function main_handler($event, $context)
     return main($path);
 }
 
+// Aliyun FC
 function handler($request, $context)
 {
     set_error_handler("myErrorHandler");
@@ -81,6 +83,7 @@ function handler($request, $context)
     return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['body']);
 }
 
+// used by Aliyun FC
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
     if (!(error_reporting() & $errno)) {
         return false;
