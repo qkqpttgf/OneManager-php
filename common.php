@@ -5,6 +5,8 @@ $Base64Env = [
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
     //'SecretKey', // used in SCF.
+    //'AccessKeyID', // used in FC.
+    //'AccessKeySecret', // used in FC.
     //'admin',
     //'adminloginpage',
     'background',
@@ -33,6 +35,7 @@ $Base64Env = [
     //'sharecookie',
     'shareapiurl',
     //'siteid',
+    'domainforproxy',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -43,6 +46,8 @@ $CommonEnv = [
     'Region', // used in SCF.
     'SecretId', // used in SCF.
     'SecretKey', // used in SCF.
+    'AccessKeyID', // used in FC.
+    'AccessKeySecret', // used in FC.
     'admin',
     'adminloginpage',
     'background',
@@ -64,6 +69,8 @@ $ShowedCommonEnv = [
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
     //'SecretKey', // used in SCF.
+    //'AccessKeyID', // used in FC.
+    //'AccessKeySecret', // used in FC.
     //'admin',
     'adminloginpage',
     'background',
@@ -95,6 +102,7 @@ $InnerEnv = [
     'shareurl',
     //'sharecookie',
     'shareapiurl',
+    'domainforproxy',
     'public_path',
     'refresh_token',
     'token_expires',
@@ -115,6 +123,7 @@ $ShowedInnerEnv = [
     //'shareurl',
     //'sharecookie',
     //'shareapiurl',
+    'domainforproxy',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -332,7 +341,17 @@ function main($path)
         }
         if (isset($files['file']) && !isset($_GET['preview'])) {
             // is file && not preview mode
-            if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files[$_SERVER['DownurlStrName']] ]);
+            if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
+                $url = $files[$_SERVER['DownurlStrName']];
+                $domainforproxy = '';
+                $domainforproxy = getConfig('domainforproxy');
+                if ($domainforproxy!='') {
+                    $tmp = splitfirst($url, '//')[1];
+                    $tmp = splitfirst($tmp, '/')[0];
+                    $url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+                }
+                return output('', 302, [ 'Location' => $url ]);
+            }
         }
         if ( isset($files['folder']) || isset($files['file']) ) {
             return render_list($path, $files);
@@ -802,8 +821,17 @@ function get_thumbnails_url($path = '/', $location = 0)
         }
     }
     if ($thumb_url!='') {
-        if ($location) return output('', 302, [ 'Location' => $thumb_url ]);
-        else return output($thumb_url);
+        if ($location) {
+            $url = $thumb_url;
+            $domainforproxy = '';
+            $domainforproxy = getConfig('domainforproxy');
+            if ($domainforproxy!='') {
+                $tmp = splitfirst($url, '//')[1];
+                $tmp = splitfirst($tmp, '/')[0];
+                $url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+            }
+            return output('', 302, [ 'Location' => $url ]);
+        } else return output($thumb_url);
     }
     return output('', 404);
 }
@@ -1675,10 +1703,9 @@ function EnvOpt($needUpdate = 0)
     } else {
         $html .= '
 <form name="updateform" action="" method="post">
-    <input type="text" name="auth" placeholder="auth" value="qkqpttgf">
-    <input type="text" name="project" placeholder="project" value="OneManager-php">
-    <button onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
-    <!--<input type="text" name="branch" placeholder="branch" value="master">-->
+    <input type="text" name="auth" size="6" placeholder="auth" value="qkqpttgf">
+    <input type="text" name="project" size="12" placeholder="project" value="OneManager-php">
+    <button name="QueryBranchs" onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
     <select name="branch">
         <option value="master">master</option>
     </select>
@@ -1687,7 +1714,6 @@ function EnvOpt($needUpdate = 0)
 <script>
     function querybranchs()
     {
-        //alert(document.updateform.auth.value);
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
         //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
@@ -1697,10 +1723,10 @@ function EnvOpt($needUpdate = 0)
             if (xhr.status==200) {
                 document.updateform.branch.options.length=0;
                 JSON.parse(xhr.responseText).forEach( function (e) {
-                    //alert(e.name);
                     document.updateform.branch.options.add(new Option(e.name,e.name));
                     if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
                 });
+                document.updateform.QueryBranchs.style.display="none";
             } else {
                 alert(xhr.responseText+"\n"+xhr.status);
             }
