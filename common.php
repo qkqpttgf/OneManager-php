@@ -334,8 +334,14 @@ function main($path)
                 }
                 $tmp = array_values($tmp);
                 if (count($tmp)>0) {
-            if (isset($_GET['url'])) return output($tmp[rand(0,count($tmp)-1)], 200);
-            return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
+                    $url = $tmp[rand(0,count($tmp)-1)];
+                    if (isset($_GET['url'])) return output($url, 200);
+                    $domainforproxy = '';
+                    $domainforproxy = getConfig('domainforproxy');
+                    if ($domainforproxy!='') {
+                        $url = proxy_replace_domain($url, $domainforproxy);
+                    }
+                    return output('', 302, [ 'Location' => $url ]);
                 } else return output('',404);
             } else return output('',401);
         }
@@ -346,11 +352,10 @@ function main($path)
                 $domainforproxy = '';
                 $domainforproxy = getConfig('domainforproxy');
                 if ($domainforproxy!='') {
-                    $tmp = splitfirst($url, '//')[1];
-                    $tmp = splitfirst($tmp, '/')[0];
-                    $url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+                    $url = proxy_replace_domain($url, $domainforproxy);
                 }
-                return output('', 302, [ 'Location' => $url ]);
+                if ( strtolower(splitlast($files['name'],'.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
+                else return output('', 302, [ 'Location' => $url ]);
             }
         }
         if ( isset($files['folder']) || isset($files['file']) ) {
@@ -364,6 +369,20 @@ function main($path)
             return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
         }
     }
+}
+
+function proxy_replace_domain($url, $domainforproxy)
+{
+    $tmp = splitfirst($url, '//');
+    $http = $tmp[0];
+    $tmp = splitfirst($tmp[1], '/');
+    $domain = $tmp[0];
+    $uri = $tmp[1];
+    if (substr($domainforproxy, 0, 7)=='http://' || substr($domainforproxy, 0, 8)=='https://') $aim = $domainforproxy;
+    else $aim = $http . '//' . $domainforproxy;
+    if (substr($aim, -1)=='/') $aim = substr($aim, 0, -1);
+    return $aim . '/' . $uri . '&Origindomain=' . $domain;
+    //$url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
 }
 
 function get_access_token($refresh_token)
@@ -826,9 +845,7 @@ function get_thumbnails_url($path = '/', $location = 0)
             $domainforproxy = '';
             $domainforproxy = getConfig('domainforproxy');
             if ($domainforproxy!='') {
-                $tmp = splitfirst($url, '//')[1];
-                $tmp = splitfirst($tmp, '/')[0];
-                $url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+                $url = proxy_replace_domain($url, $domainforproxy);
             }
             return output('', 302, [ 'Location' => $url ]);
         } else return output($thumb_url);
