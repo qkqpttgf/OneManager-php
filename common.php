@@ -326,6 +326,10 @@ function main($path)
 
         $files = list_files($path);
         //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
+        if ($_GET['json']) {
+            // return a json
+            return files_json($files);
+        }
         if (isset($_GET['random'])&&$_GET['random']!=='') {
             if ($_SERVER['ishidden']<4) {
                 $tmp = [];
@@ -383,6 +387,39 @@ function proxy_replace_domain($url, $domainforproxy)
     if (substr($aim, -1)=='/') $aim = substr($aim, 0, -1);
     return $aim . '/' . $uri . '&Origindomain=' . $domain;
     //$url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+}
+
+function files_json($files)
+{
+    $tmp = '';
+    if (isset($files['file'])) {
+        $tmp['file']['type'] = 0;
+        $tmp['file']['id'] = $files['id'];
+        $tmp['file']['name'] = $files['name'];
+        $tmp['file']['time'] = $files['lastModifiedDateTime'];
+        $tmp['file']['size'] = $files['size'];
+        $tmp['file']['mime'] = $files['file']['mimeType'];
+        $tmp['file']['url'] = $files[$_SERVER['DownurlStrName']];
+        $tmp['url'] = $files[$_SERVER['DownurlStrName']];
+    } elseif (isset($files['folder'])) {
+        $tmp['list'] = [];
+        foreach ($files['children'] as $file) {
+            $tmp1 = '';
+            if (isset($file['file'])) {
+                $tmp1['type'] = 0;
+                $tmp1['url'] = $file[$_SERVER['DownurlStrName']];
+            } elseif (isset($file['folder'])) {
+                $tmp1['type'] = 1;
+            }
+            $tmp1['id'] = $file['id'];
+            $tmp1['name'] = $file['name'];
+            $tmp1['time'] = $file['lastModifiedDateTime'];
+            $tmp1['size'] = $file['size'];
+            $tmp1['mime'] = $file['file']['mimeType'];
+            array_push($tmp['list'], $tmp1);
+        }
+    } else return output('', 404);
+    return output(json_encode($tmp));
 }
 
 function get_access_token($refresh_token)
@@ -1819,6 +1856,7 @@ function render_list($path = '', $files = '')
     OneManager: An index & manager of Onedrive auth by ysun.
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
+    //$authinfo = $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
 
     
     if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
