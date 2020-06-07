@@ -391,7 +391,7 @@ function proxy_replace_domain($url, $domainforproxy)
 
 function files_json($files)
 {
-    $tmp = '';
+    //$tmp = '';
     if (isset($files['file'])) {
         $tmp['file']['type'] = 0;
         $tmp['file']['id'] = $files['id'];
@@ -404,7 +404,7 @@ function files_json($files)
     } elseif (isset($files['folder'])) {
         $tmp['list'] = [];
         foreach ($files['children'] as $file) {
-            $tmp1 = '';
+            //$tmp1 = '';
             if (isset($file['file'])) {
                 $tmp1['type'] = 0;
                 $tmp1['url'] = $file[$_SERVER['DownurlStrName']];
