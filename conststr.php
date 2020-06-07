@@ -79,7 +79,8 @@ $constStr = [
             'timezone' => 'Set default timezone.',
             'guestup_path' => 'Set guest upload dir, before set this, the files in this dir will show as normal.',
             'hideFunctionalityFile' => '0 or 1. if 1, some file will not show in list to guest, like readme.md',
-            'passfile' => 'The password of dir will save in this file.',
+            'passfile' => 'The password of folder(& its childrens) will save in this file.',
+            'domainforproxy' => 'Will replace the https://xxxxx-my.sharepoint.com with this value.Add &Origindomain=xxxxx-my.sharepoint.com at last',
             'public_path' => 'Show this Onedrive dir when through the long url of API Gateway; public show files less than private.',
             'sitename' => 'sitename',
             'Onedrive_ver' => 'Onedrive version',
@@ -101,6 +102,7 @@ $constStr = [
             'guestup_path' => '设置游客上传路径（图床路径），不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
             'hideFunctionalityFile' => '0 或 1。如果 1, 某些文件不列表给游客看，但它的功能正常，比如readme.md',
             'passfile' => '自定义密码文件的名字，可以是\'pppppp\'，也可以是\'aaaa.txt\'等等；列目录时不会显示，只有知道密码才能查看或下载此文件。密码是这个文件的内容，可以空格、可以中文；',
+            'domainforproxy' => '会将https://xxxxx-my.sharepoint.com替换成这个值，在目标需要自己设置反代。会加上&Origindomain=原域名',
             'public_path' => '使用API长链接访问时，显示网盘文件的路径，不设置时默认为根目录；不能是private_path的上级（public看到的不能比private多，要么看到的就不一样）。',
             'sitename' => '网站的名称',
             'Onedrive_ver' => 'Onedrive版本',
@@ -777,9 +779,9 @@ $constStr = [
         'ko-kr' => '캐시 플러시',
         'fa' => 'رفرش cache',
     ],
-    'VPSnotupdate' => [
-        'en-us' => 'In VPS can not update by a click! run update.sh',
-        'zh-cn' => '在VPS中不能一键更新，可以运行update.sh',
+    'CannotOneKeyUpate' => [
+        'en-us' => 'Can not update by a click! run update.sh',
+        'zh-cn' => '不能一键更新，可以运行update.sh',
     ],
     'QueryBranchs' => [
         'en-us' => 'Query Branchs',

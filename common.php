@@ -5,6 +5,8 @@ $Base64Env = [
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
     //'SecretKey', // used in SCF.
+    //'AccessKeyID', // used in FC.
+    //'AccessKeySecret', // used in FC.
     //'admin',
     //'adminloginpage',
     'background',
@@ -33,6 +35,7 @@ $Base64Env = [
     //'sharecookie',
     'shareapiurl',
     //'siteid',
+    'domainforproxy',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -43,6 +46,8 @@ $CommonEnv = [
     'Region', // used in SCF.
     'SecretId', // used in SCF.
     'SecretKey', // used in SCF.
+    'AccessKeyID', // used in FC.
+    'AccessKeySecret', // used in FC.
     'admin',
     'adminloginpage',
     'background',
@@ -64,6 +69,8 @@ $ShowedCommonEnv = [
     //'Region', // used in SCF.
     //'SecretId', // used in SCF.
     //'SecretKey', // used in SCF.
+    //'AccessKeyID', // used in FC.
+    //'AccessKeySecret', // used in FC.
     //'admin',
     'adminloginpage',
     'background',
@@ -95,6 +102,7 @@ $InnerEnv = [
     'shareurl',
     //'sharecookie',
     'shareapiurl',
+    'domainforproxy',
     'public_path',
     'refresh_token',
     'token_expires',
@@ -115,6 +123,7 @@ $ShowedInnerEnv = [
     //'shareurl',
     //'sharecookie',
     //'shareapiurl',
+    'domainforproxy',
     'public_path',
     //'refresh_token',
     //'token_expires',
@@ -317,6 +326,10 @@ function main($path)
 
         $files = list_files($path);
         //echo json_encode(array_keys($files['children']), JSON_PRETTY_PRINT);
+        if ($_GET['json']) {
+            // return a json
+            return files_json($files);
+        }
         if (isset($_GET['random'])&&$_GET['random']!=='') {
             if ($_SERVER['ishidden']<4) {
                 $tmp = [];
@@ -325,14 +338,29 @@ function main($path)
                 }
                 $tmp = array_values($tmp);
                 if (count($tmp)>0) {
-            if (isset($_GET['url'])) return output($tmp[rand(0,count($tmp)-1)], 200);
-            return output('', 302, [ 'Location' => $tmp[rand(0,count($tmp)-1)] ]);
+                    $url = $tmp[rand(0,count($tmp)-1)];
+                    if (isset($_GET['url'])) return output($url, 200);
+                    $domainforproxy = '';
+                    $domainforproxy = getConfig('domainforproxy');
+                    if ($domainforproxy!='') {
+                        $url = proxy_replace_domain($url, $domainforproxy);
+                    }
+                    return output('', 302, [ 'Location' => $url ]);
                 } else return output('',404);
             } else return output('',401);
         }
         if (isset($files['file']) && !isset($_GET['preview'])) {
             // is file && not preview mode
-            if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) return output('', 302, [ 'Location' => $files[$_SERVER['DownurlStrName']] ]);
+            if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt')&&$files['name']!=getConfig('passfile')) ) {
+                $url = $files[$_SERVER['DownurlStrName']];
+                $domainforproxy = '';
+                $domainforproxy = getConfig('domainforproxy');
+                if ($domainforproxy!='') {
+                    $url = proxy_replace_domain($url, $domainforproxy);
+                }
+                if ( strtolower(splitlast($files['name'],'.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
+                else return output('', 302, [ 'Location' => $url ]);
+            }
         }
         if ( isset($files['folder']) || isset($files['file']) ) {
             return render_list($path, $files);
@@ -345,6 +373,54 @@ function main($path)
             return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
         }
     }
+}
+
+function proxy_replace_domain($url, $domainforproxy)
+{
+    $tmp = splitfirst($url, '//');
+    $http = $tmp[0];
+    $tmp = splitfirst($tmp[1], '/');
+    $domain = $tmp[0];
+    $uri = $tmp[1];
+    if (substr($domainforproxy, 0, 7)=='http://' || substr($domainforproxy, 0, 8)=='https://') $aim = $domainforproxy;
+    else $aim = $http . '//' . $domainforproxy;
+    if (substr($aim, -1)=='/') $aim = substr($aim, 0, -1);
+    return $aim . '/' . $uri . '&Origindomain=' . $domain;
+    //$url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
+}
+
+function files_json($files)
+{
+    //$tmp = '';
+    if (isset($files['file'])) {
+        $tmp['file']['type'] = 0;
+        $tmp['file']['id'] = $files['id'];
+        $tmp['file']['name'] = $files['name'];
+        $tmp['file']['time'] = $files['lastModifiedDateTime'];
+        $tmp['file']['size'] = $files['size'];
+        $tmp['file']['mime'] = $files['file']['mimeType'];
+        $tmp['file']['url'] = $files[$_SERVER['DownurlStrName']];
+        $tmp['url'] = $files[$_SERVER['DownurlStrName']];
+    } elseif (isset($files['folder'])) {
+        $tmp['list'] = [];
+        foreach ($files['children'] as $file) {
+            $tmp1 = null;
+            $tmp1 = [];
+            if (isset($file['file'])) {
+                $tmp1['type'] = 0;
+                $tmp1['url'] = $file[$_SERVER['DownurlStrName']];
+            } elseif (isset($file['folder'])) {
+                $tmp1['type'] = 1;
+            }
+            $tmp1['id'] = $file['id'];
+            $tmp1['name'] = $file['name'];
+            $tmp1['time'] = $file['lastModifiedDateTime'];
+            $tmp1['size'] = $file['size'];
+            $tmp1['mime'] = $file['file']['mimeType'];
+            array_push($tmp['list'], $tmp1);
+        }
+    } else return output('', 404);
+    return output(json_encode($tmp));
 }
 
 function get_access_token($refresh_token)
@@ -802,8 +878,15 @@ function get_thumbnails_url($path = '/', $location = 0)
         }
     }
     if ($thumb_url!='') {
-        if ($location) return output('', 302, [ 'Location' => $thumb_url ]);
-        else return output($thumb_url);
+        if ($location) {
+            $url = $thumb_url;
+            $domainforproxy = '';
+            $domainforproxy = getConfig('domainforproxy');
+            if ($domainforproxy!='') {
+                $url = proxy_replace_domain($url, $domainforproxy);
+            }
+            return output('', 302, [ 'Location' => $url ]);
+        } else return output($thumb_url);
     }
     return output('', 404);
 }
@@ -1541,11 +1624,10 @@ function EnvOpt($needUpdate = 0)
         }*/
         $response = setConfigResponse( setConfig($tmp, $_SERVER['disk_oprating']) );
         if (api_error($response)) {
-                $html = api_error_msg($response);
-                $title = 'Error';
-            } else {
+            $html = api_error_msg($response);
+            $title = 'Error';
+        } else {
                 //WaitSCFStat();
-                //sleep(3);
             $html .= getconstStr('Success') . '!<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
@@ -1655,16 +1737,30 @@ function EnvOpt($needUpdate = 0)
     }
     $html .= '
 <a href="?AddDisk">'.getconstStr('AddDisk').'</a><br><br>';
-    if (!((isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud')||(isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app'))) {
+
+    $canOneKeyUpate = 0;
+    if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
+        $canOneKeyUpate = 1;
+    } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
+        $canOneKeyUpate = 1;
+    } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+        $canOneKeyUpate = 1;
+    } else {
+        $tmp = time();
+        if ( mkdir(''.$tmp, 0777) ) {
+            rmdir(''.$tmp);
+            $canOneKeyUpate = 1;
+        }
+    }
+    if (!$canOneKeyUpate) {
         $html .= '
-'.getconstStr('VPSnotupdate').'<br>';
+'.getconstStr('CannotOneKeyUpate').'<br>';
     } else {
         $html .= '
 <form name="updateform" action="" method="post">
-    <input type="text" name="auth" placeholder="auth" value="qkqpttgf">
-    <input type="text" name="project" placeholder="project" value="OneManager-php">
-    <button onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
-    <!--<input type="text" name="branch" placeholder="branch" value="master">-->
+    <input type="text" name="auth" size="6" placeholder="auth" value="qkqpttgf">
+    <input type="text" name="project" size="12" placeholder="project" value="OneManager-php">
+    <button name="QueryBranchs" onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
     <select name="branch">
         <option value="master">master</option>
     </select>
@@ -1673,7 +1769,6 @@ function EnvOpt($needUpdate = 0)
 <script>
     function querybranchs()
     {
-        //alert(document.updateform.auth.value);
         var xhr = new XMLHttpRequest();
         xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
         //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
@@ -1683,10 +1778,10 @@ function EnvOpt($needUpdate = 0)
             if (xhr.status==200) {
                 document.updateform.branch.options.length=0;
                 JSON.parse(xhr.responseText).forEach( function (e) {
-                    //alert(e.name);
                     document.updateform.branch.options.add(new Option(e.name,e.name));
                     if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
                 });
+                document.updateform.QueryBranchs.style.display="none";
             } else {
                 alert(xhr.responseText+"\n"+xhr.status);
             }
@@ -1702,9 +1797,9 @@ function EnvOpt($needUpdate = 0)
         $html .= '<div style="position:relative;word-wrap: break-word;">
         ' . str_replace("\r", '<br>',$_SERVER['github_version']) . '
 </div>';
-    } else {
+    }/* else {
         $html .= getconstStr('NotNeedUpdate');
-    }
+    }*/
     return message($html, getconstStr('Setup'));
 }
 
@@ -1762,6 +1857,7 @@ function render_list($path = '', $files = '')
     OneManager: An index & manager of Onedrive auth by ysun.
     Github: https://github.com/qkqpttgf/OneManager-php
 -->';
+    //$authinfo = $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
 
     
     if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
@@ -2226,7 +2322,7 @@ function render_list($path = '', $files = '')
 
         while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', (substr($_SERVER['base_disk_path'],-1)=='/'?substr($_SERVER['base_disk_path'],0,-1):$_SERVER['base_disk_path']), $html);
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
-        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', $path)), $html);
+        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', path_format($path.'/'))), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
 
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);

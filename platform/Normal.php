@@ -252,12 +252,70 @@ Can not write config to file.<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate()
-{
-    return json_decode(updateHerokuapp(getConfig('function_name'), getConfig('APIKey'))['body'], true);
-}
-
 function setConfigResponse($response)
 {
     return $response;
+}
+
+function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+{
+    // __DIR__ is xxx/platform
+    $projectPath = splitlast(__DIR__, '/')[0];
+
+    // 从github下载对应tar.gz，并解压
+    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
+    $tarfile = $projectPath.'/github.tar.gz';
+    $githubfile = file_get_contents($url);
+    if (!$githubfile) return 0;
+    file_put_contents($tarfile, $githubfile);
+    if (splitfirst(PHP_VERSION, '.')[0] == '7') {
+        $phar = new PharData($tarfile); // need php7
+        $phar->extractTo($projectPath, null, true);//路径 要解压的文件 是否覆盖
+    } else {
+        ob_start();
+        passthru('tar -xzvf '.$tarfile,$stat);
+        ob_get_clean();
+    }
+    unlink($tarfile);
+
+    $outPath = '';
+    $tmp = scandir($projectPath);
+    $name = $auth.'-'.$project;
+    foreach ($tmp as $f) {
+        if ( substr($f, 0, strlen($name)) == $name) {
+            $outPath = $projectPath . '/' . $f;
+            break;
+        }
+    }
+    //error_log($outPath);
+    if ($outPath=='') return 0;
+
+    //unlink($outPath.'/config.php');
+    rename($projectPath.'/config.php', $outPath.'/config.php');
+
+    return moveFolder($outPath, $projectPath);
+}
+
+function moveFolder($from, $to)
+{
+    if (substr($from, -1)=='/') $from = substr($from, 0, -1);
+    if (substr($to, -1)=='/') $to = substr($to, 0, -1);
+    if (!file_exists($to)) mkdir($to, 0777);
+    $handler=opendir($from);
+    while($filename=readdir($handler)) {
+        if($filename != '.' && $filename != '..'){
+            $fromfile = $from.'/'.$filename;
+            $tofile = $to.'/'.$filename;
+            if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
+                moveFolder($fromfile, $tofile);
+            }else{
+                //if (file_exists($tofile)) unlink($tofile);
+                rename($fromfile, $tofile);
+                if (file_exists($fromfile)) unlink($fromfile);
+            }
+        }
+    }
+    closedir($handler);
+    rmdir($from);
+    return 1;
 }
