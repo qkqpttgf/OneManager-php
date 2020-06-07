@@ -404,7 +404,8 @@ function files_json($files)
     } elseif (isset($files['folder'])) {
         $tmp['list'] = [];
         foreach ($files['children'] as $file) {
-            //$tmp1 = '';
+            $tmp1 = null;
+            $tmp1 = [];
             if (isset($file['file'])) {
                 $tmp1['type'] = 0;
                 $tmp1['url'] = $file[$_SERVER['DownurlStrName']];
