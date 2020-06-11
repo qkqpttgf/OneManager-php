@@ -8,6 +8,17 @@ How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/but
 
 DEMO:  https://herooneindex.herokuapp.com/  
 
+
+# Deploy to Tencent Serverless Cloud Function (腾讯无服务器云函数 SCF)  
+Official: https://cloud.tencent.com/product/scf  
+
+~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
+  
+添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+
+DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
+
+
 # Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
 How to Install:  
     1.Start web service on your server (httpd or other), make sure you can visit it.  
@@ -21,14 +32,6 @@ How to Install:
     5.View the website in chrome or other.  
     在浏览器中访问。  
 
-# Deploy to Tencent Serverless Cloud Function (腾讯无服务器云函数 SCF)  
-Official: https://cloud.tencent.com/product/scf  
-
-~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
-  
-添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
-
-DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
 
 # Deploy to Aliyun Function Compute (阿里函数计算 FC)  
 Official: https://fc.console.aliyun.com/  
@@ -37,9 +40,12 @@ How to Install:
 1，新建函数 -- HTTP函数  
 2，运行环境选择php7.2  
 3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
-4，上传代码，开始安装
+4，上传代码  
+5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
+6，访问你的域名，开始安装  
 
 DEMO:  无  
+
 
 # Features 特性  
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
