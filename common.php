@@ -1995,47 +1995,6 @@ function render_list($path = '', $files = '')
             while (strpos($html, '<!--GuestEnd-->')) $html = str_replace('<!--GuestEnd-->', '', $html);
         }
 
-        if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {
-            $tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--IsFileStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
-                $html .= $tmp[1];
-            }
-            $tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--IsFolderStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
-                $html .= $tmp[1];
-            }
-            while (strpos($html, '<!--EncryptedStart-->')) {
-                $tmp = splitfirst($html, '<!--EncryptedStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
-                $html .= $tmp[1];
-            }
-            while (strpos($html, '<!--GuestUploadStart-->')) {
-                $html = str_replace('<!--GuestUploadStart-->', '', $html);
-                $html = str_replace('<!--GuestUploadEnd-->', '', $html);
-            }
-        }
-        if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&isset($files['folder'])&&$_SERVER['ishidden']<4 )) {
-            while (strpos($html, '<!--UploadJsStart-->')) {
-                while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
-                while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
-                while (strpos($html, '<!--constStr@Calculate-->')) $html = str_replace('<!--constStr@Calculate-->', getconstStr('Calculate'), $html);
-            }
-        } else {
-            $tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--UploadJsStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--UploadJsEnd-->');
-                $html .= $tmp[1];
-            }
-        }
         if ($_SERVER['ishidden']==4) {
             $tmp[1] = 'a';
             while ($tmp[1]!='') {
@@ -2076,8 +2035,78 @@ function render_list($path = '', $files = '')
                 $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
                 $html .= $tmp[1];
             }
+            while (strpos($html, '<!--IsNotHiddenStart-->')) {
+                $tmp = splitfirst($html, '<!--IsNotHiddenStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsNotHiddenEnd-->');
+                $html .= $tmp[1];
+            }
+        } else {
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $tmp = splitfirst($html, '<!--EncryptedStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--IsNotHiddenStart-->')) {
+                $html = str_replace('<!--IsNotHiddenStart-->', '', $html);
+                $html = str_replace('<!--IsNotHiddenEnd-->', '', $html);
+            }
         }
         while (strpos($html, '<!--constStr@Download-->')) $html = str_replace('<!--constStr@Download-->', getconstStr('Download'), $html);
+
+        if ($_SERVER['is_guestup_path']&&!$_SERVER['admin']) {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFileStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFileEnd-->');
+                $html .= $tmp[1];
+            }
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--IsFolderStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $html = str_replace('<!--GuestUploadStart-->', '', $html);
+                $html = str_replace('<!--GuestUploadEnd-->', '', $html);
+            }
+            while (strpos($html, '<!--IsNotHiddenStart-->')) {
+                $tmp = splitfirst($html, '<!--IsNotHiddenStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--IsNotHiddenEnd-->');
+                $html .= $tmp[1];
+            }
+        } else {
+            while (strpos($html, '<!--GuestUploadStart-->')) {
+                $tmp = splitfirst($html, '<!--GuestUploadStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--GuestUploadEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--IsNotHiddenStart-->')) {
+                $html = str_replace('<!--IsNotHiddenStart-->', '', $html);
+                $html = str_replace('<!--IsNotHiddenEnd-->', '', $html);
+            }
+        }
+        if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&isset($files['folder'])&&$_SERVER['ishidden']<4 )) {
+            while (strpos($html, '<!--UploadJsStart-->')) {
+                while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
+                while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
+                while (strpos($html, '<!--constStr@Calculate-->')) $html = str_replace('<!--constStr@Calculate-->', getconstStr('Calculate'), $html);
+            }
+        } else {
+            $tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--UploadJsStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--UploadJsEnd-->');
+                $html .= $tmp[1];
+            }
+        }
 
         if (isset($files['children'])) {
             while (strpos($html, '<!--GuestUploadStart-->')) {
@@ -2613,10 +2642,12 @@ function render_list($path = '', $files = '')
 
         // 最后清除换行
         while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
+        //while (strpos($html, "\r\r")) $html = str_replace("\r\r", "\r", $html);
+        while (strpos($html, "\n\n")) $html = str_replace("\n\n", "\n", $html);
         //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
 
         $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
-        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
+        $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'].' Runningtime:'.$exetime.'s Mem:'.size_format(memory_get_usage()), $html);
     }
 
     $theme_arr = scandir('theme');
@@ -2632,7 +2663,7 @@ function render_list($path = '', $files = '')
     //if ($tmp!='') $html .= '
     //    <option value="" '.($tmp==$theme?'selected="selected"':'').'>customTheme</option>';
     $html .= '
-        </select>
+    </select>
 </div>
 <script type="text/javascript">
     function changetheme(str)
