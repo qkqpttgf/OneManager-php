@@ -51,8 +51,8 @@
             /*.mdui-toolbar>*{display:none}*/
             .mdui-toolbar>a:last-child,.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>i:first-child{display:block}
         }
-        
-	</style>
+    </style>
+    <!--customCss-->
 	<script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
 </head>
 <body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
@@ -188,7 +188,6 @@
         width:100% !important;
         height:230px;
     }
-    
     .thumb .mdui-list-item .mdui-icon{
         font-size:100px;
         display: block;
@@ -203,7 +202,6 @@
         position: absolute;
         top: 180px;
     }
-    
     </style>
     <div class="nexmoe-item">
 
@@ -253,24 +251,23 @@
 <!--FileListEnd-->
 
 <!--MorePageStart-->
-<form action="" method="POST" id="nextpageform">
-    <input type="hidden" id="pagenum" name="pagenum" value="">
-		  <li class="mdui-list-item th">
-		    <div class="mdui-col-sm-6 mdui-left mdui-text-left">
+            <form action="" method="POST" id="nextpageform">
+                <input type="hidden" id="pagenum" name="pagenum" value="">
+                <li class="mdui-list-item th">
+                    <div class="mdui-col-sm-6 mdui-left mdui-text-left">
 <!--PrePageStart-->
-		        <a onclick="nextpage(<!--PrePageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@PrePage--></a>
+                        <a onclick="nextpage(<!--PrePageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@PrePage--></a>
 <!--PrePageEnd-->
 <!--NextPageStart-->
-		        <a onclick="nextpage(<!--NextPageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@NextPage--></a>
+                        <a onclick="nextpage(<!--NextPageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@NextPage--></a>
 <!--NextPageEnd-->
-		    </div>
-		    <div class="mdui-col-sm-6 mdui-right mdui-text-right">
-		      <div class="mdui-right mdui-text-right"><span class="mdui-chip-title">Page: <!--MorePageListStart--><!--MorePageListEnd--><!--MorePageListNowStart--><!--PageNum--><!--MorePageListNowEnd-->/<!--MaxPageNum--></span></div>
-            </div>
-          </li>
-        </form>
+                    </div>
+                    <div class="mdui-col-sm-6 mdui-right mdui-text-right">
+                        <div class="mdui-right mdui-text-right"><span class="mdui-chip-title">Page: <!--MorePageListStart--><!--MorePageListEnd--><!--MorePageListNowStart--><!--PageNum--><!--MorePageListNowEnd-->/<!--MaxPageNum--></span></div>
+                    </div>
+                </li>
+            </form>
 <!--MorePageEnd-->
-
         </ul>
     </div>
     </div>
@@ -302,11 +299,9 @@
     }
 <!--MorePageEnd-->
     $ = mdui.JQ;
-    
     $.fn.extend({
         sortElements: function (comparator, getSortable) {
             getSortable = getSortable || function () { return this; };
-    
             var placements = this.map(function () {
                 var sortElement = getSortable.call(this),
                     parentNode = sortElement.parentNode,
@@ -314,24 +309,21 @@
                         document.createTextNode(''),
                         sortElement.nextSibling
                     );
-    
                 return function () {
                     parentNode.insertBefore(this, nextSibling);
                     parentNode.removeChild(nextSibling);
                 };
             });
-    
             return [].sort.call(this, comparator).each(function (i) {
                 placements[i].call(getSortable.call(this));
             });
         }
     });
-    
+
     function downall() {
          let dl_link_list = Array.from(document.querySelectorAll("li a"))
              .map(x => x.href) // 所有list中的链接
              .filter(x => x.slice(-1) != "/"); // 筛选出非文件夹的文件下载链接
-    
          let blob = new Blob([dl_link_list.join("\r\n")], {
              type: 'text/plain'
          }); // 构造Blog对象
@@ -360,7 +352,6 @@
                 }
             });
         }
-    
     }	
 <!--ShowThumbnailsEnd-->
     $(function(){
@@ -373,23 +364,17 @@
                 return false;
             });
         });
-    
         $('.icon-sort').on('click', function () {
             let sort_type = $(this).attr("data-sort"), sort_order = $(this).attr("data-order");
             let sort_order_to = (sort_order === "less") ? "more" : "less";
-    
             $('li[data-sort]').sortElements(function (a, b) {
                 let data_a = $(a).attr("data-sort-" + sort_type), data_b = $(b).attr("data-sort-" + sort_type);
                 let rt = data_a.localeCompare(data_b, undefined, {numeric: true});
                 return (sort_order === "more") ? 0-rt : rt;
             });
-    
             $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
         });
-    
     });
     </script>
-    
-  
 </body>
 </html>
