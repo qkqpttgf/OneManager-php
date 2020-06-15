@@ -331,7 +331,7 @@
 			  <div class="mdui-col-sm-3 mdui-text-right"><!--lastModifiedDateTime--></div>
 			  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
 		  	</a>
-		  	
+
 			<div class="forcedownload "  >
  			      <a title="<!--constStr@Download-->" href="<!--FileEncodeReplaceUrl-->">
 			          <button class="mdui-btn mdui-ripple mdui-btn-icon"><i class="mdui-icon material-icons">file_download</i></button>
@@ -467,7 +467,7 @@ TC.preview_audio = function(aud){
         TC.aplayer.setMode("normal");
     }
 }
-	
+
 $ = mdui.JQ;
 $.fn.extend({
     sortElements: function (comparator, getSortable) {
@@ -533,8 +533,6 @@ function thumb(){
 }
 <!--ShowThumbnailsEnd-->
 $(function(){
-
-
 	$('.icon-sort').on('click', function () {
         let sort_type = $(this).attr("data-sort"), sort_order = $(this).attr("data-order");
         let sort_order_to = (sort_order === "less") ? "more" : "less";
@@ -547,11 +545,8 @@ $(function(){
 
         $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
     });
-
-  	
-  
 });
-  
+
 var ckname='image_mode';
 function getCookie(name) 
 {
@@ -583,7 +578,7 @@ $('#image_view').on('click', function () {
 		window.location.href=window.location.href;
 	}
 });
-  
+
 </script>
 </body>
 </html>
