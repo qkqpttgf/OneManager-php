@@ -1,7 +1,10 @@
+20200607-1856.19
+add platform: Aliyun Function Compute. add setting: replace sharepoint.com to a proxy server name. add setting: disableShowThumb,customTheme. add function: php hosting website can update by a click
+现在可以安装到阿里函数计算FC了。php空间可以一键更新了。可以设置某个盘替换sharpoint.com域名为你的反代域名。新增disableShowThumb,customTheme。
+
 20200503-1848.18
 Rebuild theme. Add custom Css & custom Script, add FunctionalityFile: head.omf & foot.omf.
 重建主题文件结构。增加自定义css与自定义script。增加2个功能文件：head.omf、foot.omf。
-
 20200402-1830.17
 Oneclick update can select which branch to update. Now use the accept language instead of the language config.
 一键更新可以选择哪个分支了。现在开始使用浏览器语言，抛弃language设置。

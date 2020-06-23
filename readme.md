@@ -1,14 +1,24 @@
 Install program first, then add onedrive in setup after login.  
 先安装程序，登录后在设置中添加onedrive。  
 
-# Deploy to heroku  
+# Deploy to Heroku  
 Official: https://heroku.com  
+Demo: https://herooneindex.herokuapp.com/  
 
 How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
-DEMO:  https://herooneindex.herokuapp.com/  
 
-# Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
+# Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
+Official: https://cloud.tencent.com/product/scf  
+DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
+
+~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
+  
+添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+
+
+# Deploy to Virtual Private Server (VPS 或空间)  
+DEMO:  无  
 How to Install:  
     1.Start web service on your server (httpd or other), make sure you can visit it.  
     启动web服务器，确保你能访问到。  
@@ -21,15 +31,19 @@ How to Install:
     5.View the website in chrome or other.  
     在浏览器中访问。  
 
-# Deploy to SCF  
-Official: https://cloud.tencent.com/product/scf  
 
-~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
+# Deploy to Aliyun Function Compute (FC 阿里函数计算)  
+Official: https://fc.console.aliyun.com/  
+DEMO:  无  
 
-先手动在环境变量添加Region，ap-hongkong或ap-guangzhou之类，具体看 https://cloud.tencent.com/document/api/583/17238 最底下，然后再安装。  
-添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+How to Install:  
+1，新建函数 -- HTTP函数  
+2，运行环境选择php7.2  
+3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
+4，上传代码  
+5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
+6，访问你的域名，开始安装  
 
-DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
 
 # Features 特性  
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  

@@ -2,7 +2,7 @@
 <html lang="<?php echo $constStr['language']; ?>">
 <head>
     <title><?php echo $pretitle; if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) { if (getConfig('diskname')!='') $diskname = getConfig('diskname'); else $diskname = $_SERVER['disktag']; echo ' - ' . $diskname; } ?> - <?php echo $_SERVER['sitename'];?></title>
-    <meta charset=utf-8>
+    <meta charset="utf-8">
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no,initial-scale=1.0">
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>">
@@ -16,9 +16,9 @@
         ion-icon{font-size:16px;vertical-align:middle}
         ::selection{background-color:rgba(200,200,200,0.6)}
         input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
-    	input:hover{background:rgb(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
+    	input:focus{background:rgb(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         textarea{font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:6px;background-color:transparent;color:#24292e}
-        textarea:hover{background:rgba(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
+        textarea:focus{background:rgba(3,102,214,0.6);color:#FFF;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
         .changelanguage{position:absolute;right:5px;}   
         .title{text-shadow:0 1px 15px rgba(27,31,35,1);text-decoration:none;transition-duration: 0.3s;border:1px solid rgba(27,31,35,0);text-align:center;letter-spacing:1px;height: 10px;margin:1rem auto;padding: 16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
         .title:hover{text-shadow:0 1px 15px rgba(27,31,35,0);background-color:rgba(200,200,200,1);box-shadow:0 1px 15px rgba(27,31,35,.15);}
@@ -34,7 +34,7 @@
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(205,205,205);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden;table-layout:fixed}
-        .list-table tr{height:32px;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
+        .list-table tr{height:fit-content;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
@@ -42,10 +42,10 @@
         .list-table td.file,.list-table th.file{width:70%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-        .list-table td button,.list-table th button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
-        .list-table td button:hover,.list-table th button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
+        .list-table td button,.list-table th button,.swal-button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
+        .list-table td button:hover,.list-table th button:hover,.swal-button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .list-table .size,.list-table .updated_at{text-align:right}
-        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=20);opacity:0.2;z-index:2;}
+        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -398,7 +398,7 @@ echo '</script>';
                     if ($_SERVER['admin']) { ?>
                 <div id="upload_div" style="margin:0 0 16px 0">
                 <center>
-                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
+                    <input style="width:60%" id="upload_file" type="file" name="upload_filename" multiple="multiple">
                     <input id="upload_submit" onclick="preup();" value="<?php echo getconstStr('Upload'); ?>" type="button">
                 </center>
                 </div>
@@ -429,7 +429,7 @@ echo '</script>';
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
+		            <input style="width: 60%" name="password1" type="password" placeholder="'.getconstStr('InputPassword').'">
 		            <input type="submit" value="'.getconstStr('Submit').'">
 	                </form>
                 </center>
@@ -531,7 +531,7 @@ echo '</script>';
                         </tr>
                         <tr>
                         <td><?php echo getconstStr('Name'); ?>：</td>
-                            <td><input id="create_input" name="create_name" type="text" value=""></td>
+                            <td><input style="width: 94%" id="create_input" name="create_name" type="text" value=""></td>
                         </tr>
                         <tr id="create_text_div">
                             <td><?php echo getconstStr('Content'); ?>：</td>
@@ -562,7 +562,9 @@ echo '</script>';
 	</div>
 <?php   }
     } ?>
-    <div style="color: rgba(247,247,249,0);"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
+    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
+    <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 </body>
 <?php if ($files) { ?>
 <?php if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
@@ -721,6 +723,10 @@ echo '</script>';
         $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
     }
     function showthumbnails(obj) {
+        swal("Loading Thumbnails", {
+          buttons: false,
+          timer: 1000,
+        });
         var files=document.getElementsByName('filelist');
         for ($i=0;$i<files.length;$i++) {
             str=files[$i].innerText;
@@ -757,7 +763,7 @@ echo '</script>';
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        alert(tmptextarea.innerHTML+"<?php echo getconstStr('Success');?>");
+        swal(tmptextarea.innerHTML+'<?php echo getconstStr('Success'); ?>');
     }
     var sort=0;
     function sortby(string) {
@@ -895,7 +901,6 @@ echo '</script>';
                 var tr1=document.createElement('tr');
                 table1.appendChild(tr1);
                 tr1.setAttribute('data-to',1);
-                tr1.setAttribute('style','height:fit-content');
                 var td1=document.createElement('td');
                 tr1.appendChild(td1);
                 td1.setAttribute('style','width:fit-content');
@@ -1043,7 +1048,7 @@ echo '</script>';
                                         //if (xhr4.status==409) filename = filemd5 + file.name.substr(file.name.indexOf('.'));
                                         filename = JSON.parse(xhr4.responseText)['name'];
                                         if (filename=='') {
-                                            alert('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
+                                            swal('<?php echo getconstStr('UploadErrorUpAgain'); ?>');
                                             uploadbuttonshow();
                                             return;
                                         }
@@ -1177,7 +1182,7 @@ echo '</script>';
                     html=JSON.parse(xhr.responseText);
                     addelement(html);
                 }
-            } else alert(xhr.status+'\n'+xhr.responseText);
+            } else swal(xhr.status+'\n'+xhr.responseText);
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
