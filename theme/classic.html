@@ -476,7 +476,10 @@
     function changelanguage(str)
     {
         if (str=='Language') str = '';
-        document.cookie='language='+str+'; path=/';
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie='language='+str+'; path=/; '+expires;
         location.href = location.href;
     }
 <!--ListStart-->
