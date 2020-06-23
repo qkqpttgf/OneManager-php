@@ -292,6 +292,7 @@
                         </li>
 <!--BackArrowStart-->
 		<li class="mdui-list-item mdui-ripple">
+            <div class="mdui-row mdui-col-sm-12">
 			<a href="<!--BackArrowUrl-->">
 			  <div class="mdui-col-xs-7">
 				<i class="mdui-icon material-icons">arrow_upward</i>
@@ -299,12 +300,14 @@
 			  </div>
 			  <div class="mdui-col-xs-3 mdui-text-right"></div>
 			  <div class="mdui-col-xs-2 mdui-text-right"></div>
-		  	</a>
+              </a>
+            </div>
 		</li>
 <!--BackArrowEnd-->
 		
 <!--FolderListStart-->
-		<li class="mdui-list-item mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->" data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->" style="padding-right:36px;">
+        <li class="mdui-list-item mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->" data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->" style="padding-right:36px;">
+            <div class="mdui-row mdui-col-sm-12">
 			<a href="<!--FileEncodeReplaceUrl-->/">
 			  <div class="mdui-col-xs-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons">folder_open</i>
@@ -312,7 +315,8 @@
 			  </div>
 			  <div class="mdui-col-xs-3 mdui-text-right"><!--lastModifiedDateTime--></div>
 			  <div class="mdui-col-xs-2 mdui-text-right"><!--size--></div>
-		  	</a>
+              </a>
+            </div>
 		</li>
 <!--FolderListEnd-->
 <!--FileListStart-->
@@ -322,12 +326,12 @@
 			  <img class="mdui-img-fluid" src="<?php echo get_absolute_path($root.$path).rawurlencode($item['name']); ?>">
               <?php else:?>-->
               <div class="mdui-row mdui-col-sm-12">
-              <div class="mdui-col-xs-7 mdui-text-truncate">
+              <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
 				<i class="mdui-icon material-icons"><!--IconValue--></i>
 		    	<span><!--FileEncodeReplaceName--></span>
 			  </div>
-			  <div class="mdui-col-xs-3 mdui-text-right"><!--lastModifiedDateTime--></div>
-			  <div class="mdui-col-xs-2 mdui-text-right"><!--size--></div>
+			  <div class="mdui-col-sm-3 mdui-text-right"><!--lastModifiedDateTime--></div>
+			  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
 		  	</a>
         </div>
 			<div class="forcedownload "  >
