@@ -10,9 +10,9 @@ How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/but
 
 # Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
 Official: https://cloud.tencent.com/product/scf  
-DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
+DEMO:  无  
 
-~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
+How to Install:  无  
   
 添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 
