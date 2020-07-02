@@ -239,12 +239,8 @@
 </div>
 <!--HeadomfEnd-->
 <!--HeadmdStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--<div class="mdui-chip">
-    <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-    <span class="mdui-chip-title">HEAD.md</span>
-    </div>-->
-    <!--HeadmdContent-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--HeadmdContent-->
 </div>
 <!--HeadmdEnd-->
         <style>
@@ -363,12 +359,8 @@
 </div>
 </div>
 <!--ReadmemdStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--<div class="mdui-chip">
-      <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-      <span class="mdui-chip-title">README.md</span>
-    </div>-->
-    <!--ReadmemdContent-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--ReadmemdContent-->
 </div>
 <!--ReadmemdEnd-->
 <!--FootomfStart-->
@@ -382,6 +374,8 @@
 <!--ListEnd-->
 <script src="//cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <script>
 <!--MorePageStart-->
     function nextpage(num) {
@@ -578,7 +572,9 @@ $('#image_view').on('click', function () {
 		window.location.href=window.location.href;
 	}
 });
-
+document.querySelectorAll('.markdown').forEach(function (e) {
+    e.innerHTML = marked(e.innerHTML);
+});
 </script>
 </body>
 </html>
