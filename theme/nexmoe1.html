@@ -115,16 +115,12 @@
 <!--GuestUploadEnd-->
 <!--HeadomfStart-->
 <div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--HeadomfContent-->
+<!--HeadomfContent-->
 </div>
 <!--HeadomfEnd-->
 <!--HeadmdStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--<div class="mdui-chip">
-    <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-    <span class="mdui-chip-title">HEAD.md</span>
-    </div>-->
-    <!--HeadmdContent-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--HeadmdContent-->
 </div>
 <!--HeadmdEnd-->
 <!--IsFileStart-->
@@ -272,17 +268,13 @@
     </div>
     </div>
 <!--ReadmemdStart-->
-    <div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-        <!--<div class="mdui-chip">
-          <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-          <span class="mdui-chip-title">README.md</span>
-        </div>-->
-        <!--ReadmemdContent-->
+    <div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--ReadmemdContent-->
     </div>
 <!--ReadmemdEnd-->
 <!--FootomfStart-->
 <div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--FootomfContent-->
+<!--FootomfContent-->
 </div>
 <!--FootomfEnd-->
     </div>
@@ -291,6 +283,8 @@
 <!--ShowThumbnailsEnd-->
 <!--IsFolderEnd-->
 <!--ListEnd-->
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
     <script>
 <!--MorePageStart-->
     function nextpage(num) {
@@ -374,6 +368,9 @@
             });
             $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
         });
+    });
+    document.querySelectorAll('.markdown').forEach(function (e) {
+        e.innerHTML = marked(e.innerHTML);
     });
     </script>
 </body>
