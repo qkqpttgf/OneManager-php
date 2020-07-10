@@ -17,13 +17,11 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
 	<title><!--Title--></title>
-	<link rel="stylesheet" href="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/css/mdui.css">
-	<script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
-	<script src="https://cdn.my-file.cn/mduilw/MDUILW/jquery.min.js"></script>
-    <!--<script src="https://cdn.my-file.cn/mduilw/MDUILW/jquery.pjax.js"></script>-->	
-	<script src="//cdn.staticfile.org/layer/2.3/layer.js"></script>
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
-	<link rel="stylesheet" href="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui/dist/css/mdui.min.css">
+	<script src="https://cdn.jsdelivr.net/npm/mdui/dist/js/mdui.min.js"></script>	
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+    <!--<script src="https://cdn.jsdelivr.net/npm/pjax@0.2.8/pjax.js"></script>-->
 	<link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
 
@@ -120,6 +118,18 @@
 
 <div class="mdui-drawer mdui-drawer-close" id="main-drawer"> 
 	<div class="mdui-list" mdui-collapse="{accordion: true}">
+    <!--LoginStart-->
+    <li class="mdui-list-item mdui-ripple" href="javascript:void(0);" mdui-dialog="{target: '#login_input'}">
+            <a class="mdui-list-item-icon mdui-icon material-icons">account_circle</a>
+            <a class="mdui-list-item-content">登录</a>
+        </li>
+    <!--LoginEnd-->
+    <!--AdminStart-->
+        <li class="mdui-list-item mdui-ripple" href="?setup">
+            <a class="mdui-list-item-icon mdui-icon material-icons" href="?setup">account_circle</a>
+            <a class="mdui-list-item-content" href="?setup">管理</a>
+        </li>
+    <!--AdminEnd-->
         <li class="mdui-list-item mdui-ripple" href="javascript:void(0);" onclick="darkmod_use()">
             <a class="mdui-list-item-icon mdui-icon material-icons">brightness_4</a>
             <a class="mdui-list-item-content">深色模式</a>
@@ -163,8 +173,7 @@
   </div>
 <!--EncryptedEnd-->
 <!--GuestUploadStart-->
-<!--
-            <div class="nexmoe-item" style="padding: 100px!important;" id="pjax-main">
+            <div class="nexmoe-item" style="padding: 100px!important;" id="content">
                 <div class="mdui-typo-display-3-opacity" style="text-align:center;">OneImages</div>
                 <form action="" method="post" enctype="multipart/form-data">
                     <input class="mdui-center" type="file" style="margin: 50px 0;" name="file" />
@@ -176,11 +185,10 @@
                     </div>
                 </form>
             </div>
--->
 <!--GuestUploadEnd-->
 
 <!--IsFileStart-->
-<div class="mdui-container-fluid" id="pjax-main">
+<div class="mdui-container-fluid" id="content">
 <!--IsimgFileStart-->
 <div class="nexmoe-item">
     <img class="mdui-img-fluid mdui-center mdui-m-t-5 "src="<!--FileDownUrl-->"/>
@@ -227,8 +235,25 @@
 <!--IsFileEnd-->
 
 <!--IsFolderStart-->
-<div class="mdui-container">
-	<div class="mdui-container-fluid"></div>
+<div class="mdui-container" id="content">
+	<div class="mdui-container-fluid">
+    <form action="?admin" method="post">
+    <div class="mdui-dialog" id="login_input">
+        <div class="mdui-dialog-title">登录</div>
+        <div class="mdui-dialog-content">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">lock</i>
+            <label class="mdui-textfield-label">密码</label>
+            <input class="mdui-textfield-input" type="password"/>
+        </div>
+        </div>
+        <div class="mdui-dialog-actions">
+            <button class="mdui-btn mdui-ripple" mdui-dialog-close>取消</button>
+            <button class="mdui-btn mdui-ripple" type="submit">登录</button>
+        </div>
+    </div>
+    </form>
+    </div>
     <div class="mdui-container-fluid">
 <!--HeadomfStart-->
 <div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
@@ -334,7 +359,7 @@
 			  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
 		  	</a>
         </div>
-			<div class="forcedownload "  >
+			<div class="forcedownload mdui-text-right" >
  			      <a title="<!--constStr@Download-->" href="<!--FileEncodeReplaceUrl-->">
 			          <button class="mdui-btn mdui-ripple mdui-btn-icon"><i class="mdui-icon material-icons">file_download</i></button>
 			      </a>
@@ -392,7 +417,9 @@
         document.getElementById('nextpageform').submit();
     }
 <!--MorePageEnd-->
+var $ =  mdui.JQ;
 var $$ = mdui.JQ;
+var jQuery = mdui.JQ;
 $$(function() {
     $$('.file .iframe').each(function() {
         $$(this).on('click', function() {
@@ -426,10 +453,7 @@ $$(function() {
     });
 }); 
 window.TC=window.TC||{};
-jQuery(".file .audio").click(function(e){
-            e.preventDefault();
-            TC.preview_audio(this);
-});
+$$(".file .audio").on('click',function(e){e.preventDefault();TC.preview_audio(this);});
 TC.preview_audio = function(aud){
     if(!TC.aplayer){
         TC.aplayerList=[];
@@ -600,7 +624,16 @@ function darkmod_use(){
         } else {
             mainbody.classList.add("mdui-theme-layout-dark");darkmod = 1;
             }};
-//$(document).pjax('a', '#pjax-main' , {fragment:'#pjax-main', timeout:8000});
+function login() {
+    $$("content").write("")
+}
+//var pjax = new Pjax({
+//    selectors :[
+//        "content"
+//    ],
+//    debug: true,
+//    timeout: 8000
+//})
 </script>
 </body>
 </html>
