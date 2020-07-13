@@ -128,7 +128,14 @@ function install()
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
-                return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+                return output('Jump
+            <script>
+                var expd = new Date();
+                expd.setTime(expd.getTime()+(2*60*60*1000));
+                var expires = "expires="+expd.toGMTString();
+                document.cookie=\'language=; path=/; \'+expires;
+            </script>
+            <meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
             }
         }
     }
@@ -206,7 +213,10 @@ language:<br>';
     <script>
         function changelanguage(str)
         {
-            document.cookie=\'language=\'+str+\'; path=/\';
+            var expd = new Date();
+            expd.setTime(expd.getTime()+(2*60*60*1000));
+            var expires = "expires="+expd.toGMTString();
+            document.cookie=\'language=\'+str+\'; path=/; \'+expires;
             location.href = location.href;
         }
     </script>';
@@ -263,7 +273,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $projectPath = splitlast(__DIR__, '/')[0];
 
     // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
+    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
     $tarfile = $projectPath.'/github.tar.gz';
     $githubfile = file_get_contents($url);
     if (!$githubfile) return 0;
