@@ -10,7 +10,7 @@ $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 $constStr = [
     'languages' => [
         'en-us' => 'English',
-        'zh-cn' => '中文',
+        'zh-cn' => '简体中文',
         'ja' => '日本語',
         'ko-kr' => '한국어',
         'fa' => 'فارسی',
@@ -206,7 +206,7 @@ $constStr = [
         'zh-cn' => '先在环境变量设置passfile才能加密',
         'ja' => '最初に暗号化する環境変数にパスファイルを設定します',
         'ko-kr' => '암호화하기 전에 환경 변수에 패스 파일을 설정하십시오',
-        'fa' => 'قبل از رمزگذاری \ "pass file \" را در محیط تنظیم کنید',
+        'fa' => 'قبل از رمزگذاری \"pass file \" را در محیط تنظیم کنید',
     ],
     'updateProgram' => [
         'en-us' => 'Update Program',
