@@ -1,7 +1,10 @@
+20200713-1800.20
+add platform: Huawei cloud Function Graph. now you can use "?json" to get a json of folder or file. fix some bug.
+新增白嫖平台：华为云函数工作流FG。可以用"?json"来获得目录或文件的json。修复bug。
+
 20200607-1856.19
 add platform: Aliyun Function Compute. add setting: replace sharepoint.com to a proxy server name. add setting: disableShowThumb,customTheme. add function: php hosting website can update by a click
 现在可以安装到阿里函数计算FC了。php空间可以一键更新了。可以设置某个盘替换sharpoint.com域名为你的反代域名。新增disableShowThumb,customTheme。
-
 20200503-1848.18
 Rebuild theme. Add custom Css & custom Script, add FunctionalityFile: head.omf & foot.omf.
 重建主题文件结构。增加自定义css与自定义script。增加2个功能文件：head.omf、foot.omf。
