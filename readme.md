@@ -11,6 +11,7 @@ How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/but
 # Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
 Official: https://cloud.tencent.com/product/scf  
 DEMO:  无  
+注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
 
 How to Install:  无  
   
@@ -32,7 +33,20 @@ How to Install:
     在浏览器中访问。  
 
 
-# Deploy to Aliyun Function Compute (FC 阿里函数计算)  
+# Deploy to Huawei cloud Function Graph (FG 华为云函数工作流)  
+Official: https://console.huaweicloud.com/functiongraph/  
+DEMO:  无  
+注意：FG中，环境变量整体大小为2KB，所以最多添加2个盘。  
+
+How to Install:  
+1，在函数列表，点右边创建函数  
+2，输入名称，选择运行时语言为PHP7.3，点上传ZIP文件，选择文件，然后点右边的创建函数（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。）  
+3，创建触发器：选API网关，安全认证选None，后端超时（毫秒）将5000改成30000，上面创建分组一下，其它的点点点  
+4，访问触发器给的url，开始安装  
+5，在触发器界面点触发器名称，跳到API网关管理，右边更多URL，可以添加自定义域名，自定义域名后发现还是要 xxxx.com/函数名 来访问，点上方的编辑，第1页不用改，点下一步，请求Path改成/，注意匹配模式是前缀匹配，Method为ANY，然后不用点下一步了，点立即完成，然后去发布生效  
+
+
+# Deploy to Aliyun Function Compute (FC 阿里云函数计算)  
 Official: https://fc.console.aliyun.com/  
 DEMO:  无  
 
