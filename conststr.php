@@ -1,16 +1,16 @@
 <?php
 
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
-$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg', 'm4a'];
+$exts['music'] = ['mp3', 'wma', 'flac', 'ape', 'wav', 'ogg', 'm4a'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py', 'omf'];
+$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'css', 'json', 'html', 'c', 'cpp', 'md', 'py', 'omf'];
 $exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8', 'rm', 'rmvb'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
 $constStr = [
     'languages' => [
         'en-us' => 'English',
-        'zh-cn' => '中文',
+        'zh-cn' => '简体中文',
         'ja' => '日本語',
         'ko-kr' => '한국어',
         'fa' => 'فارسی',
@@ -68,14 +68,20 @@ $constStr = [
             'adminloginpage' => 'if set, the Login button will not display, and the login page no longer \'?admin\', it is \'?{this value}\'.',
             'customScript' => '<script> in all pages, e.g. http turn to https',
             'customCss' => '<style> in <head>',
+            'customTheme' => 'an url of html',
             'domain_path' => 'more custom domain, format is a1.com:/dirto/path1|b2.com:/path2',
             'diskname' => 'The disk name you want show.',
             'disktag' => 'A tag used in store config and url.',
+            'disableShowThumb' => 'if 1, the ShowThumbnail button will not display',
+            'disableChangeTheme' => 'if 1, the Theme selection button will not display',
             'downloadencrypt' => '0 or 1. if 1, the files in encrypt folder can be downloaded without password',
             'background' => 'Set an url as background photo.',
+            'theme' => 'Select theme.',
+            'timezone' => 'Set default timezone.',
             'guestup_path' => 'Set guest upload dir, before set this, the files in this dir will show as normal.',
             'hideFunctionalityFile' => '0 or 1. if 1, some file will not show in list to guest, like readme.md',
-            'passfile' => 'The password of dir will save in this file.',
+            'passfile' => 'The password of folder(& its childrens) will save in this file.',
+            'domainforproxy' => 'Will replace the https://xxxxx-my.sharepoint.com with this value.Add &Origindomain=xxxxx-my.sharepoint.com at last',
             'public_path' => 'Show this Onedrive dir when through the long url of API Gateway; public show files less than private.',
             'sitename' => 'sitename',
             'Onedrive_ver' => 'Onedrive version',
@@ -85,14 +91,20 @@ $constStr = [
             'adminloginpage' => '如果设置，登录按钮及页面隐藏。管理登录的页面不再是\'?admin\'，而是\'?此设置的值\'。',
             'customScript' => '<script>，在所有页都会存在,例如放一个http跳转https',
             'customCss' => '<style>，在<head>最后面',
+            'customTheme' => 'html格式的主题的url',
             'domain_path' => '使用多个自定义域名时，指定每个域名看到的目录。格式为a1.com:/dirto/path1|b1.com:/path2，比private_path优先。',
             'diskname' => '这个盘你想显示什么名称。',
             'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
+            'disableShowThumb' => '如果填 1, ‘显示缩略’按钮将被隐藏。',
+            'disableChangeTheme' => '如果填 1, 主题选择切换将被隐藏',
             'downloadencrypt' => '0 或 1。如果 1, 那加密目录内的文件可以不需要密码就能下载。',
             'background' => '设置一个url作为背景。',
+            'theme' => '选择一个主题。',
+            'timezone' => '设置默认时区。',
             'guestup_path' => '设置游客上传路径（图床路径），不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
             'hideFunctionalityFile' => '0 或 1。如果 1, 某些文件不列表给游客看，但它的功能正常，比如readme.md',
             'passfile' => '自定义密码文件的名字，可以是\'pppppp\'，也可以是\'aaaa.txt\'等等；列目录时不会显示，只有知道密码才能查看或下载此文件。密码是这个文件的内容，可以空格、可以中文；',
+            'domainforproxy' => '会将https://xxxxx-my.sharepoint.com替换成这个值，在目标需要自己设置反代。会加上&Origindomain=原域名',
             'public_path' => '使用API长链接访问时，显示网盘文件的路径，不设置时默认为根目录；不能是private_path的上级（public看到的不能比private多，要么看到的就不一样）。',
             'sitename' => '网站的名称',
             'Onedrive_ver' => 'Onedrive版本',
@@ -194,7 +206,7 @@ $constStr = [
         'zh-cn' => '先在环境变量设置passfile才能加密',
         'ja' => '最初に暗号化する環境変数にパスファイルを設定します',
         'ko-kr' => '암호화하기 전에 환경 변수에 패스 파일을 설정하십시오',
-        'fa' => 'قبل از رمزگذاری \ "pass file \" را در محیط تنظیم کنید',
+        'fa' => 'قبل از رمزگذاری \"pass file \" را در محیط تنظیم کنید',
     ],
     'updateProgram' => [
         'en-us' => 'Update Program',
@@ -223,6 +235,10 @@ $constStr = [
         'ja' => 'back',
         'ko-kr' => '돌아 가기',
         'fa' => 'بازگشت',
+    ],
+    'Theme' => [
+        'en-us' => 'Theme',
+        'zh-cn' => '主题',
     ],
     'NotNeedUpdate' => [
         'en-us' => 'Not Need Update',
@@ -514,6 +530,10 @@ $constStr = [
         'ko-kr' => '업로드 링크 받기',
         'fa' => 'دریافت لینک آپلود',
     ],
+    'Calculate' => [
+        'en-us' => 'Calculate',
+        'zh-cn' => '计算',
+    ],
     'UpFileTooLarge' => [
         'en-us' => 'The File is too Large!',
         'zh-cn' => '文件过大，终止上传。',
@@ -761,9 +781,9 @@ $constStr = [
         'ko-kr' => '캐시 플러시',
         'fa' => 'رفرش cache',
     ],
-    'VPSnotupdate' => [
-        'en-us' => 'In VPS can not update by a click! run update.sh',
-        'zh-cn' => '在VPS中不能一键更新，可以运行update.sh',
+    'CannotOneKeyUpate' => [
+        'en-us' => 'Can not update by a click! run update.sh',
+        'zh-cn' => '不能一键更新，可以运行update.sh',
     ],
     'QueryBranchs' => [
         'en-us' => 'Query Branchs',

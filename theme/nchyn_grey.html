@@ -21,97 +21,156 @@
     <meta name=viewport content="width=device-width,initial-scale=1">
     <meta name="keywords" content="<!--Keywords-->">
     <meta name="description" content="<!--Description-->">
-    <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
-    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/kizx/onemoe-theme/onemoe.min.css" type="text/css" />
-    <!--BackgroundStart-->
-    <style>body{background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-position-x:center;background-image:url("<!--BackgroundUrl-->")}</style>
-	<!--BackgroundEnd-->
-	<script type="text/javascript">if(window.console&&window.console.log){console.log("%c Onemoe Theme %c https://github.com/kizx/onemoe-theme ","color: #fff; margin: 1em 0; padding: 5px 0; background: #673ab7;","margin: 1em 0; padding: 5px 0; background: #efefef;")}</script>
+    <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon" />
+    <link href="//cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+    <script src="//cdn.bootcdn.net/ajax/libs/jquery/2.0.2/jquery.min.js"></script>
+
+    <style>
+    a {
+        text-decoration: none;
+        color: dimgray;
+    }
+    .title{
+        text-align: center;
+        font-family: '-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;
+        }
+        .btn-secondary[now]{
+            background-color: #545b62;
+            box-shadow: 0 0 0 0.2rem rgba(130,138,145,.5);
+        }
+        ion-icon{vertical-align: -0.1em;}
+    body {
+        <!--BackgroundStart-->
+    background-image: url('<!--BackgroundUrl-->');
+    background-size: cover;
+    background-repeat: no-repeat;
+    height: 100%;
+    <!--BackgroundEnd-->
+}
+
+</style>
     <!--customCss-->
 </head>
 
 <body>
-    <div style="padding:1px" id="top-div">
-<!--LoginStart-->
-        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><!--constStr@Login--></a>
-<!--LoginEnd-->
-<!--AdminStart-->
-        <li class="operate"><ion-icon name="construct"></ion-icon><!--constStr@Operate--><ul>
-<!--IsFolderStart-->
-            <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><!--constStr@Create--></a></li>
-            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
-            <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a></li>
-<!--IsFolderEnd-->
-            <li><a href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a></li>
-            <li><a onclick="logout();"><ion-icon name="log-out"></ion-icon><!--constStr@Logout--></a></li>
-        </ul></li>
-<!--AdminEnd-->
+    <div style="backgroudn-color:#aaa; z-index:-999; height:100vh; width:100%; position:absolute;opacity:0.5;"></div>
+    <div id="top-div">
         &nbsp;
-        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
-            <option value="">Language</option>
-<!--SelectLanguageStart-->
-                <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
-<!--SelectLanguageEnd-->
-        </select>
     </div>
 <!--NeedUpdateStart-->
     <div style='position:absolute;'><font color='red'><!--constStr@NeedUpdate--></font></div>
 <!--NeedUpdateEnd-->
     <h1 class="title" id="title">
-        <a href="<!--base_path-->"><!--Sitename--></a>
+        <a href="<!--base_path-->" class="text-muted"><!--Sitename--></a>
     </h1>
-<!--MultiDiskAreaStart-->
     <div class="list-wrapper" id="more-disk-div">
-        <div class="list-container">
+        <div class="">
             <div class="list-header-container">
-                <div class="more-disk">
+                <div class="container text-center rounded my-3 py-3">
+                    <div class="btn-group" role="group">
+<!--MultiDiskAreaStart-->
 <!--MultiDisksStart-->
-                    <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
+                        <a href="<!--MultiDisksUrl-->" class="btn btn-secondary" <!--MultiDisksNow-->><!--MultiDisksName--></a>
 <!--MultiDisksEnd-->
-                </div>
-            </div>
-        </div>
-    </div>
 <!--MultiDiskAreaEnd-->
-<!--HeadomfStart-->
-    <div class="list-wrapper" id="head-om-div">
-        <div class="list-container">
-            <div class="list-header-container">
-                <div class="readme">
-                    <div class="customfile" id="head-om">
-                        <!--HeadomfContent-->
-                    </div>
+<!--LoginStart-->
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#exampleModal">
+                            <!--constStr@Login-->
+                        </button>
+                        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="exampleModalLabel"><!--constStr@Login--></h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <form action="?admin" method="post">
+                                        <div class="modal-body">
+                                            <input class="form-control" id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+                                        </div>
+                                        <div class="modal-footer">
+                                                <input class="btn btn-primary" type="submit" value="<!--constStr@Login-->"></button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+<!--LoginEnd-->
+<!--AdminStart-->
+                        <div class="dropdown btn-group">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" type="button"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <ion-icon name="construct"></ion-icon><!--constStr@Operate-->
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+<!--IsFolderStart-->
+                                <a  class="dropdown-item" data-toggle="modal" data-target="#NewFileModal"><ion-icon name="create"></ion-icon><!--constStr@Create--></a>
+                                <a  class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value=''"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a>
+                                <a class="dropdown-item" href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a>
+<!--IsFolderEnd-->
+                                <a class="dropdown-item" href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a>
+                                <a class="dropdown-item" onclick="logout();"><ion-icon name="log-out"></ion-icon><!--constStr@Logout--></a>
+                            </div>
+                        </div>
+<!--AdminEnd-->
+                    <select class="btn btn-secondary" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
+<!--SelectLanguageStart-->
+                        <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
+<!--SelectLanguageEnd-->
+                    </select>
                 </div>
             </div>
         </div>
     </div>
-<!--HeadomfEnd-->
-<!--HeadmdStart-->
-    <div class="list-wrapper" id="head-div">
-        <div class="list-container">
-            <div class="list-header-container">
-                <div class="readme">
-                    <div class="markdown-body" id="head">
-                        <textarea id="head-md" style="display:none;"><!--HeadmdContent--></textarea>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-<!--HeadmdEnd-->
+
 <!--ListStart-->
-    <div class="list-wrapper" id="list-div">
+
+<!--HeadomfStart-->
+<div class="container text-left rounded my-3 py-3 border" id="head-om-div">
+<div class="list-header-container" >
+    <div class="readme">
+        <div class="customfile" id="head-om">
+            <!--HeadomfContent-->
+        </div>
+    </div>
+</div>
+</div>
+
+<!--HeadomfEnd-->
+
+<!--HeadmdStart-->
+<div class="container text-left rounded my-3 py-3 border" id="head-div">
+<div class="list-header-container">
+    <div class="readme">
+        <div class="markdown-body" id="head">
+            <textarea id="head-md" style="display:none;"><!--HeadmdContent--></textarea>
+        </div>
+    </div>
+</div>
+</div>
+
+<!--HeadmdEnd-->
+
+    <div class="container text-left rounded my-3 py-3 border" id="list-div">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-header-container alert alert-secondary">
+                <ul class="nav nav-pills">
 <!--BackArrowStart-->
-                <a href="<!--BackArrowUrl-->" class="back-link">
-                    <ion-icon name="arrow-back"></ion-icon>
-                </a>
+                <li class="nav-item">
+                    <a href="<!--BackArrowUrl-->" class="nav-item active">
+                        <ion-icon name="arrow-back"></ion-icon>
+                    </a>
+                </li>
 <!--BackArrowEnd-->
-                <h3 class="table-header"><!--PathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--PathArrayEnd--></h3>
+                <li class="nav-item" id="nav-path">
+                    <!--Path-->
+                </li>
+                </ul>
             </div>
-            <div class="list-body-container">
+
+            <div class="list-body-container border">
 <!--EncryptedStart-->
                 <div style="padding:20px">
 	            <center>
@@ -122,13 +181,39 @@
                 </center>
                 </div>
 <!--EncryptedEnd-->
+
 <!--GuestUploadStart-->
-                <div id="upload_div" style="margin:10px">
-                    <div id="upload_btns" align="center">
-                    <input id="upload_file" type="file" name="upload_filename">
-                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
-                    </div>
-                </div>
+<div id="upload_div" class="input-group p-3">
+    <div id="upload_btns" >
+      <select class="form-control" onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+        <option value=""><!--constStr@UploadFile--></option>
+        <option value="1"><!--constStr@UploadFolder--></option>
+      </select>
+    </div>
+    <div class="custom-file">
+      <input onchange="showFileName()" type="file" class="custom-file-input" id="upload_file" aria-describedby="upload_submit" multiple="multiple" name="upload_filename">
+      <label id="filename_label"  class="custom-file-label" for="upload_file"><!--constStr@FileSelected--></label>
+    </div>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" onclick="preup();" type="button" id="upload_submit"><!--constStr@Upload--></button>
+    </div>
+</div>
+<div id="uploading_div" class="input-group p-3"></div>
+
+ <script> 
+ function showFileName(){
+     var file = document.getElementById("upload_file").files;
+     //取得file集合
+
+         var fileNameAll = "";
+            for(var i = 0; i < file.length; i++){
+                fileNameAll += file[i].name + ";";
+            }
+            fileNameAll = fileNameAll.substr(0, fileNameAll.length - 1);
+
+            $('#filename_label').html(fileNameAll);
+     }
+ </script>
 <!--GuestUploadEnd-->
 
 <!--IsFileStart-->
@@ -173,18 +258,19 @@
                     </div>
                 </div>
 <!--IsFileEnd-->
+
+
 <!--IsFolderStart-->
-                <table class="list-table" id="list-table">
-                    <tr id="tr0">
+                <table class="table table-hover" id="list-table">
+                    <tr class="thead-dark" id="tr0">
                         <th class="file">
                             <a onclick="sortby('a');"><!--constStr@File--></a>
 <!--ShowThumbnailsStart-->
                             &nbsp;&nbsp;&nbsp;
-                            <label><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>
-                            <button onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
+                            <button class="btn btn-sm btn-secondary" onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
 <!--ShowThumbnailsEnd-->
                             &nbsp;
-                            <button onclick="CopyAllDownloadUrl('.download');"><!--constStr@CopyAllDownloadUrl--></button>
+                            <button class="btn btn-sm btn-secondary" onclick="CopyAllDownloadUrl('.download');"><!--constStr@CopyAllDownloadUrl--></button>
                         </th>
                         <th class="updated_at"><a onclick="sortby('time');"><!--constStr@EditTime--></a></th>
                         <th class="size"><a onclick="sortby('size');"><!--constStr@Size--></a></th>
@@ -194,18 +280,22 @@
                     <tr data-to id="tr<!--filenum-->">
                         <td class="file">
 <!--AdminStart-->
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
-                            <ul>
-                                <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
-                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
-                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
-                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
-                            </ul>
-                            </li>
+<div class="dropdown d-inline">
+    <a class="btn btn-secondary dropdown-toggle" href="#" type="button"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <ion-icon name="construct"></ion-icon>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value='<!--FileEncodeReplaceName-->'"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a>
+        <a class="dropdown-item" data-toggle="modal" data-target="#renameModal" onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a>
+        <a class="dropdown-item" data-toggle="modal" data-target="#MoveModal" onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a>
+        <a class="dropdown-item" data-toggle="modal" data-target="#CopyModal" onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a>
+        <a class="dropdown-item" data-toggle="modal" data-target="#DeleteModal" onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a>
+    </div>
+</div>                
+
 <!--AdminEnd-->
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
                         </td>
                         <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
                         <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
@@ -215,14 +305,17 @@
                     <tr data-to id="tr<!--filenum-->">
                         <td class="file">
 <!--AdminStart-->
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
-                            <ul>
-                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
-                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
-                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
-                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
-                            </ul>
-                            </li>
+<div class="dropdown d-inline">
+    <a class="btn btn-secondary dropdown-toggle" href="#" type="button"  role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <ion-icon name="construct"></ion-icon>
+    </a>
+    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" data-toggle="modal" data-target="#renameModal" onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
+        <a class="dropdown-item" data-toggle="modal" data-target="#MoveModal" onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
+        <a class="dropdown-item" data-toggle="modal" data-target="#CopyModal" onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
+        <a class="dropdown-item" data-toggle="modal" data-target="#DeleteModal" onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
+    </div>
+</div>    
 <!--AdminEnd-->
                             <ion-icon name="<!--IconValue-->"></ion-icon>
                             <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" target=_blank><!--FileEncodeReplaceName--></a>
@@ -261,16 +354,42 @@
                 </form>
 <!--MorePageEnd-->
 <!--AdminStart-->
-                <div id="upload_div" style="margin:0 0 16px 0">
-                <div id="upload_btns" align="center">
-                    <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
-                        <option value=""><!--constStr@UploadFile--></option>
-                        <option value="1"><!--constStr@UploadFolder--></option>
-                    </select>
-                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
-                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
-                </div>
-                </div>
+
+
+
+
+
+<div id="upload_div" class="input-group p-3">
+    <div id="upload_btns" >
+      <select class="form-control" onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+        <option value=""><!--constStr@UploadFile--></option>
+        <option value="1"><!--constStr@UploadFolder--></option>
+      </select>
+    </div>
+    <div class="custom-file">
+      <input onchange="showFileName()" type="file" class="custom-file-input" id="upload_file" aria-describedby="upload_submit" multiple="multiple" name="upload_filename">
+      <label id="filename_label"  class="custom-file-label" for="upload_file"><!--constStr@FileSelected--></label>
+    </div>
+    <div class="input-group-append">
+      <button class="btn btn-outline-secondary" onclick="preup();" type="button" id="upload_submit"><!--constStr@Upload--></button>
+    </div>
+</div>
+<div id="uploading_div" class="input-group p-3"></div>
+
+ <script> 
+ function showFileName(){
+     var file = document.getElementById("upload_file").files;
+     //取得file集合
+
+         var fileNameAll = "";
+            for(var i = 0; i < file.length; i++){
+                fileNameAll += file[i].name + ";";
+            }
+            fileNameAll = fileNameAll.substr(0, fileNameAll.length - 1);
+
+            $('#filename_label').html(fileNameAll);
+     }
+ </script>
 <!--AdminEnd-->
 <!--IsFolderEnd-->
 <!--ListEnd-->
@@ -278,7 +397,7 @@
         </div>
     </div>
 <!--ReadmemdStart-->
-    <div class="list-wrapper" id="readme-div">
+    <div class="container text-left rounded my-3 py-3 border" id="readme-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="readme">
@@ -291,7 +410,7 @@
     </div>
 <!--ReadmemdEnd-->
 <!--FootomfStart-->
-    <div class="list-wrapper" id="foot-om-div">
+    <div class="container text-left rounded my-3 py-3 border" id="foot-om-div">
         <div class="list-container">
             <div class="list-header-container">
                 <div class="readme">
@@ -304,62 +423,163 @@
     </div>
 <!--FootomfEnd-->
 
-    <div id="mask" class="mask" style="display:none;"></div>
+    <div id="mask" style="display:none;"></div>
 <!--AdminStart-->
 <!--IsFolderStart-->
-    <div style="word-break: break-all;word-wrap: break-word;">
-        <div id="rename_div" class="operatediv" style="display:none">
+    <div style="">
+        <div id="rename_div" class="operatediv" style="">
             <div>
-                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><!--constStr@Close--></a>
+                <label id="rename_label" style="display:none"></label>
                 <form id="rename_form" onsubmit="return submit_operate('rename');">
                 <input id="rename_sid" name="rename_sid" type="hidden" value="">
                 <input id="rename_hidden" name="rename_oldname" type="hidden" value="">
-                <input id="rename_input" name="rename_newname" type="text" value="">
-                <input name="operate_action" type="submit" value="<!--constStr@Rename-->">
+
+
+                            <!-- RenameModal -->
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#myrename").click(function(){
+                $("#renameModal").modal('hide');
+                window.location.reload();
+            });
+        });
+    </script>
+
+<div class="modal fade" id="renameModal" tabindex="-1" role="dialog" aria-labelledby="renameModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="renameModalLabel"><!--constStr@Rename--></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <div class="modal-body">
+            <div class="input-group mb-3">
+                <input class="form-control" id="rename_input" name="rename_newname" type="text" value="">
+                <div class="input-group-append">
+                    <input class="input-group-text btn btn-outline-secondary" id="myrename" name="operate_action" type="submit" value="<!--constStr@Rename-->">
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+</div>
                 </form>
             </div>
         </div>
-        <div id="delete_div" class="operatediv" style="display:none">
-            <div>
-                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><!--constStr@Close--></a>
-                <label id="delete_label"></label>
-                <form id="delete_form" onsubmit="return submit_operate('delete');">
-                <label id="delete_input"><!--constStr@Delete-->?</label>
-                <input id="delete_sid" name="delete_sid" type="hidden" value="">
-                <input id="delete_hidden" name="delete_name" type="hidden" value="">
-                <input name="operate_action" type="submit" value="<!--constStr@Submit-->">
-                </form>
-            </div>
-        </div>
-        <div id="encrypt_div" class="operatediv" style="display:none">
-            <div>
-                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><!--constStr@Close--></a>
+
+
+        <div class="modal fade operatediv_close" id="exampleencrypt" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel"><!--constStr@Encrypt--></h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div id="encrypt_div" class="operatediv" >
+            <div class="container text-center rounded my-3 py-3">
                 <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
-                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
-                <!--EncryptBtnStart--><input name="operate_action" type="submit" value="<!--constStr@Encrypt-->"><!--EncryptBtnEnd--><!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
-                </form>
+                <input class="form-control d-inline" id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
+                <!--EncryptBtnStart-->
+                <script type="text/javascript">
+                    $(document).ready(function(){
+                        $("#mymodal").click(function(){
+                            $("#exampleencrypt").modal('hide');
+                            window.location.reload();
+                        });
+                    });
+                </script>
+                <input class="btn btn-secondary input-group-append my-3 float-right" name="operate_action" href="" type="submit" value="<!--constStr@Encrypt-->" id="mymodal">
+                <!--EncryptBtnEnd-->
+
+                <!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
+
+            </form>
             </div>
         </div>
-        <div id="copy_div" class="operatediv" style="display:none">
-            <div>
-                <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><!--constStr@Close--></a>
-                <form id="copy_form" onsubmit="return submit_operate('copy');">
-                <input id="copy_sid" name="copy_sid" type="hidden" value="">
-                <input id="copy_hidden" name="copy_name" type="hidden" value="">
-                <input id="copy_input" name="copy_input" type="hidden" value="">
-                <input name="operate_action" type="submit" value="<!--constStr@Copy-->">
-                </form>
+                    </div>
+                </div>
             </div>
+
+            <div id="delete_div" class="operatediv">
+
+<form id="delete_form" method="get" onsubmit="return submit_operate('delete');">
+<div class="modal fade" id="DeleteModal" tabindex="-1" role="dialog" aria-labelledby="DeleteModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="DeleteModalLabel"><!--constStr@Delete--></h5>
+    <button type="button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label id="delete_label"></label>
+    <input id="delete_sid" name="delete_sid" type="hidden" value="">
+    <input id="delete_hidden" name="delete_name" type="hidden" value="">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><!--constStr@Close--></button>
+    <input class="btn btn-danger" name="operate_action" type="submit" value="<!--constStr@Delete-->" onclick="$('#DeleteModal').modal('hide');
+        window.location.reload();">
+  </div>
+</div>
+</div>
+</div>
+</form>
+<div id="copy_div" class="operatediv">
+<form id="copy_form" method="get" onsubmit="return submit_operate('copy');">
+<div class="modal fade" id="CopyModal" tabindex="-1" role="dialog" aria-labelledby="CopyModalLabel"
+aria-hidden="true">
+<div class="modal-dialog" role="document">
+<div class="modal-content">
+  <div class="modal-header">
+    <h5 class="modal-title" id="CopyModalLabel"><!--constStr@Copy--></h5>
+    <button type="button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <label id="copy_label"></label>
+    <input id="copy_sid" name="copy_sid" type="hidden" value="">
+    <input id="copy_hidden" name="copy_name" type="hidden" value="">
+    <input id="copy_input" name="copy_input" type="hidden" value="">
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal"><!--constStr@Close--></button>
+    <input class="btn btn-primary" name="operate_action" type="submit" value="<!--constStr@Copy-->" onclick="$('#CopyModal').modal('hide');
+        window.location.reload();">
+  </div>
+</div>
+</div>
+</div>
+</form>
+
         </div>
-        <div id="move_div" class="operatediv" style="display:none">
-            <div>
-                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><!--constStr@Close--></a>
-                <form id="move_form" onsubmit="return submit_operate('move');">
-                <input id="move_sid" name="move_sid" type="hidden" value="">
+        <div id="move_div" class="operatediv">
+
+        <form id="move_form" method="get" onsubmit="return submit_operate('move');">
+    <div class="modal fade" id="MoveModal" tabindex="-1" role="dialog" aria-labelledby="MoveModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="MoveModalLabel"><!--constStr@Move--></h5>
+            <button type="button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+            <input id="move_sid" name="move_sid" type="hidden" value="">
                 <input id="move_hidden" name="move_name" type="hidden" value="">
-                <select id="move_input" name="move_folder">
+                <select id="move_input" name="move_folder" class="form-control">
 <!--MoveRootStart-->
                     <option value="/../"><!--constStr@ParentDir--></option>
 <!--MoveRootEnd-->
@@ -367,61 +587,90 @@
                     <option value="<!--MoveDirsValue-->"><!--MoveDirsValue--></option>
 <!--MoveDirsEnd-->
                 </select>
-                <input name="operate_action" type="submit" value="<!--constStr@Move-->">
-                </form>
             </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><!--constStr@Close--></button>
+            <input class="btn btn-primary" name="operate_action" type="submit" value="<!--constStr@Move-->" onclick="$('#MoveModal').modal('hide');
+                window.location.reload();">
+          </div>
         </div>
-        <div id="create_div" class="operatediv" style="display:none">
-            <div>
-                <a onclick="operatediv_close('create')" class="operatediv_close"><!--constStr@Close--></a>
-                <form id="create_form" onsubmit="return submit_operate('create');">
-                    <input id="create_sid" name="create_sid" type="hidden" value="">
-                    <input id="create_hidden" type="hidden" value="">
-                    <table>
-                        <tr>
-                            <td></td>
-                            <td><label id="create_label"></label></td>
-                        </tr>
-                        <tr>
-                            <td>　　　</td>
-                            <td>
-                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><!--constStr@Folder--></label>
-                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><!--constStr@File--></label>
-                            <td>
-                        </tr>
-                        <tr>
-                            <td><!--constStr@Name-->：</td>
-                            <td><input id="create_input" name="create_name" type="text" value=""></td>
-                        </tr>
-                        <tr id="create_text_div">
-                            <td><!--constStr@Content-->：</td>
-                            <td><textarea id="create_text" name="create_text" rows="6" cols="40"></textarea></td>
-                        </tr>
-                        <tr>
-                            <td>　　　</td>
-                            <td><input name="operate_action" type="submit" value="<!--constStr@Create-->"></td>
-                        </tr>
-                    </table>
-                </form>
+      </div>
+    </div>
+  </form>
+  <script>
+      function saveReport() { 
+$("#showDataForm").ajaxSubmit(function(message) { 
+}); 
+}
+</script>
+
+
+                <form id="create_form" method="get" onsubmit="return submit_operate('create');">
+    <div class="modal fade" id="NewFileModal" tabindex="-1" role="dialog" aria-labelledby="CreateModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="CreateModalLabel"><!--constStr@Create--><!--constStr@File--></h5>
+            <button type="button" type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="input-group mb-3">
+              <input type="text" id="create_input" name="create_name" class="form-control" placeholder="<!--constStr@Create--><!--constStr@Folder-->">
+              <div class="input-group-prepend">
+                <input type="hidden" id="create_type_folder" name="create_type" value="folder">
+                <input id="create_sid" name="create_sid" type="hidden" value="">
+                <input id="create_hidden" type="hidden" value="">
+                <div type="button" id="create_type_folder_button" class="btn btn-secondary" data-toggle="collapse"
+                  data-target="#collapseExample" onclick="if(document.getElementById('create_input').placeholder == '<!--constStr@Create--><!--constStr@Folder-->'){
+                  document.getElementById('create_input').placeholder='<!--constStr@Create--><!--constStr@File-->';document.getElementById('create_type_folder').value='file';
+                  }else {
+                    document.getElementById('create_input').placeholder='<!--constStr@Create--><!--constStr@Folder-->';document.getElementById('create_type_folder').value='folder';
+                    }"><!--constStr@File-->/<!--constStr@Folder--></div>
+                <!--$('#filetext').data('toggle') 获取 data-toggle 的值-->
+
+              </div>
             </div>
+            <div class="input-group mb-3">
+
+              <div class="collapse w-100" id="collapseExample">
+                <textarea name="create_text" id="filetextarea" class="form-control" aria-label="With textarea"
+                  placeholder="<!--constStr@File--><!--constStr@Content-->"></textarea>
+              </div>
+
+            </div>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal"><!--constStr@Close--></button>
+            <input class="btn btn-primary" name="operate_action" type="submit" value="<!--constStr@Create-->" onclick="$('#NewFileModal').modal('hide');
+                window.location.reload();">
+          </div>
         </div>
+      </div>
+    </div>
+  </form>
+  <script>
+      function saveReport() { 
+
+$("#showDataForm").ajaxSubmit(function(message) { 
+}); 
+return false;
+}
+</script>
+
     </div>
 <!--IsFolderEnd-->
 <!--AdminEnd-->
 <!--LoginStart-->
-    <div id="login_div" class="operatediv" style="display:none">
-        <div style="margin:50px">
-            <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
-	        <center>
-	            <form action="<!--IsPreview?-->admin" method="post">
-		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
-		        <input type="submit" value="<!--constStr@Login-->">
-	            </form>
-            </center>
-        </div>
-	</div>
+
 <!--LoginEnd-->
-    <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
+<p class="text-center text-muted"><a href="https://github.com/qkqpttgf/OneManager-php" class="text-muted">OneManager</a> By 逸笙 Theme By Nchyn</p>
+    <p class="text-center" style="color: rgba(247,247,249,0);"><!--FootStr--></p>
+
 </body>
 
 <!--ListStart-->
@@ -434,14 +683,11 @@
     function changelanguage(str)
     {
         if (str=='Language') str = '';
-        var expd = new Date();
-        expd.setTime(expd.getTime()+(2*60*60*1000));
-        var expires = "expires="+expd.toGMTString();
-        document.cookie='language='+str+'; path=/; '+expires;
+        document.cookie='language='+str+'; path=/';
         location.href = location.href;
     }
 <!--ListStart-->
-    /*var root = '<!--base_disk_path-->';
+    var root = '<!--base_disk_path-->';
     function path_format(path) {
         path = '/' + path + '/';
         while (path.indexOf('//') !== -1) {
@@ -449,7 +695,7 @@
         }
         return path
     }
-    document.querySelectorAll('.table-header').forEach(function (e) {
+    document.querySelectorAll('#nav-path').forEach(function (e) {
         var path = e.innerText;
         if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
         var paths = path.split('/');
@@ -461,7 +707,7 @@
         }
         e.innerHTML += paths[paths.length - 1];
         e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
-    });*/
+    });
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
@@ -583,7 +829,7 @@
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
         $head.innerHTML = marked(document.getElementById('head-md').innerText);
-        
+
     }
 <!--HeadmdEnd-->
 <!--ReadmemdStart-->
@@ -594,37 +840,29 @@
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
-        images = [<!--ImgExts-->];
         var files=document.getElementsByName('filelist');
         for ($i=0;$i<files.length;$i++) {
             str=files[$i].innerText;
             if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
-            if (!str) continue;
+            if (!str) return;
             strarry=str.split('.');
             ext=strarry[strarry.length-1].toLowerCase();
-            if (images.indexOf(ext)>-1) {
-                if (document.getElementById('originalpic').checked==true) {
-                    var url=files[$i].href;
-                    url=url.substr(0,url.length-8);
-                    files[$i].parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+str+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
-                    $i--;
-                } else {
-                    var nurl=window.location.href;
-                    if (nurl.substr(-1)!="/") nurl+="/";
-                    var url=nurl+str+'?thumbnails';
-                    get_thumbnails_url(url, str, files[$i]);
-                }
-            }
+            images = [<!--ImgExts-->];
+            if (images.indexOf(ext)>-1) get_thumbnails_url(str, files[$i]);
         }
         obj.disabled='disabled';
     }
-    function get_thumbnails_url(url, name, filea) {
+    function get_thumbnails_url(str, filea) {
+        if (!str) return;
+        var nurl=window.location.href;
+        if (nurl.substr(-1)!="/") nurl+="/";
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", url, true);
+        xhr.open("GET", nurl+str+'?thumbnails', true);
+                //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
         xhr.send('');
         xhr.onload = function(e){
             if (xhr.status==200) {
-                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+name+'">';
+                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+str+'">';
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
@@ -770,7 +1008,7 @@
             return;
         };
         var table1=document.createElement('table');
-        document.getElementById('upload_div').appendChild(table1);
+        document.getElementById('uploading_div').appendChild(table1);
         table1.setAttribute('class','list-table');
         var timea=new Date().getTime();
         var i=0;
@@ -782,55 +1020,20 @@
             tr1.setAttribute('data-to',1);
             var td1=document.createElement('td');
             tr1.appendChild(td1);
-            td1.setAttribute('style','width:30%;word-break:break-word;');
+            td1.setAttribute('style','width:30%');
             td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
             td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
             var td2=document.createElement('td');
             tr1.appendChild(td2);
             td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
+            td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             if (file.size>100*1024*1024*1024) {
                 td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
                 uploadbuttonshow();
                 return;
             }
-            upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
-<!--GuestStart-->
-            function getext(str) {
-                strarry=str.split('.');
-                ext=strarry[strarry.length-1].toLowerCase();
-                var reg = new RegExp(".","g");
-                var a = str.replace(reg,"");
-                if (a == ext) ext = "";
-                else ext = "." + ext;
-                return ext;
-            }
-        var ext = getext(file.webkitRelativePath||file.name);
-        var spark = new SparkMD5.ArrayBuffer();
-        var reader = new FileReader();
-        var chunksize=10*1024*1024;
-        var asize = 0;
-        function readblob(start) {
-            var end=start+chunksize;
-            var blob = file.slice(start,end);
-            reader.readAsArrayBuffer(blob);
-        }
-        readblob(asize);
-
-        reader.onload = function(e){
-            td2.innerHTML='<!--constStr@Calculate--> md5: '+(asize*100/file.size).toFixed(2)+'%';
-            var binary = this.result;
-            spark.append(binary);
-            asize += chunksize;
-            if (asize < file.size) {
-                readblob(asize);
-            } else {
-                var filemd5 = spark.end();
-                td2.innerHTML='md5: '+filemd5;
-                upbigfilename = filemd5+ext;
-<!--GuestEnd-->
-            td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ encodeURIComponent((file.webkitRelativePath||file.name)) +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.send(null);
             xhr1.onload = function(e){
@@ -843,23 +1046,14 @@
                         uploadbuttonshow();
                     } else {
                         td2.innerHTML='<!--constStr@UploadStart--> ...';
-                        binupfile(file,html['uploadUrl'],timea+'_'+i, upbigfilename);
+                        binupfile(file,html['uploadUrl'],timea+'_'+i);
                     }
-                }
-                if (xhr1.status==409) {
-                    td2.innerHTML='md5: '+filemd5;
-                    tdnum = timea+'_'+i;
-                    document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                 }
                 if (i<files.length-1) {
                     i++;
                     getuplink(i);
                 }
             }
-<!--GuestStart-->
-            }
-        }
-<!--GuestEnd-->
         }
     }
     function size_format(num) {
@@ -880,7 +1074,7 @@
         }
         return num.toFixed(2) + ' GB';
     }
-    function binupfile(file,url,tdnum,filename){
+    function binupfile(file,url,tdnum){
         var label=document.getElementById('upfile_td2_'+tdnum);
         var reader = new FileReader();
         var StartStr='';
@@ -901,7 +1095,9 @@
                     var a = html['nextExpectedRanges'][0];
                     newstartsize = Number( a.slice(0,a.indexOf("-")) );
                     StartTime = new Date();
+<!--AdminStart-->
                     asize = newstartsize;
+<!--AdminEnd-->
                     if (newstartsize==0) {
                         StartStr='<!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
                     } else {
@@ -915,9 +1111,19 @@
                         reader.readAsArrayBuffer(blob);
                     }
                     readblob(asize);
-
+<!--LoginStart-->
+                    var spark = new SparkMD5.ArrayBuffer();
+<!--LoginEnd-->
                     reader.onload = function(e){
                         var binary = this.result;
+<!--LoginStart-->
+                        spark.append(binary);
+                        if (asize < newstartsize) {
+                            asize += chunksize;
+                            readblob(asize);
+                            return;
+                        }
+<!--LoginEnd-->
                         var xhr = new XMLHttpRequest();
                         xhr.open("PUT", url, true);
                         //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
@@ -938,12 +1144,38 @@
                             if (response['size']>0) {
                                 // contain size, upload finish. 有size说明是最终返回，上传结束
                                 var xhr3 = new XMLHttpRequest();
-                                xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                                xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+encodeURIComponent((file.webkitRelativePath||file.name)));
                                 xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
                                 xhr3.send(null);
                                 xhr3.onload = function(e){
                                     console.log(xhr3.responseText+','+xhr3.status);
                                 }
+<!--LoginStart-->
+                                var filemd5 = spark.end();
+                                var xhr4 = new XMLHttpRequest();
+                                xhr4.open("GET", '?action=uploaded_rename&filename='+encodeURIComponent((file.webkitRelativePath||file.name))+'&filemd5='+filemd5);
+                                xhr4.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                xhr4.send(null);
+                                xhr4.onload = function(e){
+                                    console.log(xhr4.responseText+','+xhr4.status);
+                                    var filename;
+                                    //if (xhr4.status==200) filename = JSON.parse(xhr4.responseText)['name'];
+                                    //if (xhr4.status==409) filename = filemd5 + (file.webkitRelativePath||file.name).substr((file.webkitRelativePath||file.name).indexOf('.'));
+                                    filename = JSON.parse(xhr4.responseText)['name'];
+                                    if (filename=='') {
+                                        alert('<!--constStr@UploadErrorUpAgain-->');
+                                        uploadbuttonshow();
+                                        return;
+                                    }
+                                    var lasturl = location.href;
+                                    if (lasturl.substr(lasturl.length-1)!='/') lasturl += '/';
+                                    lasturl += filename + '?preview';
+                                    //window.open(lasturl);
+                                    document.getElementById('upfile_a_'+tdnum).href = lasturl;
+                                    document.getElementById('upfile_a1_'+tdnum).href = filename;
+                                    document.getElementById('upfile_cpbt_'+tdnum).style.display = "";
+                                }
+<!--LoginEnd-->
                                 EndTime=new Date();
                                 MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
                                 if (newstartsize==0) {
@@ -951,11 +1183,10 @@
                                 } else {
                                     MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path-->'+response.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path-->'+response.name+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 uploadbuttonshow();
 <!--AdminStart-->
-                                response.name=file.webkitRelativePath||response.name;
                                 addelement(response);
 <!--AdminEnd-->
                             } else {
@@ -971,7 +1202,7 @@
                         xhr.send(binary);
                     }
                 } else {
-                    if (window.location.pathname.indexOf('%23')>0||filename.indexOf('%23')>0) {
+                    if (window.location.pathname.indexOf('%23')>0||(file.webkitRelativePath||file.name).indexOf('%23')>0) {
                         label.innerHTML='<font color="red"><!--constStr@UploadFail23--></font>';
                     } else {
                         label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
@@ -998,7 +1229,7 @@
         for ($i=0;$i<$operatediv.length;$i++) {
             $operatediv[$i].style.display='none';
         }
-        document.getElementById('mask').style.display='';
+        document.getElementById('mask').style.display='none';
         //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
         document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
         if (num=='') {
@@ -1165,7 +1396,7 @@
 <!--AdminEnd-->
 <!--LoginStart-->
     function login() {
-        document.getElementById('mask').style.display='';
+        document.getElementById('mask').style.display='none';
             //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
         document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
         document.getElementById('login_div').style.display='';
@@ -1176,5 +1407,8 @@
 <!--LoginEnd-->
 </script>
 <script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="//cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
 <!--customScript-->
 </html>

@@ -1,12 +1,12 @@
 # **Tfo**
-###### A website for two-point filestorage online (tfo). 
+###### A website for two-point filestorage online (tfo)(20200713). 
 
 <img src="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Tfo.logo.svg" alt="Tfo's Logo" width="250" height="250"/>
 
 ## List of feature files 特色文件表
 Information [app.json](/app.json "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md"),[conststr.php](/conststr.php "conststr.php")
 
-UpdateAddress [heroku.php](/platform/heroku.php "heroku.php"),[scf.php](/platform/scf.php "scf.php")
+UpdateAddress [Heroku.php](/platform/Heroku.php "Heroku.php"),[TencentSCF.php](/platform/TencentSCF.php "TencentSCF.php"),[HuaweiFG.php](/platform/HuaweiFG.php "HuaweiFG.php"),[AliyunFC.php](/platform/AliyunFC.php "AliyunFC.php")
 
 Theme
 
@@ -38,11 +38,22 @@ How to Install:
 
 ### Deploy to SCF  部署到腾讯云函数
 Official: https://cloud.tencent.com/product/scf  
-
+添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 ~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
 
 先手动在环境变量添加Region，ap-hongkong或ap-guangzhou之类，具体看 https://cloud.tencent.com/document/api/583/17238 最底下，然后再安装。  
 添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+
+
+### Deploy to Aliyun Function Compute (FC 阿里函数计算)  
+Official: https://fc.console.aliyun.com/  
+How to Install:  
+* 1，新建函数 -- HTTP函数  
+* 2，运行环境选择php7.2  
+* 3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
+* 4，上传代码  
+* 5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
+* 6，访问你的域名，开始安装  
 
 ## Original Features 原始特性 
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
