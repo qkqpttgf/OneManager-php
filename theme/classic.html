@@ -1,0 +1,1222 @@
+<!--IconValuesStart-->
+{
+    "music":"musical-notes",
+    "video":"logo-youtube",
+    "img":"image",
+    "office":"paper",
+    "txt":"clipboard",
+    "zip":"filing",
+    "iso":"disc",
+    "apk":"logo-android",
+    "exe":"logo-windows",
+    "default":"document"
+}
+<!--IconValuesEnd-->
+<!DOCTYPE html>
+<html lang="<!--constStr@language-->">
+<head>
+    <title><!--Title--></title>
+    <meta charset=utf-8>
+    <meta http-equiv=X-UA-Compatible content="IE=edge">
+    <meta name=viewport content="width=device-width,initial-scale=1">
+    <meta name="keywords" content="<!--Keywords-->">
+    <meta name="description" content="<!--Description-->">
+    <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+    <style type="text/css">
+        body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<!--BackgroundStart-->background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");<!--BackgroundEnd-->}
+        a{color:#24292e;cursor:pointer;text-decoration:none}
+        ion-icon{font-size:15px;vertical-align:bottom}
+        .changelanguage{position:absolute;right:5px;}
+        .title{text-align:center;margin-top:1rem;letter-spacing:2px;margin-bottom:2rem}
+        .title a{color:#333;text-decoration:none}
+        .list-wrapper{width:80%;margin:0 auto 30px;position:relative;box-shadow:0 0 32px 0 rgb(128,128,128);border-radius:15px;}
+        .list-container{position:relative;overflow:hidden;border-radius:15px;}
+        .list-header-container{position:relative}
+        .list-header-container a.back-link{color:#000;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;padding:10px 10px;vertical-align:middle;text-decoration:none}
+        .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
+        .table-header{margin:0;border:0 none;padding:30px 60px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);word-break: break-all;word-wrap: break-word;}
+        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
+        .more-disk{margin:0;border:0 none;padding:30px 30px;text-align:left;font-weight:400;color:#000;background-color:rgba(245,245,245,0.5);white-space:nowrap;overflow:auto;}
+        .more-disk a{margin:0 10px;padding:5px;transition-duration: 0.4s;border-radius: 12px; background-color: white; color: black; border: 2px solid rgba(85,85,85,0.7); }
+        .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.7); color: white; }
+        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
+        .list-table tr{height:40px}
+        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
+        .list-table tr[data-to]:hover a{color:white}
+        .list-table tr:first-child{background:rgba(245,245,245,0)}
+        .list-table td,.list-table th{padding:0 10px;text-align:left}
+        .list-table .size,.list-table .updated_at{text-align:right}
+        .updated_at{width:25%}
+        .size{width:15%}
+        .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
+<!--AdminStart-->
+        .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
+        .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
+        .operate:hover ul{position:absolute;display:inline-table;}
+        .operate ul li{padding:7px;list-style:none;display:block;}
+        .list-table tr[data-to]:hover .operate ul li a{color:black}
+<!--AdminEnd-->
+        .operatediv{position:absolute;border:1px #CCCCCC;background-color:#FFFFCC;z-index:2;}
+        .operatediv div{margin:16px}
+        .operatediv_close{position:absolute;right:3px;top:3px;}
+        .readme{padding:8px;background-color:rgba(245,245,245,0.5);}
+        .markdown-body, .customfile{padding:20px;text-align:left}
+        @media only screen and (max-width:480px){
+            .title{margin-bottom:24px}
+            .list-wrapper{width:95%; margin-bottom:24px;}
+            .list-table {padding:8px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto;max-width:80px}
+            .size, .updated_at{display:none}
+        }
+    </style>
+    <!--customCss-->
+</head>
+
+<body>
+    <div style="padding:1px" id="top-div">
+<!--LoginStart-->
+        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><!--constStr@Login--></a>
+<!--LoginEnd-->
+<!--AdminStart-->
+        <li class="operate"><ion-icon name="construct"></ion-icon><!--constStr@Operate--><ul>
+<!--IsFolderStart-->
+            <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><!--constStr@Create--></a></li>
+            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+            <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a></li>
+<!--IsFolderEnd-->
+            <li><a href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a></li>
+            <li><a onclick="logout();"><ion-icon name="log-out"></ion-icon><!--constStr@Logout--></a></li>
+        </ul></li>
+<!--AdminEnd-->
+        &nbsp;
+        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
+            <option value="">Language</option>
+<!--SelectLanguageStart-->
+                <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
+<!--SelectLanguageEnd-->
+        </select>
+    </div>
+<!--NeedUpdateStart-->
+    <div style='position:absolute;'><font color='red'><!--constStr@NeedUpdate--></font></div>
+<!--NeedUpdateEnd-->
+    <h1 class="title" id="title">
+        <a href="<!--base_path-->"><!--Sitename--></a>
+    </h1>
+<!--MultiDiskAreaStart-->
+    <div class="list-wrapper" id="more-disk-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="more-disk">
+<!--MultiDisksStart-->
+                    <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
+<!--MultiDisksEnd-->
+                </div>
+            </div>
+        </div>
+    </div>
+<!--MultiDiskAreaEnd-->
+<!--HeadomfStart-->
+    <div class="list-wrapper" id="head-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="head-om">
+                        <!--HeadomfContent-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--HeadomfEnd-->
+<!--HeadmdStart-->
+    <div class="list-wrapper" id="head-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="markdown-body" id="head">
+                        <textarea id="head-md" style="display:none;"><!--HeadmdContent--></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--HeadmdEnd-->
+<!--ListStart-->
+    <div class="list-wrapper" id="list-div">
+        <div class="list-container">
+            <div class="list-header-container">
+<!--BackArrowStart-->
+                <a href="<!--BackArrowUrl-->" class="back-link">
+                    <ion-icon name="arrow-back"></ion-icon>
+                </a>
+<!--BackArrowEnd-->
+                <h3 class="table-header"><!--PathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--PathArrayEnd--></h3>
+            </div>
+            <div class="list-body-container">
+<!--EncryptedStart-->
+                <div style="padding:20px">
+	            <center>
+	                <form action="" method="post">
+		            <input name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		            <input type="submit" value="<!--constStr@Submit-->">
+	                </form>
+                </center>
+                </div>
+<!--EncryptedEnd-->
+<!--GuestUploadStart-->
+                <div id="upload_div" style="margin:10px">
+                    <div id="upload_btns" align="center">
+                    <input id="upload_file" type="file" name="upload_filename">
+                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
+                    </div>
+                </div>
+<!--GuestUploadEnd-->
+
+<!--IsFileStart-->
+                <div style="margin: 12px 4px 4px; text-align: center">
+                    <div style="margin: 24px">
+                        <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><!--FileEncodeUrl--></textarea>
+                        <a href="<!--FileUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
+                    </div>
+                    <div style="margin: 24px">
+<!--IsimgFileStart-->
+                        <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
+<!--IsimgFileEnd-->
+<!--IsvideoFileStart-->
+                        <div id="video-a0"></div>
+<!--IsvideoFileEnd-->
+<!--IsmusicFileStart-->
+                        <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
+<!--IsmusicFileEnd-->
+<!--IspdfFileStart-->
+                        <div id="pdf-d"></div>
+<!--IspdfFileEnd-->
+<!--IsofficeFileStart-->
+                        <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->" style="width: 100%;height: 800px" frameborder="0"></iframe>
+<!--IsofficeFileEnd-->
+<!--IstxtFileStart-->
+                        <div id="txt">
+<!--AdminStart-->
+                        <form id="txt-form" action="" method="POST">
+                            <a onclick="document.getElementById('txt-a').readOnly='';document.getElementById('txt-save').style.display='';document.getElementById('txt-editbutton').style.display='none';document.getElementById('txt-cancelbutton').style.display='';" id="txt-editbutton"><ion-icon name="create"></ion-icon><!--constStr@ClicktoEdit--></a>
+                            <a onclick="document.getElementById('txt-a').readOnly='readonly';document.getElementById('txt-save').style.display='none';document.getElementById('txt-editbutton').style.display='';document.getElementById('txt-cancelbutton').style.display='none';" id="txt-cancelbutton" style="display:none"><ion-icon name="close"></ion-icon><!--constStr@CancelEdit--></a>&nbsp;&nbsp;&nbsp;
+                            <a id="txt-save" style="display:none"><ion-icon name="save"></ion-icon><!--constStr@Save--></a>
+<!--AdminEnd-->
+                            <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <!--AdminStart-->onchange="document.getElementById('txt-save').onclick=function(){document.getElementById('txt-form').submit();}"<!--AdminEnd--> ><!--TxtContent--></textarea>
+<!--AdminStart-->
+                            </form>
+<!--AdminEnd-->
+                        </div>
+<!--IstxtFileEnd-->
+<!--IsOtherFileStart-->
+                        <span><!--constStr@FileNotSupport--></span>
+<!--IsOtherFileEnd-->
+                    </div>
+                </div>
+<!--IsFileEnd-->
+<!--IsFolderStart-->
+                <table class="list-table" id="list-table">
+                    <tr id="tr0">
+                        <th class="file">
+                            <a onclick="sortby('a');"><!--constStr@File--></a>
+<!--ShowThumbnailsStart-->
+                            &nbsp;&nbsp;&nbsp;
+                            <label><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>
+                            <button onclick="showthumbnails(this);"><!--constStr@ShowThumbnails--></button>
+<!--ShowThumbnailsEnd-->
+                            &nbsp;
+                            <button onclick="CopyAllDownloadUrl('.download');"><!--constStr@CopyAllDownloadUrl--></button>
+                        </th>
+                        <th class="updated_at"><a onclick="sortby('time');"><!--constStr@EditTime--></a></th>
+                        <th class="size"><a onclick="sortby('size');"><!--constStr@Size--></a></th>
+                    </tr>
+                    <!-- Dirs -->
+<!--FolderListStart-->
+                    <tr data-to id="tr<!--filenum-->">
+                        <td class="file">
+<!--AdminStart-->
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
+                            <ul>
+                                <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
+                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
+                            </ul>
+                            </li>
+<!--AdminEnd-->
+                            <ion-icon name="folder"></ion-icon>
+                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                        </td>
+                        <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
+                        <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
+                    </tr>
+<!--FolderListEnd-->
+<!--FileListStart-->
+                    <tr data-to id="tr<!--filenum-->">
+                        <td class="file">
+<!--AdminStart-->
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
+                            <ul>
+                                <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
+                                <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
+                                <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
+                                <li><a onclick="showdiv(event, 'delete',<!--filenum-->);"><ion-icon name="trash"></ion-icon><!--constStr@Delete--></a></li>
+                            </ul>
+                            </li>
+<!--AdminEnd-->
+                            <ion-icon name="<!--IconValue-->"></ion-icon>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" target=_blank><!--FileEncodeReplaceName--></a>
+                            <a class="download" href="<!--FileEncodeReplaceUrl-->"><ion-icon name="download"></ion-icon></a>
+                        </td>
+                        <td class="updated_at" id="file_time<!--filenum-->"><!--lastModifiedDateTime--></td>
+                        <td class="size" id="file_size<!--filenum-->"><!--size--></td>
+                    </tr>
+<!--FileListEnd-->
+                </table>
+<!--MorePageStart-->
+                <form action="" method="POST" id="nextpageform">
+                    <input type="hidden" id="pagenum" name="pagenum" value="">
+                    <table width=100% border=0>
+                        <tr>
+                            <td width=60px align=center>
+<!--PrePageStart-->
+                                <a onclick="nextpage(<!--PrePageNum-->);"><!--constStr@PrePage--></a>
+<!--PrePageEnd-->
+                            </td>
+                            <td class="updated_at">
+<!--MorePageListStart-->
+                                <a onclick="nextpage(<!--PageNum-->);"><!--PageNum--></a>
+<!--MorePageListEnd-->
+<!--MorePageListNowStart-->
+                                <font color=red><!--PageNum--></font>
+<!--MorePageListNowEnd-->
+                            </td>
+                            <td width=60px align=center>
+<!--NextPageStart-->
+                                <a onclick="nextpage(<!--NextPageNum-->);"><!--constStr@NextPage--></a>
+<!--NextPageEnd-->
+                            </td>
+                        </tr>
+                    </table>
+                </form>
+<!--MorePageEnd-->
+<!--AdminStart-->
+                <div id="upload_div" style="margin:0 0 16px 0">
+                <div id="upload_btns" align="center">
+                    <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+                        <option value=""><!--constStr@UploadFile--></option>
+                        <option value="1"><!--constStr@UploadFolder--></option>
+                    </select>
+                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
+                    <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
+                </div>
+                </div>
+<!--AdminEnd-->
+<!--IsFolderEnd-->
+<!--ListEnd-->
+            </div>
+        </div>
+    </div>
+<!--ReadmemdStart-->
+    <div class="list-wrapper" id="readme-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="markdown-body" id="readme">
+                        <textarea id="readme-md" style="display:none;"><!--ReadmemdContent--></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--ReadmemdEnd-->
+<!--FootomfStart-->
+    <div class="list-wrapper" id="foot-om-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="readme">
+                    <div class="customfile" id="foot-om">
+                        <!--FootomfContent-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!--FootomfEnd-->
+
+    <div id="mask" class="mask" style="display:none;"></div>
+<!--AdminStart-->
+<!--IsFolderStart-->
+    <div style="word-break: break-all;word-wrap: break-word;">
+        <div id="rename_div" class="operatediv" style="display:none">
+            <div>
+                <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><!--constStr@Close--></a>
+                <form id="rename_form" onsubmit="return submit_operate('rename');">
+                <input id="rename_sid" name="rename_sid" type="hidden" value="">
+                <input id="rename_hidden" name="rename_oldname" type="hidden" value="">
+                <input id="rename_input" name="rename_newname" type="text" value="">
+                <input name="operate_action" type="submit" value="<!--constStr@Rename-->">
+                </form>
+            </div>
+        </div>
+        <div id="delete_div" class="operatediv" style="display:none">
+            <div>
+                <br><a onclick="operatediv_close('delete')" class="operatediv_close"><!--constStr@Close--></a>
+                <label id="delete_label"></label>
+                <form id="delete_form" onsubmit="return submit_operate('delete');">
+                <label id="delete_input"><!--constStr@Delete-->?</label>
+                <input id="delete_sid" name="delete_sid" type="hidden" value="">
+                <input id="delete_hidden" name="delete_name" type="hidden" value="">
+                <input name="operate_action" type="submit" value="<!--constStr@Submit-->">
+                </form>
+            </div>
+        </div>
+        <div id="encrypt_div" class="operatediv" style="display:none">
+            <div>
+                <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><!--constStr@Close--></a>
+                <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
+                <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
+                <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
+                <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
+                <!--EncryptBtnStart--><input name="operate_action" type="submit" value="<!--constStr@Encrypt-->"><!--EncryptBtnEnd--><!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
+                </form>
+            </div>
+        </div>
+        <div id="copy_div" class="operatediv" style="display:none">
+            <div>
+                <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><!--constStr@Close--></a>
+                <form id="copy_form" onsubmit="return submit_operate('copy');">
+                <input id="copy_sid" name="copy_sid" type="hidden" value="">
+                <input id="copy_hidden" name="copy_name" type="hidden" value="">
+                <input id="copy_input" name="copy_input" type="hidden" value="">
+                <input name="operate_action" type="submit" value="<!--constStr@Copy-->">
+                </form>
+            </div>
+        </div>
+        <div id="move_div" class="operatediv" style="display:none">
+            <div>
+                <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><!--constStr@Close--></a>
+                <form id="move_form" onsubmit="return submit_operate('move');">
+                <input id="move_sid" name="move_sid" type="hidden" value="">
+                <input id="move_hidden" name="move_name" type="hidden" value="">
+                <select id="move_input" name="move_folder">
+<!--MoveRootStart-->
+                    <option value="/../"><!--constStr@ParentDir--></option>
+<!--MoveRootEnd-->
+<!--MoveDirsStart-->
+                    <option value="<!--MoveDirsValue-->"><!--MoveDirsValue--></option>
+<!--MoveDirsEnd-->
+                </select>
+                <input name="operate_action" type="submit" value="<!--constStr@Move-->">
+                </form>
+            </div>
+        </div>
+        <div id="create_div" class="operatediv" style="display:none">
+            <div>
+                <a onclick="operatediv_close('create')" class="operatediv_close"><!--constStr@Close--></a>
+                <form id="create_form" onsubmit="return submit_operate('create');">
+                    <input id="create_sid" name="create_sid" type="hidden" value="">
+                    <input id="create_hidden" type="hidden" value="">
+                    <table>
+                        <tr>
+                            <td></td>
+                            <td><label id="create_label"></label></td>
+                        </tr>
+                        <tr>
+                            <td>　　　</td>
+                            <td>
+                                <label><input id="create_type_folder" name="create_type" type="radio" value="folder" onclick="document.getElementById('create_text_div').style.display='none';"><!--constStr@Folder--></label>
+                                <label><input id="create_type_file" name="create_type" type="radio" value="file" onclick="document.getElementById('create_text_div').style.display='';" checked><!--constStr@File--></label>
+                            <td>
+                        </tr>
+                        <tr>
+                            <td><!--constStr@Name-->：</td>
+                            <td><input id="create_input" name="create_name" type="text" value=""></td>
+                        </tr>
+                        <tr id="create_text_div">
+                            <td><!--constStr@Content-->：</td>
+                            <td><textarea id="create_text" name="create_text" rows="6" cols="40"></textarea></td>
+                        </tr>
+                        <tr>
+                            <td>　　　</td>
+                            <td><input name="operate_action" type="submit" value="<!--constStr@Create-->"></td>
+                        </tr>
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+<!--IsFolderEnd-->
+<!--AdminEnd-->
+<!--LoginStart-->
+    <div id="login_div" class="operatediv" style="display:none">
+        <div style="margin:50px">
+            <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
+	        <center>
+	            <form action="<!--IsPreview?-->admin" method="post">
+		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		        <input type="submit" value="<!--constStr@Login-->">
+	            </form>
+            </center>
+        </div>
+	</div>
+<!--LoginEnd-->
+    <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
+</body>
+
+<!--ListStart-->
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
+<!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
+<!--ListEnd-->
+<script type="text/javascript">
+    function changelanguage(str)
+    {
+        if (str=='Language') str = '';
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie='language='+str+'; path=/; '+expires;
+        location.href = location.href;
+    }
+<!--ListStart-->
+    /*var root = '<!--base_disk_path-->';
+    function path_format(path) {
+        path = '/' + path + '/';
+        while (path.indexOf('//') !== -1) {
+            path = path.replace('//', '/')
+        }
+        return path
+    }
+    document.querySelectorAll('.table-header').forEach(function (e) {
+        var path = e.innerText;
+        if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
+        var paths = path.split('/');
+        e.innerHTML = '/ ';
+        if (paths <= 2) return;
+        for (var i = 1; i < paths.length - 1; i++) {
+            var to = path_format(root + paths.slice(0, i + 1).join('/'));
+            e.innerHTML += '<a href="' + to + '">' + paths[i] + '</a> / '
+        }
+        e.innerHTML += paths[paths.length - 1];
+        e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
+    });*/
+<!--IsFileStart-->
+    var $url = document.getElementById('url');
+    if ($url) {
+        $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
+        $url.style.height = $url.scrollHeight + 'px';
+    }
+<!--IsofficeFileStart-->
+    var $officearea=document.getElementById('office-a');
+    if ($officearea) {
+        $officearea.style.height = window.innerHeight + 'px';
+    }
+<!--IsofficeFileEnd-->
+<!--IstxtFileStart-->
+    var $textarea=document.getElementById('txt-a');
+    if ($textarea) {
+        $textarea.style.height = $textarea.scrollHeight + 'px';
+    }
+<!--IstxtFileEnd-->
+<!--IsvideoFileStart-->
+    function loadResources(type, src, callback) {
+        let script = document.createElement(type);
+        let loaded = false;
+        if (typeof callback === 'function') {
+            script.onload = script.onreadystatechange = () => {
+                if (!loaded && (!script.readyState || /loaded|complete/.test(script.readyState))) {
+                    script.onload = script.onreadystatechange = null;
+                    loaded = true;
+                    callback();
+                }
+            }
+        }
+        if (type === 'link') {
+            script.href = src;
+            script.rel = 'stylesheet';
+        } else {
+            script.src = src;
+        }
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+    function addVideos(videos) {
+        let host = 'https://s0.pstatp.com/cdn/expire-1-M';
+        let unloadedResourceCount = 4;
+        let callback = (() => {
+            return () => {
+                if (!--unloadedResourceCount) {
+                    createDplayers(videos);
+                }
+            };
+        })(unloadedResourceCount, videos);
+        loadResources(
+            'link',
+            host + '/dplayer/1.25.0/DPlayer.min.css',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/dplayer/1.25.0/DPlayer.min.js',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/hls.js/0.12.4/hls.light.min.js',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/flv.js/1.5.0/flv.min.js',
+            callback
+        );
+    }
+    function createDplayers(videos) {
+        for (i = 0; i < videos.length; i++) {
+            console.log(videos[i]);
+            new DPlayer({
+                container: document.getElementById('video-a' + i),
+                screenshot: true,
+                video: {
+                    url: videos[i]
+                }
+            });
+        }
+    }
+    addVideos(['<!--FileDownUrl-->']);
+<!--IsvideoFileEnd-->
+<!--IspdfFileStart-->
+    pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
+    var loadingTask = pdfjsLib.getDocument({ url: '<!--FileDownUrl-->', });
+    loadingTask.promise.then(function(pdf) {
+        var pagenum =  pdf.numPages;
+        var pdfContainer = document.getElementById('pdf-d');
+        for (var i=1;i<=pagenum;i++) {
+            var canvasNew = document.createElement('canvas');
+            canvasNew.id = 'pdf-c'+i;
+            pdfContainer.appendChild(canvasNew);
+            renderpage(pdf,i);
+        }
+    });
+    function renderpage(pdf,i)
+    {
+        pdf.getPage(i).then(function(page) { 
+            var scale = 1.5;
+            var viewport = page.getViewport({ scale: scale, });
+            var canvas = document.getElementById('pdf-c'+i);
+            var context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            var renderContext = {
+                canvasContext: context,
+                viewport: viewport,
+            };
+            page.render(renderContext);
+        });
+    }
+<!--IspdfFileEnd-->
+<!--IsFileEnd-->
+<!--IsFolderStart-->
+<!--HeadmdStart-->
+    var $head = document.getElementById('head');
+    if ($head) {
+        //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
+        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+        
+    }
+<!--HeadmdEnd-->
+<!--ReadmemdStart-->
+    var $readme = document.getElementById('readme');
+    if ($readme) {
+        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+    }
+<!--ReadmemdEnd-->
+<!--ShowThumbnailsStart-->
+    function showthumbnails(obj) {
+        images = [<!--ImgExts-->];
+        var files=document.getElementsByName('filelist');
+        for ($i=0;$i<files.length;$i++) {
+            str=files[$i].innerText;
+            if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+            if (!str) continue;
+            strarry=str.split('.');
+            ext=strarry[strarry.length-1].toLowerCase();
+            if (images.indexOf(ext)>-1) {
+                if (document.getElementById('originalpic').checked==true) {
+                    var url=files[$i].href;
+                    url=url.substr(0,url.length-8);
+                    files[$i].parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+str+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
+                    $i--;
+                } else {
+                    var nurl=window.location.href;
+                    if (nurl.substr(-1)!="/") nurl+="/";
+                    var url=nurl+str+'?thumbnails';
+                    get_thumbnails_url(url, str, files[$i]);
+                }
+            }
+        }
+        obj.disabled='disabled';
+    }
+    function get_thumbnails_url(url, name, filea) {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", url, true);
+        xhr.send('');
+        xhr.onload = function(e){
+            if (xhr.status==200) {
+                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+name+'">';
+            } else console.log(xhr.status+'\n'+xhr.responseText);
+        }
+    }
+<!--ShowThumbnailsEnd-->
+<!--MorePageStart-->
+    function nextpage(num) {
+        document.getElementById('pagenum').value=num;
+        document.getElementById('nextpageform').submit();
+    }
+<!--MorePageEnd-->
+<!--IsNotHiddenStart-->
+    var sort=0;
+    function sortby(string) {
+        if (string=='a') if (sort!=0) {
+            for (i = 1; i <= <!--maxfilenum-->; i++) document.getElementById('tr'+i).parentNode.insertBefore(document.getElementById('tr'+i),document.getElementById('tr'+(i-1)).nextSibling);
+            sort=0;
+            return;
+        } else return;
+        sort1=sort;
+        sortby('a');
+        sort=sort1;
+        var a=[];
+        for (i = 1; i <= <!--maxfilenum-->; i++) {
+            a[i]=i;
+            if (!!document.getElementById('folder_'+string+i)) {
+                var td1=document.getElementById('folder_'+string+i);
+                for (j = 1; j < i; j++) {
+                    if (!!document.getElementById('folder_'+string+a[j])) {
+                        var c=false;
+                        if (string=='time') if (sort==-1) {
+                            c=(td1.innerText < document.getElementById('folder_'+string+a[j]).innerText);
+                        } else {
+                            c=(td1.innerText > document.getElementById('folder_'+string+a[j]).innerText);
+                        }
+                        if (string=='size') if (sort==2) {
+                            c=(size_reformat(td1.innerText) < size_reformat(document.getElementById('folder_'+string+a[j]).innerText));
+                        } else {
+                            c=(size_reformat(td1.innerText) > size_reformat(document.getElementById('folder_'+string+a[j]).innerText));
+                        }
+                        if (c) {
+                            document.getElementById('tr'+i).parentNode.insertBefore(document.getElementById('tr'+i),document.getElementById('tr'+a[j]));
+                            for (k = i; k > j; k--) {
+                                a[k]=a[k-1];
+                            }
+                            a[j]=i;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (!!document.getElementById('file_'+string+i)) {
+                var td1=document.getElementById('file_'+string+i);
+                for (j = 1; j < i; j++) {
+                    if (!!document.getElementById('file_'+string+a[j])) {
+                        var c=false;
+                        if (string=='time') if (sort==-1) {
+                            c=(td1.innerText < document.getElementById('file_'+string+a[j]).innerText);
+                        } else {
+                            c=(td1.innerText > document.getElementById('file_'+string+a[j]).innerText);
+                        }
+                        if (string=='size') if (sort==2) {
+                            c=(size_reformat(td1.innerText) < size_reformat(document.getElementById('file_'+string+a[j]).innerText));
+                        } else {
+                            c=(size_reformat(td1.innerText) > size_reformat(document.getElementById('file_'+string+a[j]).innerText));
+                        }
+                        if (c) {
+                            document.getElementById('tr'+i).parentNode.insertBefore(document.getElementById('tr'+i),document.getElementById('tr'+a[j]));
+                            for (k = i; k > j; k--) {
+                                a[k]=a[k-1];
+                            }
+                            a[j]=i;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        if (string=='time') if (sort==-1) {
+            sort=1;
+        } else {
+            sort=-1;
+        }
+        if (string=='size') if (sort==2) {
+            sort=-2;
+        } else {
+            sort=2;
+        }
+    }
+    function size_reformat(str) {
+        if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+        if (str.substr(-2)=='GB') num=str.substr(0,str.length-3)*1024*1024*1024;
+        if (str.substr(-2)=='MB') num=str.substr(0,str.length-3)*1024*1024;
+        if (str.substr(-2)=='KB') num=str.substr(0,str.length-3)*1024;
+        if (str.substr(-2)==' B') num=str.substr(0,str.length-2);
+        return num;
+    }
+<!--IsNotHiddenEnd-->
+<!--IsFolderEnd-->
+<!--WriteTimezoneStart-->
+    var nowtime= new Date();
+    var timezone = 0-nowtime.getTimezoneOffset()/60;
+    var expd = new Date();
+    expd.setTime(expd.getTime()+(2*60*60*1000));
+    var expires = "expires="+expd.toGMTString();
+    document.cookie="timezone="+timezone+"; path=/; "+expires;
+    if (timezone!=<!--timezone-->) {
+        alert('Your timezone is '+timezone+', reload local timezone.');
+        location.href=location.href;
+    }
+<!--WriteTimezoneEnd-->
+    function CopyAllDownloadUrl(str) {
+        var tmptextarea=document.createElement('textarea');
+        document.body.appendChild(tmptextarea);
+        tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
+        document.querySelectorAll(str).forEach(function (e) {
+            tmptextarea.innerHTML+=e.href+"\r\n";
+        });
+        tmptextarea.select();
+        tmptextarea.setSelectionRange(0, tmptextarea.value.length);
+        document.execCommand("copy");
+        alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
+    }
+<!--UploadJsStart-->
+    function uploadbuttonhide() {
+        document.getElementById('upload_btns').style.display='none';
+        /*document.getElementById('upload_submit').disabled='disabled';
+        document.getElementById('upload_file').disabled='disabled';
+        document.getElementById('upload_submit').style.display='none';
+        document.getElementById('upload_file').style.display='none';*/
+    }
+    function uploadbuttonshow() {
+        document.getElementById('upload_btns').style.display='';
+        /*document.getElementById('upload_file').disabled='';
+        document.getElementById('upload_submit').disabled='';
+        document.getElementById('upload_submit').style.display='';
+        document.getElementById('upload_file').style.display='';*/
+    }
+    function preup() {
+        uploadbuttonhide();
+        var files=document.getElementById('upload_file').files;
+	    if (files.length<1) {
+            uploadbuttonshow();
+            return;
+        };
+        var table1=document.createElement('table');
+        document.getElementById('upload_div').appendChild(table1);
+        table1.setAttribute('class','list-table');
+        var timea=new Date().getTime();
+        var i=0;
+        getuplink(i);
+        function getuplink(i) {
+            var file=files[i];
+            var tr1=document.createElement('tr');
+            table1.appendChild(tr1);
+            tr1.setAttribute('data-to',1);
+            var td1=document.createElement('td');
+            tr1.appendChild(td1);
+            td1.setAttribute('style','width:30%;word-break:break-word;');
+            td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
+            td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
+            var td2=document.createElement('td');
+            tr1.appendChild(td2);
+            td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
+            if (file.size>100*1024*1024*1024) {
+                td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
+                uploadbuttonshow();
+                return;
+            }
+            upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+<!--GuestStart-->
+            function getext(str) {
+                strarry=str.split('.');
+                ext=strarry[strarry.length-1].toLowerCase();
+                var reg = new RegExp(".","g");
+                var a = str.replace(reg,"");
+                if (a == ext) ext = "";
+                else ext = "." + ext;
+                return ext;
+            }
+        var ext = getext(file.webkitRelativePath||file.name);
+        var spark = new SparkMD5.ArrayBuffer();
+        var reader = new FileReader();
+        var chunksize=10*1024*1024;
+        var asize = 0;
+        function readblob(start) {
+            var end=start+chunksize;
+            var blob = file.slice(start,end);
+            reader.readAsArrayBuffer(blob);
+        }
+        readblob(asize);
+
+        reader.onload = function(e){
+            td2.innerHTML='<!--constStr@Calculate--> md5: '+(asize*100/file.size).toFixed(2)+'%';
+            var binary = this.result;
+            spark.append(binary);
+            asize += chunksize;
+            if (asize < file.size) {
+                readblob(asize);
+            } else {
+                var filemd5 = spark.end();
+                td2.innerHTML='md5: '+filemd5;
+                upbigfilename = filemd5+ext;
+<!--GuestEnd-->
+            td2.innerHTML='<!--constStr@GetUploadLink--> ...';
+            var xhr1 = new XMLHttpRequest();
+            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+            xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
+            xhr1.send(null);
+            xhr1.onload = function(e){
+                td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                if (xhr1.status==200) {
+                    console.log(xhr1.responseText);
+                    var html=JSON.parse(xhr1.responseText);
+                    if (!html['uploadUrl']) {
+                        td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                        uploadbuttonshow();
+                    } else {
+                        td2.innerHTML='<!--constStr@UploadStart--> ...';
+                        binupfile(file,html['uploadUrl'],timea+'_'+i, upbigfilename);
+                    }
+                }
+                if (xhr1.status==409) {
+                    td2.innerHTML='md5: '+filemd5;
+                    tdnum = timea+'_'+i;
+                    document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                }
+                if (i<files.length-1) {
+                    i++;
+                    getuplink(i);
+                }
+            }
+<!--GuestStart-->
+            }
+        }
+<!--GuestEnd-->
+        }
+    }
+    function size_format(num) {
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' B';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' KB';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' MB';
+        }
+        return num.toFixed(2) + ' GB';
+    }
+    function binupfile(file,url,tdnum,filename){
+        var label=document.getElementById('upfile_td2_'+tdnum);
+        var reader = new FileReader();
+        var StartStr='';
+        var MiddleStr='';
+        var StartTime;
+        var EndTime;
+        var newstartsize = 0;
+        if(!!file){
+            var asize=0;
+            var totalsize=file.size;
+            var xhr2 = new XMLHttpRequest();
+            xhr2.open("GET", url);
+                    //xhr2.setRequestHeader('x-requested-with','XMLHttpRequest');
+            xhr2.send(null);
+            xhr2.onload = function(e){
+                if (xhr2.status==200) {
+                    var html = JSON.parse(xhr2.responseText);
+                    var a = html['nextExpectedRanges'][0];
+                    newstartsize = Number( a.slice(0,a.indexOf("-")) );
+                    StartTime = new Date();
+                    asize = newstartsize;
+                    if (newstartsize==0) {
+                        StartStr='<!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
+                    } else {
+                        StartStr='<!--constStr@LastUpload-->'+size_format(newstartsize)+ '<br><!--constStr@ThisTime--><!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
+                    }
+                    var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
+                    if (totalsize>200*1024*1024) chunksize=10*1024*1024;
+                    function readblob(start) {
+                        var end=start+chunksize;
+                        var blob = file.slice(start,end);
+                        reader.readAsArrayBuffer(blob);
+                    }
+                    readblob(asize);
+
+                    reader.onload = function(e){
+                        var binary = this.result;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("PUT", url, true);
+                        //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+                        bsize=asize+e.loaded-1;
+                        xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize +'/'+ totalsize);
+                        xhr.upload.onprogress = function(e){
+                            if (e.lengthComputable) {
+                                var tmptime = new Date();
+                                var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
+                                var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
+                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+remaintime.toFixed(1)+'s';
+                            }
+                        }
+                        var C_starttime = new Date();
+                        xhr.onload = function(e){
+                            if (xhr.status<500) {
+                            var response=JSON.parse(xhr.responseText);
+                            if (response['size']>0) {
+                                // contain size, upload finish. 有size说明是最终返回，上传结束
+                                var xhr3 = new XMLHttpRequest();
+                                xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                                xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                xhr3.send(null);
+                                xhr3.onload = function(e){
+                                    console.log(xhr3.responseText+','+xhr3.status);
+                                }
+                                EndTime=new Date();
+                                MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
+                                if (newstartsize==0) {
+                                    MiddleStr += '<!--constStr@AverageSpeed-->:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                } else {
+                                    MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                                }
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                label.innerHTML=StartStr+MiddleStr;
+                                uploadbuttonshow();
+<!--AdminStart-->
+                                response.name=file.webkitRelativePath||response.name;
+                                addelement(response);
+<!--AdminEnd-->
+                            } else {
+                                if (!response['nextExpectedRanges']) {
+                                    label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
+                                } else {
+                                    var a=response['nextExpectedRanges'][0];
+                                    asize=Number( a.slice(0,a.indexOf("-")) );
+                                    readblob(asize);
+                                }
+                            } } else readblob(asize);
+                        }
+                        xhr.send(binary);
+                    }
+                } else {
+                    if (window.location.pathname.indexOf('%23')>0||filename.indexOf('%23')>0) {
+                        label.innerHTML='<font color="red"><!--constStr@UploadFail23--></font>';
+                    } else {
+                        label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
+                    }
+                    uploadbuttonshow();
+                }
+            }
+        }
+    }
+<!--UploadJsEnd-->
+<!--ListEnd-->
+    function operatediv_close(operate) {
+        document.getElementById(operate+'_div').style.display='none';
+        document.getElementById('mask').style.display='none';
+    }
+<!--AdminStart-->
+    function logout() {
+        document.cookie = "admin=; path=/";
+        location.href = location.href;
+    }
+<!--IsFolderStart-->
+    function showdiv(event,action,num) {
+        var $operatediv=document.getElementsByName('operatediv');
+        for ($i=0;$i<$operatediv.length;$i++) {
+            $operatediv[$i].style.display='none';
+        }
+        document.getElementById('mask').style.display='';
+        //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
+        document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
+        if (num=='') {
+            var str='';
+        } else {
+            var str=document.getElementById('file_a'+num).innerText;
+            if (str=='') {
+                str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
+                if (str=='') {
+                    alert('<!--constStr@GetFileNameFail-->');
+                    operatediv_close(action);
+                    return;
+                }
+            }
+            if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+        }
+        document.getElementById(action + '_div').style.display='';
+        document.getElementById(action + '_label').innerText=str;//.replace(/&/,'&amp;');
+        document.getElementById(action + '_sid').value=num;
+        document.getElementById(action + '_hidden').value=str;
+        if (action=='rename') document.getElementById(action + '_input').value=str;
+        var $e = event || window.event;
+        var $scrollX = document.documentElement.scrollLeft || document.body.scrollLeft;
+        var $scrollY = document.documentElement.scrollTop || document.body.scrollTop;
+        var $x = $e.pageX || $e.clientX + $scrollX;
+        var $y = $e.pageY || $e.clientY + $scrollY;
+        if (action=='create') {
+            document.getElementById(action + '_div').style.left=(document.body.clientWidth-document.getElementById(action + '_div').offsetWidth)/2 +'px';
+            document.getElementById(action + '_div').style.top=(window.innerHeight-document.getElementById(action + '_div').offsetHeight)/2+$scrollY +'px';
+        } else {
+            if ($x + document.getElementById(action + '_div').offsetWidth > document.body.clientWidth) {
+                if (document.getElementById(action + '_div').offsetWidth > document.body.clientWidth) {
+                    document.getElementById(action + '_div').offsetWidth=document.body.clientWidth+'px';
+                    document.getElementById(action + '_div').style.left='0px';
+                } else {
+                    document.getElementById(action + '_div').style.left=document.body.clientWidth-document.getElementById(action + '_div').offsetWidth+'px';
+                }
+            } else {
+                document.getElementById(action + '_div').style.left=$x+'px';
+            }
+            document.getElementById(action + '_div').style.top=$y+'px';
+        }
+        document.getElementById(action + '_input').focus();
+    }
+    function submit_operate(str) {
+        var num=document.getElementById(str+'_sid').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", '?'+serializeForm(str+'_form'));
+        xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+        xhr.send(null);
+        xhr.onload = function(e){
+            var html;
+            if (xhr.status<300) {
+                console.log(xhr.status+','+xhr.responseText);
+                if (str=='rename') {
+                    html=JSON.parse(xhr.responseText);
+                    var file_a = document.getElementById('file_a'+num);
+                    file_a.innerText=html.name;
+                    file_a.href = (file_a.href.substr(-8)=='?preview')?(html.name.replace(/#/,'%23')+'?preview'):(html.name.replace(/#/,'%23')+'/');
+                }
+                if (str=='move'||str=='delete') document.getElementById('tr'+num).parentNode.removeChild(document.getElementById('tr'+num));
+                if (str=='create') {
+                    html=JSON.parse(xhr.responseText);
+                    addelement(html);
+                }
+            } else alert(xhr.status+'\n'+xhr.responseText);
+            document.getElementById(str+'_div').style.display='none';
+            document.getElementById('mask').style.display='none';
+        }
+        return false;
+    }
+    function addelement(html) {
+        var tr1=document.createElement('tr');
+        tr1.setAttribute('data-to',1);
+        var td1=document.createElement('td');
+        td1.setAttribute('class','file');
+        var a1=document.createElement('a');
+        a1.href='<!--base_disk_path--><!--Path-->'+html.name.replace(/#/,'%23');
+        a1.innerText=html.name;
+        a1.target='_blank';
+        var td2=document.createElement('td');
+        td2.setAttribute('class','updated_at');
+        td2.innerText=html.lastModifiedDateTime.replace(/T/,' ').replace(/Z/,'');
+        var td3=document.createElement('td');
+        td3.setAttribute('class','size');
+        td3.innerText=size_format(html.size);
+        if (!!html.folder) {
+            a1.href+='/';
+            document.getElementById('tr0').parentNode.insertBefore(tr1,document.getElementById('tr0').nextSibling);
+        }
+        if (!!html.file) {
+            a1.href+='?preview';
+            a1.name='filelist';
+            document.getElementById('tr0').parentNode.appendChild(tr1);
+        }
+        tr1.appendChild(td1);
+        td1.appendChild(a1);
+        tr1.appendChild(td2);
+        tr1.appendChild(td3);
+    }
+    function getElements(formId) {
+        var form = document.getElementById(formId);
+        var elements = new Array();
+        var tagElements = form.getElementsByTagName('input');
+        for (var j = 0; j < tagElements.length; j++){
+            elements.push(tagElements[j]);
+        }
+        var tagElements = form.getElementsByTagName('select');
+        for (var j = 0; j < tagElements.length; j++){
+            elements.push(tagElements[j]);
+        }
+        var tagElements = form.getElementsByTagName('textarea');
+        for (var j = 0; j < tagElements.length; j++){
+            elements.push(tagElements[j]);
+        }
+        return elements;
+    }
+    function serializeElement(element) {
+        var method = element.tagName.toLowerCase();
+        var parameter;
+        if (method == 'select') {
+            parameter = [element.name, element.value];
+        }
+        switch (element.type.toLowerCase()) {
+            case 'submit':
+            case 'hidden':
+            case 'password':
+            case 'text':
+            case 'date':
+            case 'textarea':
+                parameter = [element.name, element.value];
+                break;
+            case 'checkbox':
+            case 'radio':
+                if (element.checked){
+                    parameter = [element.name, element.value];
+                }
+                break;
+        }
+        if (parameter) {
+            var key = encodeURIComponent(parameter[0]);
+            if (key.length == 0) return;
+            if (parameter[1].constructor != Array) parameter[1] = [parameter[1]];
+            var values = parameter[1];
+            var results = [];
+            for (var i = 0; i < values.length; i++) {
+                results.push(key + '=' + encodeURIComponent(values[i]));
+            }
+            return results.join('&');
+        }
+    }
+    function serializeForm(formId) {
+        var elements = getElements(formId);
+        var queryComponents = new Array();
+        for (var i = 0; i < elements.length; i++) {
+            var queryComponent = serializeElement(elements[i]);
+            if (queryComponent) {
+                queryComponents.push(queryComponent);
+            }
+        }
+        return queryComponents.join('&');
+    }
+<!--IsFolderEnd-->
+<!--AdminEnd-->
+<!--LoginStart-->
+    function login() {
+        document.getElementById('mask').style.display='';
+            //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
+        document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
+        document.getElementById('login_div').style.display='';
+        document.getElementById('login_div').style.left=(document.body.clientWidth-document.getElementById('login_div').offsetWidth)/2 +'px';
+        document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
+        document.getElementById('login_input').focus();
+    }
+<!--LoginEnd-->
+</script>
+<script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+<!--customScript-->
+</html>
