@@ -3,16 +3,82 @@
 
 <img src="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Tfo.logo.svg" alt="Tfo's Logo" width="250" height="250"/>
 
-## List of feature files 特色文件表
-Information [app.json](/app.json "app.json"),[version](/version "version"),[readme.md](/readme.md "readme.md"),[conststr.php](/conststr.php "conststr.php")
+## List of featured files 特色文件表
+<table> 
+    <tbody>
+        <tr> 
+            <th>Type</th> 
+            <th>Files</th> 
+            <th>Postscripts</th> 
+        </tr> 
+        <tr> 
+            <td rowspan="4">Information</td> 
+            <td>
+                <a href="./app.json" alt="app.json">app.json</a>
+            </td>
+            <td rowspan="4">Tfo's information is described in these files for deployment</td> 
+        </tr>
+        <tr> 
+            <td>
+                <a href="./version" alt="version">version</a>
+            </td> 
+        </tr>
+        <tr>
+            <td>
+                <a href="./readme.md" alt="readme.md">readme.md</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="./conststr.php" alt="conststr.php">conststr.php</a>
+            </td>
+        </tr>
+        <tr> 
+            <td rowspan="4">UpdateAddress</td> 
+            <td>
+                <a href="./platform/Heroku.php" alt="Heroku.php">Heroku.php</a>
+            </td>
+            <td rowspan="4">Address to update is changed for easy management</td> 
+        </tr>
+        <tr> 
+            <td>
+                <a href="./platform/TencentSCF.php" alt="TencentSCF.php">TencentSCF.php</a>
+            </td> 
+        </tr>
+        <tr>
+            <td>
+                <a href="./platform/AliyunFC.php" alt="AliyunFC.php">AliyunFC.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="./platform/HuaweiFG.php" alt="HuaweiFG.php">HuaweiFG.php</a>
+            </td>
+        </tr>
+        <tr> 
+            <td rowspan="3">Theme</td> 
+            <td>
+                <a href="./theme/tfo_mdtr.php" alt="tfo_mdtr.php">tfo_mdtr.php (Transparent Material Design)</a>
+            </td>
+            <td rowspan="3">Material Design for Classic Series (20200517)<br>(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整)</td> 
+        </tr>
+        <tr> 
+            <td>
+                <a href="./theme/tfo_md.php" alt="tfo_md.php">tfo_md.php (Material Design)</a>
+            </td> 
+        </tr>
+        <tr>
+            <td>
+                <a href="./theme/tfo_mdtrbaw.php" alt="tfo_mdtrbaw.php">tfo_mdtrbaw.php (Black & White Material Design for Tomb-Sweeping Day)</a>
+            </td>
+        </tr>
+        <tr>
+            <td></td> 
+        </tr> 
+    </tbody>
+</table>
 
-UpdateAddress [Heroku.php](/platform/Heroku.php "Heroku.php"),[TencentSCF.php](/platform/TencentSCF.php "TencentSCF.php"),[HuaweiFG.php](/platform/HuaweiFG.php "HuaweiFG.php"),[AliyunFC.php](/platform/AliyunFC.php "AliyunFC.php")
-
-Theme
-
-Material Design for Classic Series(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整): [tfo_mdtr.php](/theme/tfo_mdtr.php "tfo_mdtr.php")(Transparent Material Design), [tfo_md.php](/theme/tfo_md.php "tfo_md.php")(Material Design), [tfo_mdtrbaw.php](/theme/tfo_mdtrbaw.php "tfo_mdtrbaw.php")(Black & White Material Design for Tomb-Sweeping Day) (All based on classic.php,latest at 2020.5.17)
-
-具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏右上角语言框**，请谨慎使用！示例中隐藏了多盘，但实际使用不隐藏哦。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...
+具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：以上系列主题**默认隐藏右上角语言框**，请谨慎使用！示例中隐藏了多盘，但实际使用不隐藏哦。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...但是自愿附加组件如评论系统、站长工具、访问统计等涉及到其他平台的私密内容不包含在主题内，若有需要请自行寻找在后台添加.
 
 ## Deploy 部署
 Install program first, then add onedrive in setup after login.  
