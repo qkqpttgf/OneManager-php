@@ -74,13 +74,13 @@
         </tr>
         <tr>
             <td>
-                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_mdtr.html" title="tfo_mdtr.html">tfo_mdtr.html<br>(TMD)</a>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_mdtr.html?preview" title="tfo_mdtr.html">tfo_mdtr.html<br>(TMD)</a>
             </td>
             <td rowspan="2">Material Design(20200718)<br>(重制了html版本适应自定义主题,并添加了可扩展模块如Valine.修改AppID和AppKey等其他参数后需要将其存储在您自己的OD中通过参数customTheme调用直链)</td> 
         </tr>
          <tr>
             <td>
-                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_md.html" title="tfo_md.html">tfo_md.html<br>(MD)</a>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_md.html?preview" title="tfo_md.html">tfo_md.html<br>(MD)</a>
             </td>
         </tr> 
     </tbody>
