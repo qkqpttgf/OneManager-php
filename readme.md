@@ -1,5 +1,5 @@
 # **Tfo**
-###### A website for two-point filestorage online (tfo)(20200713). 
+###### A website for two-point filestorage online (tfo)(20200718). 
 
 <img src="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Tfo.logo.svg" alt="Tfo's Logo" width="250" height="250"/>
 
@@ -9,71 +9,79 @@
         <tr> 
             <th>Type</th> 
             <th>Files</th> 
-            <th>Postscripts</th> 
+            <th>Postscript</th> 
         </tr> 
         <tr> 
             <td rowspan="4">Information</td> 
             <td>
-                <a href="./app.json" alt="app.json">app.json</a>
+                <a href="./app.json" title="app.json">app.json</a>
             </td>
             <td rowspan="4">Tfo's information is described in these files for deployment</td> 
         </tr>
         <tr> 
             <td>
-                <a href="./version" alt="version">version</a>
+                <a href="./version" title="version">version</a>
             </td> 
         </tr>
         <tr>
             <td>
-                <a href="./readme.md" alt="readme.md">readme.md</a>
+                <a href="./readme.md" title="readme.md">readme.md</a>
             </td>
         </tr>
         <tr>
             <td>
-                <a href="./conststr.php" alt="conststr.php">conststr.php</a>
+                <a href="./conststr.php" title="conststr.php">conststr.php</a>
             </td>
         </tr>
         <tr> 
             <td rowspan="4">UpdateAddress</td> 
             <td>
-                <a href="./platform/Heroku.php" alt="Heroku.php">Heroku.php</a>
+                <a href="./platform/Heroku.php" title="Heroku.php">Heroku.php</a>
             </td>
-            <td rowspan="4">Address to update is changed for easy management</td> 
+            <td rowspan="4">Address to update is changed for easy management and updating</td> 
         </tr>
         <tr> 
             <td>
-                <a href="./platform/TencentSCF.php" alt="TencentSCF.php">TencentSCF.php</a>
+                <a href="./platform/TencentSCF.php" title="TencentSCF.php">TencentSCF.php</a>
             </td> 
         </tr>
         <tr>
             <td>
-                <a href="./platform/AliyunFC.php" alt="AliyunFC.php">AliyunFC.php</a>
+                <a href="./platform/AliyunFC.php" title="AliyunFC.php">AliyunFC.php</a>
             </td>
         </tr>
         <tr>
             <td>
-                <a href="./platform/HuaweiFG.php" alt="HuaweiFG.php">HuaweiFG.php</a>
+                <a href="./platform/HuaweiFG.php" title="HuaweiFG.php">HuaweiFG.php</a>
             </td>
         </tr>
         <tr> 
-            <td rowspan="3">Theme</td> 
+            <td rowspan="5">Theme</td> 
             <td>
-                <a href="./theme/tfo_mdtr.php" alt="tfo_mdtr.php">tfo_mdtr.php (Transparent Material Design)</a>
+                <a href="./theme/tfo_mdtr.php" title="tfo_mdtr.php">tfo_mdtr.php<br>(Transparent Material Design)</a>
             </td>
-            <td rowspan="3">Material Design for Classic Series (20200517)<br>(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整)</td> 
+            <td rowspan="3">Material Design for Classic Series (20200517)<br>(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整,php版本)</td> 
         </tr>
         <tr> 
             <td>
-                <a href="./theme/tfo_md.php" alt="tfo_md.php">tfo_md.php (Material Design)</a>
+                <a href="./theme/tfo_md.php" title="tfo_md.php">tfo_md.php<br>(Material Design)</a>
             </td> 
         </tr>
         <tr>
             <td>
-                <a href="./theme/tfo_mdtrbaw.php" alt="tfo_mdtrbaw.php">tfo_mdtrbaw.php (Black & White Material Design for Tomb-Sweeping Day)</a>
+                <a href="./theme/tfo_mdtrbaw.php" title="tfo_mdtrbaw.php">tfo_mdtrbaw.php<br>(Black & White Material Design for Tomb-Sweeping Day)</a>
             </td>
         </tr>
         <tr>
-            <td></td> 
+            <td>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_mdtr.html" title="tfo_mdtr.html">tfo_mdtr.html<br>(TMD)</a>
+            </td>
+            <td rowspan="2">Material Design(20200718)<br>(重制了html版本适应自定义主题,并添加了可扩展模块如Valine.修改AppID和AppKey等其他参数后需要将其存储在您自己的OD中通过参数customTheme调用直链)</td> 
+        </tr>
+         <tr>
+            <td>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_md.html" title="tfo_md.html">tfo_md.html<br>(MD)</a>
+            </td>
         </tr> 
     </tbody>
 </table>
