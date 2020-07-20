@@ -439,6 +439,16 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
             </div>
         </div>
     </div>
+<div class="list-wrapper">
+    <div class="list-container">
+        <div class="list-body-container">
+            <div class="readme">
+                <div id="vcomments"></div>
+<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\',visitor: true,lang:\'en\'})</script>' ?>
+            </div>
+        </div>
+    </div>
+</div>
 <?php } ?>
     <div id="mask" class="mask" style="display:none;"></div>
 <?php
@@ -559,16 +569,6 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
             </center>
         </div>
     </div>
-<div class="list-wrapper">
-    <div class="list-container">
-        <div class="list-body-container">
-            <div class="readme">
-                <div id="vcomments"></div>
-<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\',visitor: true,lang:\'en\'})</script>' ?>
-            </div>
-        </div>
-    </div>
-</div>
 <?php   }
     } ?>
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
