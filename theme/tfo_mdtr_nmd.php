@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;}
-        .bkgd{background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>;width:100%;height:100%;filter:blur(1px)brightness(88%);position:fixed;left:0;top:0;z-index:-1}
+        .bkgd{<?php if (getConfig('background')) { ?>background-repeat:no-repeat;background-position:center;background-size:cover;background-attachment:fixed;background-image:url("<?php echo getConfig('background'); ?>");<?php } ?>;width:100%;height:100%;filter:blur(1px)brightness(88%);position:fixed;left:0;top:0;z-index:-1}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:16px;vertical-align:middle}
         ::selection{background-color:rgba(200,200,200,0.3)}
@@ -1147,7 +1147,7 @@ echo '</script>';
             if (str=='') {
                 str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
                 if (str=='') {
-                    swal ("出错了","'<?php echo getconstStr('GetFileNameFail'); ?>'");
+                    swal ('<?php echo getconstStr('GetFileNameFail'); ?>');
                     operatediv_close(action);
                     return;
                 }
