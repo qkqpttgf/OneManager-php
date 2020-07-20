@@ -49,7 +49,7 @@
         .txt-right,.vlink{display:none !important;}
         .vinput {border-bottom:0 !important;}
         .vwrap {border:0 !important;}
-        .veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
+        p,.veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
         .vbtn{border-color:#000000 !important;}
         .vicon{fill:#000000 !important;}
 <?php if ($_SERVER['admin']) { ?>
