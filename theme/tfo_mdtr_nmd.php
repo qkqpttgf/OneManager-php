@@ -102,17 +102,11 @@
         }
     </style>
     <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 </head>
 <body>
 <?php 
-echo '<script language="javascript">';
-?>
-<?php 
-echo 'window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}};';
-?>
-<?php 
-echo '</script>';
-?>
+echo '<script language="javascript">window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}}</script>'; ?>
     <div class="bkgd"></div>
     <div style="padding:1px">
 <?php
@@ -570,27 +564,8 @@ echo '</script>';
         <div class="list-body-container">
             <div class="readme">
                 <div id="vcomments"></div>
-                <?php 
-                    echo '<script >';
-                ?>
-                <?php 
-                    echo 'new Valine({';
-                ?>
-                <?php 
-                    echo 'el: '#vcomments',';
-                ?>
-                <?php 
-                    echo 'appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',';
-                ?>
-                <?php 
-                    echo 'appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'';
-                ?>
-                <?php 
-                    echo '})';
-                ?>
-                <?php 
-                    echo '</script>';
-                ?>
+<?php
+echo "<script>new Valine({el: '#vcomments',appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'})</script>"; ?>
                 </div>
             </div>
         </div>
@@ -600,7 +575,6 @@ echo '</script>';
     } ?>
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 </body>
 <?php if ($files) { ?>
 <?php if (isset($files['children']['head.md'])||isset($files['children']['readme.md'])) { ?><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
