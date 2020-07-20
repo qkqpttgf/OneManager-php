@@ -564,18 +564,17 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
         <div class="list-body-container">
             <div class="readme">
                 <div id="vcomments"></div>
-<?php
-echo "
+<?php echo '
     <script>
         new Valine({
-            el: '#vcomments',
-            appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',
-            appKey: 'jiHXLWSMWeI2atmQA3GNK5I6',
+            el: \'#vcomments\',
+            appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',
+            appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\',
             visitor: true,
-            lang:'en'
+            lang:\'en\'
         })
     </script>
-"?>
+' ?>
             </div>
         </div>
     </div>
