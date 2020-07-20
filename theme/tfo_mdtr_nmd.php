@@ -46,12 +46,11 @@
         .list-table td button:hover,.list-table th button:hover,.swal-button:hover{color:#FFF;background:rgba(3,102,214,0.6);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
-        .txt-right{display:none !important;}
-        .vlink{display:none !important;}
-        .vinput {border-bottom:0 !important;color:#000000 !important;}
+        .txt-right,.vlink{display:none !important;}
+        .vinput {border-bottom:0 !important;}
         .vwrap {border:0 !important;}
-        .veditor,.v{color:#000000 !important;}
-        .vbtn{border-color:#000000 !important;color:#000000 !important;}
+        .veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
+        .vbtn{border-color:#000000 !important;}
         .vicon{fill:#000000 !important;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
