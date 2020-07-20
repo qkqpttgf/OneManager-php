@@ -48,8 +48,10 @@
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
         .txt-right{display:none !important;}
         .vlink{display:none !important;}
-        .vinput {border-bottom:0 !important;}
+        .vinput {border-bottom:0 !important;color:#000000;}
         .vwrap {border:0 !important;}
+        .veditor{color:#000000;}
+        .vbtn{border-color:#000000;color:#000000;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
