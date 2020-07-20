@@ -570,13 +570,25 @@ echo '</script>';
         <div class="list-body-container">
             <div class="readme">
                 <div id="vcomments"></div>
-                <script>
-                    new Valine({
-                    el: '#vcomments',
-                    appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',
-                    appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'
-                    })
-                </script>
+                <?php 
+                    echo '<script >';
+                ?>
+                <?php 
+                    echo 'new Valine({';
+                ?>
+                <?php 
+                    echo 'el: '#vcomments',';
+                ?>
+                <?php 
+                    echo 'appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',';
+                ?>
+                <?php 
+                    echo 'appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'})';
+                ?>
+                <?php 
+                    echo '</script>';
+                ?>
+                </div>
             </div>
         </div>
     </div>
