@@ -101,7 +101,7 @@
             .list-table td,.list-table th{overflow:auto;text-overflow:unset}
         }
     </style>
-    <script src='//unpkg.com/valine/dist/Valine.min.js'></script>
+    <script src='https://unpkg.com/valine/dist/Valine.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
 </head>
 <body>
@@ -565,8 +565,15 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
             <div class="readme">
                 <div id="vcomments"></div>
 <?php
-echo "<script>new Valine({el: '#vcomments',appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'})</script>"; ?>
-                </div>
+echo "
+    <script>
+        new Valine({
+            el: '#vcomments',
+            appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',
+            appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'
+        })
+    </script>
+"?>
             </div>
         </div>
     </div>
