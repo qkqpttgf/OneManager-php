@@ -583,7 +583,10 @@ echo '</script>';
                     echo 'appId: 'opkXI613Es1XgaowwredD6WU-MdYXbMMI',';
                 ?>
                 <?php 
-                    echo 'appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'})';
+                    echo 'appKey: 'jiHXLWSMWeI2atmQA3GNK5I6'';
+                ?>
+                <?php 
+                    echo '})';
                 ?>
                 <?php 
                     echo '</script>';
