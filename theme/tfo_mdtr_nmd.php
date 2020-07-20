@@ -151,7 +151,7 @@ echo '</script>';
     </h1>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
-    <div class="list-wrapper" style="display:none !important">
+    <div class="list-wrapper" style="display:none !important;">
         <div class="list-container">
             <div class="list-header-container">
             <div class="more-disk">
@@ -1159,7 +1159,7 @@ echo '</script>';
             if (str=='') {
                 str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
                 if (str=='') {
-                    swal ('<?php echo getconstStr('GetFileNameFail'); ?>');
+                    swal('<?php echo getconstStr('GetFileNameFail'); ?>');
                     operatediv_close(action);
                     return;
                 }
