@@ -178,6 +178,15 @@
             </div>
         </div>
     </div>
+<div class="list-wrapper">
+    <div class="list-container">
+        <div class="list-body-container">
+            <div class="readme">
+            <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
+            </div>
+        </div>
+    </div>
+</div>
 <?php }
     if ($files) {
         if (isset($files['children']['head.md'])) { ?>
@@ -458,15 +467,6 @@
             </div>
         </div>
     </div>
-<div class="list-wrapper">
-    <div class="list-container">
-        <div class="list-body-container">
-            <div class="readme">
-<?php echo '<script>var xhr = new XMLHttpRequest();xhr.open(\'get\', \'https://v1.jinrishici.com/all.txt\');xhr.onreadystatechange = function () {if (xhr.readyState === 4) {var gushici = document.getElementById(\'gushici\');gushici.innerText = xhr.responseText;}};xhr.send();</script>' ?>
-            </div>
-        </div>
-    </div>
-</div>
 <div class="list-wrapper">
     <div class="list-container">
         <div class="list-body-container">
