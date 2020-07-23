@@ -1,7 +1,10 @@
+20200723-1430.21
+fix content-type in "?json". can not custom microsoft API id & secret by a link now, so show the return uri.
+当使用"?json"时，现在content-type是json了。现在微软不能一键创建API应用了，提供回调URI。
+
 20200713-1800.20
 add platform: Huawei cloud Function Graph. now you can use "?json" to get a json of folder or file. fix some bug.
 新增白嫖平台：华为云函数工作流FG。可以用"?json"来获得目录或文件的json。修复bug。
-
 20200607-1856.19
 add platform: Aliyun Function Compute. add setting: replace sharepoint.com to a proxy server name. add setting: disableShowThumb,customTheme. add function: php hosting website can update by a click
 现在可以安装到阿里函数计算FC了。php空间可以一键更新了。可以设置某个盘替换sharpoint.com域名为你的反代域名。新增disableShowThumb,customTheme。
