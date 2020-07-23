@@ -29,7 +29,7 @@
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
-        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.3)}
+        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.3);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
@@ -48,10 +48,13 @@
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
         .txt-right,.vlink{display:none !important;}
         .vinput {border-bottom:0 !important;}
+        .vinput:focus{background:rgba(3,102,214,0.6) !important;border:1px solid rgba(27,31,35,.15) !important;}
+        .veditor:focus{background:transparent !important;border:1px solid rgba(27,31,35,.15) !important;}
         .vwrap {border:0 !important;}
         p,.veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
         .vbtn{border-color:#000000 !important;}
         .vicon{fill:#000000 !important;}
+        .v a{color:rgb(3,102,214) !important;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -446,7 +449,11 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
         <div class="list-body-container">
             <div class="readme">
                 <div id="vcomments"></div>
-<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\',visitor: true,lang:\'en\'})</script>' ?>
+<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\',visitor: true,lang:\'en\',emojiMaps: {"bli_doge": "http://i0.hdslb.com/bfs/emote/6ea59c827c414b4a2955fe79e0f6fd3dcd515e24.png","bli_亲亲": "http://i0.hdslb.com/bfs/emote/a8111ad55953ef5e3be3327ef94eb4a39d535d06.png","bli_偷笑": "http://i0.hdslb.com/bfs/emote/bb690d4107620f1c15cff29509db529a73aee261.png","bli_再见": "http://i0.hdslb.com/bfs/emote/180129b8ea851044ce71caf55cc8ce44bd4a4fc8.png","bli_冷漠": "http://i0.hdslb.com/bfs/emote/b9cbc755c2b3ee43be07ca13de84e5b699a3f101.png","bli_发怒": "http://i0.hdslb.com/bfs/emote/34ba3cd204d5b05fec70ce08fa9fa0dd612409ff.png","bli_发财": "http://i0.hdslb.com/bfs/emote/34db290afd2963723c6eb3c4560667db7253a21a.png","bli_可爱": "http://i0.hdslb.com/bfs/emote/9e55fd9b500ac4b96613539f1ce2f9499e314ed9.png","bli_吐血": "http://i0.hdslb.com/bfs/emote/09dd16a7aa59b77baa1155d47484409624470c77.png","bli_呆": "http://i0.hdslb.com/bfs/emote/fe1179ebaa191569b0d31cecafe7a2cd1c951c9d.png","bli_呕吐": "http://i0.hdslb.com/bfs/emote/9f996894a39e282ccf5e66856af49483f81870f3.png","bli_困": "http://i0.hdslb.com/bfs/emote/241ee304e44c0af029adceb294399391e4737ef2.png","bli_坏笑": "http://i0.hdslb.com/bfs/emote/1f0b87f731a671079842116e0991c91c2c88645a.png","bli_大佬": "http://i0.hdslb.com/bfs/emote/093c1e2c490161aca397afc45573c877cdead616.png","bli_大哭": "http://i0.hdslb.com/bfs/emote/23269aeb35f99daee28dda129676f6e9ea87934f.png","bli_委屈": "http://i0.hdslb.com/bfs/emote/d04dba7b5465779e9755d2ab6f0a897b9b33bb77.png","bli_害羞": "http://i0.hdslb.com/bfs/emote/a37683fb5642fa3ddfc7f4e5525fd13e42a2bdb1.png","bli_尴尬": "http://i0.hdslb.com/bfs/emote/7cfa62dafc59798a3d3fb262d421eeeff166cfa4.png","bli_微笑": "http://i0.hdslb.com/bfs/emote/70dc5c7b56f93eb61bddba11e28fb1d18fddcd4c.png","bli_思考": "http://i0.hdslb.com/bfs/emote/90cf159733e558137ed20aa04d09964436f618a1.png","bli_惊吓": "http://i0.hdslb.com/bfs/emote/0d15c7e2ee58e935adc6a7193ee042388adc22af.png",}})</script>' ?>
+<span id="<Your/Path/Name>" class="leancloud_visitors" data-flag-title="Your Article Title">
+    <em class="post-meta-item-text" style="color:#000000 !important;">阅读量 </em>
+    <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
+</span>
             </div>
         </div>
     </div>
