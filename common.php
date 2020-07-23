@@ -432,7 +432,7 @@ function files_json($files)
             array_push($tmp['list'], $tmp1);
         }
     } else return output('', 404);
-    return output(json_encode($tmp));
+    return output(json_encode($tmp), 200, ['Content-Type' => 'application/json']);
 }
 
 function get_access_token($refresh_token)
@@ -1521,12 +1521,12 @@ function get_refresh_token()
         }
     }
 
-    if ($constStr['language']!='zh-cn') {
-        $linklang='en-us';
-    } else $linklang='zh-cn';
-    $ru = "https://developer.microsoft.com/".$linklang."/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl=".$_SERVER['redirect_uri']."&platform=option-php";
-    $deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
-    $app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
+    //if ($constStr['language']!='zh-cn') {
+    //    $linklang='en-us';
+    //} else $linklang='zh-cn';
+    //$ru = "https://developer.microsoft.com/".$linklang."/graph/quick-start?appID=_appId_&appName=_appName_&redirectUrl=".$_SERVER['redirect_uri']."&platform=option-php";
+    //$deepLink = "/quickstart/graphIO?publicClientSupport=false&appName=OneManager&redirectUrl=".$_SERVER['redirect_uri']."&allowImplicitFlow=false&ru=".urlencode($ru);
+    //$app_url = "https://apps.dev.microsoft.com/?deepLink=".urlencode($deepLink);
     $html = '
 <div>
     <form action="?AddDisk&install0" method="post" onsubmit="return notnull(this);">
@@ -1534,7 +1534,7 @@ function get_refresh_token()
         '.getconstStr('OnedriveDiskName').':<input type="text" name="diskname" placeholder="' . getconstStr('EnvironmentsDescription')['diskname'] . '" style="width:100%"><br>
         <br>
         <div>
-            <label><input type="radio" name="Drive_ver" value="MS" checked onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">MS: '.getconstStr('DriveVerMS').'</label><br>
+            <label><input type="radio" name="Drive_ver" value="MS" onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">MS: '.getconstStr('DriveVerMS').'</label><br>
             <label><input type="radio" name="Drive_ver" value="CN" onclick="document.getElementById(\'morecustom\').style.display=\'\';document.getElementById(\'inputshareurl\').style.display=\'none\';">CN: '.getconstStr('DriveVerCN').'</label><br>
             <label><input type="radio" name="Drive_ver" value="shareurl" onclick="document.getElementById(\'inputshareurl\').style.display=\'\';document.getElementById(\'morecustom\').style.display=\'none\';">ShareUrl: '.getconstStr('DriveVerShareurl').'</label><br>
         </div>
@@ -1543,12 +1543,12 @@ function get_refresh_token()
             '.getconstStr('UseShareLink').'
             <input type="text" name="shareurl" style="width:100%" placeholder="https://xxxx.sharepoint.com/:f:/g/personal/xxxxxxxx/mmmmmmmmm?e=XXXX"><br>
         </div>
-        <div id="morecustom">
+        <div id="morecustom" style="display:none;">
             <label><input type="checkbox" name="Drive_custom" onclick="document.getElementById(\'secret\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('CustomIdSecret').'</label><br>
             <div id="secret" style="display:none;margin:10px 35px">
-                <a href="'.$app_url.'" target="_blank">'.getconstStr('GetSecretIDandKEY').'</a><br>
+                return uri: https://scfonedrive.github.io/<br>
+                client_id:<input type="text" name="client_id" placeholder="a1b2c345-90ab-cdef-ghij-klmnopqrstuv"><br>
                 client_secret:<input type="text" name="client_secret"><br>
-                client_id:<input type="text" name="client_id" placeholder="12345678-90ab-cdef-ghij-klmnopqrstuv"><br>
             </div>
             <label><input type="checkbox" name="usesharepoint" onclick="document.getElementById(\'sharepoint\').style.display=(this.checked?\'\':\'none\');">'.getconstStr('UseSharepointInstead').'</label><br>
             <div id="sharepoint" style="display:none;margin:10px 35px">
