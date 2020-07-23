@@ -117,13 +117,13 @@
 <?php echo '<script language="javascript">window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}}</script>'; ?>
     <div class="bkgd"></div>
     <div class="ld" style="left:0;top:0;z-index:100;width:100%;height:100%;background:rgb(243,243,243);">
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:101;transform: rotate(30deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="178px" height="178px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:101;transform: rotate(30deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="76px" height="76px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
 <path fill="none" stroke="rgb(233,30,99)" stroke-width="10" stroke-dasharray="128.29446411132812 128.29446411132812" d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z" stroke-linecap="round" style="transform:scale(0.5);transform-origin:50px 50px">
   <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="2.0408163265306123s" keyTimes="0;1" values="0;256.58892822265625"></animate>
-</path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:102;transform: rotate(90deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="178px" height="178px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+</path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:102;transform: rotate(90deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="76px" height="76px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
 <path fill="none" stroke="rgb(76,175,80)" stroke-width="10" stroke-dasharray="128.29446411132812 128.29446411132812" d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z" stroke-linecap="round" style="transform:scale(0.5);transform-origin:50px 50px">
   <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="2.0408163265306123s" keyTimes="0;1" values="0;256.58892822265625"></animate>
-</path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:103;transform: rotate(150deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="178px" height="178px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+</path></svg><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:103;transform: rotate(150deg);position:fixed;left:0;top:0;right:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="76px" height="76px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
 <path fill="none" stroke="rgb(3,169,244)" stroke-width="10" stroke-dasharray="128.29446411132812 128.29446411132812" d="M24.3 30C11.4 30 5 43.3 5 50s6.4 20 19.3 20c19.3 0 32.1-40 51.4-40 C88.6 30 95 43.3 95 50s-6.4 20-19.3 20C56.4 70 43.6 30 24.3 30z" stroke-linecap="round" style="transform:scale(0.5);transform-origin:50px 50px">
   <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="2.0408163265306123s" keyTimes="0;1" values="0;256.58892822265625"></animate>
 </path></svg></div>
@@ -461,6 +461,14 @@
 <div class="list-wrapper">
     <div class="list-container">
         <div class="list-body-container">
+            <div class="readme">
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=85146770&auto=1&height=30"></iframe>
+        </div>
+    </div>
+</div>
+<div class="list-wrapper">
+    <div class="list-container">
+        <div class="list-body-container">
             <div class="readme" style="overflow:hidden">
                 <div id="vcomments"></div>
 <?php echo '<script>new Valine({el:\'#vcomments\',appId:\'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey:\'jiHXLWSMWeI2atmQA3GNK5I6\',visitor:true,lang:\'en\'})</script>' ?>
@@ -593,7 +601,7 @@
     </div>
 <?php   }
     } ?>
-    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
+    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:20px">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><?php echo date("Y-m-d H:i:s")." ".getconstStr('Week')[date("w")]." ".$_SERVER['REMOTE_ADDR'];?></div>
 </body>
 <?php if ($files) { ?>
