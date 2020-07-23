@@ -462,7 +462,7 @@
     <div class="list-container">
         <div class="list-body-container">
             <div class="readme">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=85146770&auto=1&height=32"></iframe>
+<?php echo '<script>var xhr = new XMLHttpRequest();xhr.open(\'get\', \'https://v1.jinrishici.com/all.txt\');xhr.onreadystatechange = function () {if (xhr.readyState === 4) {var gushici = document.getElementById(\'gushici\');gushici.innerText = xhr.responseText;}};xhr.send();</script>' ?>
             </div>
         </div>
     </div>
