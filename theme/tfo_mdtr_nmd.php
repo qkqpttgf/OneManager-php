@@ -462,7 +462,8 @@
     <div class="list-container">
         <div class="list-body-container">
             <div class="readme">
-            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=85146770&auto=1&height=30"></iframe>
+            <iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=298 height=52 src="//music.163.com/outchain/player?type=1&id=85146770&auto=1&height=32"></iframe>
+            </div>
         </div>
     </div>
 </div>
@@ -476,6 +477,7 @@
                         <em class="post-meta-item-text" style="color:#000000 !important;">Rd </em>
                             <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
                     </span>
+                </div>
         </div>
     </div>
 </div>
