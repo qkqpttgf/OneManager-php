@@ -453,7 +453,7 @@ echo '<script language="javascript">window.onload=function(){var colorList=["lin
         <div class="list-body-container">
             <div class="readme">
                 <div id="vcomments"></div>
-<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\'})visitor: true,lang:\'en\',</script>' ?>
+<?php echo '<script>new Valine({el: \'#vcomments\',appId: \'opkXI613Es1XgaowwredD6WU-MdYXbMMI\',appKey: \'jiHXLWSMWeI2atmQA3GNK5I6\'})visitor: true,lang:\'en\'})</script>' ?>
 <span id="<Your/Path/Name>" class="leancloud_visitors" data-flag-title="Your Article Title">
     <em class="post-meta-item-text" style="color:#000000 !important;">Rd </em>
     <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
