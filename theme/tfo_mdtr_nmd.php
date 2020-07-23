@@ -29,7 +29,7 @@
         .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
-        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.5)}
+        .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.6)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.3);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
@@ -47,10 +47,10 @@
         .list-table .size,.list-table .updated_at{text-align:right}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=30);opacity:0.3;z-index:2;}
         .txt-right,.vlink{display:none !important;}
-        .vinput {border:1px solid rgba(27,31,35,0) !important;}
+        .vinput {border:1px solid rgba(27,31,35,0) !important;width:50% !important;}
         .vinput:focus{background:rgba(3,102,214,0.6) !important;border:1px solid rgba(27,31,35,.15) !important;}
         .veditor:focus{background:transparent !important;border:1px solid rgba(27,31,35,.15) !important;}
-        .veditor{border:1px solid rgba(27,31,35,0) !important;}
+        .veditor{border:1px solid rgba(27,31,35,0) !important;height:fit-content !important;}
         .vwrap {border:0 !important;}
         p,.veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
         .vbtn{border-color:#000000 !important;}
@@ -68,7 +68,7 @@
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
-        .readme{padding:8px;background-color:rgba(245,245,245,0.3);}
+        .readme{padding:8px;}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
@@ -180,7 +180,7 @@
     </div>
 <div class="list-wrapper">
     <div class="list-container">
-        <div class="list-body-container">
+        <div class="list-head-container">
             <div class="readme">
             <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
             </div>
