@@ -135,9 +135,23 @@ function install()
         setConfig($tmp);
         if (needUpdate()) {
             OnekeyUpate();
-            return message('update to github version, reinstall.<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
+            return message('update to github version, reinstall.
+        <script>
+            var expd = new Date();
+            expd.setTime(expd.getTime()+(2*60*60*1000));
+            var expires = "expires="+expd.toGMTString();
+            document.cookie=\'language=; path=/; \'+expires;
+        </script>
+        <meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
         }
-        return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+        return output('Jump
+    <script>
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie=\'language=; path=/; \'+expires;
+    </script>
+    <meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
     }
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
@@ -219,7 +233,10 @@ language:<br>';
         document.cookie="timezone="+timezone+"; path=/; "+expires;
         function changelanguage(str)
         {
-            document.cookie=\'language=\'+str+\'; path=/\';
+            var expd = new Date();
+            expd.setTime(expd.getTime()+(2*60*60*1000));
+            var expires = "expires="+expd.toGMTString();
+            document.cookie=\'language=\'+str+\'; path=/; \'+expires;
             location.href = location.href;
         }
         function notnull(t)

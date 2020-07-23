@@ -1,25 +1,25 @@
 Install program first, then add onedrive in setup after login.  
 先安装程序，登录后在设置中添加onedrive。  
 
-# Deploy to heroku  
+# Deploy to Heroku  
 Official: https://heroku.com  
+Demo: https://herooneindex.herokuapp.com/  
 
 How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
-DEMO:  https://herooneindex.herokuapp.com/  
 
-
-# Deploy to Tencent Serverless Cloud Function (腾讯无服务器云函数 SCF)  
+# Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
 Official: https://cloud.tencent.com/product/scf  
+DEMO:  无  
+注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
 
-~~How to Install:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/%E6%97%A0%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%87%BD%E6%95%B0SCF%E6%90%AD%E5%BB%BAOneDrive.mp4?preview~~  
+How to Install:  无  
   
 添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
 
-DEMO:  https://service-pgxgvop2-1258064400.ap-hongkong.apigateway.myqcloud.com/test/abcdef/  
 
-
-# Deploy to VPS(Virtual Private Server) 部署到VPS或空间  
+# Deploy to Virtual Private Server (VPS 或空间)  
+DEMO:  无  
 How to Install:  
     1.Start web service on your server (httpd or other), make sure you can visit it.  
     启动web服务器，确保你能访问到。  
@@ -33,8 +33,22 @@ How to Install:
     在浏览器中访问。  
 
 
-# Deploy to Aliyun Function Compute (阿里函数计算 FC)  
+# Deploy to Huawei cloud Function Graph (FG 华为云函数工作流)  
+Official: https://console.huaweicloud.com/functiongraph/  
+DEMO:  无  
+注意：FG中，环境变量整体大小为2KB，所以最多添加2个盘。  
+
+How to Install:  
+1，在函数列表，点右边创建函数  
+2，输入名称，选择运行时语言为PHP7.3，点上传ZIP文件，选择文件，然后点右边的创建函数（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。）  
+3，创建触发器：选API网关，安全认证选None，后端超时（毫秒）将5000改成30000，上面创建分组一下，其它的点点点  
+4，访问触发器给的url，开始安装  
+5，在触发器界面点触发器名称，跳到API网关管理，右边更多URL，可以添加自定义域名，自定义域名后发现还是要 xxxx.com/函数名 来访问，点上方的编辑，第1页不用改，点下一步，请求Path改成/，注意匹配模式是前缀匹配，Method为ANY，然后不用点下一步了，点立即完成，然后去发布生效  
+
+
+# Deploy to Aliyun Function Compute (FC 阿里云函数计算)  
 Official: https://fc.console.aliyun.com/  
+DEMO:  无  
 
 How to Install:  
 1，新建函数 -- HTTP函数  
@@ -43,8 +57,6 @@ How to Install:
 4，上传代码  
 5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
 6，访问你的域名，开始安装  
-
-DEMO:  无  
 
 
 # Features 特性  

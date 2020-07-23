@@ -124,9 +124,23 @@ function install()
         setConfig($tmp);
         if (needUpdate()) {
             OnekeyUpate();
-            return message('update to github version, reinstall.<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
+            return message('update to github version, reinstall.
+    <script>
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie=\'language=; path=/; \'+expires;
+    </script>
+    <meta http-equiv="refresh" content="3;URL=' . $url . '">', 'Program updating', 201);
         }
-        return output('Jump<script>document.cookie=\'language=; path=/\';</script><meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+        return output('Jump
+    <script>
+        var expd = new Date();
+        expd.setTime(expd.getTime()+(2*60*60*1000));
+        var expires = "expires="+expd.toGMTString();
+        document.cookie=\'language=; path=/; \'+expires;
+    </script>
+    <meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
     }
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
@@ -141,7 +155,7 @@ function install()
                 $AccessKeySecret = $_POST['AccessKeySecret'];
                 $tmp['AccessKeySecret'] = $AccessKeySecret;
             }
-            $response = SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret);
+            $response = json_decode(SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret), true);
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -191,7 +205,10 @@ language:<br>';
         document.cookie="timezone="+timezone+"; path=/; "+expires;
         function changelanguage(str)
         {
-            document.cookie=\'language=\'+str+\'; path=/\';
+            var expd = new Date();
+            expd.setTime(expd.getTime()+(2*60*60*1000));
+            var expires = "expires="+expd.toGMTString();
+            document.cookie=\'language=\'+str+\'; path=/; \'+expires;
             location.href = location.href;
         }
         function notnull(t)
@@ -317,7 +334,7 @@ function api_error($response)
 
 function api_error_msg($response)
 {
-    return json_encode( $response, JSON_PRETTY_PRINT );
+    return $response;
     return $response['Error']['Code'] . '<br>
 ' . $response['Error']['Message'] . '<br><br>
 function_name:' . $_SERVER['function_name'] . '<br>
@@ -337,7 +354,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $outPath = '/tmp/';
 
     // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . $branch . '/';
+    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
     $tarfile = '/tmp/github.tar.gz';
     file_put_contents($tarfile, file_get_contents($url));
     $phar = new PharData($tarfile);

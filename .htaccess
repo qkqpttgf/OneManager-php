@@ -1,15 +1,15 @@
-# apache
-# LoadModule rewrite_module modules/mod_rewrite.so
-# AllowOverride All
+# # Apache
+# # LoadModule rewrite_module modules/mod_rewrite.so
+# # AllowOverride All
 RewriteEngine On
 RewriteRule ^(.*) index.php?/$1 [L]
 
-#-----------------------------------
-# nginx
+###-----------------------------------
+# # nginx
 # rewrite ^(.*) /index.php?/$1 last;
 #
-# caddy
+# # caddy
 # rewrite {
 #     to index.php?/$1
 # }
-#-----------------------------------
+###-----------------------------------

@@ -1,16 +1,16 @@
 <?php
 
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
-$exts['music'] = ['mp3', 'wma', 'flac', 'wav', 'ogg', 'm4a'];
+$exts['music'] = ['mp3', 'wma', 'flac', 'ape', 'wav', 'ogg', 'm4a'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'json', 'html', 'c', 'md', 'py', 'omf'];
+$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'css', 'json', 'html', 'c', 'cpp', 'md', 'py', 'omf'];
 $exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8', 'rm', 'rmvb'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
 $constStr = [
     'languages' => [
         'en-us' => 'English',
-        'zh-cn' => '中文',
+        'zh-cn' => '简体中文',
         'ja' => '日本語',
         'ko-kr' => '한국어',
         'fa' => 'فارسی',
@@ -73,6 +73,7 @@ $constStr = [
             'diskname' => 'The disk name you want show.',
             'disktag' => 'A tag used in store config and url.',
             'disableShowThumb' => 'if 1, the ShowThumbnail button will not display',
+            'disableChangeTheme' => 'if 1, the Theme selection button will not display',
             'downloadencrypt' => '0 or 1. if 1, the files in encrypt folder can be downloaded without password',
             'background' => 'Set an url as background photo.',
             'theme' => 'Select theme.',
@@ -95,6 +96,7 @@ $constStr = [
             'diskname' => '这个盘你想显示什么名称。',
             'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
             'disableShowThumb' => '如果填 1, ‘显示缩略’按钮将被隐藏。',
+            'disableChangeTheme' => '如果填 1, 主题选择切换将被隐藏',
             'downloadencrypt' => '0 或 1。如果 1, 那加密目录内的文件可以不需要密码就能下载。',
             'background' => '设置一个url作为背景。',
             'theme' => '选择一个主题。',
@@ -204,7 +206,7 @@ $constStr = [
         'zh-cn' => '先在环境变量设置passfile才能加密',
         'ja' => '最初に暗号化する環境変数にパスファイルを設定します',
         'ko-kr' => '암호화하기 전에 환경 변수에 패스 파일을 설정하십시오',
-        'fa' => 'قبل از رمزگذاری \ "pass file \" را در محیط تنظیم کنید',
+        'fa' => 'قبل از رمزگذاری \"pass file \" را در محیط تنظیم کنید',
     ],
     'updateProgram' => [
         'en-us' => 'Update Program',

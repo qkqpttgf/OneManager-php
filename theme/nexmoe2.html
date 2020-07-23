@@ -239,12 +239,8 @@
 </div>
 <!--HeadomfEnd-->
 <!--HeadmdStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--<div class="mdui-chip">
-    <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-    <span class="mdui-chip-title">HEAD.md</span>
-    </div>-->
-    <!--HeadmdContent-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--HeadmdContent-->
 </div>
 <!--HeadmdEnd-->
         <style>
@@ -331,7 +327,7 @@
 			  <div class="mdui-col-sm-3 mdui-text-right"><!--lastModifiedDateTime--></div>
 			  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
 		  	</a>
-		  	
+
 			<div class="forcedownload "  >
  			      <a title="<!--constStr@Download-->" href="<!--FileEncodeReplaceUrl-->">
 			          <button class="mdui-btn mdui-ripple mdui-btn-icon"><i class="mdui-icon material-icons">file_download</i></button>
@@ -363,12 +359,8 @@
 </div>
 </div>
 <!--ReadmemdStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--<div class="mdui-chip">
-      <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span>
-      <span class="mdui-chip-title">README.md</span>
-    </div>-->
-    <!--ReadmemdContent-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--ReadmemdContent-->
 </div>
 <!--ReadmemdEnd-->
 <!--FootomfStart-->
@@ -382,6 +374,8 @@
 <!--ListEnd-->
 <script src="//cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
 <script src="//cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <script>
 <!--MorePageStart-->
     function nextpage(num) {
@@ -467,7 +461,7 @@ TC.preview_audio = function(aud){
         TC.aplayer.setMode("normal");
     }
 }
-	
+
 $ = mdui.JQ;
 $.fn.extend({
     sortElements: function (comparator, getSortable) {
@@ -533,8 +527,6 @@ function thumb(){
 }
 <!--ShowThumbnailsEnd-->
 $(function(){
-
-
 	$('.icon-sort').on('click', function () {
         let sort_type = $(this).attr("data-sort"), sort_order = $(this).attr("data-order");
         let sort_order_to = (sort_order === "less") ? "more" : "less";
@@ -547,11 +539,8 @@ $(function(){
 
         $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
     });
-
-  	
-  
 });
-  
+
 var ckname='image_mode';
 function getCookie(name) 
 {
@@ -583,7 +572,9 @@ $('#image_view').on('click', function () {
 		window.location.href=window.location.href;
 	}
 });
-  
+document.querySelectorAll('.markdown').forEach(function (e) {
+    e.innerHTML = marked(e.innerHTML);
+});
 </script>
 </body>
 </html>
