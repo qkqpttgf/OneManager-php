@@ -180,7 +180,7 @@
     </div>
 <div class="list-wrapper">
     <div class="list-container">
-        <div class="list-head-container">
+        <div class="list-header-container">
             <div class="readme">
             <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
             </div>
