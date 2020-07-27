@@ -155,7 +155,7 @@ function install()
                 $AccessKeySecret = $_POST['AccessKeySecret'];
                 $tmp['AccessKeySecret'] = $AccessKeySecret;
             }
-            $response = json_decode(SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret), true);
+            $response = SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret);
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
