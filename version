@@ -1,7 +1,10 @@
+20200804-1453.22
+fix: once error will stop the after files in uploading multy files. SCF can get region now, change install. SCF config save in code file now not in env, <font color=red>if use SCF, you must reinstall after update</font>.
+修复，当上传多个文件时，一个文件出错将导致后续文件不再上传。SCF可以获取到region了，安装过程修改。在SCF中，现在将配置保存到代码文件中，不受环境变量4K大小限制，<font color=red>升级后，用SCF的要重装</font>。
+
 20200723-1430.21
 fix content-type in "?json". can not custom microsoft API id & secret by a link now, so show the return uri.
 当使用"?json"时，现在content-type是json了。现在微软不能一键创建API应用了，提供回调URI。
-
 20200713-1800.20
 add platform: Huawei cloud Function Graph. now you can use "?json" to get a json of folder or file. fix some bug.
 新增白嫖平台：华为云函数工作流FG。可以用"?json"来获得目录或文件的json。修复bug。
