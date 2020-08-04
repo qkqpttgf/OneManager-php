@@ -56,16 +56,23 @@ function getConfig($str, $disktag = '')
 {
     global $InnerEnv;
     global $Base64Env;
-    if (in_array($str, $InnerEnv)) {
-        if ($disktag=='') $disktag = $_SERVER['disktag'];
-        $env = json_decode(getenv($disktag), true);
-        if (isset($env[$str])) {
-            if (in_array($str, $Base64Env)) return equal_replace($env[$str],1);
-            else return $env[$str];
+    //include 'config.php';
+    $s = file_get_contents('config.php');
+    $configs = substr($s, 18, -2);
+    if ($configs!='') {
+        $envs = json_decode($configs, true);
+        if (in_array($str, $InnerEnv)) {
+            if ($disktag=='') $disktag = $_SERVER['disktag'];
+            if (isset($envs[$disktag][$str])) {
+                if (in_array($str, $Base64Env)) return equal_replace($envs[$disktag][$str],1);
+                else return $envs[$disktag][$str];
+            }
+        } else {
+            if (isset($envs[$str])) {
+                if (in_array($str, $Base64Env)) return equal_replace($envs[$str],1);
+                else return $envs[$str];
+            }
         }
-    } else {
-        if (in_array($str, $Base64Env)) return equal_replace(getenv($str),1);
-        else return getenv($str);
     }
     return '';
 }
@@ -75,50 +82,53 @@ function setConfig($arr, $disktag = '')
     global $InnerEnv;
     global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
+    //include 'config.php';
+    $s = file_get_contents('config.php');
+    $configs = substr($s, 18, -2);
+    if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|",getConfig('disktag'));
-    $diskconfig = json_decode(getenv($disktag), true);
-    $tmp = [];
     $indisk = 0;
-    $oparetdisk = 0;
+    $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
-            if (in_array($k, $Base64Env)) $diskconfig[$k] = equal_replace($v);
-            else $diskconfig[$k] = $v;
+            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = equal_replace($v);
+            else $envs[$disktag][$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
-            $oparetdisk = 1;
+            $operatedisk = 1;
         } elseif ($k=='disktag_del') {
             $disktags = array_diff($disktags, [ $v ]);
-            $tmp[$v] = '';
-            $oparetdisk = 1;
+            $envs[$v] = '';
+            $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $tmp[$k] = equal_replace($v);
-            else $tmp[$k] = $v;
+            if (in_array($k, $Base64Env)) $envs[$k] = equal_replace($v);
+            else $envs[$k] = $v;
         }
     }
     if ($indisk) {
+        $diskconfig = $envs[$disktag];
         $diskconfig = array_filter($diskconfig, 'array_value_isnot_null');
         ksort($diskconfig);
-        $tmp[$disktag] = json_encode($diskconfig);
+        $envs[$disktag] = $diskconfig;
     }
-    if ($oparetdisk) {
+    if ($operatedisk) {
         $disktags = array_unique($disktags);
         foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
-        else $tmp['disktag'] = '';
+        if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
+        else $envs['disktag'] = '';
     }
-//    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
-//';
-    $response = updateEnvironment($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
-    WaitSCFStat();
+    $envs = array_filter($envs, 'array_value_isnot_null');
+    ksort($envs);
+    $response = updateEnvironment($envs, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
+    WaitSCFStat($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
     return $response;
 }
 
-function WaitSCFStat()
+function WaitSCFStat($function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
     $trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
+    while( json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;
 }
 
@@ -288,31 +298,12 @@ function getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $Secret
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
-function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
+function getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
-    //print_r($Envs);
-    WaitSCFStat();
-    //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
-    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
-    foreach ($tmp as $tmp1) {
-        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
-    }
-    foreach ($Envs as $key1 => $value1) {
-        $tmp_env[$key1] = $value1;
-    }
-    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
-    //$tmp_env['Region'] = $Region;
-    ksort($tmp_env);
-
-    $i = 0;
-    foreach ($tmp_env as $key1 => $value1) {
-        $tmpdata['Environment.Variables.'.$i.'.Key'] = $key1;
-        $tmpdata['Environment.Variables.'.$i.'.Value'] = $value1;
-        $i++;
-    }
+    //$meth = 'GET';
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'UpdateFunctionConfiguration';
+    $tmpdata['Action'] = 'GetFunctionAddress';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Namespace'] = $Namespace;
     $tmpdata['Nonce'] = time();
@@ -324,16 +315,24 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
     $data = ReorganizeDate($tmpdata);
     $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
     //echo urlencode($signStr);
+    //return file_get_contents('https://'.$url.'&Signature='.urlencode($signStr));
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
-function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
+function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
-    echo json_encode($Envs,JSON_PRETTY_PRINT);
-    /*$trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;*/
-    //json_decode($a,true)['Response']['Environment']['Variables'][0]['Key']
+    // 获取当前代码并解压
+    $codeurl = json_decode(getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $SecretKey), true)['Response']['Url'];
+    $codezip = '/tmp/oldcode.zip';
+    $outPath = '/tmp/code/';
+    file_put_contents($codezip, file_get_contents($codeurl));
+    //$phar = new PharData($codezip);
+    //$phar = new Phar($codezip);
+    $zip=new ZipArchive();
+    $zip->open($codezip);
+    $html = $zip->extractTo($outPath);
+    
+    // 获取当前配置并加入新配置
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
     foreach ($tmp as $tmp1) {
         $tmp_env[$tmp1['Key']] = $tmp1['Value'];
@@ -345,12 +344,29 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     //$tmp_env['Region'] = $Region;
     ksort($tmp_env);
 
-    $i = 0;
-    foreach ($tmp_env as $key1 => $value1) {
-        $tmpdata['Environment.Variables.'.$i.'.Key'] = $key1;
-        $tmpdata['Environment.Variables.'.$i.'.Value'] = $value1;
-        $i++;
-    }
+    $prestr = '<?php $configs = \'
+';
+    $aftstr = '
+\';';
+    file_put_contents($outPath . 'config.php', $prestr . json_encode($tmp_env, JSON_PRETTY_PRINT) . $aftstr);
+
+    // 将目录中文件打包成zip
+    $source = '/tmp/code.zip';
+    //$zip=new ZipArchive();
+    $zip=new PharData($source);
+    //if($zip->open($source, ZipArchive::CREATE)){
+        addFileToZip($zip, $outPath); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
+    //    $zip->close(); //关闭处理的zip文件
+    //}
+
+    return updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey, $source);
+    $tmp1['Response']['Error']['Message'] = $codeurl;
+    error_log($tmp1['Response']['Error']['Message']);
+    return json_encode($tmp1);
+}
+
+function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
+{
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionConfiguration';
@@ -366,39 +382,124 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     $tmpdata['MemorySize'] = 64;
     $tmpdata['Timeout'] = 30;
     $data = ReorganizeDate($tmpdata);
-    echo $data;
+    //echo $data;
     $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
     //echo urlencode($signStr);
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
+    $response = post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
+    if (api_error(setConfigResponse($response))) {
+        return $response;
+    }
+    if ( json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Timeout'] < 25 ) {
+        $tmp['Response']['Error']['Message'] = 'Operating, please try again.';
+        $tmp['Response']['Error']['Code'] = 'Retry';
+        return json_encode($tmp);
+    }
+    WaitSCFStat($function_name, $Region, $Namespace, $SecretId, $SecretKey);
+
+    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
+    foreach ($tmp as $tmp1) {
+        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
+    }
+    foreach ($Envs as $key1 => $value1) {
+        $tmp_env[$key1] = $value1;
+    }
+    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
+    ksort($tmp_env);
+    $response = updateEnvironment($tmp_env, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
+    //WaitSCFStat();
+    return $response;
 }
 
 function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKey, $source)
 {
-    WaitSCFStat();
-    $meth = 'POST';
+    $secretId = $SecretId;
+    $secretKey = $SecretKey;
     $host = 'scf.tencentcloudapi.com';
-    $tmpdata['Action'] = 'UpdateFunctionCode';
-    $tmpdata['Code.GitUrl'] = $source['url'];
-    $tmpdata['Code.GitBranch'] = $source['branch'];
-    $tmpdata['CodeSource'] = 'Git';
+    $service = "scf";
+    $version = "2018-04-16";
+    $action = "UpdateFunctionCode";
+    $region = $Region;
+    $timestamp = time();
+    $algorithm = "TC3-HMAC-SHA256";
+
+    // step 1: build canonical request string
+    $httpRequestMethod = "POST";
+    $canonicalUri = "/";
+    $canonicalQueryString = "";
+    $canonicalHeaders = "content-type:application/json; charset=utf-8\n"."host:".$host."\n";
+    $signedHeaders = "content-type;host";
+
+    //$tmpdata['Action'] = 'UpdateFunctionCode';
+    $tmpdata['Code']['ZipFile'] = base64_encode( file_get_contents($source) );
+    $tmpdata['CodeSource'] = 'ZipFile';
     $tmpdata['FunctionName'] = $function_name;
     $tmpdata['Handler'] = 'index.main_handler';
-    $tmpdata['Namespace'] = $Namespace;
-    $tmpdata['Nonce'] = time();
-    $tmpdata['Region'] = $Region;
-    $tmpdata['SecretId'] = $SecretId;
-    $tmpdata['Timestamp'] = time();
-    $tmpdata['Token'] = '';
-    $tmpdata['Version'] = '2018-04-16';
-    $data = ReorganizeDate($tmpdata);
-    $signStr = base64_encode(hash_hmac('sha1', $meth.$host.'/?'.$data, $SecretKey, true));
-    //echo urlencode($signStr);
-    return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
+    //$tmpdata['Namespace'] = $Namespace;
+    //$tmpdata['Nonce'] = time();
+    //$tmpdata['Region'] = $Region;
+    //$tmpdata['SecretId'] = $SecretId;
+    //$tmpdata['Timestamp'] = time();
+    //$tmpdata['Token'] = '';
+    //$tmpdata['Version'] = '2018-04-16';
+    $payload = json_encode($tmpdata);
+    //$payload = '{"Limit": 1, "Filters": [{"Values": ["\u672a\u547d\u540d"], "Name": "instance-name"}]}';
+    $hashedRequestPayload = hash("SHA256", $payload);
+    $canonicalRequest = $httpRequestMethod."\n"
+        .$canonicalUri."\n"
+        .$canonicalQueryString."\n"
+        .$canonicalHeaders."\n"
+        .$signedHeaders."\n"
+        .$hashedRequestPayload;
+    //echo $canonicalRequest.PHP_EOL;
+
+    // step 2: build string to sign
+    $date = gmdate("Y-m-d", $timestamp);
+    $credentialScope = $date."/".$service."/tc3_request";
+    $hashedCanonicalRequest = hash("SHA256", $canonicalRequest);
+    $stringToSign = $algorithm."\n"
+        .$timestamp."\n"
+        .$credentialScope."\n"
+        .$hashedCanonicalRequest;
+    //echo $stringToSign.PHP_EOL;
+
+    // step 3: sign string
+    $secretDate = hash_hmac("SHA256", $date, "TC3".$secretKey, true);
+    $secretService = hash_hmac("SHA256", $service, $secretDate, true);
+    $secretSigning = hash_hmac("SHA256", "tc3_request", $secretService, true);
+    $signature = hash_hmac("SHA256", $stringToSign, $secretSigning);
+    //echo $signature.PHP_EOL;
+
+    // step 4: build authorization
+    $authorization = $algorithm
+        ." Credential=".$secretId."/".$credentialScope
+        .", SignedHeaders=content-type;host, Signature=".$signature;
+    //echo $authorization.PHP_EOL;
+
+    //$curl = "curl -X POST https://".$host
+    //    .' -H "Authorization: '.$authorization.'"'
+    //    .' -H "Content-Type: application/json; charset=utf-8"'
+    //    .' -H "Host: '.$host.'"'
+    //    .' -H "X-TC-Action: '.$action.'"'
+    //    .' -H "X-TC-Timestamp: '.$timestamp.'"'
+    //    .' -H "X-TC-Version: '.$version.'"'
+    //    .' -H "X-TC-Region: '.$region.'"'
+    //    ." -d '".$payload."'";
+    //error_log( $curl.PHP_EOL );
+    //return '{"response": {"Error": {"Message":"' . $curl . '"}}}';
+    $headers['Authorization'] = $authorization;
+    $headers['Content-Type'] = 'application/json; charset=utf-8';
+    $headers['Host'] = $host;
+    $headers['X-TC-Action'] = $action;
+    $headers['X-TC-Timestamp'] = $timestamp;
+    $headers['X-TC-Version'] = $version;
+    $headers['X-TC-Region'] = $region;
+    return curl_request('https://'.$host, $payload, $headers)['body'];
 }
 
 function api_error($response)
 {
     return isset($response['Error']);
+    return ($response==null)||isset($response['Error']);
 }
 
 function api_error_msg($response)
@@ -411,14 +512,64 @@ namespace:' . $_SERVER['namespace'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
-{
-    $source['url'] = 'https://github.com/' . $auth . '/' . $project;
-    $source['branch'] = $branch;
-    return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
-}
-
 function setConfigResponse($response)
 {
     return json_decode( $response, true )['Response'];
+}
+
+function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+{
+    $source = '/tmp/code.zip';
+    $outPath = '/tmp/';
+
+    // 从github下载对应tar.gz，并解压
+    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    $tarfile = '/tmp/github.tar.gz';
+    file_put_contents($tarfile, file_get_contents($url));
+    $phar = new PharData($tarfile);
+    $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
+
+    // 获取包中目录名
+    $tmp = scandir('phar://'.$tarfile);
+    $name = $auth.'-'.$project;
+    foreach ($tmp as $f) {
+        if ( substr($f, 0, strlen($name)) == $name) {
+            $outPath .= $f;
+            break;
+        }
+    }
+    // 放入配置文件
+    file_put_contents($outPath . '/config.php', file_get_contents(__DIR__.'/../config.php'));
+
+    // 将目录中文件打包成zip
+    //$zip=new ZipArchive();
+    $zip=new PharData($source);
+    //if($zip->open($source, ZipArchive::CREATE)){
+        addFileToZip($zip, $outPath); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
+    //    $zip->close(); //关闭处理的zip文件
+    //}
+
+    return updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source);
+}
+
+function addFileToZip($zip, $rootpath, $path = '')
+{
+    if (substr($rootpath,-1)=='/') $rootpath = substr($rootpath, 0, -1);
+    if (substr($path,0,1)=='/') $path = substr($path, 1);
+    $handler=opendir(path_format($rootpath.'/'.$path)); //打开当前文件夹由$path指定。
+    while($filename=readdir($handler)){
+        if($filename != "." && $filename != ".."){//文件夹文件名字为'.'和‘..’，不要对他们进行操作
+            $nowname = path_format($rootpath.'/'.$path."/".$filename);
+            if(is_dir($nowname)){// 如果读取的某个对象是文件夹，则递归
+                $zip->addEmptyDir($path."/".$filename);
+                addFileToZip($zip, $rootpath, $path."/".$filename);
+            }else{ //将文件加入zip对象
+                $newname = $path."/".$filename;
+                if (substr($newname,0,1)=='/') $newname = substr($newname, 1);
+                $zip->addFile($nowname, $newname);
+                //$zip->renameName($nowname, $newname);
+            }
+        }
+    }
+    @closedir($path);
 }
