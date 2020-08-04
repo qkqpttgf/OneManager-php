@@ -261,7 +261,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
 {
     //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
     $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
-    return json_decode(updateHerokuapp(getConfig('function_name'), getConfig('APIKey'), $source)['body'], true);
+    return updateHerokuapp(getConfig('function_name'), getConfig('APIKey'), $source);
 }
 
 function setConfigResponse($response)
