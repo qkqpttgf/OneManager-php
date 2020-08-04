@@ -251,17 +251,16 @@ function main($path)
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/'||$path=='') {
-            $files['folder']['childCount'] = count($disktags);
-            foreach ($disktags as $disktag) {
-                $files['children'][$disktag]['folder'] = 1;
-                $files['children'][$disktag]['name'] = $disktag;
-            }
             if ($_GET['json']) {
                 // return a json
+                $files['folder']['childCount'] = count($disktags);
+                foreach ($disktags as $disktag) {
+                    $files['children'][$disktag]['folder'] = 1;
+                    $files['children'][$disktag]['name'] = $disktag;
+                }
                 return files_json($files);
-            }
-            return render_list($path, $files);
-            //return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+            } // else return render_list($path, $files);
+            return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
         }
         $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
         //$pos = strpos($path, '/');
