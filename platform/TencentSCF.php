@@ -332,23 +332,12 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
     $zip->open($codezip);
     $html = $zip->extractTo($outPath);
     
-    // 获取当前配置并加入新配置
-    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
-    foreach ($tmp as $tmp1) {
-        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
-    }
-    foreach ($Envs as $key1 => $value1) {
-        $tmp_env[$key1] = $value1;
-    }
-    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
-    //$tmp_env['Region'] = $Region;
-    ksort($tmp_env);
-
+    // 将配置写入
     $prestr = '<?php $configs = \'
 ';
     $aftstr = '
 \';';
-    file_put_contents($outPath . 'config.php', $prestr . json_encode($tmp_env, JSON_PRETTY_PRINT) . $aftstr);
+    file_put_contents($outPath . 'config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
 
     // 将目录中文件打包成zip
     $source = '/tmp/code.zip';
@@ -396,17 +385,15 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     }
     WaitSCFStat($function_name, $Region, $Namespace, $SecretId, $SecretKey);
 
-    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
-    foreach ($tmp as $tmp1) {
-        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
+    $s = file_get_contents('config.php');
+    $configs = substr($s, 18, -2);
+    if ($configs!='') $envs = json_decode($configs, true);
+    foreach ($Envs as $k => $v) {
+        $envs[$k] = $v;
     }
-    foreach ($Envs as $key1 => $value1) {
-        $tmp_env[$key1] = $value1;
-    }
-    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
-    ksort($tmp_env);
-    $response = updateEnvironment($tmp_env, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey);
-    //WaitSCFStat();
+    $envs = array_filter($envs, 'array_value_isnot_null');
+    ksort($envs);
+    $response = updateEnvironment($envs, $function_name, $Region, $namespace, $SecretId, $SecretKey);
     return $response;
 }
 
