@@ -1465,12 +1465,17 @@ function get_refresh_token()
             $tmptoken['refresh_token'] = $refresh_token;
             $tmptoken['token_expires'] = time()+7*24*60*60;
             if (getConfig('usesharepoint')=='on') $tmptoken['siteid'] = get_siteid($ret['access_token']);
-            setConfig($tmptoken, $_COOKIE['disktag']);
-            savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
-            //WaitSCFStat();
-            $str .= '
-            <meta http-equiv="refresh" content="5;URL=' . $url . '">';
-            return message($str, getconstStr('WaitJumpIndex'));
+            $response = setConfigResponse( setConfig($tmptoken, $_COOKIE['disktag']) );
+            if (api_error($response)) {
+                $html = api_error_msg($response);
+                $title = 'Error';
+                return message($html, $title, 201);
+            } else {
+                savecache('access_token', $ret['access_token'], $ret['expires_in'] - 60);
+                $str .= '
+                <meta http-equiv="refresh" content="5;URL=' . $url . '">';
+                return message($str, getconstStr('WaitJumpIndex'));
+            }
         }
         return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
         //return message('<pre>' . json_encode($ret, JSON_PRETTY_PRINT) . '</pre>', 500);
