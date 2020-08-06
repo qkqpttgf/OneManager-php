@@ -425,7 +425,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
 {
     $source['url'] = 'https://github.com/' . $auth . '/' . $project;
     $source['branch'] = $branch;
-    return json_decode(updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source), true)['Response'];
+    return updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'), $source);
 }
 
 function setConfigResponse($response)
