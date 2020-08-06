@@ -170,12 +170,18 @@ function install()
             $SecretKey = $_POST['SecretKey'];
             $tmp['SecretKey'] = $SecretKey;
         }
+        $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
         $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
             return message($html, $title, 201);
         } else {
+            if ($tmp['ONEMANAGER_CONFIG_SAVE'] != 'file') {
+                $html = getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '<br><a href="' . $_SERVER['base_path'] . '">' . getconstStr('Home') . '</a>';
+                $title = 'Reinstall';
+                return message($html, $title, 201);
+            }
             $html .= '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <label>'.getconstStr('SetAdminPassword').':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
@@ -207,6 +213,9 @@ language:<br>';
         <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' SecretId & SecretKey</a><br>
         <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
         <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
+        $html .= '
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==getenv('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==getenv('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
         $html .= '
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
@@ -348,7 +357,7 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
     //    $zip->close(); //关闭处理的zip文件
     //}
 
-    return updateProgram($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey, $source);
+    return updateProgram($function_name, $Region, $namespace, $SecretId, $SecretKey, $source);
     $tmp1['Response']['Error']['Message'] = $codeurl;
     error_log($tmp1['Response']['Error']['Message']);
     return json_encode($tmp1);
@@ -356,6 +365,24 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] != 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => '' );
+    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
+    foreach ($tmp as $tmp1) {
+        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
+    }
+    foreach ($Envs as $key1 => $value1) {
+        $tmp_env[$key1] = $value1;
+    }
+    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
+    //$tmp_env['Region'] = $Region;
+    ksort($tmp_env);
+    $i = 0;
+    foreach ($tmp_env as $key1 => $value1) {
+        $tmpdata['Environment.Variables.'.$i.'.Key'] = $key1;
+        $tmpdata['Environment.Variables.'.$i.'.Value'] = $value1;
+        $i++;
+    }
+
     $meth = 'POST';
     $host = 'scf.tencentcloudapi.com';
     $tmpdata['Action'] = 'UpdateFunctionConfiguration';
@@ -393,7 +420,7 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);
-    $response = updateEnvironment($envs, $function_name, $Region, $namespace, $SecretId, $SecretKey);
+    $response = updateEnvironment($envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey);
     return $response;
 }
 
