@@ -365,7 +365,8 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
-    if ($Envs['ONEMANAGER_CONFIG_SAVE'] != 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => '' );
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
+    else $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => '' );
     $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
     foreach ($tmp as $tmp1) {
         $tmp_env[$tmp1['Key']] = $tmp1['Value'];
