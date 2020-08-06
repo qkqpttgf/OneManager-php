@@ -6,7 +6,8 @@ include 'common.php';
 
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
-    include 'platform/TencentSCF.php';
+    if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/TencentSCF_file.php';
+    else include 'platform/TencentSCF_env.php';
 } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
     include 'platform/AliyunFC.php';
 } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
