@@ -160,12 +160,18 @@ function install()
             $SecretKey = $_POST['SecretKey'];
             $tmp['SecretKey'] = $SecretKey;
         }
+        $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
         $response = json_decode(SetbaseConfig($tmp, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey), true)['Response'];
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
             return message($html, $title, 201);
         } else {
+            if ($tmp['ONEMANAGER_CONFIG_SAVE'] == 'file') {
+                $html = getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '<br><a href="' . $_SERVER['base_path'] . '">' . getconstStr('Home') . '</a>';
+                $title = 'Reinstall';
+                return message($html, $title, 201);
+            }
             $html .= '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <label>'.getconstStr('SetAdminPassword').':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
@@ -194,9 +200,12 @@ language:<br>';
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
         if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
-        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">'.getconstStr('Create').' SecretId & SecretKey</a><br>
+        <a href="https://console.cloud.tencent.com/cam/capi" target="_blank">' . getconstStr('Create') . ' SecretId & SecretKey</a><br>
         <label>SecretId:<input name="SecretId" type="text" placeholder="" size=""></label><br>
         <label>SecretKey:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
+        $html .= '
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==getenv('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==getenv('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
         $html .= '
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
@@ -329,7 +338,8 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
-    echo json_encode($Envs,JSON_PRETTY_PRINT);
+    //echo json_encode($Envs,JSON_PRETTY_PRINT);
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
     /*$trynum = 0;
     while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], $SecretId, $SecretKey),true)['Response']['Status']!='Active' ) echo '
 '.++$trynum;*/
