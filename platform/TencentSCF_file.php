@@ -328,18 +328,41 @@ function getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $Sec
     return post2url('https://'.$host, $data.'&Signature='.urlencode($signStr));
 }
 
+function copyFolder($from, $to)
+{
+    if (substr($from, -1)=='/') $from = substr($from, 0, -1);
+    if (substr($to, -1)=='/') $to = substr($to, 0, -1);
+    if (!file_exists($to)) mkdir($to, 0777);
+    $handler=opendir($from);
+    while($filename=readdir($handler)) {
+        if($filename != '.' && $filename != '..'){
+            $fromfile = $from.'/'.$filename;
+            $tofile = $to.'/'.$filename;
+            if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
+                copyFolder($fromfile, $tofile);
+            }else{
+                copy($fromfile, $tofile);
+            }
+        }
+    }
+    closedir($handler);
+    return 1;
+}
+
 function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
     // 获取当前代码并解压
-    $codeurl = json_decode(getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $SecretKey), true)['Response']['Url'];
-    $codezip = '/tmp/oldcode.zip';
+    //$codeurl = json_decode(getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $SecretKey), true)['Response']['Url'];
+    //$codezip = '/tmp/oldcode.zip';
     $outPath = '/tmp/code/';
-    file_put_contents($codezip, file_get_contents($codeurl));
-    //$phar = new PharData($codezip);
-    //$phar = new Phar($codezip);
-    $zip=new ZipArchive();
-    $zip->open($codezip);
-    $html = $zip->extractTo($outPath);
+    
+    //file_put_contents($codezip, file_get_contents($codeurl));
+    //$zip=new ZipArchive();
+    //$zip->open($codezip);
+    //$html = $zip->extractTo($outPath);
+
+    $coderoot = __DIR__ . '/../';
+    copyFolder($coderoot, $outPath);
     
     // 将配置写入
     $prestr = '<?php $configs = \'
@@ -365,18 +388,20 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
 function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
-    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
-    else $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => '' );
-    $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
-    foreach ($tmp as $tmp1) {
-        $tmp_env[$tmp1['Key']] = $tmp1['Value'];
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $tmp_env = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
+    else {
+        $Envs['ONEMANAGER_CONFIG_SAVE'] == '';
+        $tmp = json_decode(getfunctioninfo($function_name, $Region, $Namespace, $SecretId, $SecretKey),true)['Response']['Environment']['Variables'];
+        foreach ($tmp as $tmp1) {
+            $tmp_env[$tmp1['Key']] = $tmp1['Value'];
+        }
+        foreach ($Envs as $key1 => $value1) {
+            $tmp_env[$key1] = $value1;
+        }
+        $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
+        ksort($tmp_env);
     }
-    foreach ($Envs as $key1 => $value1) {
-        $tmp_env[$key1] = $value1;
-    }
-    $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
-    //$tmp_env['Region'] = $Region;
-    ksort($tmp_env);
+
     $i = 0;
     foreach ($tmp_env as $key1 => $value1) {
         $tmpdata['Environment.Variables.'.$i.'.Key'] = $key1;
