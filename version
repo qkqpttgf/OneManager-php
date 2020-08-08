@@ -1,7 +1,10 @@
-20200806-1130.23
-SCF:select save in env or file.
-在SCF安装时，选择配置保存在环境变量还是文件中。
+20200808-1130.23
+FG: select save in env or file.
+在FG中安装时，选择配置保存在环境变量还是文件中。
 
+20200806-1130.23
+SCF: select save in env or file.
+在SCF中安装时，选择配置保存在环境变量还是文件中。
 20200804-1453.22
 fix: once error will stop the after files in uploading multy files. SCF can get region now, change install. SCF config save in code file now not in env, <font color=red>if use SCF, you must reinstall after update</font>.
 修复，当上传多个文件时，一个文件出错将导致后续文件不再上传。SCF可以获取到region了，安装过程修改。在SCF中，现在将配置保存到代码文件中，不受环境变量4K大小限制，<font color=red>升级后，用SCF的要重装</font>。
