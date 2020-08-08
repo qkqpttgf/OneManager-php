@@ -522,6 +522,9 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
         }
     }
 
+    // 放入配置文件
+    file_put_contents($outPath . '/config.php', file_get_contents(__DIR__.'/../config.php'));
+
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();
     $zip=new PharData($source);
