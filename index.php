@@ -11,7 +11,9 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
 } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
     include 'platform/AliyunFC.php';
 } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
-    include 'platform/HuaweiFG.php';
+    //if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/HuaweiFG_file.php';
+    //else include 'platform/HuaweiFG_env.php';
+    echo 'FG' . PHP_EOL;
 } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
     include 'platform/Heroku.php';
     $path = getpath();
@@ -91,6 +93,9 @@ function handler($event, $context)
         // Huawei FG
         global $contextUserData;
         $contextUserData = $context;
+        if ($context->getUserData('ONEMANAGER_CONFIG_SAVE')=='file') include_once 'platform/HuaweiFG_file.php';
+        else include_once 'platform/HuaweiFG_env.php';
+
         $event = json_decode(json_encode($event), true);
         if ($event['isBase64Encoded']) $event['body'] = base64_decode($event['body']);
 
@@ -104,6 +109,7 @@ function handler($event, $context)
         $path = GetPathSetting($event, $context);
 
         return main($path);
+
     }
 }
 
