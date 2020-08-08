@@ -142,6 +142,7 @@ function WaitSCFStat()
 function install()
 {
     global $constStr;
+    global $contextUserData;
     if ($_GET['install2']) {
         $tmp['admin'] = $_POST['admin'];
         setConfig($tmp);
@@ -180,6 +181,7 @@ function install()
             if ($tmp['HW_secret']=='') {
                 $tmp['HW_secret'] = $_POST['HW_secret'];
             }
+            $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
             //$response = json_decode(SetbaseConfig($tmp, $HW_urn, $HW_name, $HW_pwd), true)['Response'];
             $response = setConfigResponse( SetbaseConfig($tmp, $tmp['HW_urn'], $tmp['HW_key'], $tmp['HW_secret']) );
             if (api_error($response)) {
@@ -187,6 +189,11 @@ function install()
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
+                if ($tmp['ONEMANAGER_CONFIG_SAVE'] == 'file') {
+                    $html = getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '<br><a href="' . $_SERVER['base_path'] . '">' . getconstStr('Home') . '</a>';
+                    $title = 'Reinstall';
+                    return message($html, $title, 201);
+                }
                 $html .= '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <label>'.getconstStr('SetAdminPassword').':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
@@ -222,6 +229,9 @@ language:<br>';
         在下载的credentials.csv文件中找到对应信息，填入：<br>
         <label>Access Key Id:<input name="HW_key" type="text" placeholder="" size=""></label><br>
         <label>Secret Access Key:<input name="HW_secret" type="password" placeholder="" size=""></label><br>';
+        $html .= '
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
         $html .= '
         <input type="submit" value="'.getconstStr('Submit').'">
     </form>
@@ -327,6 +337,7 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
 function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
 {
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
     $tmp_env = json_decode(json_decode(getfunctioninfo($HW_urn, $HW_key, $HW_secret),true)['user_data'],true);
     foreach ($Envs as $key1 => $value1) {
         $tmp_env[$key1] = $value1;
