@@ -793,8 +793,8 @@ $constStr = [
         'zh-cn' => '查询分支',
     ],
     'ONEMANAGER_CONFIG_SAVE_ENV' => [
-        'en-us' => 'Config save in Environments, max add 4 disks',
-        'zh-cn' => '配置保存在环境变量，最多添加4个盘',
+        'en-us' => 'Config save in Environments',
+        'zh-cn' => '配置保存在环境变量',
     ],
     'ONEMANAGER_CONFIG_SAVE_FILE' => [
         'en-us' => 'Config save in code file, may cause fee',
