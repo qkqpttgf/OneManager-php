@@ -228,7 +228,7 @@ language:<br>';
         <a href="https://console.huaweicloud.com/iam/#/mine/accessKey" target="_blank">点击链接</a>，新增访问密钥，
         在下载的credentials.csv文件中找到对应信息，填入：<br>
         <label>Access Key Id:<input name="HW_key" type="text" placeholder="" size=""></label><br>
-        <label>Secret Access Key:<input name="HW_secret" type="password" placeholder="" size=""></label><br>';
+        <label>Secret Access Key:<input name="HW_secret" type="text" placeholder="" size=""></label><br>';
         $html .= '
         <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
         <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
