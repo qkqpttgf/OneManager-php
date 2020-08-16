@@ -33,7 +33,7 @@
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
         .more-disk a:hover, .more-disk a[now]{color:#FFF;background:rgba(245,245,245,0.3);border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
-        .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0;overflow:hidden;table-layout:fixed}
+        .list-table{width:100%;padding:0 10px 10px 10px;border-spacing:0;overflow:hidden;table-layout:fixed}
         .list-table tr{height:fit-content;float:left;width:100%;transition-duration: 0.3s;border-radius:16px}
         .list-table tr[data-to]:hover{background:linear-gradient(to right, rgb(3,102,214,0.9) , rgba(3,102,214,0.3));color:white;box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table tr[data-to]:hover a{color:white}
@@ -50,14 +50,15 @@
         .vinput {border:1px solid rgba(27,31,35,0) !important;width:50% !important;}
         .vinput:focus{background:rgba(3,102,214,0.6) !important;border:1px solid rgba(27,31,35,.15) !important;}
         .veditor:focus{background:transparent !important;border:1px solid rgba(27,31,35,.15) !important;}
-        .veditor{border:1px solid rgba(27,31,35,0) !important;height:fit-content !important;}
+        .veditor{border:1px solid rgba(27,31,35,0) !important;height:fit-content !important;width:100% !important;}
         .vwrap {border:0 !important;}
         p,.veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
         .vbtn{border-color:#000000 !important;}
         .vicon{fill:#000000 !important;}
         .v a{color:rgb(3,102,214) !important;}
         .vat{font-style:italic !important;}
-        .leancloud_visitors{float:right !important;}
+        .leancloud_visitors{float:right !important;padding:12px !important;}
+        .vcomments{padding:0 10px !important;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -68,7 +69,7 @@
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
-        .readme{padding:8px;}
+        .readme{padding:0px;}
         .markdown-body{padding:20px;text-align:left;font-size:14px !important}
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
@@ -102,7 +103,7 @@
         }
         @media only screen and (max-width:495px){
             .title{margin-bottom:24px}
-            .list-wrapper{width:96%; margin:0 auto 10px;}
+            .list-wrapper{width:98%; margin:0 auto 10px;}
             .list-table {padding:8px}
             .list-table td.file,.list-table th.file{width:95%;}
             .size, .updated_at{display:none}
