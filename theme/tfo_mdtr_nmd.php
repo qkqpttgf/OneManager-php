@@ -51,14 +51,14 @@
         .vinput:focus{background:rgba(3,102,214,0.6) !important;border:1px solid rgba(27,31,35,.15) !important;}
         .veditor:focus{background:transparent !important;border:1px solid rgba(27,31,35,.15) !important;}
         .veditor{border:1px solid rgba(27,31,35,0) !important;height:fit-content !important;width:100% !important;}
-        .vwrap {border:0 !important;}
+        .vwrap {border:0 !important;padding:0 !important;}
         p,.veditor,.v,.vsys,.vtime,.vcontent,.vinput,.vbtn{color:#000000 !important;}
         .vbtn{border-color:#000000 !important;}
         .vicon{fill:#000000 !important;}
         .v a{color:rgb(3,102,214) !important;}
         .vat{font-style:italic !important;}
-        .leancloud_visitors{float:right !important;padding:12px !important;}
-        .vcomments{padding:10px !important;}
+        .leancloud_visitors{float:right !important;padding:16px !important;}
+        #vcomments{padding:16px !important;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -182,7 +182,7 @@
 <div class="list-wrapper">
     <div class="list-container">
         <div class="list-header-container">
-            <div class="readme">
+            <div class="readme" style="padding:16px !important">
             <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
             </div>
         </div>
