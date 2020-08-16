@@ -1,6 +1,6 @@
 20200816-1145.24
-add platform: Baidu CFC.
-新增百度CFC平台。
+add platform: Baidu CFC. add setting: mobile background.
+新增百度CFC平台。可以分别设置PC与手机的背景。
 
 20200808-1130.23
 FG: select save in env or file.
