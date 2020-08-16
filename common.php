@@ -852,7 +852,9 @@ function message($message, $title = 'Message', $statusCode = 200)
     <body>
         <h1>' . $title . '</h1>
         <p>
+
 ' . $message . '
+
         </p>
     </body>
 </html>
@@ -2475,9 +2477,17 @@ function render_list($path = '', $files = '')
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--BackgroundEnd-->');
         if (getConfig('background')) {
-            $background = str_replace('<!--BackgroundUrl-->', getConfig('background'), $tmp[0]);
+            $html .= str_replace('<!--BackgroundUrl-->', getConfig('background'), $tmp[0]);
         }
-        $html .= $background . $tmp[1];
+        $html .= $tmp[1];
+
+        $tmp = splitfirst($html, '<!--BackgroundMStart-->');
+        $html = $tmp[0];
+        $tmp = splitfirst($tmp[1], '<!--BackgroundMEnd-->');
+        if (getConfig('backgroundm')) {
+            $html .= str_replace('<!--BackgroundMUrl-->', getConfig('backgroundm'), $tmp[0]);
+        }
+        $html .=  $tmp[1];
 
         $tmp = splitfirst($html, '<!--PathArrayStart-->');
         $html = $tmp[0];
