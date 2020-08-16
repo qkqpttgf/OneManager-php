@@ -1,7 +1,10 @@
+20200816-1145.24
+add platform: Baidu CFC.
+新增百度CFC平台。
+
 20200808-1130.23
 FG: select save in env or file.
 在FG中安装时，选择配置保存在环境变量还是文件中。
-
 20200806-1130.23
 SCF: select save in env or file.
 在SCF中安装时，选择配置保存在环境变量还是文件中。
