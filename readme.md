@@ -59,6 +59,20 @@ How to Install:
 6，访问你的域名，开始安装  
 
 
+# Deploy to Baidu Cloud Function Compute (CFC 百度云函数计算)  
+Official: https://console.bce.baidu.com/cfc/#/cfc/functions  
+DEMO:  无  
+自定义域名需要另外使用API网关，并备案。  
+
+How to Install:  
+1，在函数列表，点创建函数  
+2，创建方式改为空白函数，点下一步  
+3，输入名称，选择运行时为PHP7.2，点下一步  
+4，触发器：下拉选择HTTP触发器，URL路径填 /{filepath+} ，HTTP方法全选，身份验证：不验证，点提交  
+5，进入代码编辑页，编辑类型改上传函数ZIP包，选择文件（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。），开始上传  
+6，点击右边触发器，复制并访问提供的url，开始安装  
+
+
 # Features 特性  
 When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
 下载时，由程序解析出直链，浏览器直接从微软Onedrive服务器下载文件，服务器只消耗与微软通信的少量流量。  
