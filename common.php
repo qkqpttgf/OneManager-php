@@ -540,14 +540,28 @@ function isHideFile($name)
 
 function getcache($str)
 {
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
+    $cache = filecache();
     return $cache->fetch($str);
 }
 
 function savecache($key, $value, $exp = 1800)
 {
-    $cache = new \Doctrine\Common\Cache\FilesystemCache(sys_get_temp_dir(), __DIR__.'/Onedrive/'.$_SERVER['disktag']);
-    $cache->save($key, $value, $exp);
+    $cache = filecache();
+    return $cache->save($key, $value, $exp);
+}
+
+function filecache()
+{
+    $dir = sys_get_temp_dir();
+    if (!is_writable($dir)) {
+        if ( is_writable(__DIR__ . '/tmp/') ) $dir = __DIR__ . '/tmp/';
+        if ( mkdir(__DIR__ . '/tmp/', 0777) ) $dir = __DIR__ . '/tmp/';
+    }
+    $tag = __DIR__ . '/OneManager/' . $_SERVER['disktag'];
+    while (strpos($tag, '/')>-1) $tag = str_replace('/', '_', $tag);
+    // error_log('DIR:' . $dir . ' TAG: ' . $tag);
+    $cache = new \Doctrine\Common\Cache\FilesystemCache($dir, $tag);
+    return $cache;
 }
 
 function getconstStr($str)
