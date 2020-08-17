@@ -19,6 +19,7 @@ $Base64Env = [
     //'HW_secret', // used in FG.
     //'admin',
     //'adminloginpage',
+    //'autoJumpFirstDisk',
     'background',
     'backgroundm',
     'diskname',
@@ -64,6 +65,7 @@ $CommonEnv = [
     'HW_secret', // used in FG.
     'admin',
     'adminloginpage',
+    'autoJumpFirstDisk',
     'background',
     'backgroundm',
     'disktag',
@@ -91,6 +93,7 @@ $ShowedCommonEnv = [
     //'HW_secret', // used in FG.
     //'admin',
     'adminloginpage',
+    'autoJumpFirstDisk',
     'background',
     'backgroundm',
     //'disktag',
@@ -255,16 +258,17 @@ function main($path)
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/'||$path=='') {
+            $files['folder']['childCount'] = count($disktags);
+            foreach ($disktags as $disktag) {
+                $files['children'][$disktag]['folder'] = 1;
+                $files['children'][$disktag]['name'] = $disktag;
+            }
             if ($_GET['json']) {
                 // return a json
-                $files['folder']['childCount'] = count($disktags);
-                foreach ($disktags as $disktag) {
-                    $files['children'][$disktag]['folder'] = 1;
-                    $files['children'][$disktag]['name'] = $disktag;
-                }
                 return files_json($files);
-            } // else return render_list($path, $files);
-            return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+            }
+            if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+            return render_list($path, $files);
         }
         $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
         //$pos = strpos($path, '/');
