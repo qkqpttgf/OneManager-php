@@ -1,7 +1,10 @@
+20200817-1740.25
+when multy disks, now will default show disks as folders in root, if set autoJumpFirstDisk 1, it will auto jump to first disk.
+多盘时，在网站根目录，默认会将各盘当成文件夹显示，可以去设置中设置autoJumpFirstDisk为1，这样可以跟以前一样自动跳到第一个盘。
+
 20200816-1145.24
 add platform: Baidu CFC. add setting: mobile background.
 新增百度CFC平台。可以分别设置PC与手机的背景。
-
 20200808-1130.23
 FG: select save in env or file.
 在FG中安装时，选择配置保存在环境变量还是文件中。
