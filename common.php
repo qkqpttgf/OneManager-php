@@ -563,6 +563,10 @@ function filecache()
     }
     $tag = __DIR__ . '/OneManager/' . $_SERVER['disktag'];
     while (strpos($tag, '/')>-1) $tag = str_replace('/', '_', $tag);
+    if (strpos($tag, ':')>-1) {
+        while (strpos($tag, ':')>-1) $tag = str_replace(':', '_', $tag);
+        while (strpos($tag, '\\')>-1) $tag = str_replace('\\', '_', $tag);
+    }
     // error_log('DIR:' . $dir . ' TAG: ' . $tag);
     $cache = new \Doctrine\Common\Cache\FilesystemCache($dir, $tag);
     return $cache;
