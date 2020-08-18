@@ -137,7 +137,12 @@ function install()
     global $constStr;
     if ($_GET['install2']) {
         $tmp['admin'] = $_POST['admin'];
-        setConfig($tmp);
+        $response = setConfigResponse( setConfig($tmp) );
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 201);
+        }
         if (needUpdate()) {
             OnekeyUpate();
             return message('update to github version, reinstall.
