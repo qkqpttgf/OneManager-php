@@ -366,6 +366,7 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
     $tmpdata['memory_size'] = 128;
     $tmpdata['runtime'] = 'PHP7.3';
     $tmpdata['timeout'] = 30;
+    $tmpdata['description'] = 'Onedrive index and manager in Huawei FG.';
     $tmpdata['user_data'] = json_encode($tmp_env);
     $req->body = json_encode($tmpdata);
     $curl = $signer->Sign($req);

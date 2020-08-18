@@ -425,7 +425,7 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     $tmpdata['Timestamp'] = time();
     $tmpdata['Token'] = '';
     $tmpdata['Version'] = '2018-04-16';
-    $tmpdata['Description'] = 'Onedrive index and manager in SCF.';
+    $tmpdata['Description'] = 'Onedrive index and manager in Tencent SCF.';
     $tmpdata['MemorySize'] = 64;
     $tmpdata['Timeout'] = 30;
     $data = ReorganizeDate($tmpdata);

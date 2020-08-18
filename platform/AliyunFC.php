@@ -299,7 +299,7 @@ function SetbaseConfig($Envs, $accountId, $region, $service_name, $function_name
     ksort($tmp_env);
 
     $tmpdata['functionName'] = $function_name;
-    $tmpdata['description'] = 'Onedrive index and manager in Ali FC.';
+    $tmpdata['description'] = 'Onedrive index and manager in Aliyun FC.';
     $tmpdata['memorySize'] = 128;
     $tmpdata['timeout'] = 30;
     $tmpdata['runtime'] = 'php7.2';
