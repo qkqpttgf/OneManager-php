@@ -13,9 +13,9 @@ Official: https://cloud.tencent.com/product/scf
 DEMO:  无  
 注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
 
-How to Install:  无  
+How to Install:  无，（重点：勾选集成响应）  
   
-添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+添加网盘时，SCF可能会反应不过来，不跳转到微软，导致添加失败，请不要删除这个盘，再添加一次相同标签的盘就可以了。  
 
 
 # Deploy to Virtual Private Server (VPS 或空间)  
