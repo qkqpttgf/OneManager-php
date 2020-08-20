@@ -2,8 +2,6 @@
     // https://help.aliyun.com/document_detail/53252.html
     // https://github.com/aliyun/fc-php-sdk/blob/master/src/AliyunFC/Client.php
 
-use AliyunFC\Client;
-
 function printInput($event, $context)
 {
     if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+30) . '...Too Long!...' . substr($event['body'],-50);
@@ -160,7 +158,7 @@ function install()
                 $AccessKeySecret = $_POST['AccessKeySecret'];
                 $tmp['AccessKeySecret'] = $AccessKeySecret;
             }
-            $response = SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret);
+            $response = setConfigResponse( SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret) );
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -239,26 +237,71 @@ language:<br>';
     return message($html, $title, 201);
 }
 
-function getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)
+function FCAPI2016($config, $Method, $data = '')
 {
-    $fcClient = new Client([
-        "endpoint" => 'https://'.$accountId.'.'.$region.'.fc.aliyuncs.com',
-        "accessKeyID" => $AccessKeyID,
-        "accessKeySecret" => $AccessKeySecret
-    ]);
-    return $fcClient->getFunction($service_name, $function_name);
+    $accountId = $config['accountId'];
+    $region = $config['region'];
+    $service_name = $config['service_name'];
+    $function_name = $config['function_name'];
+    $AccessKeyID = $config['AccessKeyID'];
+    $AccessKeySecret = $config['AccessKeySecret'];
+
+    $host = $accountId . '.' . $region . '-internal.fc.aliyuncs.com';
+    $path = '/2016-08-15/services/' . $service_name . '/functions/' . $function_name;
+    $url = 'https://' . $host . $path;
+
+    $ContentMd5 = '';
+    $ContentType = 'application/json';
+    date_default_timezone_set('UTC'); // unset last timezone setting
+    $Date = substr(gmdate("r", time()), 0, -5) . 'GMT';
+    $CanonicalizedFCHeaders = '';
+    $CanonicalizedResource = $path;
+
+    $signaturestr = $Method . "\n" . $ContentMd5 . "\n" . $ContentType . "\n" . $Date . "\n" . $CanonicalizedFCHeaders . $CanonicalizedResource;
+    $signature = base64_encode(hash_hmac('sha256', $signaturestr, $AccessKeySecret, true));
+
+    $header['Host'] = $host;
+    $header['Date'] = $Date;
+    $header['Content-Type'] = $ContentType;
+    $header['Authorization'] = 'FC ' . $AccessKeyID . ':' . $signature;
+    $header['Content-Length'] = strlen($data);
+
+    //return curl($Method, $url, $data, $header)['body'];
+    $p = 0;
+    while ($response['stat']==0 && $p<3) {
+        $response = curl($Method, $url, $data, $header);
+        $p++;
+    }
+
+    if ($response['stat']==0) {
+        $tmp['ErrorCode'] = 'Network Error';
+        $tmp['ErrorMessage'] = 'Can not connect ' . $host;
+        return json_encode($tmp);
+    }
+    if ($response['stat']!=200) {
+        $tmp = json_decode($response['body'], true);
+        $tmp['ErrorMessage'] .= '<br>' . $response['stat'] . '<br>' . $signaturestr . '<br>' . json_encode($header) . PHP_EOL;
+        return json_encode($tmp);
+    }
+    return $response['body'];
+}
+
+function getfunctioninfo($config)
+{
+    return FCAPI2016($config, 'GET');
 }
 
 function updateEnvironment($Envs, $accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)
 {
     //print_r($Envs);
-    $fcClient = new Client([
-        "endpoint" => 'https://'.$accountId.'.'.$region.'.fc.aliyuncs.com',
-        "accessKeyID" => $AccessKeyID,
-        "accessKeySecret" => $AccessKeySecret
-    ]);
-    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
-    //$tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $config['accountId'] = $accountId;
+    $config['region'] = $region;
+    $config['service_name'] = $service_name;
+    $config['function_name'] = $function_name;
+    $config['AccessKeyID'] = $AccessKeyID;
+    $config['AccessKeySecret'] = $AccessKeySecret;
+
+    $tmp = json_decode(getfunctioninfo($config), true);
     foreach ($tmp['environmentVariables'] as $key => $value ) {
         $tmp_env[$key] = $value;
     }
@@ -268,27 +311,20 @@ function updateEnvironment($Envs, $accountId, $region, $service_name, $function_
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     ksort($tmp_env);
 
-    $tmpdata['functionName'] = $tmp['functionName'];
-    $tmpdata['description'] = $tmp['description'];
-    $tmpdata['memorySize'] = $tmp['memorySize'];
-    $tmpdata['timeout'] = $tmp['timeout'];
-    $tmpdata['runtime'] = $tmp['runtime'];
-    $tmpdata['handler'] = $tmp['handler'];
     $tmpdata['environmentVariables'] = $tmp_env;
-    $tmpdata['code']['zipFile'] = base64_encode( file_get_contents($fcClient->getFunctionCode($service_name, $function_name)['data']['url']) );
-    return $fcClient->updateFunction($service_name, $function_name, $tmpdata);
+    return FCAPI2016($config, 'PUT', json_encode($tmpdata));
 }
 
 function SetbaseConfig($Envs, $accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)
 {
-    //echo json_encode($Envs,JSON_PRETTY_PRINT);
-    $fcClient = new Client([
-        "endpoint" => 'https://'.$accountId.'.'.$region.'.fc.aliyuncs.com',
-        "accessKeyID" => $AccessKeyID,
-        "accessKeySecret" => $AccessKeySecret
-    ]);
-    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
-    // $tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $config['accountId'] = $accountId;
+    $config['region'] = $region;
+    $config['service_name'] = $service_name;
+    $config['function_name'] = $function_name;
+    $config['AccessKeyID'] = $AccessKeyID;
+    $config['AccessKeySecret'] = $AccessKeySecret;
+
+    $tmp = json_decode(getfunctioninfo($config), true);
     foreach ($tmp['environmentVariables'] as $key => $value ) {
         $tmp_env[$key] = $value;
     }
@@ -298,59 +334,51 @@ function SetbaseConfig($Envs, $accountId, $region, $service_name, $function_name
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     ksort($tmp_env);
 
-    $tmpdata['functionName'] = $function_name;
     $tmpdata['description'] = 'Onedrive index and manager in Aliyun FC.';
     $tmpdata['memorySize'] = 128;
     $tmpdata['timeout'] = 30;
-    $tmpdata['runtime'] = 'php7.2';
-    $tmpdata['handler'] = 'index.handler';
     $tmpdata['environmentVariables'] = $tmp_env;
-    $tmpdata['code']['zipFile'] = base64_encode( file_get_contents($fcClient->getFunctionCode($service_name, $function_name)['data']['url']) );
-    return $fcClient->updateFunction($service_name, $function_name, $tmpdata);
+
+    return FCAPI2016($config, 'PUT', json_encode($tmpdata));
 }
 
 function updateProgram($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret, $source)
 {
-    //WaitSCFStat();
-    $fcClient = new Client([
-        "endpoint" => 'https://'.$accountId.'.'.$region.'.fc.aliyuncs.com',
-        "accessKeyID" => $AccessKeyID,
-        "accessKeySecret" => $AccessKeySecret
-    ]);
-    $tmp = $fcClient->getFunction($service_name, $function_name)['data'];
-    //$tmp = getfunctioninfo($accountId, $region, $service_name, $function_name, $AccessKeyID, $AccessKeySecret)['data'];
+    $config['accountId'] = $accountId;
+    $config['region'] = $region;
+    $config['service_name'] = $service_name;
+    $config['function_name'] = $function_name;
+    $config['AccessKeyID'] = $AccessKeyID;
+    $config['AccessKeySecret'] = $AccessKeySecret;
 
-    $tmpdata['functionName'] = $tmp['functionName'];
-    $tmpdata['description'] = $tmp['description'];
-    $tmpdata['memorySize'] = $tmp['memorySize'];
-    $tmpdata['timeout'] = $tmp['timeout'];
-    $tmpdata['runtime'] = $tmp['runtime'];
-    $tmpdata['handler'] = $tmp['handler'];
-    $tmpdata['environmentVariables'] = $tmp['environmentVariables'];
+    $tmp = json_decode(getfunctioninfo($config), true);
+
     $tmpdata['code']['zipFile'] = base64_encode( file_get_contents($source) );
 
-    return $fcClient->updateFunction($service_name, $function_name, $tmpdata);
+    return FCAPI2016($config, 'PUT', json_encode($tmpdata));
 }
 
 function api_error($response)
 {
-    return !isset($response['data']);
+    return isset($response['ErrorMessage']);
 }
 
 function api_error_msg($response)
 {
-    return $response;
-    return $response['Error']['Code'] . '<br>
-' . $response['Error']['Message'] . '<br><br>
+    return $response['ErrorCode'] . '<br>
+' . $response['ErrorMessage'] . '<br><br>
+
+accountId:' . $_SERVER['accountId'] . '<br>
+region:' . $_SERVER['region'] . '<br>
+service_name:' . $_SERVER['service_name'] . '<br>
 function_name:' . $_SERVER['function_name'] . '<br>
-Region:' . $_SERVER['Region'] . '<br>
-namespace:' . $_SERVER['namespace'] . '<br>
+
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
 function setConfigResponse($response)
 {
-    return $response;
+    return json_decode($response, true);
 }
 
 function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
