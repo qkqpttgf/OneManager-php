@@ -73,7 +73,8 @@ function getConfig($str, $disktag = '')
     global $Base64Env;
     //include 'config.php';
     $s = file_get_contents(__DIR__ . '/../config.php');
-    $configs = substr($s, 18, -2);
+    //$configs = substr($s, 18, -2);
+    $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
         $envs = json_decode($configs, true);
         if (in_array($str, $InnerEnv)) {
@@ -99,7 +100,8 @@ function setConfig($arr, $disktag = '')
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     //include 'config.php';
     $s = file_get_contents(__DIR__ . '/../config.php');
-    $configs = substr($s, 18, -2);
+    //$configs = substr($s, 18, -2);
+    $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|",getConfig('disktag'));
     $indisk = 0;
@@ -380,10 +382,8 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
     copyFolder($coderoot, $outPath);
 
     // 将配置写入
-    $prestr = '<?php $configs = \'
-';
-    $aftstr = '
-\';';
+    $prestr = '<?php $configs = \'' . PHP_EOL;
+    $aftstr = PHP_EOL . '\';';
     file_put_contents($outPath . 'config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
 
     // 将目录中文件打包成zip
@@ -441,7 +441,8 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
         return $response;
     }
     $s = file_get_contents(__DIR__ . '/../config.php');
-    $configs = substr($s, 18, -2);
+    //$configs = substr($s, 18, -2);
+    $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $tmp_env = json_decode($configs, true);
     foreach ($Envs as $k => $v) {
         $tmp_env[$k] = $v;
