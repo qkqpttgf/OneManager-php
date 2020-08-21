@@ -192,7 +192,7 @@ function install()
                     document.getElementById("submitbtn").disabled = false;
                     document.getElementById("formdiv").style.display = "";
                 } else {
-                    alert(url+"\n"+xhr4.status);
+                    alert("Url: " + url + "\nExpect http code 201, but received " + xhr4.status);
                 }
             }
         }
