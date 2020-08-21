@@ -112,7 +112,9 @@ function setConfig($arr, $disktag = '')
     //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     $prestr = '<?php $configs = \'' . PHP_EOL;
     $aftstr = PHP_EOL . '\';';
-    return file_put_contents('config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
+    $response = file_put_contents('config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
+    if ($response>0) return json_encode( [ 'response' => 'success' ] );
+    return json_encode( [ 'message' => 'Failed to write config.', 'code' => 'failed' ] );
 }
 
 function install()
@@ -123,7 +125,7 @@ function install()
             $tmp['admin'] = $_POST['admin'];
             //$tmp['language'] = $_COOKIE['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $response = setConfig($tmp);
+            $response = setConfigResponse( setConfig($tmp) );
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -253,19 +255,19 @@ function RewriteEngineOn()
 
 function api_error($response)
 {
-    return !$response;
+    return isset($response['message']);
 }
 
 function api_error_msg($response)
 {
-    return $response . '<br>
-Can not write config to file.<br>
+    return $response['code'] . '<br>
+' . $response['message'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
 function setConfigResponse($response)
 {
-    return $response;
+    return json_decode($response, true);
 }
 
 function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
@@ -318,15 +320,21 @@ function moveFolder($from, $to)
             $fromfile = $from.'/'.$filename;
             $tofile = $to.'/'.$filename;
             if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
-                moveFolder($fromfile, $tofile);
+                $response = moveFolder($fromfile, $tofile);
+                if (api_error(setConfigResponse($response))) return $response;
             }else{
                 //if (file_exists($tofile)) unlink($tofile);
-                rename($fromfile, $tofile);
+                $response = rename($fromfile, $tofile);
+                if (!$response) {
+                    $tmp['code'] = "Move Failed";
+                    $tmp['message'] = "Can not move " . $fromfile . " to " . $tofile;
+                    return json_encode($tmp);
+                }
                 if (file_exists($fromfile)) unlink($fromfile);
             }
         }
     }
     closedir($handler);
     rmdir($from);
-    return 1;
+    return json_encode( [ 'response' => 'success' ] );
 }
