@@ -59,6 +59,7 @@
         .vat{font-style:italic !important;}
         .leancloud_visitors{float:right !important;padding:16px !important;}
         #vcomments{padding:16px !important;}
+        #upload_div table tr{border-radius:6px !important;}
 <?php if ($_SERVER['admin']) { ?>
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}
@@ -1060,7 +1061,7 @@
                                     var tmptime = new Date();
                                     var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                     var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                    label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
+                                    label.innerHTML=StartStr+'<?php echo getconstStr('Upload'); ?> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '%<br><?php echo getconstStr('AverageSpeed'); ?>:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><?php echo getconstStr('CurrentSpeed'); ?> '+size_format(tmpspeed)+'/s <?php echo getconstStr('Expect'); ?> '+remaintime.toFixed(1)+'s';
                                 }
                             }
                             var C_starttime = new Date();
