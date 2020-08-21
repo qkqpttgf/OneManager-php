@@ -229,14 +229,14 @@ function main($path)
         }
         if (getConfig('admin')!='') {
             if ($_POST['password1']==getConfig('admin')) {
-                return adminform('admin',md5($_POST['password1']),$url);
+                return adminform('admin', pass2cookie('admin', $_POST['password1']), $url);
             } else return adminform();
         } else {
             return output('', 302, [ 'Location' => $url ]);
         }
     }
     if (getConfig('admin')!='')
-        if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==md5(getConfig('admin')) ) {
+        if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==pass2cookie('admin', getConfig('admin')) ) {
             $_SERVER['admin']=1;
             $_SERVER['needUpdate'] = needUpdate();
         } else {
@@ -396,7 +396,11 @@ function main($path)
                     $url = proxy_replace_domain($url, $domainforproxy);
                 }
                 if ( strtolower(splitlast($files['name'],'.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
-                else return output('', 302, [ 'Location' => $url ]);
+                else {
+                    if ($_SERVER['HTTP_RANGE']!='') $header['Range'] = $_SERVER['HTTP_RANGE'];
+                    $header['Location'] = $url;
+                    return output('', 302, $header);
+                }
             }
         }
         if ( isset($files['folder']) || isset($files['file']) ) {
@@ -410,6 +414,11 @@ function main($path)
             return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
         }
     }
+}
+
+function pass2cookie($name, $pass)
+{
+    return md5($name . ':' . md5($pass));
 }
 
 function proxy_replace_domain($url, $domainforproxy)
