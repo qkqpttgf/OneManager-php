@@ -960,9 +960,9 @@ function size_format($byte)
 
 function time_format($ISO)
 {
+    if ($ISO=='') return date('Y-m-d H:i:s');
     $ISO = str_replace('T', ' ', $ISO);
     $ISO = str_replace('Z', ' ', $ISO);
-    //return $ISO;
     return date('Y-m-d H:i:s',strtotime($ISO . " UTC"));
 }
 
