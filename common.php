@@ -250,6 +250,7 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
+    if ($_SERVER['admin']) if (isset($_GET['AddDisk'])||isset($_GET['authorization_code'])) return get_refresh_token();
 
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
@@ -290,7 +291,6 @@ function main($path)
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
 
     config_oauth();
-    if ($_SERVER['admin']) if (isset($_GET['AddDisk'])||isset($_GET['authorization_code'])) return get_refresh_token();
     $refresh_token = getConfig('refresh_token');
     //if (!$refresh_token) return get_refresh_token();
     if (!$refresh_token) {
@@ -1510,6 +1510,7 @@ function get_refresh_token()
 {
     global $constStr;
     global $CommonEnv;
+    config_oauth();
     $envs = '';
     foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
     $url = path_format($_SERVER['PHP_SELF'] . '/');
