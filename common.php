@@ -263,6 +263,7 @@ function main($path)
             foreach ($disktags as $disktag) {
                 $files['children'][$disktag]['folder'] = 1;
                 $files['children'][$disktag]['name'] = $disktag;
+                $files['children'][$disktag]['showname'] = getConfig('diskname', $disktag);
             }
             if ($_GET['json']) {
                 // return a json
@@ -2332,7 +2333,7 @@ function render_list($path = '', $files = '')
                     if ($_SERVER['admin'] or !isHideFile($file['name'])) {
                         $filenum++;
                         $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . encode_str_replace($file['name'])), $FolderList);
-                        $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['name']), $FolderListStr);
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['showname']?$file['showname']:$file['name']), $FolderListStr);
                         $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['lastModifiedDateTime']), $FolderListStr);
                         $FolderListStr = str_replace('<!--size-->', size_format($file['size']), $FolderListStr);
                         while (strpos($FolderListStr, '<!--filenum-->')) $FolderListStr = str_replace('<!--filenum-->', $filenum, $FolderListStr);
