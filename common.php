@@ -1035,34 +1035,34 @@ function bigfileupload($path)
 
 function adminform($name = '', $pass = '', $path = '')
 {
-    $statusCode = 401;
-    $html = '<html><head><title>'.getconstStr('AdminLogin').'</title><meta charset=utf-8></head>';
+    $html = '<html><head><title>' . getconstStr('AdminLogin') . '</title><meta charset=utf-8></head>';
     if ($name!=''&&$pass!='') {
-        $html .= '<body>'.getconstStr('LoginSuccess').'</body></html>';
+        $html .= '<meta http-equiv="refresh" content="3;URL=' . $path . '"><body>' . getconstStr('LoginSuccess') . '</body></html>';
         $statusCode = 302;
         date_default_timezone_set('UTC');
         $header = [
-            'Set-Cookie' => $name.'='.$pass.'; path=/; expires='.date(DATE_COOKIE,strtotime('+1hour')),
-            'Location' => $path,
+            'Set-Cookie' => $name . '=' . $pass . '; path=/; expires=' . date(DATE_COOKIE, strtotime('+1hour')),
+            //'Location' => $path,
             'Content-Type' => 'text/html'
         ];
-        return output($html,$statusCode,$header);
+        return output($html, $statusCode, $header);
     }
+    $statusCode = 401;
     $html .= '
     <body>
 	<div>
-	  <center><h4>'.getconstStr('InputPassword').'</h4>
+	  <center><h4>' . getconstStr('InputPassword') . '</h4>
 	  <form action="" method="post">
 		  <div>
 		    <input name="password1" type="password"/>
-		    <input type="submit" value="'.getconstStr('Login').'">
+		    <input type="submit" value="' . getconstStr('Login') . '">
           </div>
 	  </form>
       </center>
 	</div>
 ';
     $html .= '</body></html>';
-    return output($html,$statusCode);
+    return output($html, $statusCode);
 }
 
 function adminoperate($path)
