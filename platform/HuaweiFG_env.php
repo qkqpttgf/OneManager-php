@@ -128,15 +128,7 @@ function setConfig($arr, $disktag = '')
 //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
 //';
     $response = updateEnvironment($tmp, getConfig('HW_urn'), getConfig('HW_key'), getConfig('HW_secret'));
-    // WaitSCFStat();
     return $response;
-}
-
-function WaitSCFStat()
-{
-    $trynum = 0;
-    while( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']!='Active' ) echo '
-'.++$trynum;
 }
 
 function install()
@@ -282,27 +274,71 @@ language:<br>';
     return message($html, $title, 201);
 }
 
-function getfunctioninfo($HW_urn, $HW_key, $HW_secret)
+function FGAPIV2($HW_urn, $HW_key, $HW_secret, $Method, $End, $data = '')
 {
+    if ($HW_urn==''||$HW_key==''||$HW_secret=='') {
+        $tmp['error_code'] = 'Config Error';
+        $tmp['error_msg'] = 'HW urn or access key id or secret is empty.';
+        return json_encode($tmp);
+    }
+
     $URN = explode(':', $HW_urn);
     $Region = $URN[2];
     $project_id = $URN[3];
-    $url = 'https://functiongraph.' . $Region . '.myhuaweicloud.com/v2/' . $project_id . '/fgs/functions/' . $HW_urn . '/config';
-    $signer = new Signer();
-    $signer->Key = $HW_key;
-    $signer->Secret = $HW_secret;
-    $req = new Request('GET', $url);
-    $req->headers = array(
-        'content-type' => 'application/json;charset=utf8',
-    );
-    $req->body = '';
-    $curl = $signer->Sign($req);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    return $response;
+
+    $host = 'functiongraph.' . $Region . '.myhuaweicloud.com';
+    $path = '/v2/' . $project_id . '/fgs/functions/' . $HW_urn . '/' . $End;
+    $url = 'https://' . $host . $path;
+    $CanonicalURI = spurlencode($path, '/') . '/';
+    $CanonicalQueryString = '';
+
+    date_default_timezone_set('UTC'); // unset last timezone setting
+    $timestamp = date('Ymd\THis\Z');
+    $header['X-Sdk-Date'] = $timestamp;
+    $header['Host'] = $host;
+    $header['Content-Type'] = 'application/json;charset=utf8';
+    ksort($header);
+    $CanonicalHeaders = '';
+    $SignedHeaders = '';
+    foreach ($header as $key => $value) {
+        $CanonicalHeaders .= strtolower($key) . ':' . $value . "\n";
+        $SignedHeaders .= strtolower($key) . ';';
+    }
+    $SignedHeaders = substr($SignedHeaders, 0, -1);
+    $Hashedbody = hash("sha256", $data);
+    $CanonicalRequest = $Method . "\n" . $CanonicalURI . "\n" . $CanonicalQueryString . "\n" . $CanonicalHeaders . "\n" . $SignedHeaders . "\n" . $Hashedbody;
+    $HashedCanonicalRequest = hash("sha256", $CanonicalRequest);
+    $Algorithm = 'SDK-HMAC-SHA256';
+    $StringToSign = $Algorithm . "\n" . $timestamp . "\n" . $HashedCanonicalRequest;
+    $signature = hash_hmac("sha256", $StringToSign, $HW_secret);
+    $Authorization = "$Algorithm Access=$HW_key, SignedHeaders=$SignedHeaders, Signature=$signature";
+    $header['Authorization'] = $Authorization;
+
+    //return curl($Method, $url, $data, $header)['body']; // . $CanonicalRequest;
+    $p = 0;
+    while ($response['stat']==0 && $p<3) {
+        $response = curl($Method, $url, $data, $header);
+        $p++;
+    }
+
+    if ($response['stat']==0) {
+        $tmp['error_code'] = 'Network Error';
+        $tmp['error_msg'] = 'Can not connect ' . $host;
+        return json_encode($tmp);
+    }
+    if ($response['stat']!=200) {
+        $tmp = json_decode($response['body'], true);
+        $tmp['error_code'] .= '.';
+        $tmp['error_msg'] .= '<br>' . $response['stat'] . '<br>' . $CanonicalRequest . '<br>' . json_encode($header) . PHP_EOL;
+        return json_encode($tmp);
+    }
+    return $response['body'];
 }
 
+function getfunctioninfo($HW_urn, $HW_key, $HW_secret)
+{
+    return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'GET', 'config');
+}
 
 function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
 {
@@ -315,28 +351,13 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     ksort($tmp_env);
 
-    $URN = explode(':', $HW_urn);
-    $Region = $URN[2];
-    $project_id = $URN[3];
-    $url = 'https://functiongraph.' . $Region . '.myhuaweicloud.com/v2/' . $project_id . '/fgs/functions/' . $HW_urn . '/config';
-    $signer = new Signer();
-    $signer->Key = $HW_key;
-    $signer->Secret = $HW_secret;
-    $req = new Request('PUT', $url);
-    $req->headers = array(
-        'content-type' => 'application/json;charset=utf8',
-    );
     $tmpdata['handler'] = 'index.handler';
     $tmpdata['memory_size'] = $contextUserData->getMemorySize()+1-1;
     $tmpdata['runtime'] = 'PHP7.3';
     $tmpdata['timeout'] = $contextUserData->getRunningTimeInSeconds()+1-1;
     $tmpdata['user_data'] = json_encode($tmp_env);
-    $req->body = json_encode($tmpdata);
-    $curl = $signer->Sign($req);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    return $response;
+
+    return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'config', json_encode($tmpdata));
 }
 
 function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
@@ -350,58 +371,27 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     ksort($tmp_env);
 
-    // https://functiongraph.cn-north-4.myhuaweicloud.com/v2/{project_id}/fgs/functions/{function_urn}/config
-    $URN = explode(':', $HW_urn);
-    $Region = $URN[2];
-    $project_id = $URN[3];
-    $url = 'https://functiongraph.' . $Region . '.myhuaweicloud.com/v2/' . $project_id . '/fgs/functions/' . $HW_urn . '/config';
-    $signer = new Signer();
-    $signer->Key = $HW_key;
-    $signer->Secret = $HW_secret;
-    $req = new Request('PUT', $url);
-    $req->headers = array(
-        'content-type' => 'application/json;charset=utf8',
-    );
     $tmpdata['handler'] = 'index.handler';
     $tmpdata['memory_size'] = 128;
     $tmpdata['runtime'] = 'PHP7.3';
     $tmpdata['timeout'] = 30;
     $tmpdata['description'] = 'Onedrive index and manager in Huawei FG.';
     $tmpdata['user_data'] = json_encode($tmp_env);
-    $req->body = json_encode($tmpdata);
-    $curl = $signer->Sign($req);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    return $response;
+
+    return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'config', json_encode($tmpdata));
 }
 
 function updateProgram($HW_urn, $HW_key, $HW_secret, $source)
 {
-    $URN = explode(':', $HW_urn);
-    $Region = $URN[2];
-    $project_id = $URN[3];
-    $url = 'https://functiongraph.' . $Region . '.myhuaweicloud.com/v2/' . $project_id . '/fgs/functions/' . $HW_urn . '/code';
-    $signer = new Signer();
-    $signer->Key = $HW_key;
-    $signer->Secret = $HW_secret;
-    $req = new Request('PUT', $url);
-    $req->headers = array(
-        'content-type' => 'application/json;charset=utf8',
-    );
     $tmpdata['code_type'] = 'zip';
     $tmpdata['func_code']['file'] = base64_encode( file_get_contents($source) );
-    $req->body = json_encode($tmpdata);
-    $curl = $signer->Sign($req);
-    $response = curl_exec($curl);
-    $status = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-    curl_close($curl);
-    return $response;
+
+    return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'code', json_encode($tmpdata));
 }
 
 function api_error($response)
 {
-    return isset($response['error_code']);
+    return isset($response['error_msg']);
 }
 
 function api_error_msg($response)
@@ -431,18 +421,6 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
 
     // 获取解压出的目录名
-/*
-    @ob_start();
-    passthru('ls /tmp | grep '.$auth.'-'.$project.'',$stat);
-            $html.='状态：' . $stat . '
-    结果：
-    ';
-    $archivefolder = ob_get_clean();
-    if (substr($archivefolder,-1)==PHP_EOL) $archivefolder = substr($archivefolder, 0, -1);
-    $outPath .= $archivefolder;
-    $html.=htmlspecialchars($archivefolder);
-    //return $html;
-*/
     $tmp = scandir($outPath);
     $name = $auth.'-'.$project;
     foreach ($tmp as $f) {
@@ -483,278 +461,4 @@ function addFileToZip($zip, $rootpath, $path = '')
         }
     }
     @closedir($path);
-}
-
-
-
-
-
-
-
-
-define("BasicDateFormat", "Ymd\THis\Z");
-define("Algorithm", "SDK-HMAC-SHA256");
-define("HeaderXDate", "X-Sdk-Date");
-define("HeaderHost", "host");
-define("HeaderAuthorization", "Authorization");
-define("HeaderContentSha256", "X-Sdk-Content-Sha256");
-
-class Request
-{
-    public $method = '';
-    public $scheme = '';
-    public $host = '';
-    public $uri = '';
-    public $query = array();
-    public $headers = array();
-    public $body = '';
-
-    function __construct()
-    {
-        $args = func_get_args();
-        $i = count($args);
-        if ($i == 0) {
-            $this->construct(NULL, NULL, NULL, NULL);
-        } elseif ($i == 1) {
-            $this->construct($args[0], NULL, NULL, NULL);
-        } elseif ($i == 2) {
-            $this->construct($args[0], $args[1], NULL, NULL);
-        } elseif ($i == 3) {
-            $this->construct($args[0], $args[1], $args[2], NULL);
-        } else {
-            $this->construct($args[0], $args[1], $args[2], $args[3]);
-        }
-    }
-
-    function construct($method, $url, $headers, $body)
-    {
-        if ($method != NULL) {
-            $this->method = $method;
-        }
-        if ($url != NULL) {
-            $spl = explode("://", $url, 2);
-            $scheme = 'http';
-            if (count($spl) > 1) {
-                $scheme = $spl[0];
-                $url = $spl[1];
-            }
-            $spl = explode("?", $url, 2);
-            $url = $spl[0];
-            $query = array();
-            if (count($spl) > 1) {
-                foreach (explode("&", $spl[1]) as $kv) {
-                    $spl = explode("=", $kv, 2);
-                    $key = $spl[0];
-                    if (count($spl) == 1) {
-                        $value = "";
-                    } else {
-                        $value = $spl[1];
-                    }
-                    if ($key != "") {
-                        $key = urldecode($key);
-                        $value = urldecode($value);
-                        if (array_key_exists($key, $query)) {
-                            array_push($query[$key], $value);
-                        } else {
-                            $query[$key] = array($value);
-                        }
-                    }
-                }
-            }
-            $spl = explode("/", $url, 2);
-            $host = $spl[0];
-            if (count($spl) == 1) {
-                $url = "/";
-            } else {
-                $url = "/" . $spl[1];
-            }
-            $this->scheme = $scheme;
-            $this->host = $host;
-            $this->uri = urldecode($url);
-            $this->query = $query;
-        }
-        if ($headers != NULL) {
-            $this->headers = $headers;
-        }
-        if ($body != NULL) {
-            $this->body = $body;
-        }
-    }
-}
-
-class Signer
-{
-    public $Key = '';
-    public $Secret = '';
-
-    function escape($string)
-    {
-        $entities = array('+', "%7E");
-        $replacements = array('%20', "~");
-        return str_replace($entities, $replacements, urlencode($string));
-    }
-
-    function findHeader($r, $header)
-    {
-        foreach ($r->headers as $key => $value) {
-            if (!strcasecmp($key, $header)) {
-                return $value;
-            }
-        }
-        return NULL;
-    }
-
-// Build a CanonicalRequest from a regular request string
-//
-// CanonicalRequest =
-//  HTTPRequestMethod + '\n' +
-//  CanonicalURI + '\n' +
-//  CanonicalQueryString + '\n' +
-//  CanonicalHeaders + '\n' +
-//  SignedHeaders + '\n' +
-//  HexEncode(Hash(RequestPayload))
-    function CanonicalRequest($r, $signedHeaders)
-    {
-        $CanonicalURI = $this->CanonicalURI($r);
-        $CanonicalQueryString = $this->CanonicalQueryString($r);
-        $canonicalHeaders = $this->CanonicalHeaders($r, $signedHeaders);
-        $signedHeadersString = join(";", $signedHeaders);
-        $hash = $this->findHeader($r, HeaderContentSha256);
-        if (!$hash) {
-            $hash = hash("sha256", $r->body);
-        }
-        return "$r->method\n$CanonicalURI\n$CanonicalQueryString\n$canonicalHeaders\n$signedHeadersString\n$hash";
-    }
-
-// CanonicalURI returns request uri
-    function CanonicalURI($r)
-    {
-        $pattens = explode("/", $r->uri);
-        $uri = array();
-        foreach ($pattens as $v) {
-            array_push($uri, $this->escape($v));
-        }
-        $urlpath = join("/", $uri);
-        if (substr($urlpath, -1) != "/") {
-            $urlpath = $urlpath . "/";
-        }
-        return $urlpath;
-    }
-
-// CanonicalQueryString
-    function CanonicalQueryString($r)
-    {
-        $keys = array();
-        foreach ($r->query as $key => $value) {
-            array_push($keys, $key);
-        }
-        sort($keys);
-        $a = array();
-        foreach ($keys as $key) {
-            $k = $this->escape($key);
-            $value = $r->query[$key];
-            if (is_array($value)) {
-                sort($value);
-                foreach ($value as $v) {
-                    $kv = "$k=" . $this->escape($v);
-                    array_push($a, $kv);
-                }
-            } else {
-                $kv = "$k=" . $this->escape($value);
-                array_push($a, $kv);
-            }
-        }
-        return join("&", $a);
-    }
-
-// CanonicalHeaders
-    function CanonicalHeaders($r, $signedHeaders)
-    {
-        $headers = array();
-        foreach ($r->headers as $key => $value) {
-            $headers[strtolower($key)] = trim($value);
-        }
-        $a = array();
-        foreach ($signedHeaders as $key) {
-            array_push($a, $key . ':' . $headers[$key]);
-        }
-        return join("\n", $a) . "\n";
-    }
-
-    function curlHeaders($r)
-    {
-        $header = array();
-        foreach ($r->headers as $key => $value) {
-            array_push($header, strtolower($key) . ':' . trim($value));
-        }
-        return $header;
-    }
-
-// SignedHeaders
-    function SignedHeaders($r)
-    {
-        $a = array();
-        foreach ($r->headers as $key => $value) {
-            array_push($a, strtolower($key));
-        }
-        sort($a);
-        return $a;
-    }
-
-// Create a "String to Sign".
-    function StringToSign($canonicalRequest, $t)
-    {
-        date_default_timezone_set('UTC');
-        $date = date(BasicDateFormat, $t);
-        $hash = hash("sha256", $canonicalRequest);
-        return "SDK-HMAC-SHA256\n$date\n$hash";
-    }
-
-// Create the HWS Signature.
-    function SignStringToSign($stringToSign, $signingKey)
-    {
-        return hash_hmac("sha256", $stringToSign, $signingKey);
-    }
-
-// Get the finalized value for the "Authorization" header. The signature parameter is the output from SignStringToSign
-    function AuthHeaderValue($signature, $accessKey, $signedHeaders)
-    {
-        $signedHeadersString = join(";", $signedHeaders);
-        return "SDK-HMAC-SHA256 Access=$accessKey, SignedHeaders=$signedHeadersString, Signature=$signature";
-    }
-
-    public function Sign($r)
-    {
-        date_default_timezone_set('UTC');
-        $date = $this->findHeader($r, HeaderXDate);
-        if ($date) {
-            $t = date_timestamp_get(date_create_from_format(BasicDateFormat, $date));
-        }
-        if (!@$t) {
-            $t = time();
-            $r->headers[HeaderXDate] = date(BasicDateFormat, $t);
-        }
-        $queryString = $this->CanonicalQueryString($r);
-        if ($queryString != "") {
-            $queryString = "?" . $queryString;
-        }
-        $signedHeaders = $this->SignedHeaders($r);
-        $canonicalRequest = $this->CanonicalRequest($r, $signedHeaders);
-        $stringToSign = $this->StringToSign($canonicalRequest, $t);
-        $signature = $this->SignStringToSign($stringToSign, $this->Secret);
-        $authValue = $this->AuthHeaderValue($signature, $this->Key, $signedHeaders);
-        $r->headers[HeaderAuthorization] = $authValue;
-
-        $curl = curl_init();
-        $uri = str_replace(array("%2F"), array("/"), rawurlencode($r->uri));
-        $url = $r->scheme . '://' . $r->host . $uri . $queryString;
-        $headers = $this->curlHeaders($r);
-        curl_setopt($curl, CURLOPT_URL, $url);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $r->method);
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $r->body);
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
-        curl_setopt($curl, CURLOPT_NOBODY, FALSE);
-        return $curl;
-    }
 }
