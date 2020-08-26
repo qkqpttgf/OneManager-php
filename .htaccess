@@ -2,7 +2,7 @@
 # # LoadModule rewrite_module modules/mod_rewrite.so
 # # AllowOverride All
 RewriteEngine On
-RewriteCond $1 !^(.well-known)
+# RewriteCond $1 !^(.well-known)
 RewriteRule ^(.*) index.php?/$1 [L]
 
 ###-----------------------------------
