@@ -1038,7 +1038,7 @@ function adminform($name = '', $pass = '', $path = '')
     $html = '<html><head><title>' . getconstStr('AdminLogin') . '</title><meta charset=utf-8></head>';
     if ($name!=''&&$pass!='') {
         $html .= '<meta http-equiv="refresh" content="3;URL=' . $path . '"><body>' . getconstStr('LoginSuccess') . '</body></html>';
-        $statusCode = 302;
+        $statusCode = 201;
         date_default_timezone_set('UTC');
         $header = [
             'Set-Cookie' => $name . '=' . $pass . '; path=/; expires=' . date(DATE_COOKIE, strtotime('+1hour')),
