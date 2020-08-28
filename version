@@ -1,7 +1,10 @@
+20200828-1420.26
+nginx rewrite rule exclude .well-known folder, as auto SSL. add web.config to rewrite in IIS. now in windwos can do with \ in path. in aliyun FC & huawei FG API, use my code. CN 21Vianet client_id&secret expire. update description now only show new.
+nginx的伪静态中排除.well-known目录，方便自动SSL。添加IIS的伪静态。与linux不同，处理windows下目录用\分隔。FC、FG中使用自己代码对接平台。<font color=red>世纪互联旧API即将过期失效，升级后世纪互联的盘需要删除重新添加。</font>更新说明只显示部分。
+
 20200817-1740.25
 when multy disks, now will default show disks as folders in root, if set autoJumpFirstDisk 1, it will auto jump to first disk.
 多盘时，在网站根目录，默认会将各盘当成文件夹显示，可以去设置中设置autoJumpFirstDisk为1，这样可以跟以前一样自动跳到第一个盘。
-
 20200816-1145.24
 add platform: Baidu CFC. add setting: mobile background.
 新增百度CFC平台。可以分别设置PC与手机的背景。
