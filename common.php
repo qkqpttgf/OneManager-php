@@ -902,10 +902,11 @@ function message($message, $title = 'Message', $statusCode = 200)
 
 function needUpdate()
 {
-    $current_ver = file_get_contents(__DIR__ . '/version');
-    $current_ver = substr($current_ver, strpos($current_ver, '.')+1);
+    $current_version = file_get_contents(__DIR__ . '/version');
+    $current_ver = substr($current_version, strpos($current_version, '.')+1);
     $current_ver = explode(urldecode('%0A'),$current_ver)[0];
     $current_ver = explode(urldecode('%0D'),$current_ver)[0];
+    $split = splitfirst($current_version, '.' . $current_ver)[0] . '.' . $current_ver;
     //$github_version = file_get_contents('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
     $tmp = curl_request('https://raw.githubusercontent.com/qkqpttgf/OneManager-php/master/version');
     if ($tmp['stat']==0) return 0;
@@ -914,7 +915,9 @@ function needUpdate()
     $github_ver = explode(urldecode('%0A'),$github_ver)[0];
     $github_ver = explode(urldecode('%0D'),$github_ver)[0];
     if ($current_ver != $github_ver) {
-        $_SERVER['github_version'] = $github_version;
+        //$_SERVER['github_version'] = $github_version;
+        $_SERVER['github_ver_new'] = splitfirst($github_version, $split)[0];
+        $_SERVER['github_ver_old'] = splitfirst($github_version, $_SERVER['github_ver_new'])[1];
         return 1;
     }
     return 0;
@@ -1924,8 +1927,12 @@ function EnvOpt($needUpdate = 0)
 ';
     }
     if ($needUpdate) {
-        $html .= '<div style="position:relative;word-wrap: break-word;">
-        ' . str_replace("\r", '<br>',$_SERVER['github_version']) . '
+        $html .= '<div style="position: relative; word-wrap: break-word;">
+        ' . str_replace("\r", '<br>', $_SERVER['github_ver_new']) . '
+</div>
+<button onclick="document.getElementById(\'github_ver_old\').style.display=(document.getElementById(\'github_ver_old\').style.display==\'none\'?\'\':\'none\');">More...</button>
+<div id="github_ver_old" style="position: relative; word-wrap: break-word; display: none">
+        ' . str_replace("\r", '<br>', $_SERVER['github_ver_old']) . '
 </div>';
     }/* else {
         $html .= getconstStr('NotNeedUpdate');
