@@ -706,6 +706,25 @@ function spurlencode($str,$split='')
     return $tmp;
 }
 
+function base64y_encode($str)
+{
+    $str = base64_encode($str);
+    while (substr($str,-1)=='=') $str=substr($str,0,-1);
+    while (strpos($str, '+')!==false) $str = str_replace('+', '-', $str);
+    while (strpos($str, '/')!==false) $str = str_replace('/', '_', $str);
+    return $str;
+}
+
+function base64y_decode($str)
+{
+    while (strpos($str, '_')!==false) $str = str_replace('_', '/', $str);
+    while (strpos($str, '-')!==false) $str = str_replace('-', '+', $str);
+    while (strlen($str)%4) $str .= '=';
+    $str = base64_decode($str);
+    if (strpos($str, '%')!==false) $str = urldecode($str);
+    return $str;
+}
+
 function equal_replace($str, $add = false)
 {
     if ($add) {
@@ -2540,8 +2559,8 @@ function render_list($path = '', $files = '')
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--PathArrayEnd-->');
         $PathArrayStr = $tmp[0];
-        $tmp_path = str_replace('%23', '#', str_replace('&','&amp;', $path));
-        $tmp_url = $_SERVER['base_disk_path'];
+        $tmp_url = $_SERVER['base_path'];
+        $tmp_path = str_replace('&','&amp;', substr(urldecode($_SERVER['PHP_SELF']), strlen($tmp_url)));
         while ($tmp_path!='') {
             $tmp1 = splitfirst($tmp_path, '/');
             $folder1 = $tmp1[0];
@@ -2578,8 +2597,8 @@ function render_list($path = '', $files = '')
         $tmp = splitfirst($html, '<!--BackArrowStart-->');
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--BackArrowEnd-->');
-        if ($path !== '/') {
-            $current_url = $_SERVER['PHP_SELF'];
+        $current_url = path_format($_SERVER['PHP_SELF'] . '/');
+        if ($current_url !== $_SERVER['base_path']) {
             while (substr($current_url, -1) === '/') {
                 $current_url = substr($current_url, 0, -1);
             }
