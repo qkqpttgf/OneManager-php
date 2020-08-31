@@ -649,13 +649,13 @@
             strarry=str.split('.');
             ext=strarry[strarry.length-1].toLowerCase();
             if (images.indexOf(ext)>-1) {
+                var url=files[$i].href;
+                url=url.substr(0,url.length-8);
                 if (document.getElementById('originalpic').checked==true) {
-                    var url=files[$i].href;
-                    url=url.substr(0,url.length-8);
                     files[$i].parentNode.parentNode.innerHTML='<td colspan="3"><img src="'+url+'" alt="'+str+'" onload="if (this.offsetWidth>document.getElementById(\'list-div\').offsetWidth) this.style.width=\'100%\';"></td>';
                     $i--;
                 } else {
-                    var url=files[$i].href.replace(/preview/, 'thumbnails');
+                    url+='?thumbnails';
                     get_thumbnails_url(url, str, files[$i]);
                 }
             }
