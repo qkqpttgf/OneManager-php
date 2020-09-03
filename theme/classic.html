@@ -149,7 +149,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
-                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--PathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--PathArrayEnd--></h3>
+                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -999,12 +999,14 @@
                             var response=JSON.parse(xhr.responseText);
                             if (response['size']>0) {
                                 // contain size, upload finish. 有size说明是最终返回，上传结束
-                                var xhr3 = new XMLHttpRequest();
-                                xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
-                                xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
-                                xhr3.send(null);
-                                xhr3.onload = function(e){
-                                    console.log(xhr3.responseText+','+xhr3.status);
+                                if (totalsize>10*1024*1024) {
+                                    var xhr3 = new XMLHttpRequest();
+                                    xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                                    xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                    xhr3.send(null);
+                                    xhr3.onload = function(e){
+                                        console.log(xhr3.responseText+','+xhr3.status);
+                                    }
                                 }
                                 EndTime=new Date();
                                 MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
@@ -1015,6 +1017,7 @@
                                 }
                                 document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
+                                label.style.color='green';
                                 // uploadbuttonshow();
 <!--AdminStart-->
                                 response.name=file.webkitRelativePath||response.name;

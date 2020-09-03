@@ -65,12 +65,12 @@ function getConfig($str, $disktag = '')
         if (in_array($str, $InnerEnv)) {
             if ($disktag=='') $disktag = $_SERVER['disktag'];
             if (isset($envs[$disktag][$str])) {
-                if (in_array($str, $Base64Env)) return equal_replace($envs[$disktag][$str],1);
+                if (in_array($str, $Base64Env)) return base64y_decode($envs[$disktag][$str]);
                 else return $envs[$disktag][$str];
             }
         } else {
             if (isset($envs[$str])) {
-                if (in_array($str, $Base64Env)) return equal_replace($envs[$str],1);
+                if (in_array($str, $Base64Env)) return base64y_decode($envs[$str]);
                 else return $envs[$str];
             }
         }
@@ -93,7 +93,7 @@ function setConfig($arr, $disktag = '')
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
-            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = equal_replace($v);
+            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = base64y_encode($v);
             else $envs[$disktag][$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
@@ -104,7 +104,7 @@ function setConfig($arr, $disktag = '')
             $envs[$v] = '';
             $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $envs[$k] = equal_replace($v);
+            if (in_array($k, $Base64Env)) $envs[$k] = base64y_encode($v);
             else $envs[$k] = $v;
         }
     }
