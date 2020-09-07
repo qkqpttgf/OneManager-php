@@ -408,7 +408,7 @@ function setConfigResponse($response)
     return json_decode( $response, true );
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
 {
     $source = '/tmp/code.zip';
     $outPath = '/tmp/';
