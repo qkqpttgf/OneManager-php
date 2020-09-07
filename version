@@ -1,0 +1,81 @@
+20200828-1420.26
+nginx rewrite rule exclude .well-known folder, as auto SSL. add web.config to rewrite in IIS. now in windwos can do with \ in path. in aliyun FC & huawei FG API, use my code. CN 21Vianet client_id&secret expire. update description now only show new.
+nginx的伪静态中排除.well-known目录，方便自动SSL。添加IIS的伪静态。与linux不同，处理windows下目录用\分隔。FC、FG中使用自己代码对接平台。<font color=red>世纪互联旧API即将过期失效，升级后世纪互联的盘需要删除重新添加。</font>更新说明只显示部分。
+
+20200817-1740.25
+when multy disks, now will default show disks as folders in root, if set autoJumpFirstDisk 1, it will auto jump to first disk.
+多盘时，在网站根目录，默认会将各盘当成文件夹显示，可以去设置中设置autoJumpFirstDisk为1，这样可以跟以前一样自动跳到第一个盘。
+20200816-1145.24
+add platform: Baidu CFC. add setting: mobile background.
+新增百度CFC平台。可以分别设置PC与手机的背景。
+20200808-1130.23
+FG: select save in env or file.
+在FG中安装时，选择配置保存在环境变量还是文件中。
+20200806-1130.23
+SCF: select save in env or file.
+在SCF中安装时，选择配置保存在环境变量还是文件中。
+20200804-1453.22
+fix: once error will stop the after files in uploading multy files. SCF can get region now, change install. SCF config save in code file now not in env, <font color=red>if use SCF, you must reinstall after update</font>.
+修复，当上传多个文件时，一个文件出错将导致后续文件不再上传。SCF可以获取到region了，安装过程修改。在SCF中，现在将配置保存到代码文件中，不受环境变量4K大小限制，<font color=red>升级后，用SCF的要重装</font>。
+20200723-1430.21
+fix content-type in "?json". can not custom microsoft API id & secret by a link now, so show the return uri.
+当使用"?json"时，现在content-type是json了。现在微软不能一键创建API应用了，提供回调URI。
+20200713-1800.20
+add platform: Huawei cloud Function Graph. now you can use "?json" to get a json of folder or file. fix some bug.
+新增白嫖平台：华为云函数工作流FG。可以用"?json"来获得目录或文件的json。修复bug。
+20200607-1856.19
+add platform: Aliyun Function Compute. add setting: replace sharepoint.com to a proxy server name. add setting: disableShowThumb,customTheme. add function: php hosting website can update by a click
+现在可以安装到阿里函数计算FC了。php空间可以一键更新了。可以设置某个盘替换sharpoint.com域名为你的反代域名。新增disableShowThumb,customTheme。
+20200503-1848.18
+Rebuild theme. Add custom Css & custom Script, add FunctionalityFile: head.omf & foot.omf.
+重建主题文件结构。增加自定义css与自定义script。增加2个功能文件：head.omf、foot.omf。
+20200402-1830.17
+Oneclick update can select which branch to update. Now use the accept language instead of the language config.
+一键更新可以选择哪个分支了。现在开始使用浏览器语言，抛弃language设置。
+20200326-0001.16
+You can add sharepoint site drive as a disk, <font color=red>you must reinstall after update</font>.
+可以将sharepoint网站添加成一个盘，<font color=red>由于结构改变，升级后只能重装</font>。
+20200321-1830.15
+本次更新后，'index.html'功能在其它主题会导致bug。
+文本类文件将缓存；添加hideFunctionalityFile开关；在添加网盘时会显示已经在用的标签。
+after this update, then 'index.html' function will bug in other theme.
+cache text file content;add hideFunctionalityFile;list exist disktags when AddDisk。
+20200311-2150.14
+Add a switch, can download a known file or not, while the folder is encrypted.
+Hide time and size in mobile.
+Now, you can get a random 'jpg' from a folder when you type '?random=jpg' after the folder.
+增加一个开关，在目录加密后能否下载其中的某个文件。
+在手机上浏览时，隐藏修改时间跟大小。
+加入一个功能，现在可以在某个目录后面加上'?random=jpg'来得到本目录里面的一张随机jpg。
+20200229-1300.13
+In SCF, some config can input Special symbols now, like ?&= 。
+在SCF中，某些配置可以输入特殊符号了，像background可以用?&=之类的了。
+20200225-1310.12
+Can update by one click any time. fix bugs: special tag, reupload.
+可以不管版本直接一键更新（覆盖）了。修复可以使用特殊onedrive标签的bug，修复断网续传的问题。
+20200222-2130.11
+you can set background now. fix bug: 2nd disk upload.
+可以设置背景图片了。第2个盘上传后链接不对。
+20200222-1700.09
+Can copy file and folder now.
+可以复制文件跟目录了。
+20200220-1220.08
+Multy Mode! You can add more Onedrive in one project (bind Onedrive in setup). And now, heroku apps can update in setup!  
+多盘来了，在设置中添加Onedrive，另，heroku 上也能一键更新了！  
+20200215-1850.07
+fix: head.md not show if no readme.md.
+修复当没有readme的时候就不显示head的问题。
+20200215-1700.06
+classic theme can read the head.md file now.
+classic主题可以处理head.md文件了。
+20200202-2010.05
+refresh token expires in 90 day, save a new token per month. classic theme add some icon for admin.
+refresh token 90天过期，所以每月保存一个新的token。classic主题加了点管理图标。
+20200129-2050.04
+if there is 'index.html', then do not show file but show the index.html, except admin.
+如果有index.html，就不显示文件列表了，直接显示index.html内容，除非是管理员。
+20200120.02
+fix domain_path do not work. domain_path正常工作了。
+20200118.01
+Can be deploy to heroku/SCF/normal space. SCF、heroku、普通VPS，三种环境都可以用了。
+Change imgup_path to guestup_path, plz make sure it after update. 将imgup_path改成guestup_path更符合用途，更新后请注意更改。

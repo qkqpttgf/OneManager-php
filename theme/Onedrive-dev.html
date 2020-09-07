@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="<!--constStr@language-->">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><!--Title--></title>
+    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+    <!--https://p.sfx.ms/images/favicon.ico-->
+    <style>
+        /* 通用样式 */
+        /* 用于消除默认自带样式 */
+        html, body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            overflow: hidden;
+        }
+        a { 
+            text-decoration: none;
+        }
+        ul { 
+            list-style: none;
+        }
+        input[type="radio"] {
+            margin: 0;
+            outline: none;
+        }
+
+        /* 兼容样式 */
+        body {
+            -webkit-user-select:none;
+            -moz-user-select:none;
+            -ms-user-select:none;
+            user-select:none;
+        }
+        select:-moz-focusring {
+            color: transparent;
+            text-shadow: 0 0 0 #000;
+        }
+
+        /* 自定义样式 */
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1100px;
+        }
+        .pull-left { 
+            float: left; 
+        }
+        .pull-right { 
+            float: right; 
+        }
+
+        /* 字体外部引用 */
+        @font-face {
+            font-family: 'iconfont';  /* project id 1634400 */
+            src: url('//at.alicdn.com/t/font_1634400_9yg8f5s278.eot');
+            src: url('//at.alicdn.com/t/font_1634400_9yg8f5s278.eot?#iefix') format('embedded-opentype'),
+            url('//at.alicdn.com/t/font_1634400_9yg8f5s278.woff2') format('woff2'),
+            url('//at.alicdn.com/t/font_1634400_9yg8f5s278.woff') format('woff'),
+            url('//at.alicdn.com/t/font_1634400_9yg8f5s278.ttf') format('truetype'),
+            url('//at.alicdn.com/t/font_1634400_9yg8f5s278.svg#iconfont') format('svg');
+        }
+        .iconfont {
+            font-family:"iconfont" !important;
+            font-size:16px;font-style:normal;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-stroke-width: 0.2px;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* header */
+        header {
+            width: 100%;
+            /*height: 88px;*/
+            line-height: 48px;
+            font-size: 16px;
+            background-color: #0078D4;
+        }
+        header nav {
+            margin: 0 auto;
+            padding: 0 10px;
+            height: 48px;
+            color: #FFF;
+            box-sizing: border-box;
+        }
+        header nav a {
+            color: #FFF;
+            font-weight: 600;
+        }
+        header nav .lang .language { outline: none; }
+        header .control {
+            height: 40px;
+            line-height: 40px;
+            background-color: #f4f4f4;
+        }
+        header .control .control-item {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* main */
+        main { 
+            position: relative;
+            height: 100%;
+        }
+        main .scroll {
+            overflow-y: scroll;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+        }
+        main .main-item-list {
+            padding-left: 32px;
+            padding-right: 32px;
+            height: 32px;
+            line-height: 32px;
+            font-size: 12px;
+            box-sizing: border-box;
+        }
+        main .main-title h1 {
+            margin: 0;
+            padding: 32px;
+            font-size: 20px;
+            font-weight: 100;
+        }
+        main .main-items:hover { 
+            background-color: #F4F4F4;
+        }
+        main .main-items:hover .main-items-radio { 
+            display: inline-block!important; 
+        }
+        main .main-item-list .inner-container {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            height: 32px;
+            border-bottom: 1px solid #FFF;
+            box-sizing: border-box;
+        }
+        main .main-item-list .inner-container > div {
+            padding-left: 12px;
+            padding-right: 8px;
+            box-sizing: border-box;
+        }
+        main .main-item-list .main-item-title { 
+            border-bottom: 1px solid #EAEAEA;
+        }
+        main .main-item-list .main-items-radio-box {
+            width: 48px;
+            height: 32px;
+            line-height: 40px;
+            text-align: center;
+        }
+        main .main-item-list .main-items-radio-box .main-items-radio {
+            display: none;
+            width: 18px;
+            height: 18px;
+        }
+        main .main-item-list .main-items-radio-box .main-items-radio[currstatus=true] {
+            display: block;
+        }
+        main .main-item-list .main-items-icon {
+            min-width: 38px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+        }
+        main .main-item-title .main-items-icon {
+            height: 32px!important;
+            line-height: 9px!important;
+        }
+        main .main-item-title .main-items-icon:hover,
+        main .main-item-list .main-items-displayName:hover,
+        main .main-item-list .main-items-dateModified:hover,
+        main .main-item-list .main-items-size:hover { 
+            background-color: #EAEAEA; 
+        }
+        main .main-item-list .main-items-icon .iconfont {
+            font-size: 20px;
+        }
+        main .main-item-list .main-items-icon img {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+        main .main-items {
+            display: flex;
+            justify-content: flex-start;
+            border-bottom: 1px solid #F4F4F4;
+            box-sizing: border-box;
+        }
+        main .main-item-list .main-items-displayName,
+        main .main-item-list .main-items-fileName { 
+            width: 520px;
+        }
+        main .main-item-list .main-items-dateModified,
+        main .main-item-list .main-items-dateTime { 
+            width: 250px; 
+        }
+        main .main-item-list .main-items-size,
+        main .main-item-list .main-items-fileSize { 
+            width: 180px;
+        }
+        main .main-item-list .main-items-radio-box,
+        main .main-item-list .main-items-icon,
+        main .main-item-list .main-items-fileName,
+        main .main-item-list .main-items-dateTime,
+        main .main-item-list .main-items-fileSize {
+            padding: 11px 8px 11px 12px;
+            height: 42px;
+            line-height: 22px;
+            font-family: "Microsoft Yahei UI", Verdana, Simsun, "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            box-sizing: border-box;
+            /*overflow: hidden;*/
+        }
+        main .main-item-list .main-items-fileName a {
+            color: inherit;
+        }
+        main .main-item-list .main-items-fileName a:hover {
+            text-decoration: underline;
+        }
+        .more-disk{
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow:ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            max-width: 100px;
+        }
+        .more-disk div{
+            list-style:none;
+            position:absolute;
+            display:none;background:#ffffff;border-radius:5px;margin:0 0 0 -10px;/*padding:0 7px;*/color:#205D67;z-index:1;
+            box-shadow: 0 0.5em 3em rgba(161,177,204,.4);
+        }
+        .more-disk:hover div{display:block}
+        .more-disk div li{line-height:normal;padding: 3px 10px;}
+        .more-disk div li a{text-decoration: none; color:rgba(0,0,0,.3);}
+        .more-disk div li a:hover{color:rgba(0,0,0,.87);}
+        .more-disk div li a[now]{color:rgba(0,0,0,1);}
+    </style>
+</head>
+<body>
+    <header>
+        <nav class="container">
+            <div class="title pull-left">
+                <a href="<!--base_path-->"><!--Sitename--></a>
+            </div>
+            <div class="pull-right">
+<!--LoginStart-->
+                <a class="pull-left" onclick="/*login();*/"><!--constStr@Login--></a>
+<!--LoginEnd-->
+<!--AdminStart-->
+                <a class="pull-left" onclick="logout();"><!--constStr@Logout--></a>
+<!--AdminEnd-->
+                &nbsp;| 
+                <div class="pull-right lang">
+                    <select name="language" id="language" class="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
+                        <option value="">Language</option>
+<!--SelectLanguageStart-->
+                        <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
+<!--SelectLanguageEnd-->
+                    </select>
+                </div>
+            </div>
+        </nav>
+<!--AdminStart-->
+        <div class="control">
+            <div class="container">
+                <div class="control-item">
+                    <button class="control-items">
+                        <i class="iconfont control-items-icon">&#xe755;</i>
+                        <span class="control-items-content"><!--constStr@Create--></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+<!--AdminEnd-->
+    </header>
+    <main>
+        <!--ListStart-->
+        <div class="scroll">
+            <div class="container">
+                <div class="main-title">
+                    <h1 class="main-title-path">
+                        <a href="<!--base_path-->"><!--constStr@Home--></a>
+<!--DiskPathArrayStart-->
+                        >
+                        <a href="<!--PathArrayLink-->"><!--PathArrayName--></a>
+<!--DiskPathArrayEnd-->
+                    </h1>
+                </div>
+<!--IsFileStart-->
+                <div class="main-item-list">
+                    <div class="main-items main-item-title">
+                        <div class="inner-container">
+                            <div>
+                            <div style="margin: 24px">
+                                <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><!--FileEncodeUrl--></textarea>
+                                <a href="<!--FileUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
+                            </div>
+                            </div>
+                            <div>
+                                <!--IsimgFileStart-->
+                                <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
+                                <!--IsimgFileEnd-->
+                                <!--IsvideoFileStart-->
+                                <div id="video-a0"></div>
+                                <!--IsvideoFileEnd-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+<!--IsFileEnd-->
+<!--IsFolderStart-->
+                <div class="main-item-list">
+                    <div class="main-items main-item-title">
+                        <div class="inner-container">
+<!--AdminStart-->
+                            <div class="main-items-radio-box">
+                                <!-- <input class="main-items-radio main-items-check-all" type="radio" name="" id=""> -->
+                            </div>
+<!--AdminEnd-->
+                            <div class="main-items-icon">
+                                <i class="iconfont">&#xe746;</i>
+                            </div>
+                            <div class="main-items-displayName"><!--constStr@File--></div>
+                            <div class="main-items-dateModified"><!--constStr@EditTime--></div>
+                            <div class="main-items-size"><!--constStr@Size--></div>
+                        </div>
+                    </div>
+<!--FolderListStart-->
+                    <div class="main-items">
+<!--AdminStart-->
+                        <div class="main-items-radio-box">
+                            <input class="main-items-radio" type="radio" checked name="file" id="">
+                        </div>
+<!--AdminEnd-->
+                        <div class="main-items-icon">
+                            <img src="https://spoprod-a.akamaihd.net/files/fabric/assets/item-types-fluent/20/folder.svg" alt="folder icon">
+                        </div>
+                        <div class="main-items-fileName">
+                            <a href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                        </div>
+                        <div class="main-items-dateTime" ><!--lastModifiedDateTime--></div>
+                        <div class="main-items-fileSize" ><!--size--></div>
+                    </div>
+<!--FolderListEnd-->
+<!--FileListStart-->
+                    <div class="main-items">
+<!--AdminStart-->
+                        <div class="main-items-radio-box">
+                            <input class="main-items-radio" type="radio" checked name="file" id="">
+                        </div>
+<!--AdminEnd-->
+                        <div class="main-items-icon">
+                            <i class="iconfont">&#xe746;</i>
+                        </div>
+                        <div class="main-items-fileName">
+                            <a href="<!--FileEncodeReplaceUrl-->?preview" target="_blank"><!--FileEncodeReplaceName--></a>
+                        </div>
+                        <div class="main-items-dateTime" ><!--lastModifiedDateTime--></div>
+                        <div class="main-items-fileSize" ><!--size--></div>
+                    </div>
+<!--FileListEnd-->
+                </div>
+<!--IsFolderEnd-->
+            </div>
+        </div>
+<!--ListEnd-->
+    </main>
+    <footer>
+        <!-- OneDrive程序 -->
+    </footer>
+    <div id="mask" class="mask" style="display:none;"></div>
+<!--LoginStart-->
+    <div id="login_div" class="operatediv" style="display:none">
+        <div style="margin:50px">
+            <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
+	        <center>
+	            <form action="<!--IsPreview?-->admin" method="post">
+		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		        <input type="submit" value="<!--constStr@Login-->">
+	            </form>
+            </center>
+        </div>
+	</div>
+<!--LoginEnd-->
+    <script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script>
+        window.onload = function () 
+        {
+            // 获取所有radios元素
+            var allRadios = document.getElementsByClassName("main-items-radio");
+            RegisterRadioClick(allRadios);
+        }
+
+        // 为所有radio注册点击事件
+        function RegisterRadioClick(radios) 
+        {
+            if (radios != null) 
+            {
+                var radio;
+                for (var i = 0; i < radios.length ; i++) 
+                {
+                    // 获取单个radio元素
+                    radio = radios[i];
+                    // 为每个radio元素设置当前状态为：False
+                    //radio.setAttribute("currStatus", "false");
+                    // 页面刚加载后，取消因缓存的checked属性
+                    radio.checked = false;
+                    // 为页面中每个radio元素注册点击事件
+                    radio.onclick = function()
+                    {
+                        // 获取当前点击对象的自定义属性
+                        var currStatus = this.getAttribute("currStatus");
+                        AllRadioCurrentStatus2False(radios);
+                        if (currStatus === "true") 
+                        {
+                            AllRadioCurrentStatus2False(radios);
+                            this.setAttribute("currStatus", false);
+                            this.checked = false;
+                        }
+                        else 
+                        {
+                            this.setAttribute("currStatus", true);
+                            this.checked = true;
+                        }
+                    }
+                }
+            }
+        }
+
+        // 把页面里所有radio元素自定义属性变成为false
+        // 不然会出现需要点击两次才会被选中
+        function AllRadioCurrentStatus2False(radios)
+        {
+            for (var i = 0; i < radios.length; i++)
+            {
+                radios[i].setAttribute("currStatus", false);
+            }
+        }
+        function changelanguage(str)
+    {
+        if (str=='Language') str = '';
+        document.cookie='language='+str+'; path=/';
+        location.href = location.href;
+    }
+<!--ListStart-->
+    /*var root = '<!--base_disk_path-->';
+    function path_format(path) {
+        path = '/' + path + '/';
+        while (path.indexOf('//') !== -1) {
+            path = path.replace('//', '/')
+        }
+        return path
+    }
+    document.querySelectorAll('.main-title-path').forEach(function (e) {
+        var path = e.innerText;
+        if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
+        var paths = path.split('/');
+        e.innerHTML = '<a href="' + root + '"><!--constStr@Home--></a> > ';
+        if (paths <= 2) return;
+        for (var i = 1; i < paths.length - 1; i++) {
+            var to = path_format(root + paths.slice(0, i + 1).join('/'));
+            e.innerHTML += '<a href="' + to + '">' + paths[i] + '</a> > '
+        }
+        e.innerHTML += paths[paths.length - 1];
+        e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
+    });*/
+<!--IsFileStart-->
+    var $url = document.getElementById('url');
+    if ($url) {
+        $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
+        $url.style.height = $url.scrollHeight + 'px';
+    }
+<!--IsvideoFileStart-->
+    function loadResources(type, src, callback) {
+        let script = document.createElement(type);
+        let loaded = false;
+        if (typeof callback === 'function') {
+            script.onload = script.onreadystatechange = () => {
+                if (!loaded && (!script.readyState || /loaded|complete/.test(script.readyState))) {
+                    script.onload = script.onreadystatechange = null;
+                    loaded = true;
+                    callback();
+                }
+            }
+        }
+        if (type === 'link') {
+            script.href = src;
+            script.rel = 'stylesheet';
+        } else {
+            script.src = src;
+        }
+        document.getElementsByTagName('head')[0].appendChild(script);
+    }
+    function addVideos(videos) {
+        let host = 'https://s0.pstatp.com/cdn/expire-1-M';
+        let unloadedResourceCount = 4;
+        let callback = (() => {
+            return () => {
+                if (!--unloadedResourceCount) {
+                    createDplayers(videos);
+                }
+            };
+        })(unloadedResourceCount, videos);
+        loadResources(
+            'link',
+            host + '/dplayer/1.25.0/DPlayer.min.css',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/dplayer/1.25.0/DPlayer.min.js',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/hls.js/0.12.4/hls.light.min.js',
+            callback
+        );
+        loadResources(
+            'script',
+            host + '/flv.js/1.5.0/flv.min.js',
+            callback
+        );
+    }
+    function createDplayers(videos) {
+        for (i = 0; i < videos.length; i++) {
+            console.log(videos[i]);
+            new DPlayer({
+                container: document.getElementById('video-a' + i),
+                screenshot: true,
+                video: {
+                    url: videos[i]
+                }
+            });
+        }
+    }
+    addVideos(['<!--FileDownUrl-->']);
+<!--IsvideoFileEnd-->
+<!--IsFileEnd-->
+<!--ListEnd-->
+<!--AdminStart-->
+        function logout() {
+            document.cookie = "admin=; path=/";
+            location.href = location.href;
+        }
+<!--AdminEnd-->
+<!--LoginStart-->
+        function login() {
+            document.getElementById('mask').style.display='';
+                //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
+            document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
+            document.getElementById('login_div').style.display='';
+            document.getElementById('login_div').style.left=(document.body.clientWidth-document.getElementById('login_div').offsetWidth)/2 +'px';
+            document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
+            document.getElementById('login_input').focus();
+        }
+<!--LoginEnd-->
+    </script>
+</body>
+</html>
