@@ -26,9 +26,9 @@
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
         .list-header-container{position:relative}
-        .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
+        .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;padding: 19px 19px;vertical-align:middle;text-decoration: none;position: absolute;}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:12px 48px;line-height:1.2;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
+        .table-header{margin:0;border:0 none;padding:16px 48px;line-height:1.3;text-align:left;font-weight:400;color:#24292e;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.6)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
@@ -202,7 +202,7 @@
 <?php   } ?>
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
-            <div class="list-header-container" style="font-size:24px;box-shadow:0 1px 8px rgba(27,31,35,0.8);">
+            <div class="list-header-container" style="font-size:16px;box-shadow:0 1px 8px rgba(27,31,35,0.8);">
 <?php
     if ($path !== '/') {
         $current_url = $_SERVER['PHP_SELF'];
