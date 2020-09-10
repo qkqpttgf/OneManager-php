@@ -187,7 +187,7 @@
         <div class="list-container">
 	    <div class="list-header-container">
             	<div class="readme" style="padding:16px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);">
-            	   <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
+            	   <center><img src="https://v1.jinrishici.com/all.svg?font-size=28&spacing=8" style="max-width:100%;"></center>
            	</div>
             </div>
             <div class="list-body-container">
