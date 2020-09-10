@@ -38,7 +38,7 @@
             <td>
                 <a href="./platform/Heroku.php" title="Heroku.php">Heroku.php</a>
             </td>
-            <td rowspan="4">Address to update is changed for easy management and updating</td> 
+            <td rowspan="7">Address to update is changed for easy management and updating</td> 
         </tr>
         <tr> 
             <td>
