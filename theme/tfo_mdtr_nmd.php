@@ -235,17 +235,17 @@
 <?php } else {
         if ($_SERVER['ishidden']<4) {
             if (isset($files['error'])) {
-                    echo '<div style="margin:8px;">' . $files['error']['message'] . '</div>';
+                    echo '<div style="margin:18px;">' . $files['error']['message'] . '</div>';
                     $statusCode=404;
             } else {
                 if (isset($files['file'])) {
 ?>
-                <div style="margin: 12px 4px 4px; text-align: center">
+                <div style="margin:18px; text-align: center">
                     <div style="margin: 24px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?></textarea>
                         <a href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path);//$files[$_SERVER['DownurlStrName']] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
                     </div>
-                    <div style="margin: 24px">
+                    <div style="margin:0px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
                     if (in_array($ext, $exts['img'])) {
                         echo '                        <img src="' . $files[$_SERVER['DownurlStrName']] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
