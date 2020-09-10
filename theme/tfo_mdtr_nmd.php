@@ -39,7 +39,7 @@
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td.updated_at,.list-table th.updated_at{width:15%;}
-        .list-table td.file,.list-table th.file{width:70%;}
+        .list-table td.file,.list-table th.file{width:72%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .list-table td button,.list-table th button,.swal-button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
@@ -72,6 +72,16 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:0px;}
         .markdown-body{padding:24px;text-align:left;font-size:14px !important}
+	@media only screen and (max-width:1856px){
+            .list-table td.file,.list-table th.file{width:72%}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+	@media only screen and (max-width:1448px){
+            .list-table td.file,.list-table th.file{width:71%)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
