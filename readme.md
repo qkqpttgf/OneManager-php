@@ -34,7 +34,7 @@
             </td>
         </tr>
         <tr> 
-            <td rowspan="4">UpdateAddress</td> 
+            <td rowspan="7">UpdateAddress</td> 
             <td>
                 <a href="./platform/Heroku.php" title="Heroku.php">Heroku.php</a>
             </td>
