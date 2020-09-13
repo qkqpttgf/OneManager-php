@@ -1834,7 +1834,9 @@ function EnvOpt($needUpdate = 0)
             </td>
         </tr>';
         } elseif ($key=='theme') {
-            $theme_arr = scandir(__DIR__.'/theme');
+            $slash = '/';
+            if (strpos(__DIR__, ':')) $slash = '\\';
+            $theme_arr = scandir(__DIR__ . $slash . 'theme');
             $html .= '
         <tr>
             <td><label>' . $key . '</label></td>
@@ -1989,6 +1991,9 @@ function render_list($path = '', $files = '')
     global $exts;
     global $constStr;
 
+    $slash = '/';
+    if (strpos(__DIR__, ':')) $slash = '\\';
+
     if (isset($files['children']['index.html']) && !$_SERVER['admin']) {
         $htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'),'/'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
@@ -2041,22 +2046,22 @@ function render_list($path = '', $files = '')
     //$authinfo = $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
 
     if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
-    if ( !file_exists(__DIR__.'/theme/'.$theme) ) $theme = '';
+    if ( !file_exists(__DIR__ . $slash .'theme' . $slash . $theme) ) $theme = '';
     if ( $theme=='' ) {
         $tmp = getConfig('customTheme');
         if ( $tmp!='' ) $theme = $tmp;
     }
     if ( $theme=='' ) {
         $theme = getConfig('theme');
-        if ( $theme=='' || !file_exists(__DIR__.'/theme/'.$theme) ) $theme = 'classic.html';
+        if ( $theme=='' || !file_exists(__DIR__ . $slash .'theme' . $slash . $theme) ) $theme = 'classic.html';
     }
     if (substr($theme,-4)=='.php') {
         @ob_start();
         include 'theme/'.$theme;
         $html = ob_get_clean();
     } else {
-        if (file_exists(__DIR__.'/theme/'.$theme)) {
-            $file_path = __DIR__.'/theme/'.$theme;
+        if (file_exists(__DIR__ . $slash .'theme' . $slash . $theme)) {
+            $file_path = __DIR__ . $slash .'theme' . $slash . $theme;
             $html = file_get_contents($file_path);
         } else {
             if (!($html = getcache('customTheme'))) {
@@ -2860,7 +2865,7 @@ function render_list($path = '', $files = '')
     }
 
     if ($_SERVER['admin']||!getConfig('disableChangeTheme')) {
-        $theme_arr = scandir(__DIR__.'/theme');
+        $theme_arr = scandir(__DIR__ . $slash . 'theme');
         $html .= '
 <div style="position: fixed;right: 10px;bottom: 10px;/*color: rgba(247,247,249,0);*/">
     <select name="theme" onchange="changetheme(this.options[this.options.selectedIndex].value)">
