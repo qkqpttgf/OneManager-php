@@ -925,7 +925,9 @@ function message($message, $title = 'Message', $statusCode = 200)
     <body>
         <h1>' . $title . '</h1>
         <p>
+
 ' . $message . '
+
         </p>
     </body>
 </html>
@@ -934,7 +936,9 @@ function message($message, $title = 'Message', $statusCode = 200)
 
 function needUpdate()
 {
-    $current_version = file_get_contents(__DIR__ . '/version');
+    $slash = '/';
+    if (strpos(__DIR__, ':')) $slash = '\\';
+    $current_version = file_get_contents(__DIR__ . $slash . 'version');
     $current_ver = substr($current_version, strpos($current_version, '.')+1);
     $current_ver = explode(urldecode('%0A'),$current_ver)[0];
     $current_ver = explode(urldecode('%0D'),$current_ver)[0];
