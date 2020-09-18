@@ -34,15 +34,15 @@
             </td>
         </tr>
         <tr> 
-            <td rowspan="4">UpdateAddress</td> 
+            <td rowspan="7">UpdateAddress</td> 
             <td>
                 <a href="./platform/Heroku.php" title="Heroku.php">Heroku.php</a>
             </td>
-            <td rowspan="4">Address to update is changed for easy management and updating</td> 
+            <td rowspan="7">Address to update is changed for easy management and updating</td> 
         </tr>
         <tr> 
             <td>
-                <a href="./platform/TencentSCF.php" title="TencentSCF.php">TencentSCF.php</a>
+                <a href="./platform/BaiduCFC.php" title="BaiduCFC.php">BaiduCFC.php</a>
             </td> 
         </tr>
         <tr>
@@ -52,7 +52,22 @@
         </tr>
         <tr>
             <td>
-                <a href="./platform/HuaweiFG.php" title="HuaweiFG.php">HuaweiFG.php</a>
+                <a href="./platform/TencentSCF_file.php" title="TencentSCF_file.php">TencentSCF_file.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="./platform/TencentSCF_env.php" title="TencentSCF_env.php">TencentSCF_env.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="./platform/HuaweiFG_file.php" title="HuaweiFG_file.php">HuaweiFG_file.php</a>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <a href="./platform/HuaweiFG_env.php" title="HuaweiFG_env.php">HuaweiFG_env.php</a>
             </td>
         </tr>
         <tr> 

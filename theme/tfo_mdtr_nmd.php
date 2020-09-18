@@ -26,9 +26,9 @@
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:6px;}
         .list-container{position:relative;overflow:hidden;border-radius:6px}
         .list-header-container{position:relative}
-        .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;margin: 8px 8px;padding: 8px 8px;vertical-align:middle;text-decoration: none;position: absolute;top: 4px;left: 12px}
+        .list-header-container a.back-link{color: #000;display: inline-block;font-size: 16px;padding: 19px 19px;vertical-align:middle;text-decoration: none;position: absolute;}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:18px 48px;line-height:1.3;text-align:left;font-weight:400;color:#556677;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
+        .table-header{margin:0;border:0 none;padding:16px 48px;line-height:1.3;text-align:left;font-weight:400;color:#24292e;background-color:rgba(245,245,245,0.3);word-break: break-all;word-wrap: break-word;}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.6)}
         .more-disk{margin:0;border:0 none;padding:18px 18px;text-align:center;font-weight:400;color:#000;background-color:rgba(245,245,245,0.3);white-space:nowrap;overflow:auto;}
         .more-disk a{border:1px solid rgba(27,31,35,0);font-weight:bold;margin:0 2px;padding:5px;transition-duration: 0.3s;border-radius: 18px;background-color:transparent;color: #24292e}
@@ -39,7 +39,7 @@
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td.updated_at,.list-table th.updated_at{width:15%;}
-        .list-table td.file,.list-table th.file{width:70%;}
+        .list-table td.file,.list-table th.file{width:72%;}
         .list-table td.size,.list-table th.size{width:10%;}
         .list-table td,.list-table th{padding:0 8px;text-align:left;float:left;line-height:32px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
         .list-table td button,.list-table th button,.swal-button{border-radius:16px;transition-duration: 0.3s;cursor:pointer;color:#24292e;height:24px;padding: 0 8px;background:transparent;border:1px solid rgba(27,31,35,0);font-weight:bold;}
@@ -72,6 +72,16 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:0px;}
         .markdown-body{padding:24px;text-align:left;font-size:14px !important}
+	@media only screen and (max-width:1856px){
+            .list-table td.file,.list-table th.file{width:72%}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+	@media only screen and (max-width:1448px){
+            .list-table td.file,.list-table th.file{width:71%)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
         @media only screen and (max-width:1152px){
             .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
             .list-table td.size,.list-table th.size{width:70px !important}
@@ -180,20 +190,16 @@
             </div>
         </div>
     </div>
-<div class="list-wrapper">
-    <div class="list-container">
-        <div class="list-header-container">
-            <div class="readme" style="padding:16px !important">
-            <center><img src="https://v1.jinrishici.com/all.svg?font-size=32&spacing=12" style="max-width:100%;"></center>
-            </div>
-        </div>
-    </div>
-</div>
 <?php }
     if ($files) {
         if (isset($files['children']['head.md'])) { ?>
     <div class="list-wrapper" id="head-div">
         <div class="list-container">
+	    <div class="list-header-container">
+            	<div class="readme" style="padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);">
+            	   <center><img src="https://v1.jinrishici.com/all.svg?font-size=26&spacing=7" style="max-width:100%;"></center>
+           	</div>
+            </div>
             <div class="list-body-container">
                 <div class="readme">
                     <div class="markdown-body" id="head">
@@ -206,7 +212,7 @@
 <?php   } ?>
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
-            <div class="list-header-container" style="box-shadow:0 1px 8px rgba(27,31,35,.3)">
+            <div class="list-header-container" style="font-size:16px;box-shadow:0 1px 8px rgba(27,31,35,0.8);">
 <?php
     if ($path !== '/') {
         $current_url = $_SERVER['PHP_SELF'];
@@ -239,17 +245,17 @@
 <?php } else {
         if ($_SERVER['ishidden']<4) {
             if (isset($files['error'])) {
-                    echo '<div style="margin:8px;">' . $files['error']['message'] . '</div>';
+                    echo '<div style="margin:18px;">' . $files['error']['message'] . '</div>';
                     $statusCode=404;
             } else {
                 if (isset($files['file'])) {
 ?>
-                <div style="margin: 12px 4px 4px; text-align: center">
-                    <div style="margin: 24px">
+                <div style="margin:18px; text-align: center">
+                    <div style="margin:0px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><?php echo str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))); ?></textarea>
                         <a href="<?php echo path_format($_SERVER['base_disk_path'] . '/' . $path);//$files[$_SERVER['DownurlStrName']] ?>"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<?php echo getconstStr('Download'); ?></a>
                     </div>
-                    <div style="margin: 24px">
+                    <div style="margin:0px">
 <?php               $ext = strtolower(substr($path, strrpos($path, '.') + 1));
                     if (in_array($ext, $exts['img'])) {
                         echo '                        <img src="' . $files[$_SERVER['DownurlStrName']] . '" alt="' . substr($path, strrpos($path, '/')) . '" onload="if(this.offsetWidth>document.getElementById(\'url\').offsetWidth) this.style.width=\'100%\';" />
