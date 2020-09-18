@@ -156,7 +156,7 @@
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		            <input id="password1" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
 		            <input type="submit" value="<!--constStr@Submit-->">
 	                </form>
                 </center>
@@ -1239,6 +1239,9 @@
         document.getElementById('login_input').focus();
     }
 <!--LoginEnd-->
+<!--EncryptedStart-->
+    document.getElementById('password1').focus();
+<!--EncryptedEnd-->
 </script>
 <script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
 <!--customScript-->
