@@ -718,6 +718,7 @@ function spurlencode($str, $split='')
         $tmp = urlencode($str);
     }
     $tmp = str_replace('%2520', '%20',$tmp);
+    $tmp = str_replace('%26amp%3B', '&',$tmp);
     return $tmp;
 }
 
@@ -971,6 +972,7 @@ function output($body, $statusCode = 200, $headers = ['Content-Type' => 'text/ht
 
 function passhidden($path)
 {
+    if ($_SERVER['admin']) return 0;
     $path = str_replace('+','%2B',$path);
     $path = str_replace('&amp;','&', path_format(urldecode($path)));
     if (getConfig('passfile') != '') {
