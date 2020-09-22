@@ -73,7 +73,7 @@ function handler($event, $context)
         $tmp = array(
             'method' => $event->getMethod(),
             'clientIP' => $event->getAttribute("clientIP"),
-            'eventURI' => $event->getAttribute("eventURI"),
+            'requestURI' => $event->getAttribute("requestURI"),
             'path' => spurlencode($event->getAttribute("path"), '/'),
             'queryString' => $event->getQueryParams(),
             'headers' => $event->getHeaders(),
