@@ -39,7 +39,9 @@ function GetPathSetting($event, $context)
     $_SERVER['service_name'] = $context['service']['name'];
     $_SERVER['function_name'] = $context['function']['name'];
     $path = $event['path'];
-    $_SERVER['base_path'] = substr($event['requestURI'], 0, -strlen($path)+1);
+    $tmp = $event['requestURI'];
+    if (strpos($tmp, '?')) $tmp = substr($tmp, 0, strpos($tmp, '?'));
+    $_SERVER['base_path'] = substr($tmp, 0, -strlen($path)+1);
 
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
