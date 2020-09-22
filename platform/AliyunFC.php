@@ -39,7 +39,7 @@ function GetPathSetting($event, $context)
     $_SERVER['service_name'] = $context['service']['name'];
     $_SERVER['function_name'] = $context['function']['name'];
 
-        $_SERVER['base_path'] = '/';
+        $_SERVER['base_path'] = $event['requestURI'];
         $path = $event['path'];
         //$path = spurlencode($path, '/');
 
