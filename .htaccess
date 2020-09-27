@@ -14,11 +14,13 @@ RewriteRule ^(.*) index.php?/$1 [L]
 #     to index.php?/$1
 # }
 #
-### caddy2  json
-# "handler": "rewrite",
-# "uri": "index.php?{http.request.uri.query}"
-#
 ### caddy2 Caddyfile
-# rewrite * index.php?{query}
+# @try_files {
+#     not path /.well-known/*
+#     file {
+#         try_files index.php
+#     }
+# }
+# rewrite @try_files {http.matchers.file.relative}
 #
 ###-----------------------------------
