@@ -19,19 +19,20 @@ addEventListener('fetch', event => {
         url.protocol = 'https:'
         response = Response.redirect(url.href);
         event.respondWith( response );
-    }
-    let nd = new Date();
-    if (nd.getDate()%2) {
-        host = SingleDay
     } else {
-        host = DoubleDay
-    }
-    if (!CFproxy) {
-        url.hostname=host;
-        let request=new Request(url,event.request);
-        event.respondWith( fetch(request) )
-    } else {
-        event.respondWith( fetchAndApply(event.request) );
+        let nd = new Date();
+        if (nd.getDate()%2) {
+            host = SingleDay
+        } else {
+            host = DoubleDay
+        }
+        if (!CFproxy) {
+            url.hostname=host;
+            let request=new Request(url,event.request);
+            event.respondWith( fetch(request) )
+        } else {
+            event.respondWith( fetchAndApply(event.request) );
+        }
     }
 })
 
