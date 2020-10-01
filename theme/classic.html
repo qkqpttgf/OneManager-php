@@ -163,11 +163,15 @@
                 </div>
 <!--EncryptedEnd-->
 <!--GuestUploadStart-->
-                <div id="upload_div" style="margin:10px">
-                    <div id="upload_btns" align="center">
-                    <input id="upload_file" type="file" name="upload_filename">
+                <div id="upload_div" style="margin:0 0 16px 0">
+                <div id="upload_btns" align="center">
+                    <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+                        <option value=""><!--constStr@UploadFile--></option>
+                        <option value="1"><!--constStr@UploadFolder--></option>
+                    </select>
+                    <input id="upload_file" type="file" name="upload_filename" multiple="multiple">
                     <input id="upload_submit" onclick="preup();" value="<!--constStr@Upload-->" type="button">
-                    </div>
+                </div>
                 </div>
 <!--GuestUploadEnd-->
 
@@ -887,7 +891,7 @@
                 td2.innerHTML+='.';
             }
             xhr1.onload = function(e){
-                console.log(xhr1.status+xhr1.responseText);
+                //console.log(xhr1.status+xhr1.responseText);
                 td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
                 if (xhr1.status==409) {
                     // td2.innerHTML='nameAlreadyExists';
@@ -1015,7 +1019,8 @@
                                 } else {
                                     MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||response.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
                                 label.style.color='green';
                                 // uploadbuttonshow();
