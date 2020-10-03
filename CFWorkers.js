@@ -76,7 +76,7 @@ async function fetchAndApply(host, request) {
         while (out_body.includes(replace_path)) out_body = out_body.replace(replace_path, replaced_path);
     } else if (contentType.includes("text/html")) {
         out_body = await response.text();
-        while (out_body.includes(replace_path)) out_body = out_body.replace(replace_path, replaced_path);
+        while (replace_path!='/'&&out_body.includes(replace_path)) out_body = out_body.replace(replace_path, replaced_path);
     } else {
         out_body = await response.body;
     }
