@@ -51,7 +51,7 @@ async function fetchAndApply(host, request) {
 
     let response = null;
     if (!CFproxy) {
-        response = await fetch(request);
+        response = await fetch(f_url, request);
     } else {
         let method = request.method;
         let body = request.body;
@@ -70,7 +70,7 @@ async function fetchAndApply(host, request) {
     let out_headers = new Headers(response.headers);
     if (out_headers.get('Content-Disposition')=='attachment') out_headers.delete('Content-Disposition');
     let out_body = null;
-    let contentType = out_headers.get('content-type');
+    let contentType = out_headers.get('Content-Type');
     if (contentType.includes("application/text")) {
         out_body = await response.text();
         while (out_body.includes(replace_path)) out_body = out_body.replace(replace_path, replaced_path);
