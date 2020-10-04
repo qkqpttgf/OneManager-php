@@ -2,16 +2,20 @@
 # # LoadModule rewrite_module modules/mod_rewrite.so
 # # AllowOverride All
 RewriteEngine On
-# RewriteCond $1 !^(.well-known)
-RewriteRule ^(.*) index.php?/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^(.*) index.php/$1 [L]
 
 ###-----------------------------------
 ### nginx
-# rewrite ^/(?!.well-known)(.*)$ /index.php?/$1 last;
+#
+#    if (!-e $request_filename) {
+#        rewrite  ^(.*)$  /index.php/$1  last;
+#    }
 #
 ### caddy
 # rewrite {
-#     to index.php?/$1
+#     to index.php/$1
 # }
 #
 ### caddy2 Caddyfile
