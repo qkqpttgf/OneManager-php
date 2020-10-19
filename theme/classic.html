@@ -852,6 +852,7 @@
 <!--GuestStart-->
             function getext(str) {
                 strarry=str.split('.');
+                if (strarry.length==1) return '';
                 ext=strarry[strarry.length-1].toLowerCase();
                 var reg = new RegExp(".","g");
                 var a = str.replace(reg,"");
