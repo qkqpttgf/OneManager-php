@@ -8,7 +8,9 @@ Demo: https://herooneindex.herokuapp.com/
 How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
 
-# Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
+# Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数) 
+添加网盘时，SCF可能会反应不过来，不跳转到微软，导致添加失败，请不要删除这个盘，再添加一次相同标签的盘就可以了。  
+## 控制台部署
 Official: https://cloud.tencent.com/product/scf  
 DEMO:  无  
 注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
@@ -20,9 +22,26 @@ How to Install:
 4，在触发管理中可以看到一个 访问路径，访问它，开始安装。  
 
 （重点：勾选集成响应）  
-  
-添加网盘时，SCF可能会反应不过来，不跳转到微软，导致添加失败，请不要删除这个盘，再添加一次相同标签的盘就可以了。  
+ 
+## 通过 Serverless Framework 命令行部署
+DEMO:  无  
+注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
 
+How to Install:  
+1. 安装命令行工具 **Serverless Framework**
+```
+npm install -g serverless
+```
+2. 下载项目模版代码并进入模版目录
+```
+sls init scf-for-onedrive
+cd scf-for-onedrive
+```
+ 注：可以通过 `sls registry scf-for-onedrive` 指令，查看项目的详细信息。
+
+3. 通过 `sls deploy` 完成部署。
+
+4. 部署成功后，通过访问创建的 API 网关 URL，根据指引安装程序并添加 OneDrive 网盘。 
 
 # Deploy to Virtual Private Server (VPS 或空间)  
 DEMO:  无  
