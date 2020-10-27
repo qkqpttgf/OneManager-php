@@ -1143,7 +1143,7 @@ function adminoperate($path)
         if (getConfig('passfile')=='') return message(getconstStr('SetpassfileBfEncrypt'),'',403);
         if ($_GET['encrypt_folder']=='/') $_GET['encrypt_folder']=='';
         $foldername = spurlencode($_GET['encrypt_folder']);
-        $filename = path_format($path1 . '/' . $foldername . '/' . getConfig('passfile'));
+        $filename = path_format($path1 . '/' . $foldername . '/' . urlencode(getConfig('passfile')));
                 //echo $foldername;
         $result = MSAPI('PUT', $filename, $_GET['encrypt_newpass'], $_SERVER['access_token']);
         $path1 = path_format($path1 . '/' . $foldername );
