@@ -652,7 +652,7 @@ function get_siteid($access_token)
     $sharepointSiteAddress = getConfig('sharepointSiteAddress');
     while (substr($sharepointSiteAddress, -1)=='/') $sharepointSiteAddress = substr($sharepointSiteAddress, 0, -1);
     $tmp = splitlast($sharepointSiteAddress, '/');
-    $sharepointname = $tmp[1];
+    $sharepointname = urlencode($tmp[1]);
     $tmp = splitlast($tmp[0], '/');
     $sharepointname = $tmp[1] . '/' . $sharepointname;
     if (getConfig('Drive_ver')=='MS') $url = 'https://graph.microsoft.com/v1.0/sites/root:/'.$sharepointname;
