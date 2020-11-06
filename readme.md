@@ -10,6 +10,7 @@ How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/but
 
 # Deploy to Glitch  
 Official: https://glitch.com/  
+Demo: https://onemanager.glitch.me/  
 
 How to Install: New Project -> Import form Github -> paste "https://github.com/qkqpttgf/OneManager-php", after done, Show -> In a New Window.  
 
