@@ -62,7 +62,7 @@ OneManagerPath=`cd $(dirname $0);pwd -P`
 cd ${OneManagerPath}
 
 git clone ${branch} ${gitsource}
-[ g"$install" == g"1" ] || \mv -b config.php OneManager-php/
+[ g"$install" == g"1" ] || \mv -b .data/config.php OneManager-php/.data/
 \mv -b OneManager-php/* ./
 \mv -b OneManager-php/.[^.]* ./
 rm -rf *~
