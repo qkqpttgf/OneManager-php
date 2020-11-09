@@ -1159,7 +1159,11 @@ function adminoperate($path)
         if ($moveable) {
             $filename = spurlencode($_GET['move_name']);
             $filename = path_format($path1 . '/' . $filename);
-            $foldername = path_format('/'.urldecode($path1).'/'.$_GET['move_folder']);
+            if ($_GET['move_folder'] == '/../') {
+                $foldername = path_format('/' . urldecode($path1) . '/');
+                $foldername = substr($foldername, 0, -1);
+                $foldername = splitlast($foldername, '/')[0];
+            } else $foldername = path_format('/' . urldecode($path1) . '/' . $_GET['move_folder']);
             $data = '{"parentReference":{"path": "/drive/root:'.$foldername.'"}}';
             $result = MSAPI('PATCH', $filename, $data, $_SERVER['access_token']);
             //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
