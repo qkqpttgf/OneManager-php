@@ -66,7 +66,6 @@ git clone ${branch} ${gitsource}
 \mv -b OneManager-php/* ./
 \mv -b OneManager-php/.[^.]* ./
 rm -rf *~
-rm -rf .[^.]*~
+#rm -rf .[^.]*~
 rm -rf OneManager-php
-chmod 666 config.php
-
+chmod 666 .data/config.php
