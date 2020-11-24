@@ -627,10 +627,8 @@ function config_oauth()
     if (getConfig('Drive_ver')=='CN') {
         // CN 21Vianet
         // https://portal.azure.cn
-        //$_SERVER['client_id'] = '04c3ca0b-8d07-4773-85ad-98b037d25631';
-        //$_SERVER['client_secret'] = 'h8@B7kFVOmj0+8HKBWeNTgl@pU/z4yLB'; // expire 20200902
-        $_SERVER['client_id'] = 'b15f63f5-8b72-48b5-af69-8cab7579bff7';
-        $_SERVER['client_secret'] = '0IIuZ1Kcq_YI3NrkZFwsniEo~BoP~8_M22';
+        $_SERVER['client_id'] = '31f3bed5-b9d9-4173-86a4-72c73d278617';
+        $_SERVER['client_secret'] = 'P5-ZNtFK-tT90J.We_-DcsuB8uV7AfjL8Y';
         $_SERVER['oauth_url'] = 'https://login.partner.microsoftonline.cn/common/oauth2/v2.0/';
         $_SERVER['api_url'] = 'https://microsoftgraph.chinacloudapi.cn/v1.0/me/drive/root';
         $_SERVER['scope'] = 'https://microsoftgraph.chinacloudapi.cn/Files.ReadWrite.All offline_access';
