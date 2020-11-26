@@ -184,7 +184,7 @@ function install()
             //if (location.port!="") url += ":" + location.port;
             url += location.pathname;
             if (url.substr(-1)!="/") url += "/";
-            url += ".data/config.php";
+            url += "app.json";
             //alert(url);
             var xhr4 = new XMLHttpRequest();
             xhr4.open("GET", url);
