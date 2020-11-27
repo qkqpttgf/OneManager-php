@@ -588,7 +588,7 @@
             });
         }
     }
-    addVideos(['<!--FileDownUrl-->']);
+    addVideos(['<!--FileEncodeUrl-->']);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
@@ -1075,16 +1075,10 @@
         if (num=='') {
             var str='';
         } else {
-            var str=document.getElementById('file_a'+num).innerText;
-            if (str=='') {
-                str=document.getElementById('file_a'+num).getElementsByTagName("img")[0].alt;
-                if (str=='') {
-                    alert('<!--constStr@GetFileNameFail-->');
-                    operatediv_close(action);
-                    return;
-                }
-            }
-            if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+            var str=decodeURIComponent(document.getElementById('file_a'+num).href);
+            if (str.substr(-1)==' ') str=str.substr(0, str.length-1);
+            if (str.substr(-8)=='?preview') str=str.substr(0, str.length-8);
+            if (str.lastIndexOf('/')>-1) str=str.substr(str.lastIndexOf('/')+1);
         }
         document.getElementById(action + '_div').style.display='';
         document.getElementById(action + '_label').innerText=str;//.replace(/&/,'&amp;');
