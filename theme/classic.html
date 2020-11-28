@@ -1077,6 +1077,7 @@
         } else {
             var str=decodeURIComponent(document.getElementById('file_a'+num).href);
             if (str.substr(-1)==' ') str=str.substr(0, str.length-1);
+            if (str.substr(-1)=='/') str=str.substr(0, str.length-1);
             if (str.substr(-8)=='?preview') str=str.substr(0, str.length-8);
             if (str.lastIndexOf('/')>-1) str=str.substr(str.lastIndexOf('/')+1);
         }
