@@ -131,6 +131,16 @@
     <h1 class="title">
         <a href="<?php echo $_SERVER['base_path']; ?>"><?php echo $_SERVER['sitename']; ?></a>
     </h1>
+    <hr>
+    <h3>
+        <p >
+           <div class="text" style=" text-align:center;line-height:30px">
+               请使用IDM等多线程下载工具获得高速的下载体验！
+               <br>
+               如果下载出错，请关闭IDM等工具对本站点的“自动开始下载”功能！
+           </div>
+        </p>
+    </h3>
 <?php $disktags = explode("|",getConfig('disktag'));
     if (count($disktags)>1) { ?>
     <div class="list-wrapper">
