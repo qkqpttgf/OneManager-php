@@ -1044,6 +1044,10 @@ function get_thumbnails_url($path = '/', $location = 0)
 
 function bigfileupload($path)
 {
+    if (!$_SERVER['admin']) {
+        if (!is_guestup_path($path)) return output('Not_Guest_Upload_Folder', 400);
+        if (strpos($_GET['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
+    }
     $path1 = path_format($_SERVER['list_path'] . path_format($path));
     if (substr($path1,-1)=='/') $path1=substr($path1,0,-1);
     if ($_GET['upbigfilename']!=''&&$_GET['filesize']>0) {
