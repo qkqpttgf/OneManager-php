@@ -419,7 +419,7 @@ function main($path)
                 $files['error']['code'] = 'unknownError';
                 $files['error']['stat'] = 500;
             }
-            return message('<meta http-equiv="refresh" content="5; URL=https://jaar.ga/" /><title>渣ga!</title><body><p>唔知你搵緊咩喎...Error 404!</p></body>', '', $files['error']['stat']);
+            return message('<meta http-equiv="refresh" content="5; URL=https://jaar.ga/" /><title>渣ga!</title><body><p>唔知你想搵咩喎...</p><h5 style="color: #999999;">Error 404</h5></body>', '', $files['error']['stat']);
         }
     }
 }
