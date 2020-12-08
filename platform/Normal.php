@@ -46,8 +46,12 @@ function getConfig($str, $disktag = '')
 {
     global $InnerEnv;
     global $Base64Env;
-    //include 'config.php';
-    $s = file_get_contents('.data/config.php');
+
+    $slash = '/';
+    if (strpos(__DIR__, ':')) $slash = '\\';
+    $projectPath = splitlast(__DIR__, $slash)[0];
+    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $s = file_get_contents($configPath);
     //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
@@ -73,8 +77,11 @@ function setConfig($arr, $disktag = '')
     global $InnerEnv;
     global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    //include 'config.php';
-    $s = file_get_contents('.data/config.php');
+    $slash = '/';
+    if (strpos(__DIR__, ':')) $slash = '\\';
+    $projectPath = splitlast(__DIR__, $slash)[0];
+    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $s = file_get_contents($configPath);
     //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
@@ -115,7 +122,7 @@ function setConfig($arr, $disktag = '')
     //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     $prestr = '<?php $configs = \'' . PHP_EOL;
     $aftstr = PHP_EOL . '\';';
-    $response = file_put_contents('.data/config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
+    $response = file_put_contents($configPath, $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
     if ($response>0) return json_encode( [ 'response' => 'success' ] );
     return json_encode( [ 'message' => 'Failed to write config.', 'code' => 'failed' ] );
 }
@@ -242,17 +249,6 @@ function ConfigWriteable()
     setConfig([ 'tmp' => '' ]);
     if ($tmp == $t) return true;
     if ($r) return true;
-    return false;
-}
-
-function RewriteEngineOn()
-{
-    $http_type = ((isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on') || (isset($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] == 'https')) ? 'https://' : 'http://';
-    $tmpurl = $http_type . $_SERVER['SERVER_NAME'].':'.$_SERVER['SERVER_PORT'];
-    $tmpurl .= path_format($_SERVER['base_path'] . '/.data/config.php');
-    $tmp = curl_request($tmpurl);
-    if ($tmp['stat']==200) return false;
-    if ($tmp['stat']==201) return true; //when install return 201, after installed return 404 or 200;
     return false;
 }
 
