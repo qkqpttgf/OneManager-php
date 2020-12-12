@@ -54,7 +54,7 @@
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
         .operate:hover ul{position:absolute;display:inline-table;}
-        body .active ul{position:absolute;display:inline-table;}
+        body .active ul{position:absolute;display:inline-table;}/*for some mobile browser */
         .operate ul li{padding:7px;list-style:none;display:block;}
         .list-table tr[data-to]:hover .operate ul li a{color:black}
 <!--AdminEnd-->
@@ -930,6 +930,7 @@
         }
         uploadbuttonshow();
     }
+    /*for some mobile browser*/
     function menu_click(e){
         var ee=document.getElementsByClassName("active");
         for(var i=0;i<ee.length;i++){
