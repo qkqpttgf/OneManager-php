@@ -15,6 +15,24 @@ function getpath()
 
 function getGET()
 {
+    //error_log('POST：' . json_encode($_POST));
+    if (!$_POST) {
+        if (!!$HTTP_RAW_POST_DATA) {
+            $tmpdata = $HTTP_RAW_POST_DATA;
+            //error_log('RAW：' . $tmpdata);
+        } else {
+            $tmpdata = file_get_contents('php://input');
+            //error_log('PHPINPUT：' . $tmpdata);
+        }
+        if (!!$tmpdata) {
+            $postbody = explode("&", $tmpdata);
+            foreach ($postbody as $postvalues) {
+                $pos = strpos($postvalues,"=");
+                $_POST[urldecode(substr($postvalues,0,$pos))]=urldecode(substr($postvalues,$pos+1));
+            }
+            //error_log('POSTformPHPINPUT：' . json_encode($_POST));
+        }
+    }
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) {
         $getstr = substr($_SERVER['REQUEST_URI'], $p+1);

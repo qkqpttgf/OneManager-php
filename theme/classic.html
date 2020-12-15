@@ -1112,9 +1112,8 @@
     function submit_operate(str) {
         var num=document.getElementById(str+'_sid').value;
         var xhr = new XMLHttpRequest();
-        xhr.open("GET", '?'+serializeForm(str+'_form'));
-        xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
-        xhr.send(null);
+        xhr.open("POST", '');
+        xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
         xhr.onload = function(e){
             var html;
             if (xhr.status<300) {
@@ -1134,6 +1133,7 @@
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
+        xhr.send(serializeForm(str+'_form'));
         return false;
     }
     function addelement(html) {
