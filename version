@@ -1,7 +1,10 @@
+20201215-1400.28
+fix: hackers can upload files to ANY folder (or create a new folder) in your Onedrive. add language zh-tw. now, on heroku, xhr can post. fix: 2 or more space in file name cause bugs.
+修复：构造代码后可以上传文件到你Onedrive的任意目录（甚至创建新目录）。新增zh-tw语言。xhr的post在heroku会接收了，改回post。修复：文件名有多个空格相连时造成bug。
+
 20201106-1730.27
 Add theme. A code used in CloudFlare Workers. Admin not need password in folder. Add caddy2 rewrite rule. Add new platform Glitch. <font color=red>web hosting and VPS user should backup your config.php, after update, copy it to .data foloder.</font>
 添加主题。添加一段用于CF workers的代码。加密目录管理员不需要密码了。添加caddy2伪静态。新增Glitch平台。<font color=red>虚拟主机与VPS用户请备份config.php，升级后，手动将它覆盖到.data目录。</font>
-
 20200828-1420.26
 nginx rewrite rule exclude .well-known folder, as auto SSL. add web.config to rewrite in IIS. now in windwos can do with \ in path. in aliyun FC & huawei FG API, use my code. CN 21Vianet client_id&secret expire. update description now only show new.
 nginx的伪静态中排除.well-known目录，方便自动SSL。添加IIS的伪静态。与linux不同，处理windows下目录用\分隔。FC、FG中使用自己代码对接平台。<font color=red>世纪互联旧API即将过期失效，升级后世纪互联的盘需要删除重新添加。</font>更新说明只显示部分。
