@@ -12,7 +12,7 @@
     <!--Title-->
 </title>
 <meta name="description" content="A Onemanager-PHP site with Theme-renexmoe">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.5/css/app.css"><meta name="theme-color" content="#fff" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.9/css/app.css"><meta name="theme-color" content="#fff" />
 <!--BackgroundStart-->
 <style>
     body {
@@ -83,12 +83,16 @@
 <!--AdminStart-->
 <li class="mdui-list-item mdui-ripple" href="?setup"><a class="mdui-list-item-icon mdui-icon material-icons"
     href="?setup">account_circle</a><a class="mdui-list-item-content" href="?setup">管理</a></li>
-<li class="mdui-list-item mdui-ripple" onclick='document.cookie=null;window.location.reload();'><i
+<li class="mdui-list-item mdui-ripple" onclick='document.cookie=``;window.location.reload();' id="logout"><i
     class="mdui-icon material-icons mdui-list-item-icon">exit_to_app</i>
 <div class="mdui-list-item-content">退出登陆</div>
 </li>
+<li class="mdui-list-item mdui-ripple" id="checkupdate"><i
+    class="mdui-icon material-icons mdui-list-item-icon">update</i>
+<div class="mdui-list-item-content">检查主题更新</div>
+</li>
+<div class="mdui-divider"></div>
 <!--AdminEnd-->
-    <div class="mdui-divider"></div>
     <li
       class="mdui-list-item mdui-ripple"
       href="javascript:void(0);"
@@ -111,8 +115,6 @@
 <!--MultiDisksStart--><a
   href="<!--MultiDisksUrl-->"
   class="mdui-list-item mdui-ripple"
-  <!--MultiDisksNow--
->
   ><i class="mdui-list-item-icon mdui-icon material-icons">cloud</i>
   <div class="mdui-list-item-content">
     <!--MultiDisksName-->
@@ -148,7 +150,19 @@
                 class="mdui-menu-item-icon mdui-icon material-icons">refresh</i>刷新缓存</a></li>
     <!--AdminEnd-->
 </ul>
-<i id="mouseplace" style="position: absolute;"></i> <!--EncryptedStart-->
+<i id="mouseplace" style="position: absolute;"></i>
+<form action="?admin" method="post">
+    <div class="mdui-dialog" id="login_input" style="display: block; top: 278px; height: 228px;">
+        <div class="mdui-dialog-title">登录</div>
+        <div class="mdui-dialog-content" style="height: 108px;">
+            <div class="mdui-textfield mdui-textfield-floating-label"><i class="mdui-icon material-icons">lock</i><label
+                    class="mdui-textfield-label">密码</label><input class="mdui-textfield-input" name="password1"
+                    type="password"></div>
+        </div>
+        <div class="mdui-dialog-actions"><button class="mdui-btn mdui-ripple" mdui-dialog-close="">取消</button><button
+                class="mdui-btn mdui-ripple" type="submit" value="登录">登录</button></div>
+    </div>
+</form> <!--EncryptedStart-->
 <div class="mdui-col-md-6 mdui-col-offset-md-3"><br>
     <center>
         <div class="mdui-typo-title">这是一个受保护的文件夹，您需要提供访问密码才能查看。</div>
@@ -368,6 +382,6 @@ id="readme-md"><!--ReadmemdContent--></textarea></div>
   { "music":"audiotrack", "video":"ondemand_video", "img":"image",
   "pdf":"picture_as_pdf", "default":"insert_drive_file"}
   <!--IconValuesEnd-->
-  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.5/js/webpack-runtime.379a2fcc01ccf12b5342.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.5/js/app.0a2b4a0f9fd0828393f6.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.9/js/webpack-runtime.3d25d6ccc1fe787c24a5.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v0.9/js/app.f66a4b83748ce5596025.js"></script>
 </html>
