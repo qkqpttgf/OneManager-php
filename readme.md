@@ -104,5 +104,15 @@ If there is 'index.html' file, program will only show the content of 'index.html
 Click 'EditTime' or 'Size', the list will sort by time or size, Click 'File' can resume sort.  
 点击“时间”、“大小”，可以排序显示，点“文件”恢复原样。  
 
+# Functional files 功能性文件  
+### favicon.ico  
+put it in the showing home folder of FIRST disk (maybe not root of onedrive). 放在第一个盘的显示目录（不一定是onedrive根目录）。  
+### index.html  
+show content of index.html as html. 将index.html以静态网页显示出来。  
+### head.md readme.md  
+it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部。  
+### head.omf foot.omf  
+it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
+
 QQ Group: 943919989 (请看完上面的中英双语再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
