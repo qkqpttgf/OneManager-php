@@ -118,6 +118,8 @@ function setConfig($arr, $disktag = '')
             $disktags = array_diff($disktags, [ $v ]);
             $envs[$v] = '';
             $operatedisk = 1;
+        } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
+            if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
             if (in_array($k, $Base64Env)) $envs[$k] = base64y_encode($v);
             else $envs[$k] = $v;
@@ -130,10 +132,16 @@ function setConfig($arr, $disktag = '')
         $envs[$disktag] = $diskconfig;
     }
     if ($operatedisk) {
-        $disktags = array_unique($disktags);
-        foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
-        else $envs['disktag'] = '';
+        if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
+            $envs['disktag'] = str_replace($arr['disktag_rename'], $arr['disktag_newname'], getConfig('disktag'));
+            $envs[$arr['disktag_newname']] = $envs[$arr['disktag_rename']];
+            $envs[$arr['disktag_rename']] = '';
+        } else {
+            $disktags = array_unique($disktags);
+            foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
+            if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
+            else $envs['disktag'] = '';
+        }
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
     ksort($envs);

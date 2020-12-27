@@ -96,6 +96,8 @@ function setConfig($arr, $disktag = '')
             $disktags = array_diff($disktags, [ $v ]);
             $tmp[$v] = '';
             $oparetdisk = 1;
+        } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
+            if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
             if (in_array($k, $Base64Env)) $tmp[$k] = base64y_encode($v);
             else $tmp[$k] = $v;
@@ -107,10 +109,16 @@ function setConfig($arr, $disktag = '')
         $tmp[$disktag] = json_encode($diskconfig);
     }
     if ($oparetdisk) {
-        $disktags = array_unique($disktags);
-        foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-        if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
-        else $tmp['disktag'] = '';
+        if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
+            $tmp['disktag'] = str_replace($arr['disktag_rename'], $arr['disktag_newname'], getConfig('disktag'));
+            $tmp[$arr['disktag_newname']] = $tmp[$arr['disktag_rename']];
+            $tmp[$arr['disktag_rename']] = null;
+        } else {
+            $disktags = array_unique($disktags);
+            foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
+            if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
+            else $tmp['disktag'] = null;
+        }
     }
     foreach ($tmp as $key => $val) if ($val=='') $tmp[$key]=null;
 //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'

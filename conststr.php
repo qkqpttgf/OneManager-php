@@ -311,6 +311,16 @@ $constStr = [
         'ko-kr' => '플랫폼 변수',
         'fa' => 'پیکربندی پلتفرم',
     ],
+    'DragSort' => [
+        'en-us' => 'Drag to Sort Disk',
+        'zh-cn' => '拖拽改变顺序',
+        'zh-tw' => '',
+    ],
+    'SubmitSortdisks' => [
+        'en-us' => 'Submit Sort',
+        'zh-cn' => '确认排序',
+        'zh-tw' => '',
+    ],
     'DelDisk' => [
         'en-us' => 'Del This Disk',
         'zh-cn' => '删除此盘',
@@ -318,6 +328,11 @@ $constStr = [
         'ja' => 'このディスクを削除',
         'ko-kr' => '이 디스크를 삭제',
         'fa' => 'پاک کردن این دیسک',
+    ],
+    'RenameDisk' => [
+        'en-us' => 'Rename Disk Tag',
+        'zh-cn' => '改变标签',
+        'zh-tw' => '修改标签',
     ],
     'AddDisk' => [
         'en-us' => 'Add Onedrive Disk',

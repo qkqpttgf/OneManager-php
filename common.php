@@ -1727,8 +1727,7 @@ function get_refresh_token()
     </form>
 </div>
     <script>
-        function notnull(t)
-        {
+        function notnull(t) {
             if (t.disktag_add.value==\'\') {
                 alert(\''.getconstStr('OnedriveDiskTag').'\');
                 return false;
@@ -1738,7 +1737,7 @@ function get_refresh_token()
                 alert("Do not input ' . $envs . '");
                 return false;
             }
-            var reg = /^[a-zA-Z]([-_a-zA-Z0-9]{1,20})$/;
+            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
             if (!reg.test(t.disktag_add.value)) {
                 alert(\''.getconstStr('TagFormatAlert').'\');
                 return false;
@@ -1776,11 +1775,15 @@ function get_refresh_token()
 function EnvOpt($needUpdate = 0)
 {
     global $constStr;
+    global $CommonEnv;
     global $ShowedCommonEnv;
     global $ShowedInnerEnv;
     global $timezones;
     asort($ShowedCommonEnv);
     asort($ShowedInnerEnv);
+    $envs = '';
+    foreach ($CommonEnv as $env) $envs .= '\'' . $env . '\', ';
+
     $html = '<title>OneManager '.getconstStr('Setup').'</title>';
     if (isset($_POST['updateProgram'])&&$_POST['updateProgram']==getconstStr('updateProgram')) {
         $response = setConfigResponse(OnekeyUpate($_POST['auth'], $_POST['project'], $_POST['branch']));
@@ -1798,8 +1801,25 @@ function EnvOpt($needUpdate = 0)
     if (isset($_POST['submit1'])) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
-            if (in_array($k, $ShowedCommonEnv)||in_array($k, $ShowedInnerEnv)||$k=='disktag_del' || $k=='disktag_add') {
+            if (in_array($k, $ShowedCommonEnv) || in_array($k, $ShowedInnerEnv) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename') {
                 $tmp[$k] = $v;
+            }
+            if ($k=='disktag_newname') {
+                $v = preg_replace('/[^0-9a-zA-Z|_]/i', '', $v);
+                $f = substr($v, 0, 1);
+                if (strlen($v)==1) $v .= '_';
+                if (in_array($v, $CommonEnv)) {
+                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+                } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
+                    return message('Please start with letters');
+                } else {
+                    $tmp[$k] = $v;
+                }
+            }
+            if ($k=='disktag_sort') {
+                $td = implode('|', json_decode($v));
+                if (strlen($td)==strlen(getConfig('disktag'))) $tmp['disktag'] = $td;
+                else return message('Something wrong.');
             }
             if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
         }
@@ -1817,7 +1837,6 @@ function EnvOpt($needUpdate = 0)
             $html = api_error_msg($response);
             $title = 'Error';
         } else {
-                //WaitSCFStat();
             $html .= getconstStr('Success') . '!<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
             $title = getconstStr('Setup');
@@ -1896,18 +1915,102 @@ function EnvOpt($needUpdate = 0)
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
     </form>
 </table><br>';
-    foreach (explode("|",getConfig('disktag')) as $disktag) {
+    $disktags = getConfig('disktag');
+    if ($disktags!='') {
+        $html .= '
+<script src="//cdn.bootcss.com/Sortable/1.8.3/Sortable.js"></script>
+<style>
+    .sortable-ghost {
+        opacity: 0.4;
+        background-color: #1748ce;
+    }
+
+    #sortdisks td {
+        cursor: move;
+    }
+</style>
+<table border=1>
+    <form id="sortdisks_form" action="" method="post" style="margin: 0" onsubmit="return dragsort(this);">
+    <tr id="sortdisks">
+        <input type="hidden" name="disktag_sort" value="">';
+        $num = 0;
+        foreach (explode("|", $disktags) as $disktag) {
+            if ($disktag!='') {
+                $num++;
+                $html .= '
+        <td>' . $disktag . '</td>';
+            }
+        }
+        $html .= '
+    </tr>
+    <tr><td colspan="' . $num . '">' . getconstStr('DragSort') . '<input type="submit" name="submit1" value="' . getconstStr('SubmitSortdisks') . '"></td></tr>
+    </form>
+</table>
+<script>
+    var disks=' . json_encode(explode("|", $disktags)) . ';
+    function change(arr, oldindex, newindex) {
+        //console.log(oldindex + "," + newindex);
+        tmp=arr.splice(oldindex-1, 1);
+        if (oldindex > newindex) {
+            tmp1=JSON.parse(JSON.stringify(arr));
+            tmp1.splice(newindex-1, arr.length-newindex+1);
+            tmp2=JSON.parse(JSON.stringify(arr));
+            tmp2.splice(0, newindex-1);
+        } else {
+            tmp1=JSON.parse(JSON.stringify(arr));
+            tmp1.splice(newindex-1, arr.length-newindex+1);
+            tmp2=JSON.parse(JSON.stringify(arr));
+            tmp2.splice(0, newindex-1);
+        }
+        arr=tmp1.concat(tmp, tmp2);
+        //console.log(arr);
+        return arr;
+    }
+    function dragsort(t) {
+        if (t.disktag_sort.value==\'\') {
+            alert(\'' . getconstStr('DragSort') . '\');
+            return false;
+        }
+        envs = [' . $envs . '];
+        if (envs.indexOf(t.disktag_sort.value)>-1) {
+            alert("Do not input ' . $envs . '");
+            return false;
+        }
+        return true;
+    }
+    Sortable.create(document.getElementById(\'sortdisks\'), {
+        animation: 150,
+        onEnd: function (evt) { //拖拽完毕之后发生该事件
+            //console.log(evt.oldIndex);
+            //console.log(evt.newIndex);
+            if (evt.oldIndex!=evt.newIndex) {
+                disks=change(disks, evt.oldIndex, evt.newIndex);
+                document.getElementById(\'sortdisks_form\').disktag_sort.value=JSON.stringify(disks);
+            }
+        }
+    });
+</script><br>';
+    }
+    foreach (explode("|", $disktags) as $disktag) {
         if ($disktag!='') {
             $html .= '
 <table border=1 width=100%>
-    <form action="" method="post">
         <tr>
-            <td colspan="2">'.$disktag.'：
-                <input type="hidden" name="disktag_del" value="'.$disktag.'">
-                <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
+            <td>
+                <form action="" method="post" style="margin: 0">
+                    <input type="hidden" name="disktag_del" value="'.$disktag.'">
+                    <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
+                </form>
+            </td>
+            <td>
+                <form action="" method="post" style="margin: 0" onsubmit="return renametag(this);">
+                    <input type="hidden" name="disktag_rename" value="'.$disktag.'">
+                    <input type="text" name="disktag_newname" value="'.$disktag.'">
+                    <input type="submit" name="submit1" value="'.getconstStr('RenameDisk').'">
+                </form>
             </td>
         </tr>
-    </form>';
+    ';
             if (getConfig('refresh_token', $disktag)!='') {
                 $html .= '
     <form name="'.$disktag.'" action="" method="post">
@@ -1920,7 +2023,7 @@ function EnvOpt($needUpdate = 0)
         </tr>';
                 }
                 $html .= '
-        <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+        <tr><td></td><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
     </form>';
             } else {
                 $html .= '
@@ -1968,6 +2071,27 @@ function EnvOpt($needUpdate = 0)
     <input type="submit" name="updateProgram" value="'.getconstStr('updateProgram').'">
 </form>
 <script>
+    function renametag(t) {
+        if (t.disktag_newname.value==\'\') {
+            alert(\''.getconstStr('OnedriveDiskTag').'\');
+            return false;
+        }
+        if (t.disktag_newname.value==t.disktag_rename.value) {
+            return false;
+        }
+        envs = [' . $envs . '];
+        if (envs.indexOf(t.disktag_newname.value)>-1) {
+            alert("Do not input ' . $envs . '");
+            return false;
+        }
+        var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
+        if (!reg.test(t.disktag_newname.value)) {
+            alert(\''.getconstStr('TagFormatAlert').'\');
+            return false;
+        }
+        return true;
+    }
+
     function querybranchs()
     {
         var xhr = new XMLHttpRequest();
