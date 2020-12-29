@@ -1915,8 +1915,8 @@ function EnvOpt($needUpdate = 0)
         <tr><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
     </form>
 </table><br>';
-    $disktags = getConfig('disktag');
-    if ($disktags!='') {
+    $disktags = explode('|', getConfig('disktag'));
+    if (count($disktags)>1) {
         $html .= '
 <script src="//cdn.bootcss.com/Sortable/1.8.3/Sortable.js"></script>
 <style>
@@ -1934,7 +1934,7 @@ function EnvOpt($needUpdate = 0)
     <tr id="sortdisks">
         <input type="hidden" name="disktag_sort" value="">';
         $num = 0;
-        foreach (explode("|", $disktags) as $disktag) {
+        foreach ($disktags as $disktag) {
             if ($disktag!='') {
                 $num++;
                 $html .= '
@@ -1947,7 +1947,7 @@ function EnvOpt($needUpdate = 0)
     </form>
 </table>
 <script>
-    var disks=' . json_encode(explode("|", $disktags)) . ';
+    var disks=' . json_encode($disktags) . ';
     function change(arr, oldindex, newindex) {
         //console.log(oldindex + "," + newindex);
         tmp=arr.splice(oldindex-1, 1);
@@ -1991,7 +1991,7 @@ function EnvOpt($needUpdate = 0)
     });
 </script><br>';
     }
-    foreach (explode("|", $disktags) as $disktag) {
+    foreach ($disktags as $disktag) {
         if ($disktag!='') {
             $html .= '
 <table border=1 width=100%>
