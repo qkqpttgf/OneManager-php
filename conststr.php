@@ -127,7 +127,7 @@ $constStr = [
             'Onedrive_ver' => 'Onedrive版本',
         ],
         'zh-tw' => [
-            'admin' => '管理密碼，不添加時不顯示登入頁面且無法登入。',
+            'admin' => '管理密碼，不設定密碼將不顯示登入頁面且無法登入。',
             'adminloginpage' => '如果設定，登入按鈕及頁面隱藏。管理登入的頁面不再是\'?admin\'，而是\'?此設置的值\'。',
             'autoJumpFirstDisk' => '用於多盤，如果設1，將會自動跳到第一個盤。',
             'customScript' => '<script>，在所有頁都會存在,例如放一個http跳轉https',
@@ -314,12 +314,12 @@ $constStr = [
     'DragSort' => [
         'en-us' => 'Drag to Sort Disk',
         'zh-cn' => '拖拽改变顺序',
-        'zh-tw' => '',
+        'zh-tw' => '拖曳改變順序',
     ],
     'SubmitSortdisks' => [
         'en-us' => 'Submit Sort',
         'zh-cn' => '确认排序',
-        'zh-tw' => '',
+        'zh-tw' => '確認排序',
     ],
     'DelDisk' => [
         'en-us' => 'Del This Disk',
@@ -332,12 +332,12 @@ $constStr = [
     'RenameDisk' => [
         'en-us' => 'Rename Disk Tag',
         'zh-cn' => '改变标签',
-        'zh-tw' => '修改标签',
+        'zh-tw' => '修改標籤',
     ],
     'AddDisk' => [
         'en-us' => 'Add Onedrive Disk',
         'zh-cn' => '添加Onedrive盘',
-        'zh-tw' => '添加Onedrive盤',
+        'zh-tw' => '新增Onedrive盤',
         'ja' => 'Onedriveを追加',
         'ko-kr' => 'Onedrive 추가',
         'fa' => 'اضافه کردن دیسک Onedrive',
