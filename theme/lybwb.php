@@ -7,7 +7,7 @@
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1">
     <meta name="keywords" content="<?php echo $n_path;?>,<?php if ($p_path!='') echo $p_path.','; echo $_SERVER['sitename'];?>,OneManager,auth_by_逸笙">
-    <link rel="icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
+    <link rel="icon" href="https://cdn.jsdelivr.net/gh/anderson-ryen/picturebad/Avatar/03af8ec379310a555b550ca0a04543a98326108f.jpg" type="image/x-icon" />
     <link rel="shortcut icon" href="<?php echo $_SERVER['base_disk_path'];?>favicon.ico" type="image/x-icon" />
     <style type="text/css">
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#000000;background-image:url("<?php echo getConfig('background')?getConfig('background'):($_SERVER['base_disk_path'].'background.jpg'); ?>")!important;
