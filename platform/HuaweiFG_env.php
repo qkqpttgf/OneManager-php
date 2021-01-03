@@ -96,7 +96,7 @@ function setConfig($arr, $disktag = '')
     $diskconfig = json_decode($contextUserData->getUserData($disktag), true);
     $tmp = [];
     $indisk = 0;
-    $oparetdisk = 0;
+    $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (in_array($k, $InnerEnv)) {
             if (in_array($k, $Base64Env)) $diskconfig[$k] = base64y_encode($v);
@@ -104,11 +104,11 @@ function setConfig($arr, $disktag = '')
             $indisk = 1;
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
-            $oparetdisk = 1;
+            $operatedisk = 1;
         } elseif ($k=='disktag_del') {
             $disktags = array_diff($disktags, [ $v ]);
             $tmp[$v] = '';
-            $oparetdisk = 1;
+            $operatedisk = 1;
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
@@ -121,7 +121,7 @@ function setConfig($arr, $disktag = '')
         ksort($diskconfig);
         $tmp[$disktag] = json_encode($diskconfig);
     }
-    if ($oparetdisk) {
+    if ($operatedisk) {
         if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
             $tmp['disktag'] = str_replace($arr['disktag_rename'], $arr['disktag_newname'], getConfig('disktag'));
             $tmp[$arr['disktag_newname']] = getConfig($arr['disktag_rename']);
