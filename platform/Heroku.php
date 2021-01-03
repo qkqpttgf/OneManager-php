@@ -111,7 +111,7 @@ function setConfig($arr, $disktag = '')
     if ($oparetdisk) {
         if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
             $tmp['disktag'] = str_replace($arr['disktag_rename'], $arr['disktag_newname'], getConfig('disktag'));
-            $tmp[$arr['disktag_newname']] = $tmp[$arr['disktag_rename']];
+            $tmp[$arr['disktag_newname']] = getConfig($arr['disktag_rename']);
             $tmp[$arr['disktag_rename']] = null;
         } else {
             $disktags = array_unique($disktags);
