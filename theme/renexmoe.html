@@ -1,34 +1,42 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com">
-<link rel="preconnect" href="https://renexmoe.vercel.app">
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" />
+<link rel="preconnect" href="https://renexmoe.vercel.app" />
 <meta charset="utf-8" />
-<link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
-<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
-<title>
-    <!--Title-->
-</title>
-<meta name="description" content="A Onemanager-PHP site with Theme-renexmoe">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.1/css/app.css"><meta name="theme-color" content="#fff" />
+<link
+  rel="shortcut icon"
+  href="<!--base_path-->favicon.ico"
+  type="image/x-icon"
+/>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"
+/>
+<title><!--Title--></title>
+<meta name="description" content="A Onemanager-PHP site with Theme-renexmoe" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.2/css/app.css"><meta name="theme-color" content="#fff" />
 <!--BackgroundStart-->
 <style>
-    body {
-        --bg: url("<!--BackgroundUrl-->");
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-attachment: fixed;
-        background-image: var(--bg)
-    }
+  body {
+    --bg: url("<!--BackgroundUrl-->");
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    background-image: var(--bg);
+  }
 
-    .mdui-shadow-3 {
-        background: rgba(255, 255, 255, 0.5)
-    }
+  .mdui-shadow-3 {
+    background: rgba(255, 255, 255, 0.5);
+  }
 </style>
-<script>window.disableddarkmode = true;</script>
+<script>
+  window.disableddarkmode = true;
+</script>
 <!--BackgroundEnd-->
+
   </head>
   <body
     class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-loaded mdui-theme-accent-pink"
@@ -76,23 +84,36 @@
     <div class="mdui-drawer mdui-drawer-close" id="main-drawer">
   <div class="mdui-list" mdui-collapse="{accordion: true}">
     <!--LoginStart-->
-<li class="mdui-list-item mdui-ripple" href="javascript:void(0);" mdui-dialog="{target: '#login_input'}"><a
-    class="mdui-list-item-icon mdui-icon material-icons">account_circle</a><a
-    class="mdui-list-item-content">登录</a></li>
+<li
+  class="mdui-list-item mdui-ripple"
+  href="javascript:void(0);"
+  mdui-dialog="{target: '#login_input'}"
+>
+  <a class="mdui-list-item-icon mdui-icon material-icons">account_circle</a
+  ><a class="mdui-list-item-content">登录</a>
+</li>
 <!--LoginEnd-->
 <!--AdminStart-->
-<li class="mdui-list-item mdui-ripple" href="?setup"><a class="mdui-list-item-icon mdui-icon material-icons"
-    href="?setup">account_circle</a><a class="mdui-list-item-content" href="?setup">管理</a></li>
-<li class="mdui-list-item mdui-ripple" onclick='document.cookie=``;window.location.reload();' id="logout"><i
-    class="mdui-icon material-icons mdui-list-item-icon">exit_to_app</i>
-<div class="mdui-list-item-content">退出登陆</div>
+<li class="mdui-list-item mdui-ripple" href="?setup">
+  <a class="mdui-list-item-icon mdui-icon material-icons" href="?setup"
+    >account_circle</a
+  ><a class="mdui-list-item-content" href="?setup">管理</a>
 </li>
-<li class="mdui-list-item mdui-ripple" id="checkupdate"><i
-    class="mdui-icon material-icons mdui-list-item-icon">update</i>
-<div class="mdui-list-item-content">检查主题更新</div>
+<li
+  class="mdui-list-item mdui-ripple"
+  onclick="document.cookie=``;window.location.reload();"
+  id="logout"
+>
+  <i class="mdui-icon material-icons mdui-list-item-icon">exit_to_app</i>
+  <div class="mdui-list-item-content">退出登陆</div>
+</li>
+<li class="mdui-list-item mdui-ripple" id="checkupdate">
+  <i class="mdui-icon material-icons mdui-list-item-icon">update</i>
+  <div class="mdui-list-item-content">检查主题更新</div>
 </li>
 <div class="mdui-divider"></div>
 <!--AdminEnd-->
+
     <li
       class="mdui-list-item mdui-ripple"
       href="javascript:void(0);"
@@ -143,53 +164,86 @@
 
     <div class="mdui-container">
   <ul class="mdui-menu" id="admin-menu">
-    <li class="mdui-menu-item"><a href="javascript:;" class="mdui-ripple back"><i
-                class="mdui-menu-item-icon mdui-icon material-icons">arrow_back</i>返回上一页</a></li>
-    <!--AdminStart-->
-    <li class="mdui-menu-item"><a href="javascript:;" class="mdui-ripple refresh"><i
-                class="mdui-menu-item-icon mdui-icon material-icons">refresh</i>刷新缓存</a></li>
-    <!--AdminEnd-->
+  <li class="mdui-menu-item">
+    <a href="javascript:;" class="mdui-ripple back"
+      ><i class="mdui-menu-item-icon mdui-icon material-icons">arrow_back</i
+      >返回上一页</a
+    >
+  </li>
+  <!--AdminStart-->
+  <li class="mdui-menu-item">
+    <a href="javascript:;" class="mdui-ripple refresh"
+      ><i class="mdui-menu-item-icon mdui-icon material-icons">refresh</i
+      >刷新缓存</a
+    >
+  </li>
+  <!--AdminEnd-->
 </ul>
-<i id="mouseplace" style="position: absolute;"></i>
+<i id="mouseplace" style="position: absolute"></i>
 <form action="?admin" method="post">
-    <div class="mdui-dialog" id="login_input">
-        <div class="mdui-dialog-title">登录</div>
-        <div class="mdui-dialog-content" style="height: 108px;">
-            <div class="mdui-textfield mdui-textfield-floating-label"><i class="mdui-icon material-icons">lock</i><label
-                    class="mdui-textfield-label">密码</label><input class="mdui-textfield-input" name="password1"
-                    type="password"></div>
-        </div>
-        <div class="mdui-dialog-actions"><button class="mdui-btn mdui-ripple" mdui-dialog-close="">取消</button><button
-                class="mdui-btn mdui-ripple" type="submit" value="登录">登录</button></div>
+  <div class="mdui-dialog" id="login_input">
+    <div class="mdui-dialog-title">登录</div>
+    <div class="mdui-dialog-content" style="height: 108px">
+      <div class="mdui-textfield mdui-textfield-floating-label">
+        <i class="mdui-icon material-icons">lock</i
+        ><label class="mdui-textfield-label">密码</label
+        ><input class="mdui-textfield-input" name="password1" type="new-password" />
+      </div>
     </div>
-</form> <!--EncryptedStart-->
-<div class="mdui-col-md-6 mdui-col-offset-md-3"><br>
-    <center>
-        <div class="mdui-typo-title">这是一个受保护的文件夹，您需要提供访问密码才能查看。</div>
-    </center>
-    <form action="" method="post">
-        <div class="mdui-textfield mdui-textfield-floating-label"><i
-                class="mdui-icon material-icons">https</i><label class="mdui-textfield-label">
-                <!--constStr@InputPassword--></label><input name="password1" class="mdui-textfield-input"
-                type="password" /></div><br><button type="submit"
-            class="mdui-center mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme"><i
-                class="mdui-icon material-icons">fingerprint</i>
-            <!--constStr@Submit--></button>
-    </form>
+    <div class="mdui-dialog-actions">
+      <button class="mdui-btn mdui-ripple" mdui-dialog-close="">取消</button
+      ><button class="mdui-btn mdui-ripple" type="submit" value="登录">
+        登录
+      </button>
+    </div>
+  </div>
+</form>
+ <!--EncryptedStart-->
+<div class="mdui-col-md-6 mdui-col-offset-md-3">
+  <br />
+  <center>
+    <div class="mdui-typo-title">
+      这是一个受保护的文件夹，您需要提供访问密码才能查看。
+    </div>
+  </center>
+  <form action="" method="post">
+    <div class="mdui-textfield mdui-textfield-floating-label">
+      <i class="mdui-icon material-icons">https</i
+      ><label class="mdui-textfield-label"> <!--constStr@InputPassword--></label
+      ><input name="password1" class="mdui-textfield-input" type="password" />
+    </div>
+    <br /><button
+      type="submit"
+      class="mdui-center mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme"
+    >
+      <i class="mdui-icon material-icons">fingerprint</i>
+      <!--constStr@Submit-->
+    </button>
+  </form>
 </div>
 <!--EncryptedEnd-->
+
   <!--IsFolderStart-->
 <!--HeadomfStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-    <!--HeadomfContent-->
+<div class="mdui-typo mdui-shadow-3" style="padding: 20px; margin: 20px 0">
+  <!--HeadomfContent-->
 </div>
 <!--HeadomfEnd-->
 <!--HeadmdStart-->
-<div class="mdui-chip mdui-ripple mdui-hidden-xs"><span class="mdui-chip-icon"><i
-            class="mdui-icon material-icons">face</i></span><span class="mdui-chip-title">HEAD.md</span></div>
-<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0" id="head"><textarea
-        id="head-md"><!--HeadmdContent--></textarea></div>
+<div class="mdui-chip mdui-ripple mdui-hidden-xs">
+  <span class="mdui-chip-icon"
+    ><i class="mdui-icon material-icons">face</i></span
+  ><span class="mdui-chip-title">HEAD.md</span>
+</div>
+<div
+  class="mdui-typo mdui-shadow-3 markdown"
+  style="padding: 20px; margin: 20px 0"
+  id="head"
+>
+<pre><code id="head-md"><!--HeadmdContent--></code></pre>
+</div>
 <!--HeadmdEnd-->
+
 <div
   class="mdui-row mdui-shadow-3"
   style="padding: 5px; margin: 20px 0; border-radius: 8px"
@@ -306,24 +360,32 @@
   </ul>
 </div>
 <!--ReadmemdStart-->
-<div class="mdui-chip mdui-ripple mdui-hidden-xs"><span class="mdui-chip-icon"><i
-    class="mdui-icon material-icons">face</i></span><span class="mdui-chip-title">README.md</span></div>
-<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0" id="readme"><textarea
-id="readme-md"><!--ReadmemdContent--></textarea></div>
+<div class="mdui-chip mdui-ripple mdui-hidden-xs">
+  <span class="mdui-chip-icon"
+    ><i class="mdui-icon material-icons">face</i></span
+  ><span class="mdui-chip-title">README.md</span>
+</div>
+<div
+  class="mdui-typo mdui-shadow-3 markdown"
+  style="padding: 20px; margin: 20px 0"
+  id="readme"
+>
+  <pre><code id="readme-md"><!--ReadmemdContent--></code></pre>
+</div>
 <!--ReadmemdEnd-->
 <!--FootomfStart-->
-<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
-<!--FootomfContent-->
+<div class="mdui-typo mdui-shadow-3" style="padding: 20px; margin: 20px 0">
+  <!--FootomfContent-->
 </div>
 <!--FootomfEnd-->
+
 <!--IsFolderEnd-->
  <!--IsFileStart-->
 <div id="file">
-    <!--IsimgFileStart-->
+  <!--IsimgFileStart-->
 <img class="mdui-img-fluid mdui-center mdui-m-t-5" src="<!--FileDownUrl-->" />
 <!--IsimgFileEnd-->
-
-    <!--IsmusicFileStart-->
+ <!--IsmusicFileStart-->
 <audio
   class="mdui-center"
   src="<!--FileDownUrl-->"
@@ -333,7 +395,7 @@ id="readme-md"><!--ReadmemdContent--></textarea></div>
 ></audio>
 <!--IsmusicFileEnd-->
 
-    <!--IsvideoFileStart-->
+  <!--IsvideoFileStart-->
 <video class="mdui-video-fluid" controls style="margin-top: 20px">
   <source src="<!--FileDownUrl-->" />
   <p>
@@ -342,39 +404,56 @@ id="readme-md"><!--ReadmemdContent--></textarea></div>
   </p>
 </video>
 <!--IsvideoFileEnd-->
-
-    <!--IsofficeFileStart-->
-<iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->"
-    style="width: 100%;height: 800px" frameborder="0"></iframe>
+ <!--IsofficeFileStart-->
+<iframe
+  id="office-a"
+  src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->"
+  style="width: 100%; height: 800px"
+  frameborder="0"
+></iframe>
 <!--IsofficeFileEnd-->
-    <!--IspdfFileStart-->
-<pre id="editor"
-    style="white-space: pre-wrap;font-family: JetBrains Mono,Fira Code,Sarasa Mono SC,Cascadia Code,Menlo,Consolas,monaco,monospace;">
-    PDF暂不支持 懂？
-</pre>
+
+  <!--IspdfFileStart-->
+<embed src="<!--FileEncodeReplaceUrl-->" type="application/pdf">
 <!--IspdfFileEnd-->
-    <!--IstxtFileStart-->
+ <!--IstxtFileStart-->
 <pre
   id="editor"
   style="
     white-space: pre-wrap;
     font-family: JetBrains Mono, Fira Code, Sarasa Mono SC, Cascadia Code, Menlo,
-      Consolas, monaco, monospace;
+      Consolas, monaco, Noto Sans SC;
   "
-><!--TxtContent--></pre>
+><code id="code"><!--TxtContent--></code></pre>
+<script>
+  document.querySelector("#admin-menu").innerHTML +=
+    '<li class="mdui-menu-item"><a href="javascript:void(0);"class="mdui-ripple highlight"><i class="mdui-menu-item-icon mdui-icon material-icons">style</i>markdown解析</a></li>';
+  document.querySelector(
+    ".mdui-toolbar"
+  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up highlight" mdui-tooltip="{content: 'markdown解析'}"><i class="mdui-icon material-icons">style</i></a>`;
+</script>
+
 <!--IstxtFileEnd-->
 
-    <!--IsOtherFileStart-->
-    <!--constStr@FileNotSupport-->
-    <!--IsOtherFileEnd-->
-</div><a href="<!--FileEncodeReplaceUrl-->" target="_blank"
-    class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i
-        class="mdui-icon material-icons">file_download</i></a>
+  <!--IsOtherFileStart-->
+  <!--constStr@FileNotSupport-->
+  <!--IsOtherFileEnd-->
+</div>
+<a
+  href="<!--FileEncodeReplaceUrl-->"
+  target="_blank"
+  class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"
+  ><i class="mdui-icon material-icons">file_download</i></a
+>
 <script>
-    document.querySelector("#admin-menu").innerHTML += '<li class="mdui-menu-item"><a href="javascript:void(0);"class="mdui-ripple downloadurl"><i class="mdui-menu-item-icon mdui-icon material-icons">cloud_download</i>下载链接</a></li>';
-    document.querySelector('.mdui-toolbar').innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up downloadurl" mdui-tooltip="{content: '下载链接'}"><i class="mdui-icon material-icons">cloud_download</i></a>`;
+  document.querySelector("#admin-menu").innerHTML +=
+    '<li class="mdui-menu-item"><a href="javascript:void(0);"class="mdui-ripple downloadurl"><i class="mdui-menu-item-icon mdui-icon material-icons">cloud_download</i>下载链接</a></li>';
+  document.querySelector(
+    ".mdui-toolbar"
+  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up downloadurl" mdui-tooltip="{content: '下载链接'}"><i class="mdui-icon material-icons">cloud_download</i></a>`;
 </script>
 <!--IsFileEnd-->
+
 </div>
 
   </body>
@@ -382,6 +461,6 @@ id="readme-md"><!--ReadmemdContent--></textarea></div>
   { "music":"audiotrack", "video":"ondemand_video", "img":"image",
   "pdf":"picture_as_pdf", "default":"insert_drive_file"}
   <!--IconValuesEnd-->
-  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.1/js/webpack-runtime.6bb412dc51f236accd78.js"></script>
-    <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.1/js/app.45e98131c254c70dca7c.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.2/js/webpack-runtime.2c4e79a563c6e0c1c74f.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.2/js/app.7a662c514027ed87a34e.js"></script>
 </html>
