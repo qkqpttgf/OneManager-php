@@ -547,7 +547,7 @@ function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKe
     $headers['X-TC-Timestamp'] = $timestamp;
     $headers['X-TC-Version'] = $version;
     $headers['X-TC-Region'] = $region;
-    return curl_request('https://'.$host, $payload, $headers)['body'];
+    return curl('POST', 'https://'.$host, $payload, $headers)['body'];
 }
 
 function api_error($response)
