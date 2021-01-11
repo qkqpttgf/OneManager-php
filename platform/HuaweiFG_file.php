@@ -348,7 +348,7 @@ function getfunctioncode($HW_urn, $HW_key, $HW_secret)
 ' . '/' . $bucket . '/' . $path;
 
     $signature = base64_encode(hash_hmac('sha1', $StringToSign, $HW_secret, true));
-    $response = curl_request($url, false, [ 'Authorization' => 'OBS ' . $HW_key . ':' . $signature, 'x-obs-date' => $date, 'Content-Type' => '' ]);
+    $response = curl('GET', $url, false, [ 'Authorization' => 'OBS ' . $HW_key . ':' . $signature, 'x-obs-date' => $date, 'Content-Type' => '' ]);
     //if ($response['stat']==200) return $response['body'];
     if ($response['stat']==0) return json_encode( [ 'error_code' => 'Network', 'error_msg' => 'Network error in getting code.' ] );
     else return $response['body'];
