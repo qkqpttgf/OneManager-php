@@ -1415,7 +1415,7 @@ function EnvOpt($needUpdate = 0)
     return message($html, getconstStr('Setup'));
 }
 
-function render_list($path = '', $files = '')
+function render_list($path = '', $files = [])
 {
     global $exts;
     global $constStr;
