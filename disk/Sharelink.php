@@ -7,9 +7,7 @@ class Sharelink extends Onedrive {
         $this->disktag = $tag;
         $this->redirect_uri = 'https://scfonedrive.github.io';
         $this->api_url = getConfig('shareapiurl', $tag);
-
-        $this->access_token = $this->get_access_token(1);
-
+        $res = $this->get_access_token(1);
         //$this->ext_api_url = '/me/drive/root';
         $this->DownurlStrName = '@content.downloadUrl';
     }
@@ -55,6 +53,6 @@ class Sharelink extends Onedrive {
             //if (getConfig('sharecookie', $this->disktag)!=$this->sharecookie) $tmp1['sharecookie'] = $this->sharecookie;
             if (!!$tmp1) setConfig($tmp1);
         }
-        return $this->access_token;
+        return true;
     }
 }
