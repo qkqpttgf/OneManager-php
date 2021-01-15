@@ -260,12 +260,7 @@ function main($path)
     // Show disks in root
     if ($files['showname'] == 'root') return render_list($path, $files);
 
-    $disktype = getConfig('Driver', $_SERVER['disktag']);
-    if ($disktype=='') return render_list();
-
-    if (!class_exists($disktype)) require 'disk' . $slash . $disktype . '.php';
-    $drive = new $disktype($_SERVER['disktag']);
-    if (!driveisfine($_SERVER['disktag'])) return render_list();
+    if (!driveisfine($_SERVER['disktag'], $drive)) return render_list();
 
     // Operate
     if ($_SERVER['ajax']) {
@@ -399,7 +394,7 @@ function get_content($path)
     return $file;
 }
 
-function driveisfine($tag)
+function driveisfine($tag, &$drive = null)
 {
     global $slash;
     $disktype = getConfig('Driver', $tag);
