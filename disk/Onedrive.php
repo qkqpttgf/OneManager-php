@@ -392,7 +392,7 @@ class Onedrive {
 
             $tmp = null;
             if ($_POST['DriveType']=='Onedrive') {
-                $api = $this->api_url . '/me';
+                /*$api = $this->api_url . '/me';
                 $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ], 1);
                 if ($arr['stat']==200) {
                     $userid = json_decode($arr['body'], true)['id'];
@@ -405,7 +405,8 @@ class Onedrive {
                     $api = $this->api_url . '/me/drive';
                 } else {
                     return message($arr['stat'] . $arr['body'], 'Get User ID', $arr['stat']);
-                }
+                }*/
+                $tmp = null;
             } elseif ($_POST['DriveType']=='Custom') {
                 // sitename计算siteid
                 $tmp1 = $this->get_siteid($_POST['sharepointSite']);
@@ -416,17 +417,12 @@ class Onedrive {
                 //if ($arr['stat']!=200) return message($arr['stat'] . $arr['body'], 'Get Sharepoint Drive ID ' . $_POST['DriveType'], $arr['stat']);
                 $tmp['siteid'] = $siteid;
                 $tmp['sharepointSite'] = $_POST['sharepointSite'];
-                //$tmp['DriveId'] = json_decode($arr['body'], true)['id'];
                 if (get_class($this)=='Onedrive') $tmp['Driver'] = 'Sharepoint';
                 elseif (get_class($this)=='OnedriveCN') $tmp['Driver'] = 'SharepointCN';
             } else {
                 // 直接是siteid
-                //$api = $this->api_url . '/sites/' . $_POST['DriveType'] . '/drive/';
-                //$arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ], 1);
-                //if ($arr['stat']!=200) return message($arr['stat'] . $arr['body'], 'Get Sharepoint Drive ID ' . $_POST['DriveType'], $arr['stat']);
                 $tmp['siteid'] = $_POST['DriveType'];
                 $tmp['sharepointSite'] = $_POST['sharepointSiteUrl'];
-                //$tmp['DriveId'] = json_decode($arr['body'], true)['id'];
                 if (get_class($this)=='Onedrive') $tmp['Driver'] = 'Sharepoint';
                 elseif (get_class($this)=='OnedriveCN') $tmp['Driver'] = 'SharepointCN';
             }
