@@ -249,7 +249,7 @@
                             </li>
 <!--AdminEnd-->
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/" fileid="<!--FileId-->"><!--FileEncodeReplaceName--></a>
                         </td>
                         <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
                         <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
@@ -269,7 +269,7 @@
                             </li>
 <!--AdminEnd-->
                             <ion-icon name="<!--IconValue-->"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" target=_blank><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" fileid="<!--FileId-->" target=_blank><!--FileEncodeReplaceName--></a>
                             <a class="download" href="<!--FileEncodeReplaceUrl-->"><ion-icon name="download"></ion-icon></a>
                         </td>
                         <td class="updated_at" id="file_time<!--filenum-->"><!--lastModifiedDateTime--></td>
@@ -357,6 +357,7 @@
                 <label id="rename_label"></label><br><br><a onclick="operatediv_close('rename')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="rename_form" onsubmit="return submit_operate('rename');">
                 <input id="rename_sid" name="rename_sid" type="hidden" value="">
+                <input id="rename_fileid" name="rename_fileid" type="hidden" value="">
                 <input id="rename_hidden" name="rename_oldname" type="hidden" value="">
                 <input id="rename_input" name="rename_newname" type="text" value="">
                 <input name="operate_action" type="submit" value="<!--constStr@Rename-->">
@@ -370,6 +371,7 @@
                 <form id="delete_form" onsubmit="return submit_operate('delete');">
                 <label id="delete_input"><!--constStr@Delete-->?</label>
                 <input id="delete_sid" name="delete_sid" type="hidden" value="">
+                <input id="delete_fileid" name="delete_fileid" type="hidden" value="">
                 <input id="delete_hidden" name="delete_name" type="hidden" value="">
                 <input name="operate_action" type="submit" value="<!--constStr@Submit-->">
                 </form>
@@ -380,6 +382,7 @@
                 <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
+                <input id="encrypt_fileid" name="encrypt_fileid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
                 <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
                 <!--EncryptBtnStart--><input name="operate_action" type="submit" value="<!--constStr@Encrypt-->"><!--EncryptBtnEnd--><!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
@@ -391,6 +394,7 @@
                 <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="copy_form" onsubmit="return submit_operate('copy');">
                 <input id="copy_sid" name="copy_sid" type="hidden" value="">
+                <input id="copy_fileid" name="copy_fileid" type="hidden" value="">
                 <input id="copy_hidden" name="copy_name" type="hidden" value="">
                 <input id="copy_input" name="copy_input" type="hidden" value="">
                 <input name="operate_action" type="submit" value="<!--constStr@Copy-->">
@@ -402,6 +406,7 @@
                 <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="move_form" onsubmit="return submit_operate('move');">
                 <input id="move_sid" name="move_sid" type="hidden" value="">
+                <input id="move_fileid" name="move_fileid" type="hidden" value="">
                 <input id="move_hidden" name="move_name" type="hidden" value="">
                 <select id="move_input" name="move_folder">
 <!--MoveRootStart-->
@@ -420,6 +425,7 @@
                 <a onclick="operatediv_close('create')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="create_form" onsubmit="return submit_operate('create');">
                     <input id="create_sid" name="create_sid" type="hidden" value="">
+                    <input id="create_fileid" name="create_fileid" type="hidden" value="">
                     <input id="create_hidden" type="hidden" value="">
                     <table>
                         <tr>
@@ -472,6 +478,7 @@
 <!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--AliyundriveUploadJsStart--><script src="//cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -485,27 +492,7 @@
         location.href = location.href;
     }
 <!--ListStart-->
-    /*var root = '<!--base_disk_path-->';
-    function path_format(path) {
-        path = '/' + path + '/';
-        while (path.indexOf('//') !== -1) {
-            path = path.replace('//', '/')
-        }
-        return path
-    }
-    document.querySelectorAll('.table-header').forEach(function (e) {
-        var path = e.innerText;
-        if (path.substr(path.length-1)=='/') path = path.substr(0, path.length-1);
-        var paths = path.split('/');
-        e.innerHTML = '/ ';
-        if (paths <= 2) return;
-        for (var i = 1; i < paths.length - 1; i++) {
-            var to = path_format(root + paths.slice(0, i + 1).join('/'));
-            e.innerHTML += '<a href="' + to + '">' + paths[i] + '</a> / '
-        }
-        e.innerHTML += paths[paths.length - 1];
-        e.innerHTML = e.innerHTML.replace(/\s\/\s$/, '')
-    });*/
+
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
@@ -796,6 +783,24 @@
         alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
     }
 <!--UploadJsStart-->
+    function size_format(num) {
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' B';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' KB';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' MB';
+        }
+        return num.toFixed(2) + ' GB';
+    }
     function uploadbuttonhide() {
         document.getElementById('upload_btns').style.display='none';
         /*document.getElementById('upload_submit').disabled='disabled';
@@ -810,6 +815,8 @@
         document.getElementById('upload_submit').style.display='';
         document.getElementById('upload_file').style.display='';*/
     }
+<!--UploadJsEnd-->
+<!--OnedriveUploadJsStart-->
     function preup() {
         uploadbuttonhide();
         var files=document.getElementById('upload_file').files;
@@ -849,6 +856,7 @@
                 return;
             }
             upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            var filemd5='';
 <!--GuestStart-->
             function getext(str) {
                 strarry=str.split('.');
@@ -880,13 +888,13 @@
             if (asize < file.size) {
                 readblob(asize);
             } else {
-                var filemd5 = spark.end();
+                filemd5 = spark.end();
                 td2.innerHTML='md5: '+filemd5;
                 upbigfilename = filemd5+ext;
 <!--GuestEnd-->
             td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+            xhr1.open("POST", '?action=upbigfile');
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.onprogress = function(e){
                 td2.innerHTML+='.';
@@ -921,7 +929,7 @@
                     getuplink(i);
                 }
             }
-            xhr1.send(null);
+            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
 <!--GuestStart-->
             }
         }
@@ -929,24 +937,7 @@
         }
         uploadbuttonshow();
     }
-    function size_format(num) {
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' B';
-        }
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' KB';
-        }
-        if (num>1024) {
-            num=num/1024;
-        } else {
-            return num.toFixed(2) + ' MB';
-        }
-        return num.toFixed(2) + ' GB';
-    }
+
     function binupfile(file,url,tdnum,filename){
         var label=document.getElementById('upfile_td2_'+tdnum);
         var reader = new FileReader();
@@ -1052,7 +1043,193 @@
             }
         }
     }
-<!--UploadJsEnd-->
+<!--OnedriveUploadJsEnd-->
+<!--AliyundriveUploadJsStart-->
+    function preup() {
+        uploadbuttonhide();
+        var files=document.getElementById('upload_file').files;
+	    if (files.length<1) {
+            uploadbuttonshow();
+            return;
+        };
+        var table1=document.createElement('table');
+        document.getElementById('upload_div').appendChild(table1);
+        table1.setAttribute('class','list-table');
+        var timea=new Date().getTime();
+        var i=0;
+        getuplink(i);
+        function getuplink(i, r=0) {
+            var file=files[i];
+            var td1;
+            var td2;
+            if (r==0) {
+                var tr1=document.createElement('tr');
+                table1.appendChild(tr1);
+                tr1.setAttribute('data-to',1);
+                td1=document.createElement('td');
+                tr1.appendChild(td1);
+                td1.setAttribute('style','width:30%;word-break:break-word;');
+                td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
+                td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
+                td2=document.createElement('td');
+                tr1.appendChild(td2);
+                td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
+            }
+            var tdnum = timea+'_'+i;
+            td1=document.getElementById('upfile_td1_'+tdnum);
+            td2=document.getElementById('upfile_td2_'+tdnum);
+            if (file.size>100*1024*1024*1024) {
+                td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
+                uploadbuttonshow();
+                return;
+            }
+            upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            td2.innerHTML='计算SHA1 ...';
+            var reader = new FileReader();
+            reader.readAsArrayBuffer(file);
+            reader.onload = function(e){
+                var filesha1 = sha1(this.result);
+                td2.innerHTML='<!--constStr@GetUploadLink--> ...';
+                var xhr1 = new XMLHttpRequest();
+                xhr1.open("POST", '?action=upbigfile');
+                xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
+                xhr1.onload = function(e){
+                    //console.log(xhr1.status+xhr1.responseText);
+                    td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                    if (xhr1.status==201) {
+                        if (xhr1.responseText=='') {
+                            getuplink(i,1);
+                            return;
+                        }
+                        var html=JSON.parse(xhr1.responseText);
+                        //console.log(html);
+                        if (!html['part_info_list']) {
+                            if (html.name!='') {
+                                if (html.exist==true) td2.innerHTML=html.name+' 文件名已有';
+                                else if (html.rapid_upload==true) td2.innerHTML=html.name+' 秒传';
+                                else td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                                td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+html.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+html.name+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                            } else {
+                                td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                            }
+                        } else {
+                            td2.innerHTML='<!--constStr@UploadStart--> ...';
+                            console.log(html['part_info_list'][0]['upload_url']);
+                            binupfile(file,html['part_info_list'][0]['upload_url'],timea+'_'+i, upbigfilename, filesha1,html['file_id'],html['upload_id']);
+                        }
+                    }
+                    if (i<files.length-1) {
+                        i++;
+                        getuplink(i);
+                    }
+                }
+                xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1);
+            }
+        }
+        uploadbuttonshow();
+    }
+    function binupfile(file,url,tdnum,filename,filesha1,fileid,uploadid){
+        // xhr.getResponseHeader
+        var label=document.getElementById('upfile_td2_'+tdnum);
+        var reader = new FileReader();
+        var StartStr='';
+        var MiddleStr='';
+        var StartTime;
+        var EndTime;
+        var newstartsize = 0;
+        if(!!file){
+            var asize=0;
+            var totalsize=file.size;
+            var newstartsize=0;
+            StartTime = new Date();
+            asize = newstartsize;
+            if (newstartsize==0) {
+                StartStr='<!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
+            } else {
+                StartStr='<!--constStr@LastUpload-->'+size_format(newstartsize)+ '<br><!--constStr@ThisTime--><!--constStr@UploadStartAt-->:' +StartTime.toLocaleString()+'<br>' ;
+            }
+            //var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小
+            //if (totalsize>200*1024*1024) chunksize=10*1024*1024;
+            function readblob(start) {
+                //var end=start+chunksize;
+                //var blob = file.slice(start,end);
+                //reader.readAsArrayBuffer(blob);
+                reader.readAsArrayBuffer(file);
+            }
+            readblob(asize);
+
+            reader.onload = function(e){
+                var binary = this.result;
+                var xhr = new XMLHttpRequest();
+                xhr.open("PUT", url, true);
+                //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+                bsize=asize+e.loaded-1;
+                xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize +'/'+ totalsize);
+                xhr.upload.onprogress = function(e){
+                    if (e.lengthComputable) {
+                        var tmptime = new Date();
+                        var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
+                        var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
+                        label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+remaintime.toFixed(1)+'s';
+                    }
+                }
+                var C_starttime = new Date();
+                xhr.onload = function(e){
+                    if (xhr.status<500) {
+                        //console.log(xhr.responseText);
+                        //console.log(xhr.getResponseHeader('ETag'));
+                    //var response=JSON.parse(xhr.responseText);
+                    if (xhr.responseText==''&&xhr.getResponseHeader('ETag')!='') {
+                        // 有ETag说明上传成功
+                        var xhr1 = new XMLHttpRequest();
+                        xhr1.open("POST", '?action=upbigfile');
+                        //xhr1.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                        xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
+                        xhr1.send('uploadid='+ uploadid +'&fileid='+ fileid +'&etag='+ xhr.getResponseHeader('ETag'));
+                        xhr1.onload = function(e){
+                            console.log(xhr1.responseText+','+xhr1.status);
+<!--AdminStart-->
+                            var html=JSON.parse(xhr1.responseText);
+                            //response.name=file.webkitRelativePath||response.name;
+                            addelement(html);
+<!--AdminEnd-->
+                        }
+                        if (totalsize>10*1024*1024) {
+                            var xhr3 = new XMLHttpRequest();
+                            xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                            xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                            xhr3.send(null);
+                            xhr3.onload = function(e){
+                                console.log(xhr3.responseText+','+xhr3.status);
+                            }
+                        }
+                        EndTime=new Date();
+                        MiddleStr = '<!--constStr@EndAt-->:'+EndTime.toLocaleString()+'<br>';
+                        if (newstartsize==0) {
+                            MiddleStr += '<!--constStr@AverageSpeed-->:'+size_format(totalsize*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                        } else {
+                            MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
+                        }
+                        while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
+                        document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                        label.innerHTML=StartStr+MiddleStr;
+                        label.style.color='green';
+                        // uploadbuttonshow();
+                    } else {
+                        if (!response['nextExpectedRanges']) {
+                            label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
+                        } else {
+                            var a=response['nextExpectedRanges'][0];
+                            asize=Number( a.slice(0,a.indexOf("-")) );
+                            readblob(asize);
+                        }
+                    } } else readblob(asize);
+                }
+                xhr.send(binary);
+            }
+        }
+    }
+<!--AliyundriveUploadJsEnd-->
 <!--ListEnd-->
     function operatediv_close(operate) {
         document.getElementById(operate+'_div').style.display='none';
@@ -1060,7 +1237,10 @@
     }
 <!--AdminStart-->
     function logout() {
-        document.cookie = "admin=; path=/";
+        var expd = new Date();
+        expd.setTime(expd.getTime()+1000);
+        var expires = "expires="+expd.toGMTString();
+        document.cookie = "admin=; path=/; "+expires;
         location.href = location.href;
     }
 <!--IsFolderStart-->
@@ -1074,16 +1254,19 @@
         document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
         if (num=='') {
             var str='';
+            var fileid='';
         } else {
             var str=decodeURIComponent(document.getElementById('file_a'+num).href);
             if (str.substr(-1)==' ') str=str.substr(0, str.length-1);
             if (str.substr(-1)=='/') str=str.substr(0, str.length-1);
             if (str.substr(-8)=='?preview') str=str.substr(0, str.length-8);
             if (str.lastIndexOf('/')>-1) str=str.substr(str.lastIndexOf('/')+1);
+            var fileid=document.getElementById('file_a'+num).attributes['fileid'].nodeValue;
         }
         document.getElementById(action + '_div').style.display='';
         document.getElementById(action + '_label').innerText=str;//.replace(/&/,'&amp;');
         document.getElementById(action + '_sid').value=num;
+        document.getElementById(action + '_fileid').value=fileid;
         document.getElementById(action + '_hidden').value=str;
         if (action=='rename') document.getElementById(action + '_input').value=str;
         var $e = event || window.event;
@@ -1129,6 +1312,7 @@
                     html=JSON.parse(xhr.responseText);
                     addelement(html);
                 }
+                //alert('success');
             } else alert(xhr.status+'\n'+xhr.responseText);
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
@@ -1147,15 +1331,16 @@
         a1.target='_blank';
         var td2=document.createElement('td');
         td2.setAttribute('class','updated_at');
-        td2.innerText=html.lastModifiedDateTime.replace(/T/,' ').replace(/Z/,'');
+        if (!!html.time) td2.innerText=html.time.replace(/T/,' ').replace(/Z/,'');
         var td3=document.createElement('td');
         td3.setAttribute('class','size');
-        td3.innerText=size_format(html.size);
-        if (!!html.folder) {
+        if (!!html.size) td3.innerText=size_format(html.size);
+        else td3.innerText='0 B';
+        if (html.type=='folder') {
             a1.href+='/';
             document.getElementById('tr0').parentNode.insertBefore(tr1,document.getElementById('tr0').nextSibling);
         }
-        if (!!html.file) {
+        if (html.type=='file') {
             a1.href+='?preview';
             a1.name='filelist';
             document.getElementById('tr0').parentNode.appendChild(tr1);

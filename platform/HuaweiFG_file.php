@@ -69,23 +69,23 @@ function GetPathSetting($event, $context)
 
 function getConfig($str, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
-    //include 'config.php';
-    $s = file_get_contents(__DIR__ . '/../config.php');
-    //$configs = substr($s, 18, -2);
+
+    global $slash;
+    $projectPath = splitlast(__DIR__, $slash)[0];
+    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
         $envs = json_decode($configs, true);
-        if (in_array($str, $InnerEnv)) {
+        if (isInnerEnv($str)) {
             if ($disktag=='') $disktag = $_SERVER['disktag'];
             if (isset($envs[$disktag][$str])) {
-                if (in_array($str, $Base64Env)) return base64y_decode($envs[$disktag][$str]);
+                if (isBase64Env($str)) return base64y_decode($envs[$disktag][$str]);
                 else return $envs[$disktag][$str];
             }
         } else {
             if (isset($envs[$str])) {
-                if (in_array($str, $Base64Env)) return base64y_decode($envs[$str]);
+                if (isBase64Env($str)) return base64y_decode($envs[$str]);
                 else return $envs[$str];
             }
         }
@@ -95,20 +95,20 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
+
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    //include 'config.php';
-    $s = file_get_contents(__DIR__ . '/../config.php');
-    //$configs = substr($s, 18, -2);
+    global $slash;
+    $projectPath = splitlast(__DIR__, $slash)[0];
+    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|",getConfig('disktag'));
     $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
-        if (in_array($k, $InnerEnv)) {
-            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = base64y_encode($v);
+        if (isInnerEnv($k)) {
+            if (isBase64Env($k)) $envs[$disktag][$k] = base64y_encode($v);
             else $envs[$disktag][$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
@@ -121,7 +121,7 @@ function setConfig($arr, $disktag = '')
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $envs[$k] = base64y_encode($v);
+            if (isBase64Env($k)) $envs[$k] = base64y_encode($v);
             else $envs[$k] = $v;
         }
     }
@@ -144,7 +144,7 @@ function setConfig($arr, $disktag = '')
         }
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
-    ksort($envs);
+    //ksort($envs);
     $response = updateEnvironment($envs, getConfig('HW_urn'), getConfig('HW_key'), getConfig('HW_secret'));
     return $response;
 }
@@ -288,7 +288,7 @@ language:<br>';
         return message($html, $title, 201);
     }
     $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
-    $title = 'Error';
+    $title = 'Install';
     return message($html, $title, 201);
 }
 
@@ -377,9 +377,8 @@ function copyFolder($from, $to)
 
 function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
 {
-
+    sortConfig($Envs);
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
-    global $contextUserData;
     $source = '/tmp/code.zip';
     $outPath = '/tmp/code/';
     $oldcode = '/tmp/oldcode.zip';
@@ -392,7 +391,7 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
     // 将配置写入
     $prestr = '<?php $configs = \'' . PHP_EOL;
     $aftstr = PHP_EOL . '\';';
-    file_put_contents($outPath . 'config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
+    file_put_contents($outPath . '.data/config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
 
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();
@@ -407,6 +406,7 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
 
 function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
 {
+    global $slash;
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
     if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
     else {
@@ -448,15 +448,17 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
     if (api_error(setConfigResponse($response))) {
         return $response;
     }
-    $s = file_get_contents(__DIR__ . '/../config.php');
-    //$configs = substr($s, 18, -2);
+
+    $projectPath = splitlast(__DIR__, $slash)[0];
+    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $tmp_env = json_decode($configs, true);
     foreach ($Envs as $k => $v) {
         $tmp_env[$k] = $v;
     }
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null');
-    ksort($tmp_env);
+    //ksort($tmp_env);
     $response = updateEnvironment($tmp_env, $HW_urn, $HW_key, $HW_secret);
     return $response;
 }
@@ -538,7 +540,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     }
 
     // 放入配置文件
-    file_put_contents($outPath . '/config.php', file_get_contents(__DIR__.'/../config.php'));
+    file_put_contents($outPath . '/.data/config.php', file_get_contents(__DIR__ . '/../.data/config.php'));
 
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();

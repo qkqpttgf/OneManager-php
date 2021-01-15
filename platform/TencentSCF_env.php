@@ -54,17 +54,15 @@ function GetPathSetting($event, $context)
 
 function getConfig($str, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
-    if (in_array($str, $InnerEnv)) {
+    if (isInnerEnv($str)) {
         if ($disktag=='') $disktag = $_SERVER['disktag'];
         $env = json_decode(getenv($disktag), true);
         if (isset($env[$str])) {
-            if (in_array($str, $Base64Env)) return base64y_decode($env[$str]);
+            if (isBase64Env($str)) return base64y_decode($env[$str]);
             else return $env[$str];
         }
     } else {
-        if (in_array($str, $Base64Env)) return base64y_decode(getenv($str));
+        if (isBase64Env($str)) return base64y_decode(getenv($str));
         else return getenv($str);
     }
     return '';
@@ -72,8 +70,6 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     $disktags = explode("|",getConfig('disktag'));
     $diskconfig = json_decode(getenv($disktag), true);
@@ -81,8 +77,8 @@ function setConfig($arr, $disktag = '')
     $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
-        if (in_array($k, $InnerEnv)) {
-            if (in_array($k, $Base64Env)) $diskconfig[$k] = base64y_encode($v);
+        if (isInnerEnv($k)) {
+            if (isBase64Env($k)) $diskconfig[$k] = base64y_encode($v);
             else $diskconfig[$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
@@ -95,7 +91,7 @@ function setConfig($arr, $disktag = '')
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $tmp[$k] = base64y_encode($v);
+            if (isBase64Env($k)) $tmp[$k] = base64y_encode($v);
             else $tmp[$k] = $v;
         }
     }
@@ -256,7 +252,7 @@ language:<br>';
         return message($html, $title, 201);
     }
     $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
-    $title = 'Error';
+    $title = 'Install';
     return message($html, $title, 201);
 }
 
@@ -324,7 +320,8 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
     }
     $tmp_env = array_filter($tmp_env, 'array_value_isnot_null'); // remove null. 清除空值
     //$tmp_env['Region'] = $Region;
-    ksort($tmp_env);
+    //ksort($tmp_env);
+    sortConfig($tmp_env);
 
     $i = 0;
     foreach ($tmp_env as $key1 => $value1) {

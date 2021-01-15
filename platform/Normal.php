@@ -58,27 +58,22 @@ function getGET()
 
 function getConfig($str, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
-
-    $slash = '/';
-    if (strpos(__DIR__, ':')) $slash = '\\';
+    global $slash;
     $projectPath = splitlast(__DIR__, $slash)[0];
     $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
     $s = file_get_contents($configPath);
-    //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
         $envs = json_decode($configs, true);
-        if (in_array($str, $InnerEnv)) {
+        if (isInnerEnv($str)) {
             if ($disktag=='') $disktag = $_SERVER['disktag'];
             if (isset($envs[$disktag][$str])) {
-                if (in_array($str, $Base64Env)) return base64y_decode($envs[$disktag][$str]);
+                if (isBase64Env($str)) return base64y_decode($envs[$disktag][$str]);
                 else return $envs[$disktag][$str];
             }
         } else {
             if (isset($envs[$str])) {
-                if (in_array($str, $Base64Env)) return base64y_decode($envs[$str]);
+                if (isBase64Env($str)) return base64y_decode($envs[$str]);
                 else return $envs[$str];
             }
         }
@@ -88,23 +83,19 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
+    global $slash;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    $slash = '/';
-    if (strpos(__DIR__, ':')) $slash = '\\';
     $projectPath = splitlast(__DIR__, $slash)[0];
     $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
     $s = file_get_contents($configPath);
-    //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
     $disktags = explode("|", getConfig('disktag'));
     $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
-        if (in_array($k, $InnerEnv)) {
-            if (in_array($k, $Base64Env)) $envs[$disktag][$k] = base64y_encode($v);
+        if (isInnerEnv($k)) {
+            if (isBase64Env($k)) $envs[$disktag][$k] = base64y_encode($v);
             else $envs[$disktag][$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
@@ -117,7 +108,7 @@ function setConfig($arr, $disktag = '')
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
-            if (in_array($k, $Base64Env)) $envs[$k] = base64y_encode($v);
+            if (isBase64Env($k)) $envs[$k] = base64y_encode($v);
             else $envs[$k] = $v;
         }
     }
@@ -140,7 +131,8 @@ function setConfig($arr, $disktag = '')
         }
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
-    ksort($envs);
+    //ksort($envs);
+    sortConfig($envs);
     
     //echo '<pre>'. json_encode($envs, JSON_PRETTY_PRINT).'</pre>';
     $prestr = '<?php $configs = \'' . PHP_EOL;
@@ -260,7 +252,7 @@ language:<br>';
         return message($html, $title, 201);
     }
     $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
-    $title = 'Error';
+    $title = 'Install';
     return message($html, $title, 201);
 }
 
