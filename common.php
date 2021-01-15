@@ -1722,8 +1722,10 @@ function get_refresh_token()
                 <input type="text" name="sharepointSiteAddress" style="width:100%" placeholder="'.getconstStr('InputSharepointSiteAddress').'"><br>
             </div>
         </div>
-        <br>
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <br>';
+        if ($_SERVER['language']=='zh-cn') $html .= '你要理解 scfonedrive.github.io 是github上的静态网站，<br>除非github真的挂掉了，<br>不然，稍后你如果连不上，请检查你的运营商或其它“你懂的”问题！<br>';
+        $html .='
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
 </div>
     <script>
