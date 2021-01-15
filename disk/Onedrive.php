@@ -17,7 +17,7 @@ class Onedrive {
         $this->oauth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $this->api_url = 'https://graph.microsoft.com/v1.0';
         $this->scope = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
-        $this->access_token = $this->get_access_token(getConfig('refresh_token', $tag));
+        $res = $this->get_access_token(getConfig('refresh_token', $tag));
 
         $this->client_secret = urlencode($this->client_secret);
         $this->scope = urlencode($this->scope);
@@ -732,7 +732,7 @@ class Onedrive {
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);
             if (time()>getConfig('token_expires', $this->disktag)) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ], $this->disktag);
         }
-        return $this->access_token;
+        return true;
     }
 
     protected function get_siteid($sharepointSite)
