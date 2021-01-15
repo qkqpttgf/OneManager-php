@@ -8,7 +8,7 @@ class Aliyundrive {
         $this->disktag = $tag;
         $this->auth_url = 'https://websv.aliyundrive.com/token/refresh';
         $this->api_url = 'https://api.aliyundrive.com/v2';
-        $this->access_token = $this->get_access_token(getConfig('refresh_token', $tag));
+        $res = $this->get_access_token(getConfig('refresh_token', $tag));
         $this->default_drive_id = getConfig('default_drive_id', $tag);
     }
     
@@ -710,6 +710,6 @@ class Aliyundrive {
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);
             if (time()>getConfig('token_expires', $this->disktag)) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ], $this->disktag);
         }
-        return $this->access_token;
+        return true;
     }
 }
