@@ -19,7 +19,7 @@ $EnvConfigs = [
     'HW_secret'         => 0b000, // used in FG.
     'function_name'     => 0b000, // used in heroku.
 
-    'admin'             => 0b001,
+    'admin'             => 0b000,
     'adminloginpage'    => 0b010,
     'autoJumpFirstDisk' => 0b010,
     'background'        => 0b011,
