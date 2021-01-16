@@ -118,7 +118,7 @@ class Onedrive {
                     $files['error']['stat'] = $arr['stat'];
                 }
             } else {
-                //error_log($arr['body']);
+                //error_log1($arr['body']);
                 $files = json_decode($arr['body'], true);
                 if (isset($files['error'])) {
                     $files['error']['stat'] = $arr['stat'];
@@ -128,7 +128,7 @@ class Onedrive {
                     $files['error']['message'] = 'unknownError';
                 }
                 //$files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
-                //error_log(json_encode($files, JSON_PRETTY_PRINT));
+                //error_log1(json_encode($files, JSON_PRETTY_PRINT));
             }
         }
         //echo '<pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
@@ -172,7 +172,7 @@ class Onedrive {
         } elseif (isset($files['error'])) {
             return $files;
         }
-        //error_log(json_encode($tmp));
+        //error_log1(json_encode($tmp));
         return $tmp;
     }
 
@@ -463,7 +463,7 @@ class Onedrive {
             $api = $this->api_url . '/me/followedSites';
             $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ]);
             if (!($arr['stat']==200||$arr['stat']==403||$arr['stat']==400)) return message($arr['stat'] . json_encode(json_decode($arr['body']), JSON_PRETTY_PRINT), 'Get followedSites', $arr['stat']);
-            error_log($arr['body']);
+            error_log1($arr['body']);
             $sites = json_decode($arr['body'], true)['value'];
 
             $title = 'Select Disk';
@@ -717,8 +717,8 @@ class Onedrive {
             }
             if ($response['stat']==200) $ret = json_decode($response['body'], true);
             if (!isset($ret['access_token'])) {
-                error_log($this->oauth_url . 'token' . '?client_id=' . $this->client_id . '&client_secret=' . $this->client_secret . '&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . substr($refresh_token, 0, 20) . '******' . substr($refresh_token, -20));
-                error_log('failed to get [' . $this->disktag . '] access_token. response' . json_encode($ret));
+                error_log1($this->oauth_url . 'token' . '?client_id=' . $this->client_id . '&client_secret=' . $this->client_secret . '&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . substr($refresh_token, 0, 20) . '******' . substr($refresh_token, -20));
+                error_log1('failed to get [' . $this->disktag . '] access_token. response' . json_encode($ret));
                 $response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
                 $response['body'] .= '\nfailed to get [' . $this->disktag . '] access_token.';
                 return $response;
@@ -727,7 +727,7 @@ class Onedrive {
             $tmp = $ret;
             $tmp['access_token'] = '******';
             $tmp['refresh_token'] = '******';
-            error_log('[' . $this->disktag . '] Get access token:' . json_encode($tmp, JSON_PRETTY_PRINT));
+            error_log1('[' . $this->disktag . '] Get access token:' . json_encode($tmp, JSON_PRETTY_PRINT));
             $this->access_token = $ret['access_token'];
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);
             if (time()>getConfig('token_expires', $this->disktag)) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ], $this->disktag);
@@ -757,7 +757,7 @@ class Onedrive {
             $i++;
         }
         if ($response['stat']!=200) {
-            error_log('failed to get siteid. response' . json_encode($response));
+            error_log1('failed to get siteid. response' . json_encode($response));
             $response['body'] .= '\nfailed to get siteid.';
             return $response;
             //throw new Exception($response['stat'].', failed to get siteid.'.$response['body']);
@@ -767,7 +767,7 @@ class Onedrive {
 
     public function del_upload_cache($path)
     {
-        error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
+        error_log1('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
         $tmp = splitlast($_GET['filename'], '/');
         if ($tmp[1]!='') {
             $filename = $tmp[0] . '/.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $tmp[1] . '.tmp';
@@ -905,7 +905,7 @@ class Onedrive {
         $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
         //$response['Location'] = curl_getinfo($ch);
         curl_close($ch);
-        error_log($response['stat'].'
+        error_log1($response['stat'].'
     '.$response['body'].'
     '.$url.'
     ');

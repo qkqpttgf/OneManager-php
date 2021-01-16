@@ -15,14 +15,14 @@ function getpath()
 
 function getGET()
 {
-    //error_log('POST：' . json_encode($_POST));
+    //error_log1('POST：' . json_encode($_POST));
     if (!$_POST) {
         if (!!$HTTP_RAW_POST_DATA) {
             $tmpdata = $HTTP_RAW_POST_DATA;
-            //error_log('RAW：' . $tmpdata);
+            //error_log1('RAW：' . $tmpdata);
         } else {
             $tmpdata = file_get_contents('php://input');
-            //error_log('PHPINPUT：' . $tmpdata);
+            //error_log1('PHPINPUT：' . $tmpdata);
         }
         if (!!$tmpdata) {
             $postbody = explode("&", $tmpdata);
@@ -30,7 +30,7 @@ function getGET()
                 $pos = strpos($postvalues,"=");
                 $_POST[urldecode(substr($postvalues,0,$pos))]=urldecode(substr($postvalues,$pos+1));
             }
-            //error_log('POSTformPHPINPUT：' . json_encode($_POST));
+            //error_log1('POSTformPHPINPUT：' . json_encode($_POST));
         }
     }
     $p = strpos($_SERVER['REQUEST_URI'],'?');
@@ -117,9 +117,9 @@ function setConfig($arr, $disktag = '')
         }
     }
     foreach ($tmp as $key => $val) if ($val=='') $tmp[$key]=null;
-//    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
-//';
+
     return setHerokuConfig($tmp, getConfig('function_name'), getConfig('APIKey'));
+    error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT));
 }
 
 function install()
@@ -227,7 +227,7 @@ function HerokuAPI($method, $url, $data = '', $apikey)
     foreach ($headers as $headerName => $headerVal) {
         $sendHeaders[] = $headerName . ': ' . $headerVal;
     }
-    error_log($method . $url . $data . $apikey);
+    error_log1($method . $url . $data . $apikey);
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST,$method);
@@ -242,7 +242,7 @@ function HerokuAPI($method, $url, $data = '', $apikey)
     $response['body'] = curl_exec($ch);
     $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
     curl_close($ch);
-    error_log($response['stat'].'
+    error_log1($response['stat'].'
 '.$response['body'].'
 ');
     return $response;

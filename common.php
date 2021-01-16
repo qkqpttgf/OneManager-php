@@ -475,7 +475,7 @@ function filecache($disktag)
         $tag = str_replace(':', '_', $tag);
         $tag = str_replace('\\', '_', $tag);
     }
-    // error_log('DIR:' . $dir . ' TAG: ' . $tag);
+    // error_log1('DIR:' . $dir . ' TAG: ' . $tag);
     $cache = new \Doctrine\Common\Cache\FilesystemCache($dir, $tag);
     return $cache;
 }
@@ -573,6 +573,11 @@ function base64y_decode($str)
     $str = base64_decode($str);
     //if (strpos($str, '%')!==false) $str = urldecode($str);
     return $str;
+}
+
+function error_log1($str)
+{
+    error_log($str);
 }
 
 function is_guestup_path($path)
@@ -683,6 +688,13 @@ function comppass($pass)
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
+    //$_SERVER['PHP_AUTH_USER']
+    if ($_SERVER['PHP_AUTH_PW'] !== '') if (md5($_SERVER['PHP_AUTH_PW']) === $pass ) {
+        date_default_timezone_set('UTC');
+        $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
+        date_default_timezone_set(get_timezone($_SERVER['timezone']));
+        return 2;
+    }
     return 4;
 }
 
@@ -1492,7 +1504,7 @@ function render_list($path = '', $files = [])
                 $file_path = $theme;
                 $tmp = curl('GET', $file_path, false, [], 1);
                 if ($tmp['stat']==302) {
-                    error_log(json_encode($tmp));
+                    error_log1(json_encode($tmp));
                     $tmp = curl('GET', $tmp["returnhead"]["Location"]);
                 }
                 if (!!$tmp['body']) $html = $tmp['body'];
@@ -1603,6 +1615,16 @@ function render_list($path = '', $files = [])
         }
 
         if ($_SERVER['ishidden']==4) {
+            // 加密状态
+            // Basic Auth
+            return output('Need password.', 401, ['WWW-Authenticate'=>'Basic realm="Secure Area"']);
+            /*$tmp[1] = 'a';
+            while ($tmp[1]!='') {
+                $tmp = splitfirst($html, '<!--ListStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--ListEnd-->');
+                $html .= $tmp[1];
+            }*/
             $tmp[1] = 'a';
             while ($tmp[1]!='') {
                 $tmp = splitfirst($html, '<!--IsFileStart-->');
@@ -1617,13 +1639,6 @@ function render_list($path = '', $files = [])
                 $tmp = splitfirst($tmp[1], '<!--IsFolderEnd-->');
                 $html .= $tmp[1];
             }
-            /*$tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--ListStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--ListEnd-->');
-                $html .= $tmp[1];
-            }*/
             $tmp[1] = 'a';
             while ($tmp[1]!='') {
                 $tmp = splitfirst($html, '<!--IsNotHiddenStart-->');
@@ -1891,7 +1906,7 @@ function render_list($path = '', $files = [])
                                 if ($ext==$key1) {
                                     $FolderListStr = str_replace('<!--IconValue-->', $value1, $FolderListStr);
                                 }
-                                //error_log('file:'.$file['name'].':'.$key1);
+                                //error_log1('file:'.$file['name'].':'.$key1);
                                 if (!strpos($FolderListStr, '<!--IconValue-->')) break;
                             }
                             if (strpos($FolderListStr, '<!--IconValue-->')) $FolderListStr = str_replace('<!--IconValue-->', $IconValues['default'], $FolderListStr);

@@ -37,8 +37,8 @@ class Sharelink extends Onedrive {
             $this->access_token = splitlast($ret['ListSchema']['.driveAccessToken'],'=')[1];
             $this->api_url = $ret['ListSchema']['.driveUrl'].'/root';
             if (!$this->access_token) {
-                error_log($domain . "/personal/" . $account . "/_api/web/GetListUsingPath(DecodedUrl=@a1)/RenderListDataAsStream?@a1='" . urlencode("/personal/" . $account . "/Documents") . "'&RootFolder=" . urlencode("/personal/" . $account . "/Documents/") . "&TryNewExperienceSingle=TRUE");
-                error_log('failed to get share access_token. response' . json_encode($ret));
+                error_log1($domain . "/personal/" . $account . "/_api/web/GetListUsingPath(DecodedUrl=@a1)/RenderListDataAsStream?@a1='" . urlencode("/personal/" . $account . "/Documents") . "'&RootFolder=" . urlencode("/personal/" . $account . "/Documents/") . "&TryNewExperienceSingle=TRUE");
+                error_log1('failed to get share access_token. response' . json_encode($ret));
                 $response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
                 $response['body'] .= '\nfailed to get shareurl access_token.';
                 return $response;
@@ -46,7 +46,7 @@ class Sharelink extends Onedrive {
             }
             //$tmp = $ret;
             //$tmp['access_token'] = '******';
-            //error_log('['.$this->disktag.'] Get access token:'.json_encode($tmp, JSON_PRETTY_PRINT));
+            //error_log1('['.$this->disktag.'] Get access token:'.json_encode($tmp, JSON_PRETTY_PRINT));
             savecache('access_token', $this->access_token, $this->disktag);
             $tmp1 = null;
             if (getConfig('shareapiurl', $this->disktag)!=$this->api_url) $tmp1['shareapiurl'] = $this->api_url;

@@ -316,7 +316,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
             break;
         }
     }
-    //error_log($outPath);
+    //error_log1($outPath);
     if ($outPath=='') return 0;
 
     //unlink($outPath.'/config.php');

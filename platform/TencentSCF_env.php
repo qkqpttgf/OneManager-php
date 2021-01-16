@@ -24,6 +24,11 @@ function GetGlobalVariable($event)
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
     $_SERVER['HTTP_USER_AGENT'] = $event['headers']['user-agent'];
+    if (isset($event['headers']['authorization'])) {
+        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['authorization'], 'Basic ')[1]), ':');
+        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
+        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
+    }
     $_SERVER['HTTP_TRANSLATE']==$event['headers']['translate'];//'f'
     $_SERVER['USER'] = 'qcloud';
 }

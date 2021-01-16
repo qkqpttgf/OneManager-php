@@ -28,6 +28,11 @@ function GetGlobalVariable($event)
         $pos = strpos($cookievalues,"=");
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
+    if (isset($event['headers']['Authorization'])) {
+        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['Authorization'][0], 'Basic ')[1]), ':');
+        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
+        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
+    }
     $_SERVER['FC_SERVER_PATH'] = '/var/fc/runtime/php7.2';
 }
 
@@ -453,4 +458,26 @@ function addFileToZip($zip, $rootpath, $path = '')
         }
     }
     @closedir($path);
+}
+
+function myErrorHandler($errno, $errstr, $errfile, $errline) {
+    if (!(error_reporting() & $errno)) {
+        return false;
+    }
+    switch ($errno) {
+    case E_USER_ERROR:
+        $errInfo = array(
+            "errorMessage" => $errstr,
+            "errorType"    => \ServerlessFC\friendly_error_type($errno),
+            "stackTrace"   => array(
+                "file" => $errfile,
+                "line" => $errline,
+            ),
+        );
+        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
+        break;
+    default: // E_USER_WARNING | E_USER_NOTICE
+        break;
+    }
+    return true;
 }

@@ -24,6 +24,11 @@ function GetGlobalVariable($event)
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
     $_SERVER['HTTP_USER_AGENT'] = $event['headers']['user-agent'];
+    if (isset($event['headers']['authorization'])) {
+        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['authorization'], 'Basic ')[1]), ':');
+        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
+        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
+    }
     $_SERVER['HTTP_TRANSLATE']==$event['headers']['translate'];//'f'
     $_SERVER['USER'] = 'qcloud';
 }
@@ -392,7 +397,7 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
     return updateProgram($function_name, $Region, $namespace, $SecretId, $SecretKey, $source);
     $tmp1['Response']['Error']['Message'] = $codeurl;
-    error_log($tmp1['Response']['Error']['Message']);
+    error_log1($tmp1['Response']['Error']['Message']);
     return json_encode($tmp1);
 }
 
@@ -535,7 +540,7 @@ function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKe
     //    .' -H "X-TC-Version: '.$version.'"'
     //    .' -H "X-TC-Region: '.$region.'"'
     //    ." -d '".$payload."'";
-    //error_log( $curl.PHP_EOL );
+    //error_log1( $curl.PHP_EOL );
     //return '{"response": {"Error": {"Message":"' . $curl . '"}}}';
     $headers['Authorization'] = $authorization;
     $headers['Content-Type'] = 'application/json; charset=utf-8';
