@@ -266,7 +266,7 @@ function main($path)
     if ($_SERVER['ajax']) {
         if ($_GET['action']=='del_upload_cache') {
             // del '.tmp' without login. 无需登录即可删除.tmp后缀文件
-            return $drive->del_upload_cache();
+            return $drive->del_upload_cache($path);
         }
         if ($_GET['action']=='upbigfile') {
             if (!$_SERVER['admin']) {
