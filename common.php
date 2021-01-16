@@ -191,7 +191,6 @@ function main($path)
 //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/'||$path=='') {
-            if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
             $files['type'] = 'folder';
             $files['childcount'] = count($disktags);
             $files['showname'] = 'root';
@@ -202,8 +201,9 @@ function main($path)
             }
             if ($_GET['json']) {
                 // return a json
-                return output(json_encode($files));
+                return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
             }
+            if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
         } else {
             $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
             //$pos = strpos($path, '/');
@@ -331,7 +331,7 @@ function main($path)
 
     if ($_GET['json']) {
         // return a json
-        return output(json_encode($files));
+        return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
     }
     // random file
     if (isset($_GET['random'])&&$_GET['random']!=='') {
