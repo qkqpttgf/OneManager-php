@@ -765,7 +765,7 @@ class Onedrive {
         return json_decode($response['body'],true)['id'];
     }
 
-    public function del_upload_cache()
+    public function del_upload_cache($path)
     {
         error_log('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
         $tmp = splitlast($_GET['filename'], '/');
