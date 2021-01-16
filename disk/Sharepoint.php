@@ -16,8 +16,7 @@ class Sharepoint extends Onedrive {
         $this->oauth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $this->api_url = 'https://graph.microsoft.com/v1.0';
         $this->scope = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
-        $this->access_token = getcache('access_token', $tag);
-        if (!$this->access_token) $this->access_token = $this->get_access_token(getConfig('refresh_token', $tag));
+        $res = $this->get_access_token(getConfig('refresh_token', $tag));
 
         $this->client_secret = urlencode($this->client_secret);
         $this->scope = urlencode($this->scope);

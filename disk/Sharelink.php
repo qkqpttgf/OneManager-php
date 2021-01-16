@@ -52,6 +52,7 @@ class Sharelink extends Onedrive {
             if (getConfig('shareapiurl', $this->disktag)!=$this->api_url) $tmp1['shareapiurl'] = $this->api_url;
             //if (getConfig('sharecookie', $this->disktag)!=$this->sharecookie) $tmp1['sharecookie'] = $this->sharecookie;
             if (!!$tmp1) setConfig($tmp1);
+            return true;
         }
         return true;
     }
