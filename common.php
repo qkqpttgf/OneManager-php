@@ -323,7 +323,7 @@ function main($path)
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
             if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
             $files = $drive->list_files($path1);
-        } 
+        }
     } else {
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
         if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
@@ -723,9 +723,13 @@ function gethiddenpass($path,$passfile)
             if ($arr['stat']==200) {
                 $passwordf=explode("\n",$arr['body']);
                 $password=$passwordf[0];
-                if ($password!='') $password=md5($password);
-                savecache('path_' . $path1 . '/?password', $password, $_SERVER['disktag']);
-                return $password;
+                if ($password==='') {
+                    return '';
+                } else {
+                    $password=md5($password);
+                    savecache('path_' . $path1 . '/?password', $password, $_SERVER['disktag']);
+                    return $password;
+                }
             } else {
                 //return md5('DefaultP@sswordWhenNetworkError');
                 return md5( md5(time()).rand(1000,9999) );
@@ -1667,6 +1671,30 @@ function render_list($path = '', $files = [])
                 $tmp = splitfirst($html, '<!--IsNotHiddenStart-->');
                 $html = $tmp[0];
                 $tmp = splitfirst($tmp[1], '<!--IsNotHiddenEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--HeadomfStart-->')) {
+                $tmp = splitfirst($html, '<!--HeadomfStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--HeadmdStart-->')) {
+                $tmp = splitfirst($html, '<!--HeadmdStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--ReadmemdStart-->')) {
+                $tmp = splitfirst($html, '<!--ReadmemdStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--FootomfStart-->')) {
+                $tmp = splitfirst($html, '<!--FootomfStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
                 $html .= $tmp[1];
             }
         } else {
