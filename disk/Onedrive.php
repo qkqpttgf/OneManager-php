@@ -294,7 +294,11 @@ class Onedrive {
     }
     public function Encrypt($folder, $passfilename, $pass) {
         $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
-        $result = $this->MSAPI('PUT', $filename, $pass, $this->access_token);
+        if ($pass==='') {
+            $result = $this->MSAPI('DELETE', $filename, '', $this->access_token);
+        } else {
+            $result = $this->MSAPI('PUT', $filename, $pass, $this->access_token);
+        }
         $path1 = $folder['path'];
         if ($path1!='/'&&substr($path1, -1)=='/') $path1 = substr($path1, 0, -1);
         savecache('path_' . $path1 . '/?password', '', $this->disktag, 1);
