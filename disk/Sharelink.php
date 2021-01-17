@@ -12,6 +12,11 @@ class Sharelink extends Onedrive {
         $this->DownurlStrName = '@content.downloadUrl';
     }
 
+    public function ext_show_innerenv()
+    {
+        return [ 'shareurl' ];
+    }
+
     protected function get_access_token($refresh_token) {
         if (!($this->access_token = getcache('access_token', $this->disktag))) {
             $shareurl = getConfig('shareurl', $this->disktag);
