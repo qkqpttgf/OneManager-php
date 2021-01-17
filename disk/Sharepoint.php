@@ -23,4 +23,9 @@ class Sharepoint extends Onedrive {
         $this->DownurlStrName = '@microsoft.graph.downloadUrl';
         $this->ext_api_url = '/sites/' . getConfig('siteid', $tag) . '/drive/root';
     }
+
+    public function ext_show_innerenv()
+    {
+        return [ 'sharepointSite', 'siteid' ];
+    }
 }
