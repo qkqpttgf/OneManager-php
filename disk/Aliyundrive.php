@@ -25,6 +25,11 @@ class Aliyundrive {
         //return $tmp;
     }
 
+    public function ext_show_innerenv()
+    {
+        return [];
+    }
+
     public function list_files($path = '/')
     {
         
