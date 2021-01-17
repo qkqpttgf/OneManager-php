@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(0);
 include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
