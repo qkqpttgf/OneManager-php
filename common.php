@@ -238,7 +238,7 @@ function main($path)
     if (isset($_GET['AddDisk'])) {
         if ($_SERVER['admin']) {
             if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
-                $drive = new $_GET['AddDisk']($_COOKIE['disktag']);
+                $drive = new $_GET['AddDisk']($_GET['disktag']);
                 return $drive->AddDisk();
         } else {
             $url = $_SERVER['PHP_SELF'];
@@ -406,11 +406,18 @@ function driveisfine($tag, &$drive = null)
     else return false;
 }
 
-function baseclassofdrive()
+function baseclassofdrive($d = null)
 {
     global $drive;
-    if (!$drive) return false;
-    return $drive->show_base_class();
+    if (!$d) $dr = $drive;
+    else $dr = $d;
+    if (!$dr) return false;
+    return $dr->show_base_class();
+}
+
+function extendShow_diskenv($drive)
+{
+    return $drive->ext_show_innerenv();
 }
 
 function pass2cookie($name, $pass)
@@ -1261,6 +1268,8 @@ function EnvOpt($needUpdate = 0)
     }
     foreach ($disktags as $disktag) {
         if ($disktag!='') {
+            $disk_tmp = null;
+            $diskok = driveisfine($disktag, $disk_tmp);
             $html .= '
 <table border=1 width=100%>
     <tr>
@@ -1280,18 +1289,17 @@ function EnvOpt($needUpdate = 0)
     </tr>
     <tr>
         <td>Driver</td>
-        <td>' . getConfig('Driver', $disktag) . '</td>
+        <td>' . getConfig('Driver', $disktag);
+            if (baseclassofdrive($disk_tmp)=='Onedrive') $html .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">Change Driver type' . getconstStr(' ') . '</a>';
+            $html .= '</td>
     </tr>
     ';
-            $tmp = getConfig('shareurl', $disktag);
-            if ($tmp!='') $html .= '<tr><td>shareurl</td><td>' . $tmp . '</td></tr>';
-            $tmp = getConfig('siteid', $disktag);
-            if ($tmp!='') {
-                $html .= '<tr><td>Site</td><td>' . getConfig('sharepointSite', $disktag) . '</td></tr>';
-                $html .= '<tr><td>siteid</td><td>' . $tmp . '</td></tr>';
+            foreach (extendShow_diskenv($disk_tmp) as $ext_env) {
+                $html .= '<tr><td>' . $ext_env . '</td><td>' . getConfig($ext_env, $disktag) . '</td></tr>
+    ';
             }
 
-            if (driveisfine($disktag)) {
+            if ($diskok) {
                 $html .= '
     <form name="'.$disktag.'" action="" method="post">
         <input type="hidden" name="disk" value="'.$disktag.'">';
