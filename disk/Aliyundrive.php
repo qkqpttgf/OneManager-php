@@ -222,6 +222,10 @@ class Aliyundrive {
         if (isset($existfile['type'])) { // 删掉原文件
             $this->Delete(['id'=>$existfile['file_id']]);
         }
+        if ($pass==='') {
+            // 如果为空，上面已经删除了
+            return output('Success', 200);
+        }
         if (!$folder['id']) {
             $res = $this->list_path($folder['path']);
             //error_log1('res:' . json_encode($res));
