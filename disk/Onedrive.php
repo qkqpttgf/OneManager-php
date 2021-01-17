@@ -38,6 +38,11 @@ class Onedrive {
         //return $tmp;
     }
 
+    public function ext_show_innerenv()
+    {
+        return [];
+    }
+
     public function list_files($path = '/')
     {
         global $exts;
@@ -382,7 +387,7 @@ class Onedrive {
         $url = path_format($_SERVER['PHP_SELF'] . '/');
         //$this->api_url = splitfirst($_SERVER['api_url'], '/v1.0')[0] . '/v1.0';
 
-        if (isset($_GET['install4'])) {
+        if (isset($_GET['Finish'])) {
             if ($this->access_token == '') {
                 $refresh_token = getConfig('refresh_token', $this->disktag);
                 if (!$refresh_token) {
@@ -448,7 +453,7 @@ class Onedrive {
             }
         }
 
-        if (isset($_GET['install3'])) {
+        if (isset($_GET['SelectDrive'])) {
             if ($this->access_token == '') {
                 $refresh_token = getConfig('refresh_token', $this->disktag);
                 if (!$refresh_token) {
@@ -470,10 +475,10 @@ class Onedrive {
             error_log1($arr['body']);
             $sites = json_decode($arr['body'], true)['value'];
 
-            $title = 'Select Disk';
+            $title = 'Select Driver';
             $html = '
 <div>
-    <form action="?install4&AddDisk=' . get_class($this) . '" method="post" onsubmit="return notnull(this);">
+    <form action="?Finish&disktag=' . $_GET['disktag'] . '&AddDisk=' . get_class($this) . '" method="post" onsubmit="return notnull(this);">
         <label><input type="radio" name="DriveType" value="Onedrive" checked>' . 'Use Onedrive ' . getconstStr(' ') . '</label><br>';
             if ($sites[0]!='') foreach ($sites as $k => $v) {
                 $html .= '
@@ -540,7 +545,7 @@ class Onedrive {
                 } else {
                     savecache('access_token', $ret['access_token'], $this->disktag, $ret['expires_in'] - 60);
                     $str .= '
-                <meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk=' . get_class($this) . '&install3">';
+                <meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk=' . get_class($this) . '&disktag=' . $_GET['disktag'] . '&SelectDrive">';
                     return message($str, getconstStr('Wait') . ' 3s', 201);
                 }
             }
@@ -553,7 +558,7 @@ class Onedrive {
                 return message('
     <a href="" id="a1">' . getconstStr('JumptoOffice') . '</a>
     <script>
-        url=location.protocol + "//" + location.host + "' . $url . '?install2&AddDisk=' . get_class($this) . '";
+        url=location.protocol + "//" + location.host + "' . $url . '?install2&disktag=' . $_GET['disktag'] . '&AddDisk=' . get_class($this) . '";
         url="' . $this->oauth_url . 'authorize?scope=' . $this->scope . '&response_type=code&client_id=' . $this->client_id . '&redirect_uri=' . $this->redirect_uri . '&state=' . '"+encodeURIComponent(url);
         document.getElementById(\'a1\').href=url;
         //window.open(url,"_blank");
@@ -589,6 +594,7 @@ class Onedrive {
                 }
 
                 $tmp = null;
+                // clear envs
                 foreach ($EnvConfigs as $env => $v) if (isInnerEnv($env)) $tmp[$env] = '';
 
                 //$this->disktag = $_POST['disktag_add'];
@@ -612,7 +618,7 @@ class Onedrive {
                     $title = 'Error';
                 } else {
                     $title = getconstStr('MayinEnv');
-                    $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install1&AddDisk=' . $_POST['Drive_ver'] . '">';
+                    $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install1&disktag=' . $_GET['disktag'] . '&AddDisk=' . $_POST['Drive_ver'] . '">';
                     if ($_POST['Drive_ver']=='Sharelink') $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '">';
                 }
                 return message($html, $title, 201);
@@ -700,11 +706,11 @@ class Onedrive {
                     }
                 }
             }
-            document.getElementById("form1").action="?install0&AddDisk=" + t.Drive_ver.value;
-            var expd = new Date();
-            expd.setTime(expd.getTime()+(2*60*60*1000));
-            var expires = "expires="+expd.toGMTString();
-            document.cookie=\'disktag=\'+t.disktag_add.value+\'; path=/; \'+expires;
+            document.getElementById("form1").action="?install0&disktag=" + t.disktag_add.value + "&AddDisk=" + t.Drive_ver.value;
+            //var expd = new Date();
+            //expd.setTime(expd.getTime()+(2*60*60*1000));
+            //var expires = "expires="+expd.toGMTString();
+            //document.cookie=\'disktag=\'+t.disktag_add.value+\'; path=/; \'+expires;
             return true;
         }
     </script>';
