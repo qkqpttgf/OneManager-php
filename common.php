@@ -35,6 +35,7 @@ $EnvConfigs = [
     'customCss'         => 0b011,
     'customTheme'       => 0b011,
     'theme'             => 0b010,
+    'dontBasicAuth'     => 0b010,
 
     'Driver'            => 0b100,
     'client_id'         => 0b100,
@@ -270,7 +271,7 @@ function main($path)
         }
         if ($_GET['action']=='upbigfile') {
             if (!$_SERVER['admin']) {
-                if (!is_guestup_path($path)) return output('Not_Guest_Upload_Folder', 400);
+                if (!$_SERVER['is_guestup_path']) return output('Not_Guest_Upload_Folder', 400);
                 if (strpos($_GET['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
             }
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
@@ -688,12 +689,15 @@ function comppass($pass)
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
-    //$_SERVER['PHP_AUTH_USER']
-    if ($_SERVER['PHP_AUTH_PW'] !== '') if (md5($_SERVER['PHP_AUTH_PW']) === $pass ) {
-        date_default_timezone_set('UTC');
-        $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
-        date_default_timezone_set(get_timezone($_SERVER['timezone']));
-        return 2;
+    if (!getConfig('dontBasicAuth')) {
+        // use Basic Auth
+        //$_SERVER['PHP_AUTH_USER']
+        if ($_SERVER['PHP_AUTH_PW'] !== '') if (md5($_SERVER['PHP_AUTH_PW']) === $pass ) {
+            date_default_timezone_set('UTC');
+            $_SERVER['Set-Cookie'] = 'password='.$pass.'; expires='.date(DATE_COOKIE,strtotime('+1hour'));
+            date_default_timezone_set(get_timezone($_SERVER['timezone']));
+            return 2;
+        }
     }
     return 4;
 }
@@ -1616,8 +1620,10 @@ function render_list($path = '', $files = [])
 
         if ($_SERVER['ishidden']==4) {
             // 加密状态
-            // Basic Auth
-            return output('Need password.', 401, ['WWW-Authenticate'=>'Basic realm="Secure Area"']);
+            if (!getConfig('dontBasicAuth')) {
+                // use Basic Auth
+                return output('Need password.', 401, ['WWW-Authenticate'=>'Basic realm="Secure Area"']);
+            }
             /*$tmp[1] = 'a';
             while ($tmp[1]!='') {
                 $tmp = splitfirst($html, '<!--ListStart-->');
