@@ -1086,11 +1086,12 @@ function EnvOpt($needUpdate = 0)
                 $v = preg_replace('/[^0-9a-zA-Z|_]/i', '', $v);
                 $f = substr($v, 0, 1);
                 if (strlen($v)==1) $v .= '_';
-                //if (in_array($v, $CommonEnv)) {
                 if (isCommonEnv($v)) {
-                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button><script>document.cookie=\'disktag=; path=/\';</script>', 'Error', 201);
+                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 201);
                 } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
-                    return message('Please start with letters');
+                    return message('<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Please start with letters', 201);
+                } elseif (getConfig($v)) {
+                    return message('<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Same tag', 201);
                 } else {
                     $tmp[$k] = $v;
                 }
