@@ -1,7 +1,10 @@
+20210118-1600.31
+can change Ondrive to Sharepoint, can copy a disk. fix a bug that 500 error in setup.
+Onedrive跟Sharepoint可以切换了，可以复制一个盘。修复bug。
+
 20210115-1111.30
 <font color=red>v3, after update, please AddDisk again, please set passfile again.</font> themes of php deleted, or you can use branch v2_last.
 <font color=red>v3，一键升级后请重新添加盘，passfile失效，重新设置。</font>php主题删掉了，要么就用v2_last分支。
-
 20201229.29
 Modify tags, change sequence of disk.
 可以修改标签，移动标签顺序。
