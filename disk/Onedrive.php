@@ -415,7 +415,10 @@ class Onedrive {
                 } else {
                     return message($arr['stat'] . $arr['body'], 'Get User ID', $arr['stat']);
                 }*/
-                $tmp = null;
+                if (get_class($this)=='Sharepoint') $tmp['Driver'] = 'Onedrive';
+                elseif (get_class($this)=='SharepointCN') $tmp['Driver'] = 'OnedriveCN';
+                $tmp['sharepointSite'] = '';
+                $tmp['siteid'] = '';
             } elseif ($_POST['DriveType']=='Custom') {
                 // sitename计算siteid
                 $tmp1 = $this->get_siteid($_POST['sharepointSite']);
@@ -454,6 +457,7 @@ class Onedrive {
         }
 
         if (isset($_GET['SelectDrive'])) {
+            if (get_class($this)=='Sharelink') return message('Can not change to other.', 'Back', 201);
             if ($this->access_token == '') {
                 $refresh_token = getConfig('refresh_token', $this->disktag);
                 if (!$refresh_token) {
@@ -576,13 +580,7 @@ class Onedrive {
                 $f = substr($_POST['disktag_add'], 0, 1);
                 if (strlen($_POST['disktag_add'])==1) $_POST['disktag_add'] .= '_';
                 if (isCommonEnv($_POST['disktag_add'])) {
-                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>
-                    <script>
-                    var expd = new Date();
-                    expd.setTime(expd.getTime()+1);
-                    var expires = "expires="+expd.toGMTString();
-                    document.cookie=\'disktag=; path=/; \'+expires;
-                    </script>', 'Error', 201);
+                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 201);
                 } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
                     return message('Please start with letters<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>
                     <script>

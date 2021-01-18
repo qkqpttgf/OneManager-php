@@ -407,11 +407,19 @@ $constStr = [
         'fa' => 'پاک کردن این دیسک',
         'ar-sa' => 'حذف هذا القرص',
     ],
+    'CopyDisk' => [
+        'en-us' => 'Copy this Disk',
+        'zh-cn' => '复制此盘',
+    ],
     'RenameDisk' => [
         'en-us' => 'Rename Disk Tag',
         'zh-cn' => '改变标签',
         'zh-tw' => '修改標籤',
         'ar-sa' => 'تغيير التسمية',
+    ],
+    'ChangeOnedrivetype' => [
+        'en-us' => 'Change Onedrive/Sharepoint',
+        'zh-cn' => '切换Onedrive/Sharepoint',
     ],
     'AddDisk' => [
         'en-us' => 'Add Disk',

@@ -40,21 +40,22 @@ $EnvConfigs = [
     'Driver'            => 0b100,
     'client_id'         => 0b100,
     'client_secret'     => 0b101,
-    'diskname'          => 0b111,
-    'domain_path'       => 0b111,
-    'downloadencrypt'   => 0b110,
-    'guestup_path'      => 0b111,
     'sharepointSite'    => 0b101,
     'shareurl'          => 0b101,
     //'sharecookie'       => 0b101,
     'shareapiurl'       => 0b101,
     'siteid'            => 0b100,
-    'domainforproxy'    => 0b111,
-    'public_path'       => 0b111,
     'refresh_token'     => 0b100,
     'token_expires'     => 0b100,
     'default_drive_id'  => 0b100,
     'default_sbox_drive_id'=> 0b100,
+
+    'diskname'          => 0b111,
+    'domain_path'       => 0b111,
+    'downloadencrypt'   => 0b110,
+    'guestup_path'      => 0b111,
+    'domainforproxy'    => 0b111,
+    'public_path'       => 0b111,
 ];
 
 $timezones = array( 
@@ -1078,7 +1079,7 @@ function EnvOpt($needUpdate = 0)
     if (isset($_POST['submit1'])) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
-            if (isShowedEnv($k) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename') {
+            if (isShowedEnv($k) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename' || $k=='disktag_copy') {
                 $tmp[$k] = $v;
             }
             if ($k=='disktag_newname') {
@@ -1275,7 +1276,7 @@ function EnvOpt($needUpdate = 0)
 <table border=1 width=100%>
     <tr>
         <td>
-            <form action="" method="post" style="margin: 0">
+            <form action="" method="post" style="margin: 0" onsubmit="return deldiskconfirm(this);">
                 <input type="hidden" name="disktag_del" value="'.$disktag.'">
                 <input type="submit" name="submit1" value="'.getconstStr('DelDisk').'">
             </form>
@@ -1286,12 +1287,16 @@ function EnvOpt($needUpdate = 0)
                 <input type="text" name="disktag_newname" value="'.$disktag.'" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '">
                 <input type="submit" name="submit1" value="'.getconstStr('RenameDisk').'">
             </form>
+            <form action="" method="post" style="margin: 0">
+                <input type="hidden" name="disktag_copy" value="' . $disktag . '">
+                <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
+            </form>
         </td>
     </tr>
     <tr>
         <td>Driver</td>
         <td>' . getConfig('Driver', $disktag);
-            if (baseclassofdrive($disk_tmp)=='Onedrive') $html .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">Change Driver type' . getconstStr(' ') . '</a>';
+            if ($diskok && baseclassofdrive($disk_tmp)=='Onedrive') $html .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">' . getconstStr('ChangeOnedrivetype') . '</a>';
             $html .= '</td>
     </tr>
     ';
@@ -1371,13 +1376,18 @@ function EnvOpt($needUpdate = 0)
 <form name="updateform" action="" method="post">
     <input type="text" name="auth" size="6" placeholder="auth" value="qkqpttgf">
     <input type="text" name="project" size="12" placeholder="project" value="OneManager-php">
-    <button name="QueryBranchs" onclick="querybranchs();return false">'.getconstStr('QueryBranchs').'</button>
+    <button name="QueryBranchs" onclick="querybranchs();return false;">'.getconstStr('QueryBranchs').'</button>
     <select name="branch">
         <option value="master">master</option>
     </select>
     <input type="submit" name="updateProgram" value="'.getconstStr('updateProgram').'">
 </form>
 <script>
+    function deldiskconfirm(t) {
+        var msg="' . getconstStr('Delete') . ' ??";
+        if (confirm(msg)==true) return true;
+        else return false;
+    }
     function renametag(t) {
         if (t.disktag_newname.value==\'\') {
             alert(\''.getconstStr('DiskTag').'\');
