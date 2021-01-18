@@ -417,6 +417,7 @@ function baseclassofdrive($d = null)
 
 function extendShow_diskenv($drive)
 {
+    if (!$drive) return [];
     return $drive->ext_show_innerenv();
 }
 
