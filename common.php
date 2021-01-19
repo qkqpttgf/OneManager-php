@@ -163,13 +163,9 @@ function main($path)
         } else {
             $url = path_format($_SERVER['PHP_SELF'] . '/');
         }
-        if (getConfig('admin')!='') {
-            if ($_POST['password1']==getConfig('admin')) {
-                return adminform('admin', pass2cookie('admin', $_POST['password1']), $url);
-            } else return adminform();
-        } else {
-            return output('', 302, [ 'Location' => $url ]);
-        }
+        if ($_POST['password1']==getConfig('admin')) {
+            return adminform('admin', pass2cookie('admin', $_POST['password1']), $url);
+        } else return adminform();
     }
     if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==pass2cookie('admin', getConfig('admin')) ) {
         $_SERVER['admin']=1;
@@ -190,7 +186,7 @@ function main($path)
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
     $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     $disktags = explode("|", getConfig('disktag'));
-//    echo 'count$disk:'.count($disktags);
+    //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
         if ($path=='/'||$path=='') {
             $files['type'] = 'folder';
@@ -227,8 +223,7 @@ function main($path)
             if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path'] . '/' . $_SERVER['disktag'] . '/');
         }
     } else $_SERVER['disktag'] = $disktags[0];
-//    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'
-//';
+    //    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
@@ -318,12 +313,14 @@ function main($path)
     // list folder
     if ($_SERVER['is_guestup_path'] && !$_SERVER['admin']) {
         $files = json_decode('{"type":"folder"}', true);
-    } elseif (!getConfig('downloadencrypt', $_SERVER['disktag'])) {
-        if ($_SERVER['ishidden']==4) $files = json_decode('{"type":"folder"}', true);
-        else {
+    } elseif ($_SERVER['ishidden']==4) {
+        if (!getConfig('downloadencrypt', $_SERVER['disktag'])) {
+            $files = json_decode('{"type":"folder"}', true);
+        } else {
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
             if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
             $files = $drive->list_files($path1);
+            if ($files['type']=='folder') $files = json_decode('{"type":"folder"}', true);
         }
     } else {
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
@@ -1070,8 +1067,7 @@ function EnvOpt($needUpdate = 0)
             $title = 'Error';
         } else {
             //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a>';
             $title = getconstStr('Setup');
         }
         return message($html, $title);
@@ -1087,11 +1083,11 @@ function EnvOpt($needUpdate = 0)
                 $f = substr($v, 0, 1);
                 if (strlen($v)==1) $v .= '_';
                 if (isCommonEnv($v)) {
-                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 201);
+                    return message('Do not input ' . $envs . '<br><a href="">' . getconstStr('Back') . '</a>', 'Error', 201);
                 } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
-                    return message('<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Please start with letters', 201);
+                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Please start with letters', 201);
                 } elseif (getConfig($v)) {
-                    return message('<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Same tag', 201);
+                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Same tag', 201);
                 } else {
                     $tmp[$k] = $v;
                 }
@@ -1118,7 +1114,7 @@ function EnvOpt($needUpdate = 0)
             $title = 'Error';
         } else {
             $html .= getconstStr('Success') . '!<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+            <a href="">' . getconstStr('Back') . '</a>';
             $title = getconstStr('Setup');
         }
         return message($html, $title);
