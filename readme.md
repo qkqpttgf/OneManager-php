@@ -75,33 +75,33 @@
             <td>
                 <a href="./theme/tfo_mdtr.php" title="tfo_mdtr.php">tfo_mdtr.php<br>(Transparent Material Design)</a>
             </td>
-            <td rowspan="3">Material Design for Classic Series (20200517)<br>(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整,php最终版本)</td> 
+            <td rowspan="3">Material Design for Classic Series (20200517)<br>(对默认主题的MD风格小优化，有对响应式、按钮外观、上传界面、路径栏随机赋色、背景模糊等的调整，该版本为php主题最终版本)</td> 
         </tr>
         <tr> 
             <td>
-                <a href="./theme/tfo_md.php" title="tfo_md.php">tfo_md.php<br>(Material Design)</a>
+                <a href="./theme/tfo_md.php" title="tfo_md.php">tfo_md.php<br>(Classic Material Design)</a>
             </td> 
         </tr>
         <tr>
             <td>
-                <a href="./theme/tfo_mdtrbaw.php" title="tfo_mdtrbaw.php">tfo_mdtrbaw.php<br>(Black & White Material Design for Tomb-Sweeping Day)</a>
+                <a href="./theme/tfo_mdtrbaw.php" title="tfo_mdtrbaw.php">tfo_mdtrbaw.php<br>(Black & White Filterd Material Design for Tomb-Sweeping Day)</a>
             </td>
         </tr>
         <tr>
             <td>
-                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_mdtr.html?preview" title="tfo_mdtr.html">tfo_mdtr.html<br>(TMD)</a>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_mdtr.html?preview" title="tfo_mdtr.html">tfo_mdtr.html<br>(Transparent Material Design)</a>
             </td>
-            <td rowspan="2">Material Design(20200718)<br>(重制了html版本适应自定义主题,并添加了可扩展模块如Valine.修改AppID和AppKey等其他参数后存储在自己的Github上复制Raw链接填入customTheme参数即可)</td> 
+            <td rowspan="2">Material Design Beta (20200718)<br>(重制了html版本适应自定义主题，并添加了扩展模块如一言，配置存储在自己的Github上复制Raw链接填入customTheme参数即可)</td> 
         </tr>
          <tr>
             <td>
-                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_md.html?preview" title="tfo_md.html">tfo_md.html<br>(MD)</a>
+                <a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Theme_new/tfo_md.html?preview" title="tfo_md.html">tfo_md.html<br>(Classic Material Design)</a>
             </td>
         </tr> 
     </tbody>
 </table>
 
-具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：示例中隐藏了多盘，但实际使用不隐藏哦。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...但是自愿附加组件如评论系统、站长工具、访问统计等涉及到其他平台的私密内容不包含在主题内，若有需要请自行寻找在后台添加.
+具体地，您可以下载/复制体验一下或参考示例中运用tfo_mdtr.php的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：示例中隐藏了多盘，但实际使用不隐藏哦。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...但是自愿附加组件如评论系统、站长工具、访问统计等涉及到其他平台的私密内容不包含在主题内，若有需要请自行寻找在后台添加。
 
 ## Deploy 部署
 Install program first, then add onedrive in setup after login.  
