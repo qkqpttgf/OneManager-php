@@ -87,20 +87,15 @@ class Onedrive {
                     if ($files['folder']['childCount']>200) {
                         // files num > 200 , then get nextlink
                         $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                        if ($page>1) if (!($files = getcache('path_' . $path . '_' . $page, $this->disktag))) {
-                            $files = $this->fetch_files_children($files, $path, $page);
-                        //$files['children'] = children_name($files['children']);
-                        /*$url = $_SERVER['api_url'];
-                        if ($path !== '/') {
-                            $url .= ':' . $path;
-                            if (substr($url,-1)=='/') $url=substr($url,0,-1);
-                            $url .= ':/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName;
-                        } else {
-                            $url .= '/children?$top=9999&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName;
-                        }
-                        $children = json_decode(curl_request($url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
-                        $files['children'] = $children['value'];*/
-                            savecache('path_' . $path . '_' . $page, $files, $this->disktag);
+                        if ($page>1)
+                        //if (!($files = getcache('path_1' . $path . '_' . $page, $this->disktag)))
+                        {
+                            $children = $this->fetch_files_children($path, $page);
+                            //echo '<pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
+                            $files['children'] = $children['value'];
+                            //$files['children'] = children_name($files['children']);
+                            $files['folder']['page'] = $page;
+                            //savecache('path_' . $path . '_' . $page, $files, $this->disktag);
                         }
                     } else {
                     // files num < 200 , then cache
@@ -181,21 +176,70 @@ class Onedrive {
         return $tmp;
     }
 
-    protected function fetch_files_children($files, $path, $page)
-    {
-        $cachefilename = '.SCFcache_'.$_SERVER['function_name'];
-        $maxpage = ceil($files['folder']['childCount']/200);
-        if (!($files['children'] = getcache('files_' . $path . '_page_' . $page, $this->disktag))) {
-            // down cache file get jump info. 下载cache文件获取跳页链接
-            $cachefile = $this->list_files(path_format($path . '/' .$cachefilename));
-            if ($cachefile['size']>0) {
-                $pageinfo = curl('GET', $cachefile[$this->DownurlStrName])['body'];
-                $pageinfo = json_decode($pageinfo,true);
-                for ($page4=1;$page4<$maxpage;$page4++) {
-                    savecache('nextlink_' . $path . '_page_' . $page4, $pageinfo['nextlink_' . $path . '_page_' . $page4], $this->disktag);
-                    $pageinfocache['nextlink_' . $path . '_page_' . $page4] = $pageinfo['nextlink_' . $path . '_page_' . $page4];
+    protected function fetch_files_children($path, $page, $getNextlink = false) {
+        $children = getcache('files_' . $path . '_page_' . $page, $this->disktag);
+        if (!$children) {
+            $url = $this->api_url . $this->ext_api_url;
+            if ($path !== '/') {
+                $url .= ':' . $path;
+                if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                $url .= ':';
+            }
+            $url .= '/children?$top=' . ($page-1)*200 . '&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName;
+            $children_tmp = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+            //echo $url . '<br><pre>' . json_encode($children_tmp, JSON_PRETTY_PRINT) . '</pre>';
+            $p = 1;
+            $i = 0;
+            foreach ($children_tmp['value'] as $child) {
+                $i++;
+                $value_name = 'child_' . $p;
+                ${$value_name}['value'][] = $child;
+                if ($i==200) {
+                    savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
+                    unset(${$value_name});
+                    $i = 0;
+                    $p++;
                 }
             }
+
+            $url = $children_tmp['@odata.nextLink'];
+            $children_tmp = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+            //echo $url . '<br><pre>' . json_encode($children_tmp, JSON_PRETTY_PRINT) . '</pre>';
+            $p = $page;
+            $i = 0;
+            foreach ($children_tmp['value'] as $child) {
+                $i++;
+                $value_name = 'child_' . $p;
+                ${$value_name}['value'][] = $child;
+                if ($i==200) {
+                    savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
+                    //unset(${$value_name});
+                    $i = 0;
+                    $p++;
+                }
+            }
+            if ($i!=0) savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
+            $value_name = 'child_' . $page;
+            return ${$value_name};
+        }
+        return $children;
+        
+        /*if ($getNextlink) {
+            if (isset($children['@odata.nextLink'])) {
+                return $children;
+            } else {
+                if ($page*200>9800) {
+                    $children_tmp = fetch_files_children($path, floor($page/49)*49, 1);
+                    $url = $children_tmp['@odata.nextLink'];
+                    $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+                }
+            }
+        }*/
+    }
+    protected function fetch_files_children1($files, $path, $page)
+    {
+        $maxpage = ceil($files['folder']['childCount']/200);
+        if (!($children = getcache('files_' . $path . '_page_' . $page, $this->disktag))) {
             $pageinfochange=0;
             for ($page1=$page;$page1>=1;$page1--) {
                 $page3=$page1-1;
@@ -211,7 +255,7 @@ class Onedrive {
                         $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName;
                         $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
                         // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
-                        savecache('files_' . $path . '_page_' . $page1, $children['value'], $this->disktag);
+                        savecache('files_' . $path . '_page_' . $page1, $children, $this->disktag);
                         $nextlink=getcache('nextlink_' . $path . '_page_' . $page1, $this->disktag);
                         if ($nextlink!=$children['@odata.nextLink']) {
                             savecache('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink'], $this->disktag);
@@ -223,7 +267,7 @@ class Onedrive {
                         for ($page2=$page1+1;$page2<=$page;$page2++) {
                             sleep(1);
                             $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
-                            savecache('files_' . $path . '_page_' . $page2, $children['value'], $this->disktag);
+                            savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag);
                             $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
                             if ($nextlink!=$children['@odata.nextLink']) {
                                 savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], $this->disktag);
@@ -234,6 +278,8 @@ class Onedrive {
                             $url = $children['@odata.nextLink'];
                         }
                         //echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
+                        return $children;
+                        /*
                         $files['children'] = $children['value'];
                         $files['folder']['page']=$page;
                         $pageinfocache['filenum'] = $files['folder']['childCount'];
@@ -241,13 +287,13 @@ class Onedrive {
                         $pageinfocache['cachesize'] = $cachefile['size'];
                         $pageinfocache['size'] = $files['size']-$cachefile['size'];
                         if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT), $this->access_token)['body'];
-                        return $files;
+                        return $files;*/
                     }
                 } else {
                     for ($page2=$page3+1;$page2<=$page;$page2++) {
                         sleep(1);
                         $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
-                        savecache('files_' . $path . '_page_' . $page2, $children['value'], $this->disktag, 3300);
+                        savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag, 3300);
                         $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
                         if ($nextlink!=$children['@odata.nextLink']) {
                             savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], $this->disktag, 3300);
@@ -258,17 +304,19 @@ class Onedrive {
                         $url = $children['@odata.nextLink'];
                     }
                     //echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
-                    $files['children'] = $children['value'];
+                    return $children;
+
+                    /*$files['children'] = $children['value'];
                     $files['folder']['page']=$page;
                     $pageinfocache['filenum'] = $files['folder']['childCount'];
                     $pageinfocache['dirsize'] = $files['size'];
                     $pageinfocache['cachesize'] = $cachefile['size'];
                     $pageinfocache['size'] = $files['size']-$cachefile['size'];
                     if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT), $this->access_token)['body'];
-                    return $files;
+                    return $files;*/
                 }
             }
-        } else {
+        }/* else {
             $files['folder']['page']=$page;
             for ($page4=1;$page4<=$maxpage;$page4++) {
                 if (!($url = getcache('nextlink_' . $path . '_page_' . $page4, $this->disktag))) {
@@ -277,8 +325,9 @@ class Onedrive {
                     $files['folder'][$path.'_'.$page4] = $url;
                 }
             }
-        }
-        return $files;
+        }*/
+        return $children;
+        //return $files;
     }
 
     public function Rename($file, $newname) {
