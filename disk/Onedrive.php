@@ -155,19 +155,20 @@ class Onedrive {
             $tmp['childcount'] = $files['folder']['childCount'];
             $tmp['page'] = $files['folder']['page'];
             foreach ($files['children'] as $file) {
+                $filename = strtolower($file['name']);
                 if (isset($file['file'])) {
-                    $tmp['list'][$file['name']]['type'] = 'file';
+                    $tmp['list'][$filename]['type'] = 'file';
                     //var_dump($file);
                     //echo $file['name'] . ':' . $this->DownurlStrName . ':' . $file[$this->DownurlStrName] . PHP_EOL;
-                    $tmp['list'][$file['name']]['url'] = $file[$this->DownurlStrName];
-                    $tmp['list'][$file['name']]['mime'] = $file['file']['mimeType'];
+                    $tmp['list'][$filename]['url'] = $file[$this->DownurlStrName];
+                    $tmp['list'][$filename]['mime'] = $file['file']['mimeType'];
                 } elseif (isset($file['folder'])) {
-                    $tmp['list'][$file['name']]['type'] = 'folder';
+                    $tmp['list'][$filename]['type'] = 'folder';
                 }
-                $tmp['list'][$file['name']]['id'] = $file['id'];
-                $tmp['list'][$file['name']]['name'] = $file['name'];
-                $tmp['list'][$file['name']]['time'] = $file['lastModifiedDateTime'];
-                $tmp['list'][$file['name']]['size'] = $file['size'];
+                $tmp['list'][$filename]['id'] = $file['id'];
+                $tmp['list'][$filename]['name'] = $file['name'];
+                $tmp['list'][$filename]['time'] = $file['lastModifiedDateTime'];
+                $tmp['list'][$filename]['size'] = $file['size'];
             }
         } elseif (isset($files['error'])) {
             return $files;
