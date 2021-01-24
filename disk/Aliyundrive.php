@@ -66,18 +66,19 @@ class Aliyundrive {
             $tmp['size'] = $files['size'];
             //$tmp['page'] = $files['folder']['page'];
             foreach ($files['items'] as $file) {
+                $filename = strtolower($file['name']);
                 if ($file['type']=='file') {
-                    $tmp['list'][$file['name']]['type'] = 'file';
-                    $tmp['list'][$file['name']]['url'] = $file['download_url'];
-                    $tmp['list'][$file['name']]['mime'] = $file['file']['content_type'];
+                    $tmp['list'][$filename]['type'] = 'file';
+                    $tmp['list'][$filename]['url'] = $file['download_url'];
+                    $tmp['list'][$filename]['mime'] = $file['file']['content_type'];
                 } elseif ($file['type']=='folder') {
-                    $tmp['list'][$file['name']]['type'] = 'folder';
+                    $tmp['list'][$filename]['type'] = 'folder';
                 }
                 //$tmp['id'] = $file['parent_file_id'];
-                $tmp['list'][$file['name']]['id'] = $file['file_id'];
-                $tmp['list'][$file['name']]['name'] = $file['name'];
-                $tmp['list'][$file['name']]['time'] = $file['updated_at'];
-                $tmp['list'][$file['name']]['size'] = $file['size'];
+                $tmp['list'][$filename]['id'] = $file['file_id'];
+                $tmp['list'][$filename]['name'] = $file['name'];
+                $tmp['list'][$filename]['time'] = $file['updated_at'];
+                $tmp['list'][$filename]['size'] = $file['size'];
                 $tmp['childcount']++;
             }
         } elseif (isset($files['code'])) {
