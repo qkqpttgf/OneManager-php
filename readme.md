@@ -40,8 +40,8 @@ How to Install:
     开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
     3.Upload code.  
     上传好代码。  
-    4.Change the file config.php can be read&write (666 is suggested).  
-    让代码中的config.php文件程序可读写，推荐chmod 666 config.php。  
+    4.Change the file .data/config.php can be read&write (666 is suggested).  
+    使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
     5.View the website in chrome or other.  
     在浏览器中访问。  
 
