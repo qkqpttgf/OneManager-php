@@ -17,7 +17,7 @@
 />
 <title><!--Title--></title>
 <meta name="description" content="A Onemanager-PHP site with Theme-renexmoe" />
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/css/app.css"><meta name="theme-color" content="#fff" />
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/css/app.css"><meta name="theme-color" content="#fff" />
 <!--BackgroundStart-->
 <style>
   body {
@@ -64,13 +64,11 @@
   <div class="mdui-toolbar">
   <span
     class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
-    mdui-tooltip="{content: '菜单'}"
     onclick='mdui.$("body").toggleClass("mdui-drawer-body-left");'
     id="toggle-drawer"
     ><i class="mdui-icon material-icons">menu</i></span
   >
   <a
-    mdui-tooltip="{content: '返回'}"
     class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white mdui-hidden-sm-up"
     onclick="window.history.back()"
   >
@@ -90,7 +88,6 @@
   <!--AdminStart--><a
     href="javascript:;"
     class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up refresh"
-    mdui-tooltip="{content: '刷新缓存'}"
     ><i class="mdui-icon material-icons">refresh</i></a
   >
   <!--AdminEnd-->
@@ -144,20 +141,26 @@
         href="<!--base_path-->"
         class="mdui-list-item-icon mdui-icon material-icons"
         >home</a
-      ><a href="<!--base_path-->" class="mdui-list-item-content">
+      ><a href="<!--base_path-->" class="mdui-list-item-content" id="home">
         <!--constStr@Home--></a
       >
     </li>
     <!--MultiDiskAreaStart-->
 <div class="mdui-divider"></div>
-<!--MultiDisksStart--><a
-  href="<!--MultiDisksUrl-->"
-  class="mdui-list-item mdui-ripple"
-  ><i class="mdui-list-item-icon mdui-icon material-icons">cloud</i>
-  <div class="mdui-list-item-content mdui-text-truncate">
+<!--MultiDisksStart-->
+<li class="mdui-list-item mdui-ripple">
+  <a
+    href="<!--MultiDisksUrl-->"
+    class="mdui-list-item-icon mdui-icon material-icons"
+    >cloud</a
+  >
+  <a
+    href="<!--MultiDisksUrl-->"
+    class="mdui-list-item-content mdui-text-truncate disk_name"
+  >
     <!--MultiDisksName-->
-  </div>
-</a>
+  </a>
+</li>
 <!--MultiDisksEnd-->
 <div class="mdui-divider"></div>
 <!--MultiDiskAreaEnd-->
@@ -204,7 +207,7 @@
       <div class="mdui-textfield mdui-textfield-floating-label">
         <i class="mdui-icon material-icons">lock</i
         ><label class="mdui-textfield-label">密码</label
-        ><input class="mdui-textfield-input" name="password1" type="new-password" />
+        ><input class="mdui-textfield-input" name="password1" type="password" />
       </div>
     </div>
     <div class="mdui-dialog-actions">
@@ -295,7 +298,7 @@
       </div>
     </li>
     <!--BackArrowStart-->
-    <li class="mdui-list-item mdui-ripple">
+    <li class="mdui-list-item mdui-ripple back-page">
       <div class="mdui-row mdui-col-sm-12">
         <a href="<!--BackArrowUrl-->">
           <div class="mdui-col-xs-7">
@@ -408,12 +411,18 @@
   src="<!--FileDownUrl-->"
   controls
   autoplay
-  style="width: 100%; margin-top: 10%"
-></audio>
+  style="width: 100%; margin-top: 10%; margin-bottom: 10%"
+>
+  >
+</audio>
 <!--IsmusicFileEnd-->
 
   <!--IsvideoFileStart-->
-<video class="mdui-video-fluid" controls style="margin-top: 20px">
+<video
+  class="mdui-video-fluid"
+  controls
+  style="margin-top: 20px; margin-bottom: 20px"
+>
   <source src="<!--FileDownUrl-->" />
   <p>
     Your browser doesn't support HTML5 video. Here is a
@@ -447,7 +456,7 @@
     '<li class="mdui-menu-item"><a href="javascript:void(0);"class="mdui-ripple highlight"><i class="mdui-menu-item-icon mdui-icon material-icons">style</i>markdown解析</a></li>';
   document.querySelector(
     ".mdui-toolbar"
-  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up highlight" mdui-tooltip="{content: 'markdown解析'}"><i class="mdui-icon material-icons">style</i></a>`;
+  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up highlight"><i class="mdui-icon material-icons">style</i></a>`;
 </script>
 
 <!--IstxtFileEnd-->
@@ -467,7 +476,7 @@
     '<li class="mdui-menu-item"><a href="javascript:void(0);"class="mdui-ripple downloadurl"><i class="mdui-menu-item-icon mdui-icon material-icons">cloud_download</i>下载链接</a></li>';
   document.querySelector(
     ".mdui-toolbar"
-  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up downloadurl" mdui-tooltip="{content: '下载链接'}"><i class="mdui-icon material-icons">cloud_download</i></a>`;
+  ).innerHTML += `<a href="javascript:;" class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up downloadurl"><i class="mdui-icon material-icons">cloud_download</i></a>`;
 </script>
 <!--IsFileEnd-->
 
@@ -478,5 +487,5 @@
   { "music":"audiotrack", "video":"ondemand_video", "img":"image",
   "pdf":"picture_as_pdf", "default":"insert_drive_file"}
   <!--IconValuesEnd-->
-  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/0.22405c6324dc78e2789a.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/1.7ccfc2697ce2c013975a.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/2.76d137ac64942c0cb54d.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/3.49e2e0050d6b66d39191.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/4.80b46df3e268829edfaa.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/5.78e24308a8ce27d5568f.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/6.4e5b42d81986fd4f26cd.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/app~798ab416.88ceaf936463b5f18075.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/app~ffdf5190.1b80eefa57b9cff5594e.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.4.1/js/webpack-runtime.bb7702f66d5e9a8172c7.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~1b381f3c.5004ff1e7fccf38af990.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~28a13772.d11317064b292bf02fea.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~34e3d95a.1bd1a5e8637cbfb8c667.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~5d2cf59e.f43e55be3ceb6bd06cc7.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~798ab416.8cdd2e29b70683103071.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~7c420fd4.7520935b3261cc2558df.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~df18e074.72b37a5a3dc42ae7080e.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~f0256996.b71376c975fe3aff5b8b.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/app~f1cc13fd.7155493f51961fa66d7e.js"></script><script src="https://cdn.jsdelivr.net/gh/186526/renexmoe-cdn@v1.1.5/js/webpack-runtime.a94291540399944c9e47.js"></script>
 </html>
