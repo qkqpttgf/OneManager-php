@@ -849,6 +849,7 @@
                 return;
             }
             upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            var filemd5='';
 <!--GuestStart-->
             function getext(str) {
                 strarry=str.split('.');
@@ -885,7 +886,7 @@
 <!--GuestEnd-->
             td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             var xhr1 = new XMLHttpRequest();
-            xhr1.open("GET", '?action=upbigfile&upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&lastModified='+ file.lastModified);
+            xhr1.open("POST", '?action=upbigfile');
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.onprogress = function(e){
                 td2.innerHTML+='.';
@@ -920,7 +921,7 @@
                     getuplink(i);
                 }
             }
-            xhr1.send(null);
+            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
 <!--GuestStart-->
             }
         }
