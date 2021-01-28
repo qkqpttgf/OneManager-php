@@ -525,7 +525,7 @@ class Onedrive {
 
             $api = $this->api_url . '/me/followedSites';
             $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ]);
-            if (!($arr['stat']==200||$arr['stat']==403||$arr['stat']==400)) return message($arr['stat'] . json_encode(json_decode($arr['body']), JSON_PRETTY_PRINT), 'Get followedSites', $arr['stat']);
+            if (!($arr['stat']==200||$arr['stat']==403||$arr['stat']==400||$arr['stat']==404)) return message($arr['stat'] . json_encode(json_decode($arr['body']), JSON_PRETTY_PRINT), 'Get followedSites', $arr['stat']);
             error_log1($arr['body']);
             $sites = json_decode($arr['body'], true)['value'];
 
