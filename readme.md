@@ -1,5 +1,5 @@
 # **Tfo**
-###### A website for two-point filestorage online (tfo)(20210115). 
+###### A website for two-point filestorage online (tfo)(20210201). 
 
 <img src="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/Tfo.logo.svg" alt="Tfo's Logo" width="250" height="250"/>
 
@@ -29,11 +29,16 @@
             </td>
         </tr>
         <tr> 
-            <td rowspan="7">UpdateAddress</td> 
+            <td rowspan="8">UpdateAddress</td> 
             <td>
                 <a href="./platform/Heroku.php" title="Heroku.php">Heroku.php</a>
             </td>
-            <td rowspan="7">Address to update is changed for easy management and updating</td> 
+            <td rowspan="8">Address to update is changed for easy management and updating</td> 
+        </tr>
+                <tr>
+            <td>
+                <a href="./platform/AliyunFC.php" title="AliyunFC.php">AliyunFC.php</a>
+            </td>
         </tr>
         <tr> 
             <td>
@@ -42,7 +47,7 @@
         </tr>
         <tr>
             <td>
-                <a href="./platform/AliyunFC.php" title="AliyunFC.php">AliyunFC.php</a>
+                <a href="./platform/Normal.php" title="Normal.php">Normal.php</a>
             </td>
         </tr>
         <tr>
@@ -82,14 +87,14 @@
 Official: https://heroku.com  
 Demo: https://herooneindex.herokuapp.com/  
 
-How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
+How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/BingoKingo/Tfo) to Deploy a new app, or create an app then deploy via connect to your github fork.  
 
 
 ### Deploy to Glitch  
 Official: https://glitch.com/  
 Demo: https://onemanager.glitch.me/  
 
-How to Install: New Project -> Import form Github -> paste "https://github.com/qkqpttgf/OneManager-php", after done, Show -> In a New Window.  
+How to Install: New Project -> Import form Github -> paste "https://github.com/BingoKingo/Tfo", after done, Show -> In a New Window.  
 
 
 ### Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
@@ -117,8 +122,8 @@ How to Install:
     开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
     3.Upload code.  
     上传好代码。  
-    4.Change the file config.php can be read&write (666 is suggested).  
-    让代码中的config.php文件程序可读写，推荐chmod 666 config.php。  
+    4.Change the file .data/config.php can be read&write (666 is suggested).  
+    使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。    
     5.View the website in chrome or other.  
     在浏览器中访问。  
 

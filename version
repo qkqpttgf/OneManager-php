@@ -1,7 +1,16 @@
+20210118-1600.31
+can change Ondrive to Sharepoint, can copy a disk. fix a bug that 500 error in setup.
+Onedrive跟Sharepoint可以切换了，可以复制一个盘。修复bug。
+
+20210115-1111.30
+<font color=red>v3, after update, please AddDisk again, please set passfile again.</font> themes of php deleted, or you can use branch v2_last.
+<font color=red>v3，一键升级后请重新添加盘，passfile失效，重新设置。</font>php主题删掉了，要么就用v2_last分支。
+20201229.29
+Modify tags, change sequence of disk.
+可以修改标签，移动标签顺序。
 20201215-1400.28
 fix: hackers can upload files to ANY folder (or create a new folder) in your Onedrive. add language zh-tw. now, on heroku, xhr can post. fix: 2 or more space in file name cause bugs.
 修复：构造代码后可以上传文件到你Onedrive的任意目录（甚至创建新目录）。新增zh-tw语言。xhr的post在heroku会接收了，改回post。修复：文件名有多个空格相连时造成bug。
-
 20201106-1730.27
 Add theme. A code used in CloudFlare Workers. Admin not need password in folder. Add caddy2 rewrite rule. Add new platform Glitch. <font color=red>web hosting and VPS user should backup your config.php, after update, copy it to .data foloder.</font>
 添加主题。添加一段用于CF workers的代码。加密目录管理员不需要密码了。添加caddy2伪静态。新增Glitch平台。<font color=red>虚拟主机与VPS用户请备份config.php，升级后，手动将它覆盖到.data目录。</font>

@@ -1,5 +1,6 @@
 <?php
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
+error_reporting(0);
 include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
@@ -15,8 +16,6 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     //else include 'platform/HuaweiFG_env.php';
     echo 'FG' . PHP_EOL;
 } elseif ($_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
-    //set_include_path(get_include_path() . PATH_SEPARATOR . '/opt/php');
-    //include 'BaiduBce.phar';
     include 'platform/BaiduCFC.php';
 } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
     include 'platform/Heroku.php';
@@ -135,29 +134,4 @@ function handler($event, $context)
         return json_encode(main($path), JSON_FORCE_OBJECT);
 
     }
-}
-
-// used by Aliyun FC
-function myErrorHandler($errno, $errstr, $errfile, $errline) {
-    if (!(error_reporting() & $errno)) {
-        return false;
-    }
-    switch ($errno) {
-    case E_USER_ERROR:
-        $errInfo = array(
-            "errorMessage" => $errstr,
-            "errorType"    => \ServerlessFC\friendly_error_type($errno),
-            "stackTrace"   => array(
-                "file" => $errfile,
-                "line" => $errline,
-            ),
-        );
-        throw new \ErrorException($errstr, 0, $errno, $errfile, $errline);
-        break;
-
-    default: // E_USER_WARNING | E_USER_NOTICE
-        break;
-    }
-
-    return true;
 }

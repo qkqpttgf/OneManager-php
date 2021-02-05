@@ -18,6 +18,7 @@ $constStr = [
         'ja' => '日本語',
         'ko-kr' => '한국어',
         'fa' => 'فارسی',
+        'ar-sa' => 'السعودية',
     ],
     'Week' => [
         'en-us' => [
@@ -74,6 +75,15 @@ $constStr = [
             5 => 'جمعه',
             6 => 'شنبه',
         ],
+        'ar-sa' => [
+            6 => 'بيوم الأحد',
+            0 => 'الإثنين',
+            1 => 'الثلاثاء',
+            2 => 'الأربعاء',
+            3 => 'الخميس',
+            4 => 'يوم الجمعة',
+            5 => 'في. يوم السبت',
+        ],
     ],
     'EnvironmentsDescription' => [
         'en-us' => [
@@ -89,6 +99,7 @@ $constStr = [
             'disableShowThumb' => 'if 1, the ShowThumbnail button will not display',
             'disableChangeTheme' => 'if 1, the Theme selection button will not display',
             'downloadencrypt' => '0 or 1. if 1, the files in encrypt folder can be downloaded without password',
+            'dontBasicAuth' => 'if 1, will not popup user/pass windows in encrypted folder, but show the page in theme.',
             'background' => 'Set an url as background photo.',
             'backgroundm' => 'Set an url as background in mobile phone.',
             'theme' => 'Select theme.',
@@ -104,7 +115,7 @@ $constStr = [
         'zh-cn' => [
             'admin' => '管理密码，不添加时不显示登录页面且无法登录。',
             'adminloginpage' => '如果设置，登录按钮及页面隐藏。管理登录的页面不再是\'?admin\'，而是\'?此设置的值\'。',
-            'autoJumpFirstDisk' => '用于多盘，如果设1，将会自动跳到第一个盘。',
+            'autoJumpFirstDisk' => '用于多个磁盘，如果为1，则自动跳转到第一个磁盘',
             'customScript' => '<script>，在所有页都会存在,例如放一个http跳转https',
             'customCss' => '<style>，在<head>最后面',
             'customTheme' => 'html格式的主题的url',
@@ -112,10 +123,11 @@ $constStr = [
             'diskname' => '这个盘你想显示什么名称。',
             'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
             'disableShowThumb' => '如果填 1, ‘显示缩略’按钮将被隐藏。',
-            'disableChangeTheme' => '如果填 1, 主题选择切换将被隐藏',
+            'disableChangeTheme' => '如果为 1，则不会显示主题选择按钮',
             'downloadencrypt' => '0 或 1。如果 1, 那加密目录内的文件可以不需要密码就能下载。',
+            'dontBasicAuth' => '如果为 1，加密目录不再弹出用户名密码窗口，只会显示主题自带的页面。',
             'background' => '设置一个url作为背景。',
-            'backgroundm' => '设置一个url作为手机用的背景。',
+            'backgroundm' => '设置一个url作为手机端用的背景。',
             'theme' => '选择一个主题。',
             'timezone' => '设置默认时区。',
             'guestup_path' => '设置游客上传路径（图床路径），不设置这个值时该目录内容会正常列文件出来，设置后只有上传界面，不显示其中文件（登录后显示）。',
@@ -154,13 +166,24 @@ $constStr = [
         'ja' => [
             'admin' => 'パスワードを管理する、追加しない場合、ログインページは表示されず、ログインできません。',
             'adminloginpage' => '設定すると、ログインボタンとページが非表示になります。ログインを管理するためのページは\'?admin \'ではなく、\'?この設定の値\'。',
-            'domain_path' => '複数のカスタムドメイン名を使用する場合、各ドメイン名に表示されるディレクトリを指定します。形式はa1.com:/dirto/path1|b1.com:/path2で、private_pathよりも優先されます。',
-            'diskname' => '',
-            'disktag' => '',
-            'downloadencrypt' => '',
-            'background' => '',
+            'autoJumpFirstDisk' => '複数のディスクを使って、1を設定すると、自動的に最初のディスクにジャンプします。',
+            'customScript' => '＜script＞は、すべてのページに存在します。例えば、httpを置いてhttpsをジャンプします。',
+            'customCss' => '＜style＞は、＜head＞の一番後ろにあります。',
+            'customTheme' => 'htmlフォーマットのテーマのurl',
+            'domain_path' => '複数のドメイン名を使用する場合、ドメイン名ごとに見られるディレクトリを指定します。フォーマットはa 1.com:/dirto/path 1.com:/path 2で、prvate_path優先。',
+            'diskname' => 'このディスクの名前を表示したいですか？',
+            'disktag' => '一つのラベルは保存配置に使い、複数のディスクはurlに表示されます。',
+            'disableShowThumb' => '1を記入すると、「表示サムネイル」ボタンが隠れます。',
+            'disableChangeTheme' => '1を記入すると、テーマ選択の切り替えが隠れます。',
+            'downloadencrypt' => '0または1です。もし1なら、暗号化されたディレクトリ内のファイルはパスワードなしでダウンロードできます。',
+            'background' => '背景にurlを設定します。',
+            'backgroundm' => '携帯電話用の背景としてurlを設定します。',
+            'theme' => 'テーマを選択します。',
+            'timezone' => 'プリセットタイムゾーンを設定します。',
             'guestup_path' => 'マップベッドのパスを設定します。この値が設定されていない場合、ディレクトリの内容は通常ファイルにリストされ、設定後はアップロードインターフェイスのみが表示されます。',
+            'hideFunctionalityFile' => '0または1です。もし1ならば、いくつかの書類はリストで観光客に見せませんが、その機能は正常です。readme.md',
             'passfile' => 'カスタムパスワードファイルの名前は、\'pppppp \'、\'aaaa.txt \'などの場合があります。ディレクトリをリストするときには表示されません。パスワードを知っている場合にのみ、このファイルを表示またはダウンロードできます。 パスワードはこのファイルの内容であり、スペースまたは漢字を使用できます。',
+            'domainforproxy' => '会将https://xxxy-my.sharepoint.comこの値に代えて、目標には自分で反世代を設定する必要があります。に加えて&amp;Originndomain=元のドメイン名',
             'public_path' => 'APIのロングリンクアクセスを使用する場合、ネットワークディスクファイルのパスが表示されますが、設定されていない場合はデフォルトでルートディレクトリになり、private_pathの上位にはなりません（publicはprivate以上のものを見ることができません。それ以外は異なります。）。',
             'sitename' => 'ウェブサイト名',
             'Onedrive_ver' => 'Onedriveバージョン',
@@ -168,13 +191,24 @@ $constStr = [
         'ko-kr' => [
             'admin' => '비밀번호를 관리하고 로그인 페이지를 표시하지 않으며 추가하지 않으면 로그인 할 수 없습니다.',
             'adminloginpage' => '설정하면 로그인 버튼과 페이지가 숨겨집니다. 로그인 관리 페이지는 더 이상 \ ?Admin\'이 아니라 \ ?이 설정의 값 \'입니다.',
-            'domain_path' => '여러 개의 사용자 정의 도메인 이름을 사용하는 경우 각 도메인 이름에 표시되는 디렉토리를 지정하십시오. 형식은 a1.com:/dirto/path1|b1.com:/path2이며 private_path보다 우선합니다.',
-            'diskname' => '이 디스크에 어떤 이름을 표시 하시겠습니까?',
-            'disktag' => '레이블은 구성을 저장하는 데 사용되며 디스크가 여러 개인 경우 URL에 표시됩니다.',
-            'downloadencrypt' => '',
-            'background' => 'URL을 배경으로 설정하거나 표시하는.',
-            'guestup_path' => '방문자의 업로드 경로 (맵 베드 경로)를 설정합니다.이 값을 설정하지 않으면 디렉토리의 내용이 파일로 표시되고 설정 후에는 업로드 인터페이스 만 표시되고 파일은 표시되지 않습니다 (로그인 후 표시).',
-            'passfile' => '사용자 정의 비밀번호 파일의 이름은 \'pppppp\' \'aaaa.txt \'등이 될 수 있으며 디렉토리가 나열되어 있으면 표시되지 않으며 비밀번호를 알고있는 경우에만이 파일을 보거나 다운로드 할 수 있습니다. 암호는이 파일의 내용이며 공백이거나 한국어 일 수 있습니다.',
+            'autoJumpFirstDisk' => '여러 개의 디스크 에 사용 되 며, 1 이 되면 첫 번 째 디스크 로 자동 으로 이동 합 니 다.',
+            'customScript' => '< script > 은 모든 페이지 에 존재 합 니 다. 예 를 들 어 http 을 하나 넣 고 https 로 이동 합 니 다.',
+            'customCss' => '< 스타일 >, < 헤드 > 맨 뒤에',
+            'customTheme' => 'html 형식의 테마 url',
+            'domain_path' => '도 메 인 이름 을 여러 개 사용자 정의 할 때 도 메 인 이름 마다 보 이 는 디 렉 터 리 를 지정 합 니 다.형식 은 a1. com: / dirto / path 1 | b1. com: / path 2, privatepath 우선.',
+            'diskname' => '이 접시 에 당신 은 어떤 명칭 을 표시 하고 싶 습 니까?',
+            'disktag' => '디스크가 여러 개인 경우 구성을 저장하는 데 사용되는 레이블이 url에 표시됩니다.',
+            'disableShowThumb' => '1을 입력하면 “썸네일 표시”버튼이 숨겨집니다.',
+            'disableChangeTheme' => '1이면 테마 선택 버튼이 표시되지 않습니다.',
+            'downloadencrypt' => '0 또는 1 1이면 암호화 된 디렉토리의 파일을 암호없이 다운로드 할 수 있습니다.',
+            'background' => 'URL을 배경으로 설정하십시오.',
+            'backgroundm' => 'URL을 휴대폰의 배경으로 설정합니다.',
+            'theme' => '주제를 선택하십시오.',
+            'timezone' => '기본 시간대를 설정합니다.',
+            'guestup_path' => '게스트 업로드 경로 (사진 침대 경로)를 설정합니다.이 값을 설정하지 않으면 디렉토리의 내용이 파일로 나열됩니다. 설정 후 업로드 인터페이스 만 표시되지 않습니다 (로그인 후 표시됨).',
+            'hideFunctionalityFile' => '0 또는 1 1 인 경우 일부 파일이 관광객 용으로 나열되지 않지만 readme.md와 같은 기능은 정상입니다.',
+            'passfile' => '사용자 지정 암호 파일의 이름은 \ “pppppp \”또는 \ “aaaa.txt \”등이 될 수 있습니다. 디렉터리가 나열 될 때 표시되지 않으며 암호를 알고있는 경우에만 파일을 보거나 다운로드 할 수 있습니다. 암호는이 파일의 내용이며 공백이거나 중국어 일 수 있습니다.',
+            'domainforproxy' => 'https://xxxxx-my.sharepoint.com을이 값으로 바꾸고 대상에서 안티 생성을 설정해야합니다. & Origindomain = Original domain name 을 추가합니다.',
             'public_path' => 'API 긴 링크 액세스를 사용하는 경우 네트워크 디스크 파일의 경로가 표시됩니다. 설정되지 않은 경우 기본적으로 루트 디렉토리로 설정됩니다.',
             'sitename' => '웹 사이트 이름',
             'Onedrive_ver' => 'Onedrive 버전',
@@ -193,6 +227,31 @@ $constStr = [
             'sitename' => 'نام سایت',
             'Onedrive_ver' => 'ورژن Onedrive',
         ],
+        'ar-sa' => [
+            'admin' => ' إدارة كلمة السر ، لا يمكنك عرض صفحة تسجيل الدخول دون إضافة',
+            'adminloginpage' => 'إذا كان الإعداد ، زر تسجيل الدخول و الصفحة المخفية   إدارة صفحة تسجيل الدخول لم تعد قيمة هذا الإعداد ؟',
+            'autoJumpFirstDisk' => 'على أقراص متعددة ، إذا كان واحد ، ثم الانتقال تلقائيا إلى القرص الأول',
+            'customScript' => 'في جميع الصفحات ، على سبيل المثال ، وضع النص المتشعب القفز HTTPS',
+            'customCss' => '<style>，في الجزء الخلفي من',
+            'customTheme' => 'أتش تي أم أل شكل عنوان الموضوع',
+            'domain_path' => 'عند استخدام العديد من أسماء النطاقات المخصصة ، حدد الدليل الذي يرى كل اسم النطاق   هذا هو القانون ؛   بات اولا',
+            'diskname' => 'ما اسم هذا القرص الذي تريد أن تظهر ؟',
+            'disktag' => 'العلامة التي تستخدم لحفظ التكوين ، يتم عرضها في عناوين المواقع عند تعدد الأقراص',
+            'disableShowThumb' => 'إذا كنت ملء ، زر عرض الاختصارات سوف تكون مخفية',
+            'disableChangeTheme' => 'إذا كان واحد ، لا يتم عرض زر اختيار الموضوع',
+            'downloadencrypt' => 'أو واحد   إذا كان واحد ، ثم تشفير الملفات في الدليل يمكن تحميلها بدون كلمة السر',
+            'background' => 'وضع رابط كخلفية',
+            'backgroundm' => 'وضع رابط كخلفية على الهاتف',
+            'theme' => 'اختر موضوع واحد',
+            'timezone' => 'تعيين المنطقة الزمنية الافتراضية',
+            'guestup_path' => 'إذا كنت لا تضع هذه القيمة ، محتويات الدليل سوف تظهر بشكل صحيح ، فقط واجهة تحميل بعد الإعداد ، لا تظهر الملفات بعد تسجيل الدخول.',
+            'hideFunctionalityFile' => 'أو واحد   إذا كان واحد ، بعض الملفات لا تظهر في قائمة الزوار ، ولكن وظيفتها هي طبيعية ، مثل   قراءة',
+            'passfile' => 'يمكنك تحديد اسم ملف كلمة السر الخاصة بك ؟   النص   انتظر ، لا تظهر في الكتالوج إلا إذا كنت تعرف كلمة السر ، يمكنك عرض أو تحميل هذا الملف   كلمة السر هي محتوى هذه الوثيقة ، يمكنك الفضاء ، يمكنك الصينية ؛',
+            'domainforproxy' => 'سوف   لا شيء   استبدال هذه القيمة ، تحتاج إلى تعيين جيل معاكس في الهدف الخاص بك   إضافة اسم النطاق الأصلي',
+            'public_path' => 'عند استخدام API وصلة طويلة للوصول إلى عرض مسار الملف على القرص ، إذا لم يتم تعيين الافتراضي هو الجذر ، لا يمكن أن يكون private ش   لا يمكن أن نرى أكثر من private publics ، أو لا',
+            'sitename' => 'اسم الموقع',
+            'Onedrive_ver' => 'أوندريف',
+        ],
     ],
     'SetSecretsFirst' => [
         'en-us' => 'Set API in Config first! or reinstall.',
@@ -201,6 +260,7 @@ $constStr = [
         'ja' => '最初に環境変数にAPIを設定してください！',
         'ko-kr' => '먼저 환경 변수에서 API를 설정하십시오! 또는 다시 설치하십시오.',
         'fa' => 'ابتدا API را در پیکربندی تنظیم کنید! یا دوباره نصب کنید.',
+        'ar-sa' => 'وضع المعهد في بيئة متغيرة   أو أعد التحميل',
     ],
     'RefreshtoLogin' => [
         'en-us' => '<font color="red">Refresh</font> and login.',
@@ -209,6 +269,7 @@ $constStr = [
         'ja' => 'ページを<font color = "red">更新</font>して、再度ログインしてください',
         'ko-kr' => '페이지를 <font color = "red"> 새로 고침 </ font> 하시고 다시 로그인하십시오',
         'fa' => '<font color="red">رفرش</font> و لاگین.',
+        'ar-sa' => 'الرجاء إعادة تسجيل الدخول بعد تحديث الصفحة',
     ],
     'AdminLogin' => [
         'en-us' => 'Admin Login',
@@ -217,6 +278,7 @@ $constStr = [
         'ja' => 'ログインを管理する',
         'ko-kr' => '로그인 관리',
         'fa' => 'ورود ادمین',
+        'ar-sa' => 'إدارة تسجيل الدخول',
     ],
     'LoginSuccess' => [
         'en-us' => 'Login Success!',
@@ -225,6 +287,7 @@ $constStr = [
         'ja' => 'ログイン成功、ジャンプ',
         'ko-kr' => '로그인 성공, 점프',
         'fa' => 'ورود با موفقیت انجام شد!',
+        'ar-sa' => 'تسجيل الدخول بنجاح ، القفز',
     ],
     'InputPassword' => [
         'en-us' => 'Input Password',
@@ -233,6 +296,7 @@ $constStr = [
         'ja' => 'パスワードを入力してください',
         'ko-kr' => '비밀번호 입력',
         'fa' => 'رمز عبور را وارد کنید',
+        'ar-sa' => 'أدخل كلمة المرور',
     ],
     'Login' => [
         'en-us' => 'Login',
@@ -241,6 +305,7 @@ $constStr = [
         'ja' => 'サインイン',
         'ko-kr' => '로그인',
         'fa' => 'ورود',
+        'ar-sa' => 'تسجيل الدخول',
     ],
     'Encrypt' => [
         'en-us' => 'Encrypt',
@@ -249,6 +314,7 @@ $constStr = [
         'ja' => '暗号化',
         'ko-kr' => '암호화',
         'fa' => 'رمزگذاری',
+        'ar-sa' => 'مشفر',
     ],
     'SetpassfileBfEncrypt' => [
         'en-us' => 'Set \'passfile\' in Environments before encrypt',
@@ -257,6 +323,7 @@ $constStr = [
         'ja' => '最初に暗号化する環境変数にパスファイルを設定します',
         'ko-kr' => '암호화하기 전에 환경 변수에 패스 파일을 설정하십시오',
         'fa' => 'قبل از رمزگذاری \"pass file \" را در محیط تنظیم کنید',
+        'ar-sa' => 'أولا تعيين متغير البيئة passfile لتشفير',
     ],
     'updateProgram' => [
         'en-us' => 'Update Program',
@@ -265,6 +332,7 @@ $constStr = [
         'ja' => 'ワンクリック更新',
         'ko-kr' => '원 클릭 업데이트',
         'fa' => 'برنامه را به روز کنید',
+        'ar-sa' => 'تحديث',
     ],
     'UpdateSuccess' => [
         'en-us' => 'Program update Success!',
@@ -273,6 +341,7 @@ $constStr = [
         'ja' => 'プログラムのアップグレードに成功しました！',
         'ko-kr' => '프로그램 업그레이드 성공!',
         'fa' => 'موفقیت به روز رسانی برنامه!',
+        'ar-sa' => 'ترقية البرنامج بنجاح',
     ],
     'Setup' => [
         'en-us' => 'Setup',
@@ -281,6 +350,7 @@ $constStr = [
         'ja' => '設定する',
         'ko-kr' => '설정',
         'fa' => 'نصب',
+        'ar-sa' => 'إعداد',
     ],
     'Back' => [
         'en-us' => 'Back',
@@ -289,11 +359,16 @@ $constStr = [
         'ja' => 'back',
         'ko-kr' => '돌아 가기',
         'fa' => 'بازگشت',
+        'ar-sa' => 'رجع',
     ],
     'Theme' => [
         'en-us' => 'Theme',
         'zh-cn' => '主题',
         'zh-tw' => '主題',
+        'ja' => 'テーマ',
+        'ko-kr' => '주제.',
+        'fa' => 'عنوان',
+        'ar-sa' => 'الثيمات',
     ],
     'NotNeedUpdate' => [
         'en-us' => 'Not Need Update',
@@ -302,6 +377,7 @@ $constStr = [
         'ja' => '更新不要',
         'ko-kr' => '업데이트가 필요하지 않습니다',
         'fa' => 'آپدیت لازم نیست',
+        'ar-sa' => 'لا تحتاج إلى تحديث',
     ],
     'PlatformConfig' => [
         'en-us' => 'Platform Config',
@@ -310,6 +386,7 @@ $constStr = [
         'ja' => 'プラットフォーム変数',
         'ko-kr' => '플랫폼 변수',
         'fa' => 'پیکربندی پلتفرم',
+        'ar-sa' => 'منصة متغير',
     ],
     'DragSort' => [
         'en-us' => 'Drag to Sort Disk',
@@ -328,19 +405,30 @@ $constStr = [
         'ja' => 'このディスクを削除',
         'ko-kr' => '이 디스크를 삭제',
         'fa' => 'پاک کردن این دیسک',
+        'ar-sa' => 'حذف هذا القرص',
+    ],
+    'CopyDisk' => [
+        'en-us' => 'Copy this Disk',
+        'zh-cn' => '复制此盘',
     ],
     'RenameDisk' => [
         'en-us' => 'Rename Disk Tag',
         'zh-cn' => '改变标签',
         'zh-tw' => '修改標籤',
+        'ar-sa' => 'تغيير التسمية',
+    ],
+    'ChangeOnedrivetype' => [
+        'en-us' => 'Change Onedrive/Sharepoint',
+        'zh-cn' => '切换Onedrive/Sharepoint',
     ],
     'AddDisk' => [
-        'en-us' => 'Add Onedrive Disk',
-        'zh-cn' => '添加Onedrive盘',
-        'zh-tw' => '新增Onedrive盤',
-        'ja' => 'Onedriveを追加',
-        'ko-kr' => 'Onedrive 추가',
-        'fa' => 'اضافه کردن دیسک Onedrive',
+        'en-us' => 'Add Disk',
+        'zh-cn' => '添加盘',
+        'zh-tw' => '新增盤',
+        'ja' => 'を追加',
+        'ko-kr' => '추가',
+        'fa' => 'اضافه کردن دیسک ',
+        'ar-sa' => 'إضافة قرص',
     ],
     'Home' => [
         'en-us' => 'Home',
@@ -349,16 +437,25 @@ $constStr = [
         'ja' => 'ホーム',
         'ko-kr' => '홈',
         'fa' => 'خانه',
+        'ar-sa' => 'فرونت بيج',
     ],
     'Preview' => [
         'en-us' => 'Preview',
         'zh-cn' => '预览',
         'zh-tw' => '預覽',
+        'ja' => 'プレビュー',
+        'ko-kr' => '미리보기',
+        'fa' => 'پیش‌نمایش',
+        'ar-sa' => 'معاينة',
     ],
     'List' => [
         'en-us' => 'List',
         'zh-cn' => '列表',
         'zh-tw' => '列表',
+        'ja' => 'リスト',
+        'ko-kr' => '리스트',
+        'fa' => 'فهرست',
+        'ar-sa' => 'الليست',
     ],
     'NeedUpdate' => [
         'en-us' => 'Program can update<br>Click setup in Operate at top.',
@@ -367,6 +464,7 @@ $constStr = [
         'ja' => 'プログラムをアップグレードできます<br>上記の管理メニューで<br>アップグレードする設定ページに入ります',
         'ko-kr' => '프로그램을 업그레이드 할 수 있습니다. <br> 위의 관리 메뉴에서 <br> 업그레이드 할 설정 페이지를 입력하십시오.',
         'fa' => 'برنامه می تواند آپدیت شود<br>روی گزینه نصب در بالای صفحه کلیک کنید.',
+        'ar-sa' => 'يمكن ترقية البرنامج في القائمة أعلاه إدارة',
     ],
     'Operate' => [
         'en-us' => 'Operate',
@@ -375,14 +473,16 @@ $constStr = [
         'ja' => '管理',
         'ko-kr' => '관리',
         'fa' => 'مدیریت',
+        'ar-sa' => 'الإدارة',
     ],
     'Logout' => [
         'en-us' => 'Logout',
-        'zh-cn' => '登出',
+        'zh-cn' => '退出',
         'zh-tw' => '登出',
         'ja' => 'ログアウトする',
         'ko-kr' => '로그 아웃',
         'fa' => 'خروج',
+        'ar-sa' => 'انسحب',
     ],
     'Create' => [
         'en-us' => 'Create',
@@ -391,6 +491,7 @@ $constStr = [
         'ja' => '新しい',
         'ko-kr' => '새로운',
         'fa' => 'ایجاد کردن',
+        'ar-sa' => 'بنيت حديثا',
     ],
     'Download' => [
         'en-us' => 'download',
@@ -399,6 +500,7 @@ $constStr = [
         'ja' => 'ダウンロードする',
         'ko-kr' => '다운로드',
         'fa' => 'دانلود',
+        'ar-sa' => 'داون لود',
     ],
     'ClicktoEdit' => [
         'en-us' => 'Click to edit',
@@ -407,6 +509,7 @@ $constStr = [
         'ja' => 'クリック後に編集',
         'ko-kr' => '클릭 후 편집',
         'fa' => 'برای ویرایش کلیک کنید',
+        'ar-sa' => 'انقر فوق تحرير',
     ],
     'Save' => [
         'en-us' => 'Save',
@@ -415,6 +518,7 @@ $constStr = [
         'ja' => '保存する',
         'ko-kr' => '저장',
         'fa' => 'ذخیره',
+        'ar-sa' => 'حفظ',
     ],
     'FileNotSupport' => [
         'en-us' => 'File not support preview.',
@@ -423,6 +527,7 @@ $constStr = [
         'ja' => 'ファイル形式はプレビューをサポートしていません',
         'ko-kr' => '파일 형식은 미리보기를 지원하지 않습니다',
         'fa' => 'پیش نمایش برای این فایل پشتیبانی نمی شود.',
+        'ar-sa' => 'معاينة الملف غير معتمد',
     ],
     'File' => [
         'en-us' => 'File',
@@ -431,6 +536,7 @@ $constStr = [
         'ja' => 'ファイル',
         'ko-kr' => '파일',
         'fa' => 'فایل',
+        'ar-sa' => 'فايل',
     ],
     'ShowThumbnails' => [
         'en-us' => 'Thumbnails',
@@ -439,11 +545,16 @@ $constStr = [
         'ja' => '画像のサムネイル',
         'ko-kr' => '사진 섬네일',
         'fa' => 'تصویر بندانگشتی',
+        'ar-sa' => 'تجاهل الصورة',
     ],
     'OriginalPic' => [
         'en-us' => 'OriginalPic',
         'zh-cn' => '原图',
         'zh-tw' => '原圖',
+        'ja' => '原図',
+        'ko-kr' => '원 도',
+        'fa' => 'تصویر اصلی',
+        'ar-sa' => 'الصورة الأصلية',
     ],
     'CopyAllDownloadUrl' => [
         'en-us' => 'CopyAllDownloadUrl',
@@ -452,11 +563,16 @@ $constStr = [
         'ja' => 'すべてのダウンロードリンクをコピー',
         'ko-kr' => '모든 다운로드 링크 복사',
         'fa' => 'کپی از تمام لینک ها',
+        'ar-sa' => 'نسخ جميع روابط التحميل',
     ],
     'Search' => [
         'en-us' => 'Search',
         'zh-cn' => '搜索',
         'zh-tw' => '搜尋',
+        'ja' => '検索',
+        'ko-kr' => '수색 하 다.',
+        'fa' => 'جستجو',
+        'ar-sa' => 'بحث',
     ],
     'EditTime' => [
         'en-us' => 'EditTime',
@@ -465,6 +581,7 @@ $constStr = [
         'ja' => '変更時間',
         'ko-kr' => '수정 시간',
         'fa' => 'زمان ویرایش',
+        'ar-sa' => 'تعديل الوقت',
     ],
     'Size' => [
         'en-us' => 'Size',
@@ -473,6 +590,7 @@ $constStr = [
         'ja' => 'サイズ ',
         'ko-kr' => '사이즈',
         'fa' => 'سایز',
+        'ar-sa' => 'مقاس',
     ],
     'Rename' => [
         'en-us' => 'Rename',
@@ -481,6 +599,7 @@ $constStr = [
         'ja' => '名前を変更',
         'ko-kr' => '이름 바꾸기',
         'fa' => 'تغییر نام',
+        'ar-sa' => 'إعادة تسمية',
     ],
     'Move' => [
         'en-us' => 'Move',
@@ -489,6 +608,7 @@ $constStr = [
         'ja' => '移動する',
         'ko-kr' => '이동',
         'fa' => 'انتقال',
+        'ar-sa' => 'تحرك',
     ],
     'Copy' => [
         'en-us' => 'Copy',
@@ -497,6 +617,7 @@ $constStr = [
         'ja' => 'コピー',
         'ko-kr' => '복사',
         'fa' => 'کپی',
+        'ar-sa' => 'نسخ',
     ],
     'CannotMove' => [
         'en-us' => 'Can not Move!',
@@ -505,6 +626,7 @@ $constStr = [
         'ja' => '動かない！',
         'ko-kr' => '움직일 수 없어!',
         'fa' => 'نمی‌تواند منتقل شود!',
+        'ar-sa' => 'لا تتحرك',
     ],
     'Delete' => [
         'en-us' => 'Delete',
@@ -513,6 +635,7 @@ $constStr = [
         'ja' => '削除する',
         'ko-kr' => '삭제',
         'fa' => 'حذف کردن',
+        'ar-sa' => 'حذف',
     ],
     'PrePage' => [
         'en-us' => 'PrePage',
@@ -521,6 +644,7 @@ $constStr = [
         'ja' => '前へ',
         'ko-kr' => '이전',
         'fa' => 'صفحه قبل',
+        'ar-sa' => 'الصفحة السابقة',
     ],
     'NextPage' => [
         'en-us' => 'NextPage',
@@ -529,6 +653,7 @@ $constStr = [
         'ja' => '次のページ',
         'ko-kr' => '다음 페이지',
         'fa' => 'صفحه بعد',
+        'ar-sa' => 'الصفحة التالية',
     ],
     'Upload' => [
         'en-us' => 'Upload',
@@ -537,16 +662,25 @@ $constStr = [
         'ja' => 'アップロードする',
         'ko-kr' => '업로드',
         'fa' => 'آپلود',
+        'ar-sa' => 'ابلود',
     ],
     'UploadFile' => [
         'en-us' => 'Upload File(s)',
         'zh-cn' => '上传文件',
         'zh-tw' => '上傳文件',
+        'ja' => 'ファイルをアップロード',
+        'ko-kr' => '문건 을 업로드 하 다',
+        'fa' => 'بارگذاری پرونده',
+        'ar-sa' => 'تحميل الملف',
     ],
     'UploadFolder' => [
         'en-us' => 'Upload Folder',
         'zh-cn' => '上传文件夹',
         'zh-tw' => '上傳資料夾',
+        'ja' => 'フォルダをアップロード',
+        'ko-kr' => '폴 더 업로드',
+        'fa' => 'بارگذاری پوشه',
+        'ar-sa' => 'تحميل ملف',
     ],
     'FileSelected' => [
         'en-us' => 'Select File',
@@ -555,6 +689,7 @@ $constStr = [
         'ja' => 'ファイルを選択',
         'ko-kr' => '파일 선택',
         'fa' => 'انتخاب فایل',
+        'ar-sa' => 'اختر ملف',
     ],
     'NoFileSelected' => [
         'en-us' => 'Not Select File',
@@ -563,6 +698,7 @@ $constStr = [
         'ja' => 'ファイルが選択されていません',
         'ko-kr' => '선택된 파일이 없습니다',
         'fa' => 'فایل را انتخاب نکنید',
+        'ar-sa' => 'لا يوجد ملف محدد',
     ],
     'Submit' => [
         'en-us' => 'Submit',
@@ -571,6 +707,7 @@ $constStr = [
         'ja' => '確認する',
         'ko-kr' => '확인',
         'fa' => 'ارسال',
+        'ar-sa' => 'أكد',
     ],
     'Close' => [
         'en-us' => '×',
@@ -579,6 +716,7 @@ $constStr = [
         'ja' => '×',
         'ko-kr' => '×',
         'fa' => '×',
+        'ar-sa' => '×',
     ],
     'InputPasswordUWant' => [
         'en-us' => 'Input Password you Want',
@@ -587,6 +725,7 @@ $constStr = [
         'ja' => '設定するパスワードを入力してください',
         'ko-kr' => '설정하려는 비밀번호를 입력하십시오',
         'fa' => 'پسورد خود را وارد کنید',
+        'ar-sa' => 'أدخل كلمة السر التي تريد تعيين',
     ],
     'ParentDir' => [
         'en-us' => 'Parent Dir',
@@ -595,6 +734,7 @@ $constStr = [
         'ja' => '親ディレクトリ',
         'ko-kr' => '부모 디렉토리',
         'fa' => 'مسیر',
+        'ar-sa' => 'الدليل السابق',
     ],
     'Folder' => [
         'en-us' => 'Folder',
@@ -603,6 +743,7 @@ $constStr = [
         'ja' => 'フォルダー',
         'ko-kr' => '폴더',
         'fa' => 'پوشه',
+        'ar-sa' => 'فولدر',
     ],
     'Name' => [
         'en-us' => 'Name',
@@ -611,6 +752,7 @@ $constStr = [
         'ja' => '名前',
         'ko-kr' => '이름',
         'fa' => 'نام',
+        'ar-sa' => 'إسم',
     ],
     'Content' => [
         'en-us' => 'Content',
@@ -619,6 +761,7 @@ $constStr = [
         'ja' => '内容',
         'ko-kr' => '내용',
         'fa' => 'محتوا',
+        'ar-sa' => 'المحتويات',
     ],
     'CancelEdit' => [
         'en-us' => 'Cancel Edit',
@@ -627,6 +770,7 @@ $constStr = [
         'ja' => '編集をキャンセル',
         'ko-kr' => '편집 취소',
         'fa' => 'لغو ویرایش',
+        'ar-sa' => 'إلغاء تحرير',
     ],
     'GetFileNameFail' => [
         'en-us' => 'Fail to Get File Name!',
@@ -635,6 +779,7 @@ $constStr = [
         'ja' => 'ファイル名を取得できませんでした！',
         'ko-kr' => '파일 이름을 가져 오지 못했습니다!',
         'fa' => 'نام فایل به دست نیامد!',
+        'ar-sa' => 'فشل الحصول على اسم الملف',
     ],
     'GetUploadLink' => [
         'en-us' => 'Get Upload Link',
@@ -643,11 +788,16 @@ $constStr = [
         'ja' => 'アップロードリンクを取得',
         'ko-kr' => '업로드 링크 받기',
         'fa' => 'دریافت لینک آپلود',
+        'ar-sa' => 'الحصول على رابط التحميل',
     ],
     'Calculate' => [
         'en-us' => 'Calculate',
         'zh-cn' => '计算',
         'zh-tw' => '計算',
+        'ja' => '計算する',
+        'ko-kr' => '계산 하 다.',
+        'fa' => 'محاسبه',
+        'ar-sa' => 'محسوب',
     ],
     'UpFileTooLarge' => [
         'en-us' => 'The File is too Large!',
@@ -656,6 +806,7 @@ $constStr = [
         'ja' => '超えると、アップロードは終了します。',
         'ko-kr' => '파일이 너무 커서 업로드가 종료되었습니다.',
         'fa' => 'فایل خیلی بزرگ است!',
+        'ar-sa' => 'الملف كبير جدا ، إنهاء التحميل',
     ],
     'UploadStart' => [
         'en-us' => 'Upload Start',
@@ -664,6 +815,7 @@ $constStr = [
         'ja' => 'アップロードを開始',
         'ko-kr' => '업로드 시작',
         'fa' => 'شروع آپلود',
+        'ar-sa' => 'بدء التحميل',
     ],
     'UploadStartAt' => [
         'en-us' => 'Start At',
@@ -672,6 +824,7 @@ $constStr = [
         'ja' => 'で開始',
         'ko-kr' => '에서 시작',
         'fa' => 'شروع از',
+        'ar-sa' => 'تبدأ في',
     ],
     'ThisTime' => [
         'en-us' => 'This Time',
@@ -680,6 +833,7 @@ $constStr = [
         'ja' => '今回は',
         'ko-kr' => '이번에는',
         'fa' => 'این زمان',
+        'ar-sa' => 'هذه المرة',
     ],
     'LastUpload' => [
         'en-us' => 'Last time Upload',
@@ -688,6 +842,7 @@ $constStr = [
         'ja' => '上回は',
         'ko-kr' => '마지막 업로드',
         'fa' => 'آخرین زمان آپلود',
+        'ar-sa' => 'آخر تحميل',
     ],
     'AverageSpeed' => [
         'en-us' => 'AverageSpeed',
@@ -696,6 +851,7 @@ $constStr = [
         'ja' => '平均速度',
         'ko-kr' => '평균 속도',
         'fa' => 'میانگین سرعت',
+        'ar-sa' => 'متوسط السرعة',
     ],
     'CurrentSpeed' => [
         'en-us' => 'CurrentSpeed',
@@ -704,6 +860,7 @@ $constStr = [
         'ja' => 'インスタントスピード',
         'ko-kr' => '즉각적인 속도',
         'fa' => 'سرعت فعلی',
+        'ar-sa' => 'سرعة فورية',
     ],
     'Expect' => [
         'en-us' => 'Expect',
@@ -712,6 +869,7 @@ $constStr = [
         'ja' => '期待される',
         'ko-kr' => '예상',
         'fa' => 'انتظار',
+        'ar-sa' => 'ومن المتوقع أيضا',
     ],
     'EndAt' => [
         'en-us' => 'End At',
@@ -720,6 +878,7 @@ $constStr = [
         'ja' => 'で終了',
         'ko-kr' => '에 끝남',
         'fa' => 'پایان از',
+        'ar-sa' => 'نهاية',
     ],
     'UploadErrorUpAgain' => [
         'en-us' => 'Maybe error, do upload again.',
@@ -728,6 +887,7 @@ $constStr = [
         'ja' => '間違っている可能性があります。もう一度アップロードしてください。',
         'ko-kr' => '잘못되었을 수 있습니다. 다시 업로드하십시오.',
         'fa' => 'خطا، دوباره آپلود کنید',
+        'ar-sa' => 'قد تكون خاطئة ، إعادة تحميل',
     ],
     'UploadComplete' => [
         'en-us' => 'Upload Complete',
@@ -736,6 +896,7 @@ $constStr = [
         'ja' => 'アップロード完了',
         'ko-kr' => '업로드 완료',
         'fa' => 'آپلود با موفقیت انجام شد',
+        'ar-sa' => 'تحميل كامل',
     ],
     'UploadFail23' => [
         'en-us' => 'Upload Fail, contain #.',
@@ -744,6 +905,7 @@ $constStr = [
         'ja' => 'ディレクトリまたはファイル名に＃が含まれています。アップロードに失敗しました。',
         'ko-kr' => '디렉토리 또는 파일 이름에 #이 포함되어 있습니다. 업로드하지 못했습니다.',
         'fa' => 'بارگذاری ناموفق، حاوی #.',
+        'ar-sa' => 'دليل أو اسم الملف يحتوي على تحميل فشلت',
     ],
     'defaultSitename' => [
         'en-us' => 'OneManager',
@@ -755,6 +917,7 @@ $constStr = [
         'ja' => 'refresh_tokenを保存しています！',
         'ko-kr' => 'refresh_token 저장 중!',
         'fa' => 'در حال ذخیره refresh_token!',
+        'ar-sa' => 'حفظ refresh ش   توكن',
     ],
     'MayinEnv' => [
         'en-us' => 'The \'Drive_ver\' may in Config',
@@ -763,6 +926,7 @@ $constStr = [
         'ja' => 'Drive_verは環境変数に書き込まれている必要があります',
         'ko-kr' => 'Drive_verが書き込まれている必要があります',
         'fa' => 'The \'Drive_ver\' may in Config',
+        'ar-sa' => 'درايو   يجب أن يكون مكتوب على',
     ],
     'Wait' => [
         'en-us' => 'Wait',
@@ -771,6 +935,7 @@ $constStr = [
         'ja' => 'ちょっと待って',
         'ko-kr' => '잠깐만',
         'fa' => 'منتظر بمانید',
+        'ar-sa' => 'انتظر لحظة',
     ],
     'WaitJumpIndex' => [
         'en-us' => 'Wait 5s jump to Home page',
@@ -779,6 +944,7 @@ $constStr = [
         'ja' => '5秒待ってホームページにジャンプします',
         'ko-kr' => '5 초 동안 홈페이지로 이동',
         'fa' => '۵ دقیقه صبر کنید تا به صفحه نخست برگردید',
+        'ar-sa' => 'انتظر 5S القفز إلى الصفحة الرئيسية',
     ],
     'JumptoOffice' => [
         'en-us' => 'Login Office and Get a refresh_token',
@@ -787,27 +953,34 @@ $constStr = [
         'ja' => 'Officeにジャンプしてログインし、refresh_tokenを取得します',
         'ko-kr' => '사무실로 이동하여 로그인하여 refresh_token을 받으십시오.',
         'fa' => 'وارد Office شوید و یک refresh_token دریافت کنید',
+        'ar-sa' => 'Login Office and Get a refresh_token',
     ],
-    'OnedriveDiskTag' => [
-        'en-us' => 'Onedrive Disk Tag',
-        'zh-cn' => 'Onedrive 标签',
-        'zh-tw' => 'Onedrive 標籤',
-        'ja' => 'Onedriveタグ',
-        'ko-kr' => 'Onedrive 태그',
-        'fa' => 'برچسب دیسک Onedrive',
+    'DiskTag' => [
+        'en-us' => 'Disk Tag',
+        'zh-cn' => '标签',
+        'zh-tw' => '標籤',
+        'ja' => 'タグ',
+        'ko-kr' => '태그',
+        'fa' => 'برچسب دیسک ',
+        'ar-sa' => 'تاغ',
     ],
-    'OnedriveDiskName' => [
-        'en-us' => 'Onedrive Showed Name',
-        'zh-cn' => 'Onedrive 显示名称',
-        'zh-tw' => 'Onedrive 顯示名稱',
-        'ja' => 'Onedrive表示名',
-        'ko-kr' => 'Onedrive 표시 이름',
-        'fa' => 'نام نشان داده شده Onedrive',
+    'DiskName' => [
+        'en-us' => 'Showed Name',
+        'zh-cn' => '显示名称',
+        'zh-tw' => '顯示名稱',
+        'ja' => '表示名',
+        'ko-kr' => '표시 이름',
+        'fa' => 'نام نشان داده شده ',
+        'ar-sa' => 'عرض الاسم',
     ],
     'DriveVerMS' => [
         'en-us' => 'Onedrive, Onedrive for business',
         'zh-cn' => '国际版（商业版与个人版）',
         'zh-tw' => '國際版（商業版與個人版）',
+        'ja' => '国際版（商業版と個人版）',
+        'ko-kr' => '국제 판 (상업 판 과 개인 판)',
+        'fa' => 'International Edition (Business Edition and Personal Edition)',
+        'ar-sa' => 'الأعمال التجارية الدولية الطبعة الطبعة الشخصية',
     ],
     'DriveVerCN' => [
         'en-us' => 'Onedrive in China',
@@ -816,6 +989,7 @@ $constStr = [
         'ja' => '中国のOnedrive',
         'ko-kr' => '중국 Onedrive',
         'fa' => 'Onedrive در چین',
+        'ar-sa' => 'Onedrive النسخة الصينية',
     ],
     'DriveVerShareurl' => [
         'en-us' => 'A share link of a folder',
@@ -824,16 +998,17 @@ $constStr = [
     ],
     'UseShareLink' => [
         'en-us' => 'Share a folder in Onedrive (enable EDIT for everyone), input the link url below.',
-        'zh-cn' => '对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
+        'zh-cn' => '<font color="red">只有国际版能用，</font>对一个Onedrive文件夹共享，允许所有人编辑，然后将共享链接填在下方',
         'zh-tw' => '對一個Onedrive資料夾共享，允許所有人編輯，然後將共享連結填在下方',
     ],
     'CustomIdSecret' => [
         'en-us' => 'Use custom client id & secret instead of OneManager default',
-        'zh-cn' => '自己申请应用ID与机密，不用OneManager默认的',
-        'zh-tw' => '自己申請應用ID與機密，不用OneManager預設的',
+        'zh-cn' => '用自己申请的应用ID与机密，不用OneManager默认的',
+        'zh-tw' => '用自己申請的應用ID與機密，不用OneManager預設的',
         'ja' => 'アプリケーションIDとシークレットを自分で申請する',
         'ko-kr' => '응용 프로그램 ID 및 비밀 신청',
         'fa' => 'به طور پیش فرض اما از شناسه برنامه و سکرت استفاده کنید',
+        'ar-sa' => 'استخدام التطبيق الخاص بك معرف وسرية ، لا أحد مدير الافتراضية',
     ],
     'GetSecretIDandKEY' => [
         'en-us' => 'Get custom client id & secret',
@@ -841,6 +1016,7 @@ $constStr = [
         'zh-tw' => '申請應用ID與機密',
         'ja' => 'アプリケーションIDとシークレット',
         'fa' => 'دریافت شناسه برنامه و سکرت',
+        'ar-sa' => 'تطبيق الهوية والسرية',
     ],
     'UseSharepointInstead' => [
         'en-us' => 'Use space in Sharepoint website instead of Onedrive',
@@ -862,6 +1038,7 @@ $constStr = [
         'ja' => 'タグは、文字で始まり、文字または数字で終わる必要があります。少なくとも2つ',
         'ko-kr' => '태그는 문자로 시작하고 문자 또는 숫자로 끝나야합니다 (2 이상).',
         'fa' => 'برچسب باید با یک حرف شروع شود، با یک حرف یا رقم پایان یابد و تنها می‌تواند حاوی حروف کوچک، ارقام و خط فاصله، حداقل ۲ حرف باشد!',
+        'ar-sa' => 'التسمية يمكن أن تبدأ فقط مع الحروف ، وتنتهي مع الحروف أو الأرقام ، على الأقل',
     ],
     'ClickInstall' => [
         'en-us' => 'Click to install the project',
@@ -870,6 +1047,7 @@ $constStr = [
         'ja' => 'クリックしてインストールプロセスを開始します',
         'ko-kr' => '설치 과정을 시작하려면 클릭',
         'fa' => 'برای نصب پروژه کلیک کنید',
+        'ar-sa' => 'انقر فوق بدء الإعداد',
     ],
     'LogintoBind' => [
         'en-us' => 'then login and bind your onedrive in setup',
@@ -878,6 +1056,7 @@ $constStr = [
         'ja' => '次に、ログインして、設定でonedriveをバインドします。',
         'ko-kr' => '그런 다음 로그인하여 onedrive를 설정에 바인딩하십시오.',
         'fa' => 'پس از آن وارد سیستم شوید و تنظیمات خود را در onedrive متصل کنید',
+        'ar-sa' => 'ثم قم بتسجيل الدخول بعد ربط أحد السائقين في الإعدادات',
     ],
     'MakesuerWriteable' => [
         'en-us' => 'Plase make sure the config.php is writeable. run writeable.sh.',
@@ -886,6 +1065,7 @@ $constStr = [
         'ja' => 'config.phpが書き込み可能であることを確認してください。',
         'ko-kr' => 'config.php가 쓰기 가능한지 확인하십시오.',
         'fa' => 'اطمینان حاصل کنید که config.php قابل نوشتن است. writeable.sh را اجرا کنید.',
+        'ar-sa' => 'أكد   بي إتش بي   قابل للكتابة',
     ],
     'MakesuerRewriteOn' => [
         'en-us' => 'Plase make sure the RewriteEngine is On.',
@@ -894,16 +1074,25 @@ $constStr = [
         'ja' => '書き換え（擬似静的）機能が有効になっていることを確認します。',
         'ko-kr' => '다시 쓰기 (의사 정적) 기능이 활성화되어 있는지 확인하십시오.',
         'fa' => 'لطفاً مطمئن شوید که RewriteEngine روشن است.',
+        'ar-sa' => 'يؤكد أن الكتابة يمكن أن تكون وظيفة شبه استاتي',
     ],
     'CopyUrl' => [
         'en-us' => 'Copy URL',
         'zh-cn' => '复制链接',
         'zh-tw' => '複製連結',
+        'ja' => 'リンクをコピー',
+        'ko-kr' => '링크 복사',
+        'fa' => 'کپی ارتباط',
+        'ar-sa' => 'نسخ الرابط',
     ],
     'Success' => [
         'en-us' => 'Success',
         'zh-cn' => '成功',
         'zh-tw' => '成功',
+        'ja' => '成功',
+        'ko-kr' => '성공 하 다.',
+        'fa' => 'موفقیت',
+        'ar-sa' => 'نجح',
     ],
     'SetAdminPassword' => [
         'en-us' => 'Set Admin Password',
@@ -917,6 +1106,7 @@ $constStr = [
         'ja' => 'リフレッシュ',
         'ko-kr' => '새로 고침',
         'fa' => 'رفرش',
+        'ar-sa' => 'منعش',
     ],
     'SelectLanguage' => [
         'en-us' => 'Select Language',
@@ -925,6 +1115,7 @@ $constStr = [
         'ja' => '言語を選択してください',
         'ko-kr' => '언어를 선택하십시오',
         'fa' => 'زبان را انتخاب کنید',
+        'ar-sa' => 'اختيار اللغة',
     ],
     'RefreshCache' => [
         'en-us' => 'RefreshCache',
@@ -933,6 +1124,7 @@ $constStr = [
         'ja' => 'キャッシュを再構築',
         'ko-kr' => '캐시 플러시',
         'fa' => 'رفرش cache',
+        'ar-sa' => 'تحديث الكاش',
     ],
     'CannotOneKeyUpate' => [
         'en-us' => 'Can not update by a click! run update.sh',

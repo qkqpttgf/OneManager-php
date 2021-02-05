@@ -24,6 +24,11 @@ function GetGlobalVariable($event)
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
     $_SERVER['HTTP_USER_AGENT'] = $event['headers']['user-agent'];
+    if (isset($event['headers']['authorization'])) {
+        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['authorization'], 'Basic ')[1]), ':');
+        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
+        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
+    }
     $_SERVER['HTTP_TRANSLATE']==$event['headers']['translate'];//'f'
     $_SERVER['USER'] = 'qcloud';
 }
@@ -54,15 +59,13 @@ function GetPathSetting($event, $context)
 
 function getConfig($str, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
     //include 'config.php';
-    $s = file_get_contents('config.php');
+    $s = file_get_contents('.data/config.php');
     //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
         $envs = json_decode($configs, true);
-        if (in_array($str, $InnerEnv)) {
+        if (isInnerEnv($str)) {
             if ($disktag=='') $disktag = $_SERVER['disktag'];
             if (isset($envs[$disktag][$str])) {
                 if (in_array($str, $Base64Env)) return base64y_decode($envs[$disktag][$str]);
@@ -80,11 +83,9 @@ function getConfig($str, $disktag = '')
 
 function setConfig($arr, $disktag = '')
 {
-    global $InnerEnv;
-    global $Base64Env;
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     //include 'config.php';
-    $s = file_get_contents('config.php');
+    $s = file_get_contents('.data/config.php');
     //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
@@ -92,7 +93,7 @@ function setConfig($arr, $disktag = '')
     $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
-        if (in_array($k, $InnerEnv)) {
+        if (isInnerEnv($k)) {
             if (in_array($k, $Base64Env)) $envs[$disktag][$k] = base64y_encode($v);
             else $envs[$disktag][$k] = $v;
             $indisk = 1;
@@ -102,6 +103,11 @@ function setConfig($arr, $disktag = '')
         } elseif ($k=='disktag_del') {
             $disktags = array_diff($disktags, [ $v ]);
             $envs[$v] = '';
+            $operatedisk = 1;
+        } elseif ($k=='disktag_copy') {
+            $newtag = $v . '_' . date("Ymd_His");
+            $envs[$newtag] = $envs[$v];
+            array_push($disktags, $newtag);
             $operatedisk = 1;
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
@@ -118,7 +124,12 @@ function setConfig($arr, $disktag = '')
     }
     if ($operatedisk) {
         if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
-            $envs['disktag'] = str_replace($arr['disktag_rename'], $arr['disktag_newname'], getConfig('disktag'));
+            $tags = [];
+            foreach ($disktags as $tag) {
+                if ($tag==$arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
+                else array_push($tags, $tag);
+            }
+            $envs['disktag'] = implode('|', $tags);
             $envs[$arr['disktag_newname']] = $envs[$arr['disktag_rename']];
             $envs[$arr['disktag_rename']] = '';
         } else {
@@ -129,7 +140,7 @@ function setConfig($arr, $disktag = '')
         }
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
-    ksort($envs);
+    //ksort($envs);
     $response = updateEnvironment($envs, $_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
     WaitSCFStat($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey'));
     return $response;
@@ -268,7 +279,7 @@ language:<br>';
         return message($html, $title, 201);
     }
     $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
-    $title = 'Error';
+    $title = 'Install';
     return message($html, $title, 201);
 }
 
@@ -366,6 +377,7 @@ function copyFolder($from, $to)
 
 function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey)
 {
+    sortConfig($Envs);
     // 获取当前代码并解压
     //$codeurl = json_decode(getfunctioncodeurl($function_name, $Region, $Namespace, $SecretId, $SecretKey), true)['Response']['Url'];
     //$codezip = '/tmp/oldcode.zip';
@@ -382,7 +394,7 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
     // 将配置写入
     $prestr = '<?php $configs = \'' . PHP_EOL;
     $aftstr = PHP_EOL . '\';';
-    file_put_contents($outPath . 'config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
+    file_put_contents($outPath . '.data/config.php', $prestr . json_encode($Envs, JSON_PRETTY_PRINT) . $aftstr);
 
     // 将目录中文件打包成zip
     $source = '/tmp/code.zip';
@@ -395,7 +407,7 @@ function updateEnvironment($Envs, $function_name, $Region, $Namespace, $SecretId
 
     return updateProgram($function_name, $Region, $namespace, $SecretId, $SecretKey, $source);
     $tmp1['Response']['Error']['Message'] = $codeurl;
-    error_log($tmp1['Response']['Error']['Message']);
+    error_log1($tmp1['Response']['Error']['Message']);
     return json_encode($tmp1);
 }
 
@@ -451,7 +463,7 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
     }
     WaitSCFStat($function_name, $Region, $Namespace, $SecretId, $SecretKey);
 
-    $s = file_get_contents('config.php');
+    $s = file_get_contents('.data/config.php');
     //$configs = substr($s, 18, -2);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
@@ -459,7 +471,7 @@ function SetbaseConfig($Envs, $function_name, $Region, $Namespace, $SecretId, $S
         $envs[$k] = $v;
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
-    ksort($envs);
+    //ksort($envs);
     $response = updateEnvironment($envs, $function_name, $Region, $Namespace, $SecretId, $SecretKey);
     return $response;
 }
@@ -538,7 +550,7 @@ function updateProgram($function_name, $Region, $Namespace, $SecretId, $SecretKe
     //    .' -H "X-TC-Version: '.$version.'"'
     //    .' -H "X-TC-Region: '.$region.'"'
     //    ." -d '".$payload."'";
-    //error_log( $curl.PHP_EOL );
+    //error_log1( $curl.PHP_EOL );
     //return '{"response": {"Error": {"Message":"' . $curl . '"}}}';
     $headers['Authorization'] = $authorization;
     $headers['Content-Type'] = 'application/json; charset=utf-8';
@@ -593,7 +605,7 @@ function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
         }
     }
     // 放入配置文件
-    file_put_contents($outPath . '/config.php', file_get_contents(__DIR__.'/../config.php'));
+    file_put_contents($outPath . '/.data/config.php', file_get_contents(__DIR__ . '/../.data/config.php'));
 
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();
