@@ -1,0 +1,26 @@
+# # Apache
+# # LoadModule rewrite_module modules/mod_rewrite.so
+# # AllowOverride All
+RewriteEngine On
+# RewriteCond $1 !^(.well-known)
+RewriteRule ^(.*) index.php?/$1 [L]
+
+###-----------------------------------
+### nginx
+# rewrite ^/(?!.well-known)(.*)$ /index.php?/$1 last;
+#
+### caddy
+# rewrite {
+#     to index.php?/$1
+# }
+#
+### caddy2 Caddyfile
+# @try_files {
+#     not path /.well-known/*
+#     file {
+#         try_files index.php
+#     }
+# }
+# rewrite @try_files {http.matchers.file.relative}
+#
+###-----------------------------------

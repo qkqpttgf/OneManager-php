@@ -1,0 +1,7 @@
+{
+  "name": "Tfo",
+  "description": "Deploy Tfo to heroku",
+  "website": "https://github.com/BingoKingo/Tfo",
+  "repository": "https://github.com/BingoKingo/Tfo",
+  "success_url": "/"
+}

@@ -1,0 +1,377 @@
+<!--IconValuesStart-->
+{
+    "music":"audiotrack",
+    "video":"ondemand_video",
+    "img":"image",
+    "default":"insert_drive_file"
+}
+<!--IconValuesEnd-->
+<!DOCTYPE html>
+<html lang="<!--constStr@language-->">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no"/>
+	<title><!--Title--></title>
+	<link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+	<link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+	<link rel="stylesheet" href="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/css/mdui.css">
+	<style>
+        body{background-color:#f2f5fa;padding-bottom:60px;<!--BackgroundStart-->background-position:center bottom;background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");<!--BackgroundEnd-->}
+        .nexmoe-item{margin:20px -8px 0!important;padding:15px!important;border-radius:5px;background-color:#fff;-webkit-box-shadow:0 .5em 3em rgba(161,177,204,.4);box-shadow:0 .5em 3em rgba(161,177,204,.4);background-color:#fff}
+        .mdui-img-fluid,.mdui-video-fluid{border-radius:5px;border:1px solid #eee}
+        .mdui-list{padding:0}
+        .mdui-list-item{margin:0!important;border-radius:5px;padding:0 10px 0 5px!important;border:1px solid #eee;margin-bottom:10px!important}
+        .mdui-list-item:last-child{margin-bottom:0!important}
+        .mdui-list-item:first-child{border:none}
+        .mdui-toolbar{width:auto;margin-top:60px!important}
+        .mdui-appbar .mdui-toolbar{height:56px;font-size:16px}
+        .mdui-toolbar>*{padding:0 6px;margin:0 2px;}
+        .mdui-toolbar>.mdui-typo-headline{padding:0 16px 0 0}
+        .mdui-toolbar>i{padding:0}
+        .mdui-toolbar>a{padding:0 16px;line-height:30px;border-radius:30px;border:1px solid #eee;opacity:.87}
+        .mdui-toolbar>a:hover,a.mdui-typo-headline,a.active{opacity:1}
+        .mdui-container{max-width:980px}
+        .mdui-list>.th{background-color:initial}
+        .mdui-list-item>a{width:100%;line-height:48px}
+        .mdui-toolbar>a:last-child{opacity:1;background-color:#1e89f2;color:#ffff}
+        .more-disk{display: inline-block;max-width: 100px;}
+        .more-disk div{
+            list-style:none;
+            position:absolute;display:none;background:#ffffff;border-radius:5px;margin:0 0 0 -10px;/*padding:0 7px;*/color:#205D67;z-index:1;
+            box-shadow: 0 0.5em 3em rgba(161,177,204,.4);
+        }
+        .more-disk:hover div{display:block}
+        .more-disk div li{line-height:normal;padding: 3px 10px;}
+        .more-disk div li a{text-decoration: none; color:rgba(0,0,0,.3);}
+        .more-disk div li a:hover{color:rgba(0,0,0,.87);}
+        .more-disk div li a[now]{color:rgba(0,0,0,1);}
+        @media screen and (max-width:980px){
+            .mdui-list-item .mdui-text-right{display:none}
+            .mdui-container{width:100%!important;margin:0}
+            /*.mdui-toolbar>*{display:none}*/
+            .mdui-toolbar>a:last-child,.mdui-toolbar>.mdui-typo-headline,.mdui-toolbar>i:first-child{display:block}
+        }
+    </style>
+    <!--customCss-->
+	<script src="//cdnjs.loli.net/ajax/libs/mdui/0.4.1/js/mdui.min.js"></script>
+</head>
+<body class="mdui-theme-primary-blue-grey mdui-theme-accent-blue">
+	<div class="mdui-container">
+	    <div class="mdui-container-fluid">
+            <div class="mdui-toolbar nexmoe-item" id="toolbar">
+                <a href="<!--base_path-->"><!--Sitename--></a>
+<!--MultiDiskAreaStart-->
+                <i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>
+                <div class="more-disk">
+                    <span><!--DiskNameNow--></span>
+                    <div>
+<!--MultiDisksStart-->
+                        <li><a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a></li>
+<!--MultiDisksEnd-->
+                    </div>
+                </div>
+<!--MultiDiskAreaEnd-->
+<!--PathArrayStart-->
+                <i class="mdui-icon material-icons mdui-icon-dark" style="margin:0;">chevron_right</i>
+                <a href="<!--PathArrayLink-->"><!--PathArrayName--></a>
+<!--PathArrayEnd-->
+            </div>
+        </div>
+
+<!--ListStart-->
+        <div class="mdui-container-fluid">
+<!--EncryptedStart-->
+            <div class="mdui-col-md-6 mdui-col-offset-md-3">
+              <!--<center><h1 class="mdui-typo-display-2-opacity">这是一个受保护的文件夹，您需要提供访问密码才能查看。</h1></center>-->
+              <form action="" method="post">
+                  <div class="mdui-textfield mdui-textfield-floating-label">
+                    <i class="mdui-icon material-icons">https</i>
+                    <label class="mdui-textfield-label"><!--constStr@InputPassword--></label>
+                    <input name="password1" class="mdui-textfield-input" type="password"/>
+                  </div>
+                  <br>
+                  <button type="submit" class="mdui-center mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme">
+                      <i class="mdui-icon material-icons">fingerprint</i>
+                      <!--constStr@Submit-->
+                  </button>
+              </form>
+            </div>
+<!--EncryptedEnd-->
+<!--GuestUploadStart-->
+<!--
+            <div class="nexmoe-item" style="padding: 100px!important;">
+                <div class="mdui-typo-display-3-opacity" style="text-align:center;">OneImages</div>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input class="mdui-center" type="file" style="margin: 50px 0;" name="file" />
+                    <div class="mdui-row-xs-3">
+                        <div class="mdui-col"></div>
+                        <div class="mdui-col">
+                            <button class="mdui-btn mdui-btn-block mdui-color-theme-accent mdui-ripple"><!--constStr@Upload--></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+-->
+<!--GuestUploadEnd-->
+<!--HeadomfStart-->
+<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
+<!--HeadomfContent-->
+</div>
+<!--HeadomfEnd-->
+<!--HeadmdStart-->
+<div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--HeadmdContent-->
+</div>
+<!--HeadmdEnd-->
+<!--IsFileStart-->
+<!--IsimgFileStart-->
+            <div class="nexmoe-item">
+                <img class="mdui-img-fluid mdui-center" src="<!--FileDownUrl-->"/>
+            </div>
+<!--IsimgFileEnd-->
+<!--IstxtFileStart-->
+            <div class="nexmoe-item">
+                <pre id="editor" style="white-space: pre-wrap;"><!--TxtContent--></pre>
+            </div>
+<!--IstxtFileEnd-->
+<!--IsmusicFileStart-->
+            <div class="nexmoe-item">
+                <audio class="mdui-center" src="<!--FileDownUrl-->" controls autoplay style="width: 100%;" ></audio>
+            </div>
+<!--IsmusicFileEnd-->
+<!--IsofficeFileStart-->
+            <div class="nexmoe-item">
+                <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->" style="width: 100%;height: 800px" frameborder="0"></iframe>
+            </div>
+<!--IsofficeFileEnd-->
+<!--IsvideoFileStart-->
+            <link class="dplayer-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+            <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+            <div class="nexmoe-item">
+                <div class="mdui-center" id="dplayer"></div>
+            </div>
+            <script>
+                const dp = new DPlayer({
+                    container: document.getElementById('dplayer'),
+                    lang:'zh-cn',
+                    video: {
+                        url: '<!--FileDownUrl-->',
+                        type: 'auto'
+                    }
+                });
+            </script>
+<!--IsvideoFileEnd-->
+<!--IsOtherFileStart-->
+            <div class="nexmoe-item"><!--constStr@FileNotSupport--></div>
+<!--IsOtherFileEnd-->
+            <a href="<!--FileEncodeReplaceUrl-->" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">file_download</i></a>
+<!--IsFileEnd-->
+<!--IsFolderStart-->
+    <style>
+    .thumb .th{
+        display: none;
+    }
+    .thumb .mdui-text-right{
+        display: none;
+    }
+    .thumb .mdui-list-item a ,.thumb .mdui-list-item {
+        width:217px;
+        height: 230px;
+        float: left;
+        margin: 10px 10px !important;
+    }
+    .thumb .mdui-col-xs-12,.thumb .mdui-col-sm-7{
+        width:100% !important;
+        height:230px;
+    }
+    .thumb .mdui-list-item .mdui-icon{
+        font-size:100px;
+        display: block;
+        margin-top: 40px;
+        color: #7ab5ef;
+    }
+    .thumb .mdui-list-item span{
+        float: left;
+        display: block;
+        text-align: center;
+        width:100%;
+        position: absolute;
+        top: 180px;
+    }
+    </style>
+    <div class="nexmoe-item">
+
+    <div class="mdui-row">
+        <ul class="mdui-list">
+            <li class="mdui-list-item th">
+              <div class="mdui-col-xs-12 mdui-col-sm-7"><!--constStr@File--> <i class="mdui-icon material-icons icon-sort" data-sort="name" data-order="downward">expand_more</i></div>
+              <div class="mdui-col-sm-3 mdui-text-right"><!--constStr@EditTime--> <i class="mdui-icon material-icons icon-sort" data-sort="date" data-order="downward">expand_more</i></div>
+              <div class="mdui-col-sm-2 mdui-text-right"><!--constStr@Size--> <i class="mdui-icon material-icons icon-sort" data-sort="size" data-order="downward">expand_more</i></div>
+            </li>
+<!--BackArrowStart-->
+            <li class="mdui-list-item mdui-ripple">
+                <a href="<!--BackArrowUrl-->">
+                  <div class="mdui-col-xs-12 mdui-col-sm-7">
+                    <i class="mdui-icon material-icons">arrow_upward</i>
+                    ..
+                  </div>
+                  <div class="mdui-col-sm-3 mdui-text-right"></div>
+                  <div class="mdui-col-sm-2 mdui-text-right"></div>
+                  </a>
+            </li>
+<!--BackArrowEnd-->
+
+<!--FolderListStart-->
+            <li class="mdui-list-item mdui-ripple">
+                <a href="<!--FileEncodeReplaceUrl-->/">
+                  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+                    <i class="mdui-icon material-icons">folder_open</i>
+                    <span><!--FileEncodeReplaceName--></span>
+                  </div>
+                  <div class="mdui-col-sm-3 mdui-text-right"><!--lastModifiedDateTime--></div>
+                  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
+                  </a>
+            </li>
+<!--FolderListEnd-->
+<!--FileListStart-->
+            <li class="mdui-list-item file mdui-ripple">
+                <a href="<!--FileEncodeReplaceUrl-->?preview" target="_blank">
+                  <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+                    <i class="mdui-icon material-icons"><!--IconValue--></i>
+                    <span><!--FileEncodeReplaceName--></span>
+                  </div>
+                  <div class="mdui-col-sm-3 mdui-text-right"><!--lastModifiedDateTime--></div>
+                  <div class="mdui-col-sm-2 mdui-text-right"><!--size--></div>
+                  </a>
+            </li>
+<!--FileListEnd-->
+
+<!--MorePageStart-->
+            <form action="" method="POST" id="nextpageform">
+                <input type="hidden" id="pagenum" name="pagenum" value="">
+                <li class="mdui-list-item th">
+                    <div class="mdui-col-sm-6 mdui-left mdui-text-left">
+<!--PrePageStart-->
+                        <a onclick="nextpage(<!--PrePageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@PrePage--></a>
+<!--PrePageEnd-->
+<!--NextPageStart-->
+                        <a onclick="nextpage(<!--NextPageNum-->);" class="mdui-btn mdui-btn-raised"><!--constStr@NextPage--></a>
+<!--NextPageEnd-->
+                    </div>
+                    <div class="mdui-col-sm-6 mdui-right mdui-text-right">
+                        <div class="mdui-right mdui-text-right"><span class="mdui-chip-title">Page: <!--MorePageListStart--><!--MorePageListEnd--><!--MorePageListNowStart--><!--PageNum--><!--MorePageListNowEnd-->/<!--MaxPageNum--></span></div>
+                    </div>
+                </li>
+            </form>
+<!--MorePageEnd-->
+        </ul>
+    </div>
+    </div>
+<!--ReadmemdStart-->
+    <div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px;margin: 20px 0">
+<!--ReadmemdContent-->
+    </div>
+<!--ReadmemdEnd-->
+<!--FootomfStart-->
+<div class="mdui-typo mdui-shadow-3" style="padding: 20px;margin: 20px 0">
+<!--FootomfContent-->
+</div>
+<!--FootomfEnd-->
+    </div>
+<!--ShowThumbnailsStart-->
+    <a href="javascript:thumb();" class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i class="mdui-icon material-icons">format_list_bulleted</i></a>
+<!--ShowThumbnailsEnd-->
+<!--IsFolderEnd-->
+<!--ListEnd-->
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
+    <script>
+<!--MorePageStart-->
+    function nextpage(num) {
+        document.getElementById('pagenum').value=num;
+        document.getElementById('nextpageform').submit();
+    }
+<!--MorePageEnd-->
+    $ = mdui.JQ;
+    $.fn.extend({
+        sortElements: function (comparator, getSortable) {
+            getSortable = getSortable || function () { return this; };
+            var placements = this.map(function () {
+                var sortElement = getSortable.call(this),
+                    parentNode = sortElement.parentNode,
+                    nextSibling = parentNode.insertBefore(
+                        document.createTextNode(''),
+                        sortElement.nextSibling
+                    );
+                return function () {
+                    parentNode.insertBefore(this, nextSibling);
+                    parentNode.removeChild(nextSibling);
+                };
+            });
+            return [].sort.call(this, comparator).each(function (i) {
+                placements[i].call(getSortable.call(this));
+            });
+        }
+    });
+
+    function downall() {
+         let dl_link_list = Array.from(document.querySelectorAll("li a"))
+             .map(x => x.href) // 所有list中的链接
+             .filter(x => x.slice(-1) != "/"); // 筛选出非文件夹的文件下载链接
+         let blob = new Blob([dl_link_list.join("\r\n")], {
+             type: 'text/plain'
+         }); // 构造Blog对象
+         let a = document.createElement('a'); // 伪造一个a对象
+         a.href = window.URL.createObjectURL(blob); // 构造href属性为Blob对象生成的链接
+         a.download = "folder_download_link.txt"; // 文件名称，你可以根据你的需要构造
+         a.click() // 模拟点击
+         a.remove();
+    }
+<!--ShowThumbnailsStart-->
+    function thumb(){
+        if($('.mdui-fab i').text() == "apps"){
+            $('.mdui-fab i').text("format_list_bulleted");
+            $('.nexmoe-item').removeClass('thumb');
+            $('.nexmoe-item .mdui-icon').show();
+            $('.nexmoe-item .mdui-list-item').css("background","");
+        }else{
+            $('.mdui-fab i').text("apps");
+            $('.nexmoe-item').addClass('thumb');
+            $('.mdui-col-xs-12 i.mdui-icon').each(function(){
+                if($(this).text() == "image"){
+                    var thumbnails = $(this).parent().parent().attr('href');
+                    thumbnails = thumbnails.substr(0, thumbnails.length-8)+'?thumbnails&location';
+                    $(this).hide();
+                    $(this).parent().parent().parent().css("background","url("+thumbnails+")  no-repeat center top");
+                }
+            });
+        }
+    }	
+<!--ShowThumbnailsEnd-->
+    $(function(){
+        $('.file a').each(function(){
+            $(this).on('click', function () {
+                var form = $('<form target=_blank method=post></form>').attr('action', $(this).attr('href')).get(0);
+                $(document.body).append(form);
+                form.submit();
+                $(form).remove();
+                return false;
+            });
+        });
+        $('.icon-sort').on('click', function () {
+            let sort_type = $(this).attr("data-sort"), sort_order = $(this).attr("data-order");
+            let sort_order_to = (sort_order === "less") ? "more" : "less";
+            $('li[data-sort]').sortElements(function (a, b) {
+                let data_a = $(a).attr("data-sort-" + sort_type), data_b = $(b).attr("data-sort-" + sort_type);
+                let rt = data_a.localeCompare(data_b, undefined, {numeric: true});
+                return (sort_order === "more") ? 0-rt : rt;
+            });
+            $(this).attr("data-order", sort_order_to).text("expand_" + sort_order_to);
+        });
+    });
+    document.querySelectorAll('.markdown').forEach(function (e) {
+        e.innerHTML = marked(e.innerHTML);
+    });
+    </script>
+</body>
+</html>
