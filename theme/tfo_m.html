@@ -79,8 +79,7 @@
         #vcomments{padding:16px !important;}
         #upload_div table tr{border-radius:6px !important;}
         #upload_div{margin:10px}
-        #more-disk-div{opacity:0;}
-        #curpath:hover #more-disk-div{opacity:1;}
+        #more-disk-div{display:none;}
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
@@ -200,6 +199,19 @@
     <h1 class="title" id="title">
         <a href="<!--base_path-->"><!--Sitename--></a>
     </h1>
+<!--MultiDiskAreaStart-->
+    <div class="list-wrapper" id="more-disk-div">
+        <div class="list-container">
+            <div class="list-header-container">
+                <div class="more-disk">
+<!--MultiDisksStart-->
+                    <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
+<!--MultiDisksEnd-->
+                </div>
+            </div>
+        </div>
+    </div>
+<!--MultiDiskAreaEnd-->
 <!--HeadomfStart-->
     <div class="list-wrapper" id="head-om-div">
         <div class="list-container">
@@ -236,11 +248,6 @@
         <div class="list-container">
             <div class="list-header-container" id="curpath">
                 <h3 class="table-header"><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
-                <div class="more-disk" id="more-disk-div">
-                    <!--MultiDisksStart-->
-                    <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
-                    <!--MultiDisksEnd-->
-                </div>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
