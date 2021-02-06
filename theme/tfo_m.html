@@ -92,6 +92,46 @@
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .readme{padding:0px;}
         .markdown-body, .customfile{padding:24px;text-align:left;font-size:14px !important}
+        @media only screen and (max-width:1856px){
+            .list-table td.file,.list-table th.file{width:72%}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+	@media only screen and (max-width:1448px){
+            .list-table td.file,.list-table th.file{width:71%)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:1152px){
+            .list-table td.file,.list-table th.file{width:calc(95% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:925px){
+            .list-table td.file,.list-table th.file{width:calc(94% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:781px){
+            .list-table td.file,.list-table th.file{width:calc(93% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:679px){
+            .list-table td.file,.list-table th.file{width:calc(92% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:605px){
+            .list-table td.file,.list-table th.file{width:calc(91% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
+        @media only screen and (max-width:542px){
+            .list-table td.file,.list-table th.file{width:calc(90% - 220px)}
+            .list-table td.size,.list-table th.size{width:70px !important}
+            .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
+        }
         @media only screen and (max-width:480px){
 <!--BackgroundMStart-->
             body{background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundMUrl-->");}
@@ -105,7 +145,7 @@
         }
     </style>
     <!--customCss-->
-    <script src='https://unpkg.com/valine/dist/Valine.min.js'></script>
+    <script src='https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "85d8e9274ecf4a05951f2fea9b2a0d72"}'></script>
@@ -129,7 +169,7 @@
         <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><!--constStr@Login--></a>
 <!--LoginEnd-->
 <!--AdminStart-->
-        <li class="operate"><ion-icon name="construct"></ion-icon><!--constStr@Operate--><ul>
+        <li class="operate"><ion-icon name="construct"></ion-icon><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><!--constStr@Create--></a></li>
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
@@ -201,7 +241,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container" id="curpath">
-                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><a href="<!--BackArrowUrl-->" class="back-link"><ion-icon name="arrow-back"></ion-icon></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -290,7 +330,7 @@
                     <tr data-to id="tr<!--filenum-->">
                         <td class="file">
 <!--AdminStart-->
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a></a>
                             <ul>
                                 <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
                                 <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
@@ -311,7 +351,7 @@
                     <tr data-to id="tr<!--filenum-->">
                         <td class="file">
 <!--AdminStart-->
-                            <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
+                            <li class="operate"><ion-icon name="construct"></ion-icon><a></a>
                             <ul>
                                 <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
                                 <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
@@ -392,7 +432,7 @@
             <div class="list-body-container">
                 <div class="readme" style="overflow:hidden">
                     <div id="vcomments"></div>
-                        <script>new Valine({el:'#vcomments',appId:'opkXI613Es1XgaowwredD6WU-MdYXbMMI',appKey:'jiHXLWSMWeI2atmQA3GNK5I6',visitor:true,lang:'en'})</script>
+                        <script>new Waline({el:'#vcomments',serverURL: 'https://waline-cyan.vercel.app/',visitor:true,lang:'en'})</script>
                             <span id="<Your/Path/Name>" class="leancloud_visitors" data-flag-title="Your Article Title">
                                 <em class="post-meta-item-text" style="color:#000000 !important;">Rd </em>
                                     <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
@@ -851,7 +891,7 @@
     var expires = "expires="+expd.toGMTString();
     document.cookie="timezone="+timezone+"; path=/; "+expires;
     if (timezone!=<!--timezone-->) {
-        alert('Your timezone is '+timezone+', reload local timezone.');
+        swal('Your timezone is '+timezone+', reload local timezone.');
         location.href=location.href;
     }
 <!--WriteTimezoneEnd-->
@@ -865,7 +905,7 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
+        swal(tmptextarea.innerHTML+"<!--constStr@Success-->");
     }
 <!--UploadJsStart-->
     function uploadbuttonhide() {
