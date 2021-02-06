@@ -36,7 +36,7 @@
         .list-header-container{position:relative}
         .list-header-container a.back-link{color:#000000;display:inline-block;position:absolute;font-size:16px;margin:20px 10px;vertical-align:middle;text-decoration:none;padding:19px 19px;}
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
-        .table-header{margin:0;border:0 none;padding:16px 48px;text-align:left;font-weight:400;word-break:break-all;word-wrap:break-word;color:#24292e;background-color:rgba(245,245,245,0.3);line-height:1.3}
+        .table-header{margin:0;border:0 none;padding:16px 24px;text-align:left;font-weight:400;word-break:break-all;word-wrap:break-word;color:#24292e;background-color:rgba(245,245,245,0.3);line-height:1.3}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.6)}
         .more-disk{margin:0;border:0 none;font-weight:400;color:#000;white-space:nowrap;overflow:auto;padding:18px 18px;text-align:center;background-color:rgba(245,245,245,0.3)}
         .more-disk a{margin:0 2px;padding:5px;transition-duration:0.3s;border-radius:18px;background-color:transparent;color:#24292e;border:2px solid rgba(85,85,85,0.7);border:1px solid rgba(27,31,35,0);font-weight:bold}
@@ -72,6 +72,8 @@
         .vicon{fill:#000000 !important;}
         .v a{color:rgb(3,102,214) !important;}
         .vat{font-style:italic !important;}
+        .vlogin{float:right !important;}
+        .v[data-class=v] *{line-height: 1.35 !important;}
         .leancloud_visitors{float:right !important;padding:16px !important;}
         #vcomments{padding:16px !important;}
         #upload_div table tr{border-radius:6px !important;}
@@ -132,14 +134,14 @@
             .list-table td.size,.list-table th.size{width:70px !important}
             .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
-        @media only screen and (max-width:480px){
+        @media only screen and (max-width:495px){
 <!--BackgroundMStart-->
             body{background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundMUrl-->");}
 <!--BackgroundMEnd-->
             .title{margin-bottom:24px}
             .list-wrapper{width:98%;margin:0 auto 10px;}
             .list-table {padding:8px}
-            .list-table td, .list-table th{white-space:nowrap;overflow:auto;text-overflow:unset;max-width:80px}
+            .list-table td, .list-table th{white-space:nowrap;overflow:auto;text-overflow:unset}
             .size, .updated_at{display:none}
             .list-table td.file,.list-table th.file{width:95%;}
         }
@@ -241,7 +243,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container" id="curpath">
-                <h3 class="table-header"><a href="<!--BackArrowUrl-->" class="back-link"><ion-icon name="arrow-back"></ion-icon></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -432,8 +434,8 @@
             <div class="list-body-container">
                 <div class="readme" style="overflow:hidden">
                     <div id="vcomments"></div>
-                        <script>new Waline({el:'#vcomments',serverURL: 'https://waline-cyan.vercel.app/',visitor:true,lang:'en'})</script>
-                            <span id="<Your/Path/Name>" class="leancloud_visitors" data-flag-title="Your Article Title">
+                        <script>new Waline({el:'#vcomments',serverURL: 'https://bkc.vercel.app/',visitor:true,lang:'en',meta:['nick','mail'],requiredFields:['nick'],placeholder:'Write your commtent here, please:)'})</script>
+                            <span id="/" class="leancloud_visitors" data-flag-title="Your Article Title">
                                 <em class="post-meta-item-text" style="color:#000000 !important;">Rd </em>
                                     <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
                             </span>
