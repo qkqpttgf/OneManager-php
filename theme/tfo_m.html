@@ -80,13 +80,14 @@
         #upload_div table tr{border-radius:6px !important;}
         #upload_div{margin:10px}
         #more-disk-div{opacity:0;}
-        #curpath:hover #more-disk-div{opacity:1;;}
+        #curpath:hover #more-disk-div{opacity:1;}
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
-        ::-webkit-scrollbar {width:6px;border-radius:2px;}
-        ::-webkit-scrollbar-thumb {background-color:rgba(200,200,200,0.5);border-radius: 5px;}
-        ::-webkit-scrollbar-track {box-shadow:0 1px 15px rgba(27,31,35,.15);background:transparent;}
+        ::-webkit-scrollbar{width:6px;border-radius:2px;transition-duration:0.3s;opacity:0;}
+        ::-webkit-scrollbar:hover{opacity:1;}
+        ::-webkit-scrollbar-thumb {background-color:rgba(200,200,200,0.5);border-radius:2px;}
+        ::-webkit-scrollbar-track {background:transparent;}
         .operate:hover ul{position:absolute;display:inline-table;}
 <!--AdminStart-->
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
@@ -585,7 +586,7 @@
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><!--FootStr--></div>
 </body>
 <!--ListStart-->
-<!--MdRequireStart--><link rel="stylesheet" href="//tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/MdTheme/gb.css">
+<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
