@@ -19,6 +19,7 @@
     <meta charset=utf-8>
     <meta http-equiv=X-UA-Compatible content="IE=edge">
     <meta name=viewport content="width=device-width,initial-scale=1;minimum-scale=1,maximum-scale=1,user-scalable=no,initial-scale=1">
+    <meta name="referrer" content="no-referrer">
     <meta name="keywords" content="<!--Keywords-->">
     <meta name="description" content="Power by Tfo's Theme for OneManager-php" />
     <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
@@ -72,6 +73,7 @@
         .vicon{fill:#000000 !important;}
         .v a{color:rgb(3,102,214) !important;}
         .vat{font-style:italic !important;}
+        .vcard{padding-top:0px;border:0px}
         .vlogin-btn{width:fit-content !important;height:fit-content !important;border:0 !important}
         .v[data-class=v] *{line-height: 1.35 !important;}
         .leancloud_visitors{float:right !important;padding:16px !important;}
@@ -90,6 +92,7 @@
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:6px;list-style:none;display:block;float:left;font-size:0px;line-height:16px;}
+        .operate:hover ul{position:absolute;display:inline-table;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <!--AdminEnd-->
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}        
@@ -171,7 +174,7 @@
 </path></svg></div>
     <div style="padding:1px" id="top-div">
 <!--LoginStart-->
-        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon><!--constStr@Login--></a>
+        <a class="login" onclick="login();"><ion-icon name="log-in"></ion-icon></a>
 <!--LoginEnd-->
 <!--AdminStart-->
         <li class="operate"><ion-icon name="construct"></ion-icon><ul>
@@ -246,7 +249,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container" id="curpath">
-                <h3 class="table-header"><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><!--DiskPathArrayStart--><a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -260,7 +263,7 @@
                 </div>
 <!--EncryptedEnd-->
 <!--GuestUploadStart-->
-                <div id="upload_div">
+                <div id="upload_div" style="margin:0 0 16px 0">
                 <div id="upload_btns" align="center">
                     <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
                         <option value=""><!--constStr@UploadFile--></option>
@@ -346,7 +349,7 @@
                             </li>
 <!--AdminEnd-->
                             <ion-icon name="folder"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="folderlist" href="<!--FileEncodeReplaceUrl-->/" fileid="<!--FileId-->"><!--FileEncodeReplaceName--></a>
                         </td>
                         <td class="updated_at" id="folder_time<!--filenum-->"><!--lastModifiedDateTime--></td>
                         <td class="size" id="folder_size<!--filenum-->"><!--size--></td>
@@ -366,7 +369,7 @@
                             </li>
 <!--AdminEnd-->
                             <ion-icon name="<!--IconValue-->"></ion-icon>
-                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" target=_blank><!--FileEncodeReplaceName--></a>
+                            <a id="file_a<!--filenum-->" name="filelist" href="<!--FileEncodeReplaceUrl-->?preview" fileid="<!--FileId-->" target=_blank><!--FileEncodeReplaceName--></a>
                             <a class="download" href="<!--FileEncodeReplaceUrl-->"><ion-icon name="download"></ion-icon></a>
                         </td>
                         <td class="updated_at" id="file_time<!--filenum-->"><!--lastModifiedDateTime--></td>
@@ -438,7 +441,7 @@
                 <div class="readme" style="overflow:hidden">
                     <div id="vcomments"></div>
                         <script>new Waline({el:'#vcomments',serverURL: 'https://bkc.vercel.app/',visitor:true,lang:'en',meta:['nick','mail'],requiredFields:['nick'],placeholder:'Write your comment here, please:)'})</script>
-                            <span id="/" class="leancloud_visitors" data-flag-title="Your Article Title">
+                            <span id="/index" class="leancloud_visitors" data-flag-title="Your Article Title">
                                 <em class="post-meta-item-text" style="color:#000000 !important;">Rd </em>
                                     <i class="leancloud-visitors-count" style="color:#000000 !important;">1000000</i>
                             </span>
@@ -484,6 +487,7 @@
                 <form id="delete_form" onsubmit="return submit_operate('delete');">
                 <label id="delete_input"><!--constStr@Delete-->?</label>
                 <input id="delete_sid" name="delete_sid" type="hidden" value="">
+                <input id="delete_fileid" name="delete_fileid" type="hidden" value="">
                 <input id="delete_hidden" name="delete_name" type="hidden" value="">
                 <input name="operate_action" type="submit" value="<!--constStr@Submit-->">
                 </form>
@@ -494,6 +498,7 @@
                 <label id="encrypt_label"></label><br><br><a onclick="operatediv_close('encrypt')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="encrypt_form" onsubmit="return submit_operate('encrypt');">
                 <input id="encrypt_sid" name="encrypt_sid" type="hidden" value="">
+                <input id="encrypt_fileid" name="encrypt_fileid" type="hidden" value="">
                 <input id="encrypt_hidden" name="encrypt_folder" type="hidden" value="">
                 <input id="encrypt_input" name="encrypt_newpass" type="text" value="" placeholder="<!--constStr@InputPasswordUWant-->">
                 <!--EncryptBtnStart--><input name="operate_action" type="submit" value="<!--constStr@Encrypt-->"><!--EncryptBtnEnd--><!--EncryptAlertStart--><br><label><!--constStr@SetpassfileBfEncrypt--></label><!--EncryptAlertEnd-->
@@ -505,6 +510,7 @@
                 <label id="copy_label"></label><br><br><a onclick="operatediv_close('copy')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="copy_form" onsubmit="return submit_operate('copy');">
                 <input id="copy_sid" name="copy_sid" type="hidden" value="">
+                <input id="copy_fileid" name="copy_fileid" type="hidden" value="">
                 <input id="copy_hidden" name="copy_name" type="hidden" value="">
                 <input id="copy_input" name="copy_input" type="hidden" value="">
                 <input name="operate_action" type="submit" value="<!--constStr@Copy-->">
@@ -516,6 +522,7 @@
                 <label id="move_label"></label><br><br><a onclick="operatediv_close('move')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="move_form" onsubmit="return submit_operate('move');">
                 <input id="move_sid" name="move_sid" type="hidden" value="">
+                <input id="move_fileid" name="move_fileid" type="hidden" value="">
                 <input id="move_hidden" name="move_name" type="hidden" value="">
                 <select id="move_input" name="move_folder">
 <!--MoveRootStart-->
@@ -534,6 +541,7 @@
                 <a onclick="operatediv_close('create')" class="operatediv_close"><!--constStr@Close--></a>
                 <form id="create_form" onsubmit="return submit_operate('create');">
                     <input id="create_sid" name="create_sid" type="hidden" value="">
+                    <input id="create_fileid" name="create_fileid" type="hidden" value="">
                     <input id="create_hidden" type="hidden" value="">
                     <table>
                         <tr>
@@ -586,6 +594,7 @@
 <!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--AliyundriveUploadJsStart--><script src="//cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -1153,7 +1162,7 @@ function size_format(num) {
             }
         }
     }
-<!--UploadJsEnd-->
+<!--OnedriveUploadJsEnd-->
 <!--AliyundriveUploadJsStart-->
     function preup() {
         uploadbuttonhide();
