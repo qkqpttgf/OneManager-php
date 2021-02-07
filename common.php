@@ -2042,7 +2042,7 @@ function render_list($path = '', $files = [])
         if ($_SERVER['base_disk_path']!=$_SERVER['base_path']) {
             if (getConfig('diskname')!='') $diskname = getConfig('diskname');
             else $diskname = $_SERVER['disktag'];
-            // $title .= ' - ' . $diskname;
+            $title .= ' - ' . $diskname;
         }
         $title .= ' - ' . $_SERVER['sitename'];
         $html = str_replace('<!--Title-->', $title, $html);

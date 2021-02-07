@@ -289,9 +289,9 @@ function_name:' . $_SERVER['function_name'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'BingoKingo', $project = 'Tfo', $branch = 'master')
+function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/BingoKingo/Tfo/tarball/master/';
+    //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
     $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
     return updateHerokuapp(getConfig('function_name'), getConfig('APIKey'), $source);
 }

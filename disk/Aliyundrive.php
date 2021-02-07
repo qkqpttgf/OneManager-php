@@ -8,8 +8,8 @@ class Aliyundrive {
         $this->disktag = $tag;
         $this->auth_url = 'https://websv.aliyundrive.com/token/refresh';
         $this->api_url = 'https://api.aliyundrive.com/v2';
-        $res = $this->get_access_token(getConfig('refresh_token', $tag));
         $this->default_drive_id = getConfig('default_drive_id', $tag);
+        $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
     
     public function isfine()
@@ -441,7 +441,7 @@ class Aliyundrive {
 
         return curl('POST', $url, json_encode($data), $header);
     }
-    protected function fileCreate($parentId, $fileName, $sha1, $size) {
+    protected function fileCreate($parentId, $fileName, $sha1, $size, $part_number) {
         $url = $this->api_url . '/file/create';
 
         $header["content-type"] = "application/json; charset=utf-8";
@@ -455,7 +455,9 @@ class Aliyundrive {
         $data['ignoreError'] = false;
         $data['name'] = $fileName;
         $data['parent_file_id'] = $parentId;
-        $data['part_info_list'][0]['part_number'] = 1;
+        for ($i=0;$i<$part_number;$i++) {
+            $data['part_info_list'][$i]['part_number'] = $i+1;
+        }
         $data['size'] = (int)$size;
         $data['type'] = 'file';
 
@@ -492,9 +494,11 @@ class Aliyundrive {
         $data['drive_id'] = $this->default_drive_id;
         $data['file_id'] = $file_id;
         $data['ignoreError'] = false;
+        $i = 0;
         foreach ($etags as $etag) {
-            $data['part_info_list'][$etag['part_number'] - 1]['part_number'] = $etag['part_number'];
-            $data['part_info_list'][$etag['part_number'] - 1]['etag'] = $etag['etag'];
+            $data['part_info_list'][$i]['part_number'] = $i + 1;
+            $data['part_info_list'][$i]['etag'] = $etag;
+            $i++;
         }
         $data['upload_id'] = $upload_id;
 
@@ -511,7 +515,7 @@ class Aliyundrive {
     {
         if (isset($_POST['uploadid'])) {
             // Complete
-            $result = $this->fileComplete($_POST['fileid'], $_POST['uploadid'], $_POST['etag']);
+            $result = $this->fileComplete($_POST['fileid'], $_POST['uploadid'], json_decode($_POST['etag'], true));
             return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         } else {
             if ($_POST['upbigfilename']=='') return output('error: no file name', 400);
@@ -552,7 +556,7 @@ class Aliyundrive {
                 //error_log1($res['body']);
                 $parent_file_id = json_decode($res['body'], true)['file_id'];
             }
-            $response = $this->fileCreate($parent_file_id, $filename, $_POST['filesha1'], $fileinfo['size']);
+            $response = $this->fileCreate($parent_file_id, $filename, $_POST['filesha1'], $fileinfo['size'], ceil($fileinfo['size']/$_POST['chunksize']));
             $res = json_decode($response['body'], true);
             if (isset($res['exist'])) {
                 // 已经有
@@ -619,7 +623,7 @@ class Aliyundrive {
             $tmp['refresh_token'] = $result['refresh_token'];
             $tmp['default_drive_id'] = $result['default_drive_id'];
             $tmp['default_sbox_drive_id'] = $result['default_sbox_drive_id'];
-            $tmp['token_expires'] = time()+7*24*60*60;
+            $tmp['token_expires'] = time()+3*24*60*60;
             $tmp['Driver'] = 'Aliyundrive';
             $tmp['disktag_add'] = $_POST['disktag_add'];
             $tmp['diskname'] = $_POST['diskname'];
@@ -708,9 +712,10 @@ class Aliyundrive {
             if ($response['stat']==200) $ret = json_decode($response['body'], true);
             if (!isset($ret['access_token'])) {
                 error_log1('failed to get [' . $this->disktag . '] access_token. response' . json_encode($ret));
-                $response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
-                $response['body'] .= '\nfailed to get [' . $this->disktag . '] access_token.';
-                return $response;
+                //$response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
+                $response['body'] .= 'failed to get [' . $this->disktag . '] access_token.';
+                $this->error = $response;
+                return false;
             }
             $tmp = $ret;
             $tmp['access_token'] = '******';
@@ -718,7 +723,7 @@ class Aliyundrive {
             error_log1('[' . $this->disktag . '] Get access token:' . json_encode($tmp, JSON_PRETTY_PRINT));
             $this->access_token = $ret['access_token'];
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);
-            if (time()>getConfig('token_expires', $this->disktag)) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ], $this->disktag);
+            if (time()>getConfig('token_expires', $this->disktag)) setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+3*24*60*60 ], $this->disktag);
             return true;
         }
         return true;
