@@ -93,7 +93,8 @@
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:6px;list-style:none;display:block;float:left;font-size:0px;line-height:16px;}
-        .operate:hover ul{position:fixed;display:inline-table;}
+        .operate:hover ul{position:absolute;display:inline-table;}
+        #opflow:hover ul{position:fixed;display:inline-table;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <!--AdminEnd-->
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}        
@@ -177,10 +178,10 @@
 </path></svg></div>
     <div style="padding:1px" id="top-div">
 <!--LoginStart-->
-        <a class="login" onclick="login();"><ion-icon name="ellipse-outline"></ion-icon></a>
+        <a class="login" onclick="login();"><ion-icon name="ban-outline"></ion-icon></a>
 <!--LoginEnd-->
 <!--AdminStart-->
-        <li class="operate" id="opflow"><ion-icon name="ellipse-outline"></ion-icon><ul>
+        <li class="operate" id="opflow"><ion-icon name="ban-outline"></ion-icon><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle-outline"></ion-icon><!--constStr@Create--></a></li>
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock-closed-outline"></ion-icon><!--constStr@Encrypt--></a></li>
