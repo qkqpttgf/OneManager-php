@@ -1369,7 +1369,7 @@ function size_format(num) {
     function themeinf() {
         swal({
         title: "Tfo' Theme Information",
-        text: "Current Version:20210205<br>Can not support automatic update, please update manually or upgrade with the program.<br>Tfo’s HomePage on GitHub: https://github.com/BingoKingo/Tfo<br>Tfo’s Example Website: https://tfo.herokuapp.com/",
+        text: "Current Version:20210205"+"/n"+"Can not support automatic update, please update manually or upgrade with the program."+"/n"+"Tfo’s HomePage on GitHub:"+"/n"+"https://github.com/BingoKingo/Tfo"+"/n"+"Tfo’s Example Website:"+"/n"+"https://tfo.herokuapp.com/",
         icon: "Info",
         buttons: {
         cancel: "Close",
@@ -1381,8 +1381,10 @@ function size_format(num) {
     switch (value) {
         case "address":
             windows.location.href="https://github.com/qkqpttgf/OneManager-php/blob/master/theme/tfo.html";
+            swal.close();
         case "update":
             windows.location.href="/?setup";
+            swal.close();
         default:
             swal.close();
         }
