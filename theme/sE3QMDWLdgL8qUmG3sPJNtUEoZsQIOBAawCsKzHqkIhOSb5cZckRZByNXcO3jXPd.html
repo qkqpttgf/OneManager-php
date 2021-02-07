@@ -287,12 +287,13 @@
                             var strPath = window.document.location.pathname;
                             var pos = strFullPath.indexOf(strPath);
                             var prePath = strFullPath.substring(0, pos);
-                            var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-                            document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
+                            // var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
+                            // document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
+                            document.getElementById("url").value= prePath + "<!--FileEncodeUrl-->";
                             }
                             window.onload = getPath;
                         </script>
-                        <input id="url" title="url" type="url" style="width: 90%; margin-top: 2px;" value="<!--FileEncodeUrl-->" readonly>
+                        <input id="url" title="url" type="url" style="width: 90%; margin-top: 2px;" value="" readonly>
                         <a href="<!--FileUrl-->"><ion-icon name="cloud-download-outline" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
                     </div>
                     <div style="margin: 24px;display:block;overflow:hidden;">
