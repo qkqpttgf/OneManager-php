@@ -84,15 +84,16 @@
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
+        #opflow{position: fixed;bottom: 16px;left: 16px;z-index: 105;
+}
         ::-webkit-scrollbar{width:6px;border-radius:2px;transition-duration:0.3s;}
         ::-webkit-scrollbar-thumb {width:6px;background-color:rgba(200,200,200,0.5);border-radius:2px;}
         ::-webkit-scrollbar-track {width:6px;background:transparent;}
-        .operate:hover ul{position:absolute;display:inline-table;}
 <!--AdminStart-->
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
-        .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
+        .operate ul{position:fixed;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:6px;list-style:none;display:block;float:left;font-size:0px;line-height:16px;}
-        .operate:hover ul{position:absolute;display:inline-table;}
+        .operate:hover ul{display:inline-table;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <!--AdminEnd-->
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}        
@@ -179,7 +180,7 @@
         <a class="login" onclick="login();"><ion-icon name="log-in-outline"></ion-icon></a>
 <!--LoginEnd-->
 <!--AdminStart-->
-        <li class="operate"><ion-icon name="construct-outline"></ion-icon><ul>
+        <li class="operate" id="opflow"><ion-icon name="construct-outline"></ion-icon><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle-outline"></ion-icon><!--constStr@Create--></a></li>
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock-closed-outline"></ion-icon><!--constStr@Encrypt--></a></li>
@@ -604,7 +605,7 @@
 <!--LoginEnd-->
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:20px">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><!--FootStr--></div>
-    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:6px;display:none" id="tminf">Current Version: 20210205<br>Update Tips:<br>Tip 1: Upgrade with the program. (Best Choice!)<br>Tip 2: Copy the CustomTheme link and paste it in the Platform Config form of program setting page.<br>Tip 3: Update manually.<br><br>Tfo’s CustomTheme Address:<br><a href="https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/NecessaryFiles/tfo.html">https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/NecessaryFiles/tfo.html</a><br>Tfo's Theme UpdateCheck Address<br><a href="https://github.com/qkqpttgf/OneManager-php/blob/master/theme/tfo.html">https://github.com/qkqpttgf/OneManager-php/blob/master/theme/tfo.html</a><br>Tfo’s HomePage on GitHub:<br><a href="https://github.com/BingoKingo/Tfo">https://github.com/BingoKingo/Tfo</a><br>Tfo’s Example Website:<br><a href="https://tfo.herokuapp.com/">https://tfo.herokuapp.com/</a></div>
+    <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:6px;display:none" id="tminf">Current Version: 20210205<br>Update Tips:<br>Tip 1: Upgrade with the program. (Best Choice!)<br>Tip 2: Copy the CustomTheme link and paste it in the Platform Config form of program setting page.<br>Tip 3: Update manually.<br><br>Tfo’s CustomTheme Address:<br>https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/NecessaryFiles/tfo.html<br>Tfo's Theme UpdateCheck Address:<br>https://github.com/qkqpttgf/OneManager-php/blob/master/theme/tfo.html<br>https://github.com/BingoKingo/Tfo/blob/master/theme/tfo.html<br>Tfo’s HomePage on GitHub:<br>https://github.com/BingoKingo/Tfo<br>Tfo’s Example Website:<br>https://tfo.herokuapp.com/</div>
 </body>
 <!--ListStart-->
 <!--MdRequireStart--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
