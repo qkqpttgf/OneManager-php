@@ -84,16 +84,15 @@
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
-        #opflow{position: fixed;bottom: 16px;left: 16px;z-index: 105;
-}
+        .login,#opflow{position: fixed;bottom: 16px;left: 16px;z-index: 105;}
         ::-webkit-scrollbar{width:6px;border-radius:2px;transition-duration:0.3s;}
         ::-webkit-scrollbar-thumb {width:6px;background-color:rgba(200,200,200,0.5);border-radius:2px;}
         ::-webkit-scrollbar-track {width:6px;background:transparent;}
 <!--AdminStart-->
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
-        .operate ul{position:fixed;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
+        .operate ul{position:absolute;display:none;background:white;transition-duration: 0.3s;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);border-radius:32px;margin:-7px 0 0 0;padding:0 3px;color:#205D67;z-index:3;}        .operate:hover ul{position:absolute;display:inline-table;}
         .operate ul li{padding:6px;list-style:none;display:block;float:left;font-size:0px;line-height:16px;}
-        .operate:hover ul{display:inline-table;}
+        .operate:hover ul{position:fixed;display:inline-table;}
         .list-table tr[data-to]:hover .operate ul li a{color:#24292e}
 <!--AdminEnd-->
         .operatediv{position:absolute;border:0px #CCCCCC;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);transition-duration: 0.3s;border-radius:6px;background-color:white;color:#24292e;z-index:3;}        
