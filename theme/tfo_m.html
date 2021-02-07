@@ -26,10 +26,10 @@
     <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
     <style type="text/css">
         body{font-family:'-apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;}
-        a{color:#24292e;cursor:pointer;text-decoration:none;}
+        a{color:#24292e;cursor:pointer;text-decoration:none;white-space:nowrap;}
         ion-icon{font-size:16px;vertical-align:middle;}
         .changelanguage{position:absolute;right:5px;display:none;}
-        .title{text-align:center;margin:1rem auto;letter-spacing:1px;margin-bottom:2rem;text-shadow:0 1px 15px rgba(27,31,35,1);text-decoration:none;transition-duration:0.3s;border:1px solid rgba(27,31,35,0);height:10px;padding:16px 16px;white-space:nowrap;overflow:hidden;width:fit-content;border-radius:36px;}
+        .title{text-align:center;margin:1rem auto;letter-spacing:1px;margin-bottom:2rem;text-shadow:0 1px 15px rgba(27,31,35,1);text-decoration:none;transition-duration:0.3s;border:1px solid rgba(27,31,35,0);height:10px;padding:16px 16px;overflow:hidden;width:fit-content;border-radius:36px;}
         .title:hover{text-shadow:0 1px 15px rgba(27,31,35,0);background-color:rgba(200,200,200,.6);box-shadow:0 1px 15px rgba(27,31,35,.15);}
         .title a{color:#FFFFFF;text-decoration:none;}
         .list-wrapper{width:88%;margin:0 auto 10px;position:relative;border-radius:6px;box-shadow:0 1px 15px rgba(27,31,35,.15);border:1px solid rgba(27,31,35,.15);}
@@ -39,8 +39,8 @@
         .list-container,.list-header-container,.list-wrapper,a.back-link:hover,body{color:#24292e}
         .table-header{margin:0;border:0 none;padding:16px 24px;text-align:left;font-weight:400;word-break:break-all;word-wrap:break-word;color:#24292e;background-color:rgba(245,245,245,0.3);line-height:1.3;font-size:18px}
         .list-body-container{position:relative;left:0;overflow-x:hidden;overflow-y:auto;box-sizing:border-box;background:rgba(245,245,245,0.6)}
-        .more-disk{margin:0;border:0 none;font-weight:400;color:#000;white-space:nowrap;overflow:auto;padding:18px 18px;text-align:center;background-color:rgba(245,245,245,0.3)}
-        .more-disk a{margin:0 2px;padding:5px;transition-duration:0.3s;border-radius:18px;background-color:transparent;color:#24292e;border:2px solid rgba(85,85,85,0.7);border:1px solid rgba(27,31,35,0);font-weight:bold}
+        .more-disk{margin:0;border:0 none;font-weight:400;color:#000;padding:18px 18px;text-align:center;background-color:rgba(245,245,245,0.3);line-height:32px;}
+        .more-disk a{margin:0 2px;padding:5px;transition-duration:0.3s;border-radius:18px;background-color:transparent;color:#24292e;border:2px solid rgba(85,85,85,0.7);border:1px solid rgba(27,31,35,0);font-weight:bold;}
         .more-disk a:hover,.more-disk a[now]{background:rgba(245,245,245,0.3);color:#FFFFFF;border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 10px 10px 10px;border-spacing:0;overflow:hidden;table-layout:fixed}
         .list-table tr{height:fit-content;float:left;width:100%;transition-duration:0.3s;border-radius:16px}
@@ -80,13 +80,13 @@
         #vcomments{padding:16px !important;}
         #upload_div table tr{border-radius:6px !important;}
         #upload_div{margin:10px}
-        #more-disk-div{display:none;}
+        #more-disk-div{display:block;}
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
         ::-webkit-scrollbar{width:6px;border-radius:2px;transition-duration:0.3s;}
-        ::-webkit-scrollbar-thumb {background-color:rgba(200,200,200,0.5);border-radius:2px;}
-        ::-webkit-scrollbar-track {background:transparent;}
+        ::-webkit-scrollbar-thumb {width:6px;background-color:rgba(200,200,200,0.5);border-radius:2px;}
+        ::-webkit-scrollbar-track {width:6px;background:transparent;}
         .operate:hover ul{position:absolute;display:inline-table;}
 <!--AdminStart-->
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
@@ -105,7 +105,7 @@
             .list-table td.size,.list-table th.size{width:70px !important}
             .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
         }
-	@media only screen and (max-width:1448px){
+	    @media only screen and (max-width:1448px){
             .list-table td.file,.list-table th.file{width:71%)}
             .list-table td.size,.list-table th.size{width:70px !important}
             .list-table td.updated_at,.list-table th.updated_at{width:140px !important}
@@ -144,6 +144,8 @@
 <!--BackgroundMStart-->
             body{background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundMUrl-->");}
 <!--BackgroundMEnd-->
+            iframe{width: 200%;-ms-zoom: 0.5;-moz-transform: scale(0.5);-moz-transform-origin: 0 0;-o-transform: scale(0.5);-o-transform-origin: 0 0;-webkit-transform: scale(0.5);-webkit-transform-origin: 0 0;}
+            #frh{height:400px}
             .title{margin-bottom:24px}
             .list-wrapper{width:98%;margin:0 auto 10px;}
             .list-table {padding:8px}
@@ -155,7 +157,8 @@
     <!--customCss-->
     <script src='https://cdn.jsdelivr.net/npm/@waline/client/dist/Waline.min.js'></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
-    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/ionicons@5.4.0/dist/index.min.js"></script>
     <script defer src='https://static.cloudflareinsights.com/beacon.min.js' data-cf-beacon='{"token": "85d8e9274ecf4a05951f2fea9b2a0d72"}'></script>
 </head>
 <body>
@@ -249,7 +252,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container" id="curpath">
-                <h3 class="table-header"><!--DiskPathArrayStart--><a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -277,11 +280,11 @@
 
 <!--IsFileStart-->
                 <div style="margin: 12px 4px 4px; text-align: center">
-                    <div style="margin: 24px">
+                    <div style="margin: 24px" contenteditable="true">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><!--FileEncodeUrl--></textarea>
                         <a href="<!--FileUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
                     </div>
-                    <div style="margin: 24px">
+                    <div style="margin: 24px;display:block;overflow:hidden;" id="frh">
 <!--IsimgFileStart-->
                         <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
 <!--IsimgFileEnd-->
@@ -746,9 +749,10 @@
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
-        swal("Loading Thumbnails...Please Wait.", {
+        swal("Wait", "Loading Thumbnails...", {
           buttons: false,
           timer: 1000,
+          closeOnEsc: false,
         });
         images = [<!--ImgExts-->];
         var files=document.getElementsByName('filelist');
@@ -885,7 +889,7 @@
     var expires = "expires="+expd.toGMTString();
     document.cookie="timezone="+timezone+"; path=/; "+expires;
     if (timezone!=<!--timezone-->) {
-        swal('Your timezone is '+timezone+', reload local timezone.');
+        swal('TimeZone', 'Your timezone is '+timezone+', reload local timezone.', {buttons: false,timer: 1000,closeOnEsc: false,});
         location.href=location.href;
     }
 <!--WriteTimezoneEnd-->
@@ -899,7 +903,7 @@
         tmptextarea.select();
         tmptextarea.setSelectionRange(0, tmptextarea.value.length);
         document.execCommand("copy");
-        swal(tmptextarea.innerHTML+"<!--constStr@Success-->");
+        swal("<!--constStr@Success-->", tmptextarea.innerHTML, {icon: "success",timer: 3000,closeOnEsc: false,});
     }
 <!--UploadJsStart-->
 function size_format(num) {
@@ -1431,8 +1435,8 @@ function size_format(num) {
                     html=JSON.parse(xhr.responseText);
                     addelement(html);
                 }
-                //swal('success');
-            } else swal(xhr.status+'\n'+xhr.responseText);
+                //swal("<!--constStr@Success-->", "", {icon: "success",buttons: false,timer: 1000,closeOnEsc: false,});
+            } else swal(xhr.status, xhr.responseText, {icon: "error",timer: 3000,closeOnEsc: false,});
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
@@ -1548,6 +1552,5 @@ function size_format(num) {
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
 <!--customScript-->
 </html>
