@@ -12,11 +12,11 @@
             <th>Postscript</th> 
         </tr> 
         <tr> 
-            <td rowspan="3">Information</td> 
+            <td rowspan="4">Information</td> 
             <td>
                 <a href="./app.json" title="app.json">app.json</a>
             </td>
-            <td rowspan="3">Tfo's information is described in these files for deployment</td> 
+            <td rowspan="4">Tfo's information is described in these files for deployment</td> 
         </tr>
         <tr>
             <td>
@@ -26,6 +26,11 @@
         <tr>
             <td>
                 <a href="./conststr.php" title="conststr.php">conststr.php</a>
+            </td>
+        </tr>
+                <tr>
+            <td>
+                <a href="./common.php" title="common.php">common.php</a>
             </td>
         </tr>
         <tr> 
@@ -80,7 +85,7 @@
     </tbody>
 </table>
 
-具体地，您可以下载/复制体验一下或参考示例中运用tfo.html的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。需要注意：**主题含多盘切换栏，悬浮在路径栏上可见；今日诗词随多盘head.md显示**。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...但是自愿附加组件如评论系统、站长工具、访问统计等涉及到其他平台的私密内容不包含在主题内，若有需要请自行寻找在后台添加。主题的php历史版本请到<a href="./theme/" title="Old Theme">Theme</a>文件夹查看.
+具体地，您可以下载/复制体验一下或参考示例中运用tfo.html的[Li Share Storage Mini](https://tfo.herokuapp.com/ "Li Share Storage Mini")。今日诗词随多盘显示。目前，主题仍存在诸多问题，请谅解。PS:主题将要实现的功能有狠多，敬请期待...但是自愿附加组件如今日诗词、评论系统、站长工具、访问统计等涉及到其他平台的私密内容不包含在主题内，若有需要请自行寻找在后台添加。主题的php历史版本请到<a href="./theme/" title="Old Theme">Theme</a>文件夹查看.
 
 ## Deploy 部署
 ### Deploy to Heroku  
