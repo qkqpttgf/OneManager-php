@@ -855,7 +855,7 @@
                 uploadbuttonshow();
                 return;
             }
-            upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
             var filemd5='';
 <!--GuestStart-->
             function getext(str) {
@@ -1085,12 +1085,22 @@
                 uploadbuttonshow();
                 return;
             }*/
-            upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
             td2.innerHTML='计算SHA1 ...';
             var reader = new FileReader();
             reader.readAsArrayBuffer(file);
             reader.onload = function(e) {
                 var filesha1 = sha1(this.result);
+<!--GuestStart-->
+                function getext(str) {
+                    let p = str.lastIndexOf('.');
+                    if (p===-1) return '';
+                    if (p===0) return '';
+                    return str.substr(p);
+                }
+                var ext = getext(file.webkitRelativePath||file.name);
+                upbigfilename = filesha1 + ext;
+<!--GuestEnd-->
                 td2.innerHTML='<!--constStr@GetUploadLink--> ...';
                 var html = JSON.parse(localStorage.getItem(filesha1));
                 //console.log(html);
