@@ -43,9 +43,9 @@
         .more-disk a{margin:0 2px;padding:5px;transition-duration:0.3s;border-radius:18px;background-color:transparent;color:#24292e;border:2px solid rgba(85,85,85,0.7);border:1px solid rgba(27,31,35,0);font-size:16px;}
         .more-disk a:hover,.more-disk a[now]{background:rgba(245,245,245,0.3);color:#FFFFFF;border:1px solid rgba(27,31,35,.15);box-shadow:0 1px 15px rgba(27,31,35,.15)}
         .list-table{width:100%;padding:0 10px 10px 10px;border-spacing:0;overflow:hidden;table-layout:fixed}
-        .list-table tr{height:fit-content;float:left;width:100%;transition-duration:0.3s;border-radius:16px}
-        .list-table tr[data-to]:hover{color:white;background:linear-gradient(to right,rgb(3,102,214,0.9),rgba(3,102,214,0.3));box-shadow:0 1px 15px rgba(27,31,35,.15)}        
-        .list-table tr[data-to]:hover a{color:white;}
+        .list-table tr{color:#24292e;height:fit-content;float:left;width:100%;transition-duration:0.3s;border-radius:16px}
+        .list-table tr[data-to]:hover{color:white !important;background:linear-gradient(to right,rgb(3,102,214,0.9),rgba(3,102,214,0.3));box-shadow:0 1px 15px rgba(27,31,35,.15)}
+        .list-table tr[data-to]:hover a{color:white;transition-duration:0.3s}       
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{text-align:left}
         .list-table td.updated_at,.list-table th.updated_at{width:15%;}
@@ -68,7 +68,6 @@
         .operatediv div{margin:16px}
         .operatediv_close{position:absolute;right:3px;top:3px;}
         .markdown-body, .customfile{padding:24px;text-align:left;font-size:14px !important}
-<!--TfoStyleStart-->
         .bkgd{<!--BackgroundStart-->background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");background-position:center;width:100%;height:100%;filter:blur(1px)brightness(88%);position:fixed;left:0;top:0;z-index:-1;<!--BackgroundEnd-->}
         ::selection{background-color:rgba(200,200,200,0.5)}
         input{cursor:pointer;padding: 0 8px;height:24px;font-weight:bold;border:1px solid rgba(27,31,35,0);transition-duration: 0.3s;border-radius:16px;background-color:transparent;color:#24292e}
@@ -89,12 +88,13 @@
         .vat{font-style:italic !important;}
         .vcard{padding-top:0px;border:0px}
         .vlogin-btn{width:fit-content !important;height:fit-content !important;border:0 !important}
+        .vleft{display:none;}
         .v[data-class=v] *{line-height: 1.35 !important;}
         .leancloud_visitors{float:right !important;padding:16px !important;}
         #vcomments{padding:16px !important;}
         #upload_div table tr{border-radius:6px !important;}
         #upload_div{margin:10px}
-        #more-disk-div{display:block;}
+        #pdf-d canvas{width:100%;}
         #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
@@ -110,7 +110,6 @@
         .swal-footer{margin-top:0px;padding:0px 16px 8px;}
         .swal-modal{margin:6px auto;border-radius:6px}
         .swal-title:not(:last-child){margin-bottom:0px}
-<!--TfoStyleEnd-->
         @media only screen and (max-width:1856px){
             .list-table td.file,.list-table th.file{width:72%}
             .list-table td.size,.list-table th.size{width:70px !important}
@@ -155,7 +154,7 @@
 <!--BackgroundMStart-->
             body{background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundMUrl-->");}
 <!--BackgroundMEnd-->
-            iframe{width:200% !important;-ms-zoom:0.5;-moz-transform:scale(0.5);-moz-transform-origin: 0 0;-o-transform: scale(0.5);-o-transform-origin: 0 0;-webkit-transform: scale(0.5);-webkit-transform-origin: 0 0;}
+            #preview-div iframe{width:200% !important;-ms-zoom:0.5;-moz-transform:scale(0.5);-moz-transform-origin: 0 0;-o-transform: scale(0.5);-o-transform-origin: 0 0;-webkit-transform: scale(0.5);-webkit-transform-origin: 0 0;}
             .title{margin-bottom:24px}
             .list-wrapper{width:98%;margin:0 auto 10px;}
             .list-table {padding:8px}
@@ -164,19 +163,12 @@
             .list-table td.file,.list-table th.file{width:95%;}
         }
     </style>
-    <!--<style lang="less">
-        @import "~assets/variable";.ripple--wapper{position:relative;overflow:hidden;//禁止文本选择
-            -webkit-user-select:none;-moz-user-select:none;-webkit-user-select:none;-o-user-select:none;user-select:none;.ripple--container{position:absolute;top:0;right:0;bottom:0;left:0;span{position:absolute;transform:scale(0);border-radius:100%;opacity:.3;background-color:#333;animation:ripple .2s;}@keyframes ripple{to{opacity:0;transform:scale(2);}}}}
-    </style>-->
     <!--customCss-->
-    <!--<script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.min.js"></script>-->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
 </head>
 <body>
     <script language="javascript">window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}}</script>
-    <script language="javascript">export default{name:'ripple',data(){return{timer:0}},props:{size:{type:Number,default:100}},deactivated(){if(this.timer){clearTimeout(this.timer)}while(this.$refs.rippleContainer.firstChild){this.$refs.rippleContainer.removeChild(this.$refs.rippleContainer.firstChild)}},methods:{showRipple(e){const target=this.$refs.rippleContainer const ripple=document.createElement('span')const size=this.size const pos=this.$refs.rippleContainer.getBoundingClientRect()const clientX=e.targetTouches[0].clientX const clientY=e.targetTouches[0].clientY const x=clientX-pos.left-size/2 const y=clientY-pos.top-size/2 const style=`top:${y/50}rem;left:${x/50}rem;width:${size/50}rem;height:${size/50}rem`ripple.setAttribute('style',style)const container=this.$refs.rippleContainer container.appendChild(ripple)},cleanRipple(){const _this=this if(this.timer){clearTimeout(this.timer)}this.timer=setTimeout(()=>{if(_this.$refs.rippleContainer&&_this.$refs.rippleContainer.firstChild){_this.$refs.rippleContainer.removeChild(_this.$refs.rippleContainer.firstChild)}},1000)}}}</script>
     <div class="bkgd"></div>
     <div class="ld" style="left:0;top:0;z-index:100;width:100%;height:100%;background:rgb(243,243,243);">
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="z-index:101;transform: rotate(30deg);position:fixed;left:0;bottom:0;margin: auto; display: block; shape-rendering: auto;" width="36px" height="36px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
@@ -230,8 +222,8 @@
                 </div>
             </div>
             <div class="list-body-container">
-                <div class="readme" id="jinrishici">
-                    <center><img src="https://v1.jinrishici.com/all.svg?font-size=26&spacing=7" style="max-width:100%;"></center>
+                <div id="jinrishici">
+                    <center><img src="https://v2.jinrishici.com/one.svg?font-size=26&spacing=7" style="max-width:100%;"></center>
                 </div>
              </div>
         </div>
@@ -240,7 +232,7 @@
 <!--HeadomfStart-->
     <div class="list-wrapper" id="head-om-div">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-body-container">
                 <div class="readme">
                     <div class="customfile" id="head-om">
                         <!--HeadomfContent-->
@@ -297,21 +289,21 @@
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
                         <script type="text/javascript">
-                            function getPath() {
-                            var strFullPath = window.document.location.href;
+                            window.onload=function(){var strFullPath = window.document.location.href;
                             var strPath = window.document.location.pathname;
                             var pos = strFullPath.indexOf(strPath);
                             var prePath = strFullPath.substring(0, pos);
                             // var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-                            // document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
                             document.getElementById("url").value= prePath + "<!--FileEncodeUrl-->";
-                            }
-                            window.onload = getPath;
+                            // document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
+                            if(document.getElementById("office-a")) { 
+                            document.getElementById("preview-div").style.height="320px";
+                        }}
                         </script>
                         <input id="url" title="url" type="url" style="width: 90%; margin-top: 2px;" value="" readonly>
                         <a href="<!--FileUrl-->"><ion-icon name="cloud-download-outline" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
                     </div>
-                    <div style="margin: 24px;display:block;overflow:hidden;">
+                    <div id="preview-div" style="margin: 24px;display:block;overflow:hidden;">
 <!--IsimgFileStart-->
                         <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
 <!--IsimgFileEnd-->
@@ -422,7 +414,7 @@
                                 <a onclick="nextpage(<!--PageNum-->);"><!--PageNum--></a>
 <!--MorePageListEnd-->
 <!--MorePageListNowStart-->
-                                <font color=red><!--PageNum--></font>
+                                <font></font><!--PageNum--></font>
 <!--MorePageListNowEnd-->
                             </td>
                             <td width=60px align=center>
@@ -467,7 +459,7 @@
 <!--FootomfStart-->
     <div class="list-wrapper" id="foot-om-div">
         <div class="list-container">
-            <div class="list-header-container">
+            <div class="list-body-container">
                 <div class="readme">
                     <div class="customfile" id="foot-om">
                         <!--FootomfContent-->
@@ -477,7 +469,6 @@
         </div>
     </div>
 <!--FootomfEnd-->
-
     <div id="mask" class="mask" style="display:none;"></div>
 <!--AdminStart-->
 <!--IsFolderStart-->
@@ -604,12 +595,12 @@
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:20px">Power by<a style="color:rgb(3,102,214)" href="https://github.com/BingoKingo/Tfo">Tfo</a>'s Theme for <a style="color:rgb(3,102,214)" href="https://github.com/qkqpttgf/OneManager-php">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><!--FootStr--></div>
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:6px;display:none" id="tminf">
-        Current Version: 20210205 &nbsp;<br>Update Tips: 1.Upgrade with the program. (Best Choice!) 2.Copy the CustomTheme link and paste it in the Platform Config form of program setting page. 3.Update manually. &nbsp;<br>
+        Current Version: 20210210 &nbsp;<br>Update Tips: 1.Upgrade with the program. (Best Choice!) 2.Copy the CustomTheme link and paste it in the Platform Config form of program setting page. 3.Update manually. &nbsp;<br>
         Tfo’s CustomTheme Address: https://tfo.herokuapp.com/index/Uploaded/WebContents/Github/Tfo/NecessaryFiles/tfo.html &nbsp;<br>Tfo's Theme UpdateCheck Address: https://github.com/qkqpttgf/OneManager-php/blob/master/theme/tfo.html &nbsp;<br>https://github.com/BingoKingo/Tfo/blob/master/theme/tfo.html &nbsp;<br>Tfo’s HomePage on GitHub: https://github.com/BingoKingo/Tfo &nbsp;<br>Tfo’s Example Website: https://tfo.herokuapp.com/
     </div>
 </body>
 <!--ListStart-->
-<!--MdRequireStart--><link rel="stylesheet" href="https://unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
+<!--MdRequireStart--><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked@2.0.0/lib/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.1/spark-md5.min.js"></script><!--GuestUploadEnd-->
 <!--AliyundriveUploadJsStart--><script src="https://cdn.jsdelivr.net/npm/sha1@1.1.1/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
@@ -989,7 +980,7 @@ function size_format(num) {
             td1=document.getElementById('upfile_td1_'+tdnum);
             td2=document.getElementById('upfile_td2_'+tdnum);
             if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
+                td2.innerHTML='<font><!--constStr@UpFileTooLarge--></font>';
                 uploadbuttonshow();
                 return;
             }
@@ -1039,7 +1030,7 @@ function size_format(num) {
             }
             xhr1.onload = function(e){
                 //console.log(xhr1.status+xhr1.responseText);
-                td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                td2.innerHTML='<font>'+xhr1.responseText+'</font>';
                 if (xhr1.status==409) {
                     // td2.innerHTML='nameAlreadyExists';
                     var html=JSON.parse(xhr1.responseText);
@@ -1047,7 +1038,7 @@ function size_format(num) {
 <!--GuestStart-->
                     td2.innerHTML='md5: '+filemd5;
 <!--GuestEnd-->
-                    td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||file.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||file.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                    td1.innerHTML='<div><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||file.name)+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+(file.webkitRelativePath||file.name)+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                 }
                 if (xhr1.status==200) {
                     if (xhr1.responseText=='') {
@@ -1056,7 +1047,7 @@ function size_format(num) {
                     }
                     var html=JSON.parse(xhr1.responseText);
                     if (!html['uploadUrl']) {
-                        td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                        td2.innerHTML='<font>'+xhr1.responseText+'</font><br>';
                     } else {
                         td2.innerHTML='<!--constStr@UploadStart--> ...';
                         binupfile(file,html['uploadUrl'],timea+'_'+i, upbigfilename);
@@ -1150,9 +1141,9 @@ function size_format(num) {
                                     MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                                 }
                                 while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
-                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                document.getElementById('upfile_td1_'+tdnum).innerHTML='<div><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
-                                label.style.color='green';
+                                label.style.color='black';
                                 // uploadbuttonshow();
 <!--AdminStart-->
                                 response.name=file.webkitRelativePath||response.name;
@@ -1160,7 +1151,7 @@ function size_format(num) {
 <!--AdminEnd-->
                             } else {
                                 if (!response['nextExpectedRanges']) {
-                                    label.innerHTML='<font color="red">'+xhr.responseText+'</font>&nbsp;';
+                                    label.innerHTML='<font>'+xhr.responseText+'</font>&nbsp;';
                                 } else {
                                     var a=response['nextExpectedRanges'][0];
                                     asize=Number( a.slice(0,a.indexOf("-")) );
@@ -1172,9 +1163,9 @@ function size_format(num) {
                     }
                 } else {
                     if (window.location.pathname.indexOf('%23')>0||filename.indexOf('%23')>0) {
-                        label.innerHTML='<font color="red"><!--constStr@UploadFail23--></font>';
+                        label.innerHTML='<font><!--constStr@UploadFail23--></font>';
                     } else {
-                        label.innerHTML='<font color="red">'+xhr2.responseText+'</font>';
+                        label.innerHTML='<font>'+xhr2.responseText+'</font>';
                     }
                     // uploadbuttonshow();
                 }
@@ -1217,7 +1208,7 @@ function size_format(num) {
             td1=document.getElementById('upfile_td1_'+tdnum);
             td2=document.getElementById('upfile_td2_'+tdnum);
             if (file.size>100*1024*1024*1024) {
-                td2.innerHTML='<font color="red"><!--constStr@UpFileTooLarge--></font>';
+                td2.innerHTML='<font><!--constStr@UpFileTooLarge--></font>';
                 uploadbuttonshow();
                 return;
             }
@@ -1233,7 +1224,7 @@ function size_format(num) {
                 xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                 xhr1.onload = function(e){
                     //console.log(xhr1.status+xhr1.responseText);
-                    td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                    td2.innerHTML='<font>'+xhr1.responseText+'</font>';
                     if (xhr1.status==201) {
                         if (xhr1.responseText=='') {
                             getuplink(i,1);
@@ -1245,10 +1236,10 @@ function size_format(num) {
                             if (html.name!='') {
                                 if (html.exist==true) td2.innerHTML=html.name+' 文件名已有';
                                 else if (html.rapid_upload==true) td2.innerHTML=html.name+' 秒传';
-                                else td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
-                                td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+html.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+html.name+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                else td2.innerHTML='<font>'+xhr1.responseText+'</font><br>';
+                                td1.innerHTML='<div><a href="<!--base_disk_path--><!--Path-->'+html.name+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+html.name+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                             } else {
-                                td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                                td2.innerHTML='<font>'+xhr1.responseText+'</font><br>';
                             }
                         } else {
                             td2.innerHTML='<!--constStr@UploadStart--> ...';
@@ -1349,13 +1340,13 @@ function size_format(num) {
                             MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:'+size_format((totalsize-newstartsize)*1000/(EndTime.getTime()-StartTime.getTime()))+'/s<br>';
                         }
                         while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
-                        document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                        document.getElementById('upfile_td1_'+tdnum).innerHTML='<div><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                         label.innerHTML=StartStr+MiddleStr;
-                        label.style.color='green';
+                        label.style.color='black';
                         // uploadbuttonshow();
                     } else {
                         if (!response['nextExpectedRanges']) {
-                            label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
+                            label.innerHTML='<font>'+xhr.responseText+'</font><br>';
                         } else {
                             var a=response['nextExpectedRanges'][0];
                             asize=Number( a.slice(0,a.indexOf("-")) );
@@ -1384,12 +1375,12 @@ function size_format(num) {
     function tminf() {
         var tminftxt=document.getElementById("tminf").innerText;
         swal({
-        title: "Tfo's Theme Information",
+        title: "Tfo's Update Information",
         text: tminftxt,
         icon: "info",
         buttons: {
         cancel: "Close",
-        update: "Update with OneManager-php",
+        update: "Update with the program",
         },
     })
     .then((value) => {
