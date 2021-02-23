@@ -39,14 +39,6 @@ function GetGlobalVariable($event)
         $pos = strpos($cookievalues,"=");
         $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
     }
-    $_SERVER['HTTP_USER_AGENT'] = $event['headers']['user-agent'];
-    if (isset($event['headers']['authorization'])) {
-        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['authorization'], 'Basic ')[1]), ':');
-        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
-        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
-    }
-    $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
-    $_SERVER['_APP_SHARE_DIR'] = '/var/share/CFF/processrouter';
 }
 
 function GetPathSetting($event, $context)
@@ -69,6 +61,18 @@ function GetPathSetting($event, $context)
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['REMOTE_ADDR'] = $event['headers']['x-real-ip'];
     $_SERVER['HTTP_X_REQUESTED_WITH'] = $event['headers']['x-requested-with'];
+    $_SERVER['HTTP_USER_AGENT'] = $event['headers']['user-agent'];
+    if (isset($event['headers']['authorization'])) {
+        $basicAuth = splitfirst(base64_decode(splitfirst($event['headers']['authorization'], 'Basic ')[1]), ':');
+        $_SERVER['PHP_AUTH_USER'] = $basicAuth[0];
+        $_SERVER['PHP_AUTH_PW'] = $basicAuth[1];
+    }
+    $_SERVER['REQUEST_SCHEME'] = $event['headers']['x-forwarded-proto'];
+    $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
+    //if ($_SERVER['HTTP_REFERER']!='') 
+    $_SERVER['referhost'] = explode('/', $event['headers']['referer'])[2];
+    $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
+    $_SERVER['_APP_SHARE_DIR'] = '/var/share/CFF/processrouter';
     return $path;
 }
 
