@@ -81,7 +81,7 @@ class Aliyundrive {
                 $tmp['list'][$filename]['size'] = $file['size'];
                 $tmp['childcount']++;
             }
-        } elseif (isset($files['code'])) {
+        } elseif (isset($files['code'])||isset($files['error'])) {
             return $files;
         }
         //error_log1(json_encode($tmp));
@@ -92,9 +92,10 @@ class Aliyundrive {
     {
         global $exts;
         while (substr($path, -1)=='/') $path = substr($path, 0, -1);
+        if ($path == '') $path = '/';
         //$files = getcache('path_' . $path, $this->disktag);
         //if (!$files) {
-        //if (!($files = getcache('path_' . $path, $this->disktag))) {
+        if (!($files = getcache('path_' . $path, $this->disktag))) {
             if ($path == '/' || $path == '') {
                 $files = $this->fileList('root');
                 //error_log1('root_id' . $files['id']);
@@ -135,14 +136,14 @@ class Aliyundrive {
                 $files['error']['message'] = 'Not Found';
                 $files['error']['stat'] = 404;
             } elseif (isset($files['stat'])) {
-                $tmp['error']['stat'] = $files['stat'];
+                $files['error']['stat'] = $files['stat'];
                 $files['error']['code'] = 'Error';
                 $files['error']['message'] = $files['body'];
             } else {
                 savecache('path_' . $path, $files, $this->disktag, 600);
             }
-        //}
-        //error_log1('path:' . $path . ', files:' . json_encode($files));
+        }
+        //error_log1('path:' . $path . ', files:' . substr(json_encode($files), 0, 150));
         return $files;
     }
 
@@ -711,7 +712,7 @@ class Aliyundrive {
             error_log1(json_encode($response));
             if ($response['stat']==200) $ret = json_decode($response['body'], true);
             if (!isset($ret['access_token'])) {
-                error_log1('failed to get [' . $this->disktag . '] access_token. response' . json_encode($ret));
+                error_log1('failed to get [' . $this->disktag . '] access_token. response: ' . $response['stat'] . $response['body']);
                 //$response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
                 $response['body'] .= 'failed to get [' . $this->disktag . '] access_token.';
                 $this->error = $response;
