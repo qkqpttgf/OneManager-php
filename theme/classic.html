@@ -1086,9 +1086,10 @@
                 return;
             }*/
             var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
-            td2.innerHTML='计算SHA1 ...';
             var reader = new FileReader();
-            reader.readAsArrayBuffer(file);
+            reader.onprogress = function(e) {
+                td2.innerText = '计算SHA1... ' + (e.loaded*100/file.size).toFixed(2) + " %";
+            }
             reader.onload = function(e) {
                 var filesha1 = sha1(this.result);
 <!--GuestStart-->
@@ -1146,6 +1147,7 @@
                     xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
                 }
             }
+            reader.readAsArrayBuffer(file);
         }
         uploadbuttonshow();
     }
