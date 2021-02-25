@@ -282,9 +282,8 @@ function main($path)
         $tmp = adminoperate($path);
         if ($tmp['statusCode'] > 0) {
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
-            if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
-            savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
+            if ($path1!='/'&&substr($path1,-1)=='/') $path1 = substr($path1, 0, -1);
+            savecache('path_' . $path1, '', $_SERVER['disktag'], 1);
             return $tmp;
         }
     } else {
@@ -382,7 +381,7 @@ function main($path)
             $files['error']['code'] = 'unknownError';
             $files['error']['stat'] = 500;
         }
-        return message('<a href="'.$_SERVER['base_path'].'">'.getconstStr('Back').getconstStr('Home').'</a><div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
+        return message('<div style="margin:8px;"><pre>' . $files['error']['message'] . '</pre></div><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>', $files['error']['code'], $files['error']['stat']);
     }
 }
 
