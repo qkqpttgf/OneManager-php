@@ -767,6 +767,12 @@ class Onedrive {
     }
 
     protected function get_access_token($refresh_token) {
+        if (!$refresh_token) {
+            $tmp['stat'] = 0;
+            $tmp['body'] = 'No refresh_token';
+            $this->error = $tmp;
+            return false;
+        }
         if (!($this->access_token = getcache('access_token', $this->disktag))) {
             $p=0;
             while ($response['stat']==0&&$p<3) {
@@ -784,8 +790,8 @@ class Onedrive {
                 //throw new Exception($response['stat'].', failed to get ['.$this->disktag.'] access_token.'.$response['body']);
             }
             $tmp = $ret;
-            $tmp['access_token'] = '******';
-            $tmp['refresh_token'] = '******';
+            $tmp['access_token'] = substr($tmp['access_token'], 0, 10) . '******';
+            $tmp['refresh_token'] = substr($tmp['refresh_token'], 0, 10) . '******';
             error_log1('[' . $this->disktag . '] Get access token:' . json_encode($tmp, JSON_PRETTY_PRINT));
             $this->access_token = $ret['access_token'];
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);

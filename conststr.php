@@ -96,6 +96,7 @@ $constStr = [
             'referrer' => 'only these domains can refer resourse in this site, format is a1.com|b2.com',
             'domain_path' => 'more custom domain, format is a1.com:/dirto/path1|b2.com:/path2',
             'diskname' => 'The disk name you want show.',
+            'diskDescription' => ' Some tips of this disk, not used in code.',
             'disktag' => 'A tag used in store config and url.',
             'disableShowThumb' => 'if 1, the ShowThumbnail button will not display',
             'disableChangeTheme' => 'if 1, the Theme selection button will not display',
@@ -123,6 +124,7 @@ $constStr = [
             'referrer' => '只有这些域名能引用本站资源。格式为a1.com|b1.com',
             'domain_path' => '使用多个自定义域名时，指定每个域名看到的目录。格式为a1.com:/dirto/path1|b1.com:/path2，比private_path优先。',
             'diskname' => '这个盘你想显示什么名称。',
+            'diskDescription' => '对这个盘的一些描述，随便写，代码不引用这个。',
             'disktag' => '一个标签，用于保存配置，多盘时会显示在url中。',
             'disableShowThumb' => '如果填 1, ‘显示缩略’按钮将被隐藏。',
             'disableChangeTheme' => '如果为 1，则不会显示主题选择按钮',
@@ -325,11 +327,11 @@ $constStr = [
     ],
     'SetpassfileBfEncrypt' => [
         'en-us' => 'Set \'passfile\' in Environments before encrypt',
-        'zh-cn' => '先在环境变量设置passfile才能加密',
-        'zh-tw' => '先在環境變數設定passfile才能加密',
-        'ja' => '最初に暗号化する環境変数にパスファイルを設定します',
+        'zh-cn' => '先设置passfile才能加密',
+        'zh-tw' => '先設定passfile才能加密',
+        'ja' => '最初に暗号化する変数にパスファイルを設定します',
         'ko-kr' => '암호화하기 전에 환경 변수에 패스 파일을 설정하십시오',
-        'fa' => 'قبل از رمزگذاری \"pass file \" را در محیط تنظیم کنید',
+        'fa' => 'قبل از رمزگذاری \"passfile \" را در محیط تنظیم کنید',
         'ar-sa' => 'أولا تعيين متغير البيئة passfile لتشفير',
     ],
     'updateProgram' => [
@@ -424,9 +426,9 @@ $constStr = [
         'zh-tw' => '修改標籤',
         'ar-sa' => 'تغيير التسمية',
     ],
-    'ChangeOnedrivetype' => [
-        'en-us' => 'Change Onedrive/Sharepoint',
-        'zh-cn' => '切换Onedrive/Sharepoint',
+    'ChangeDrivetype' => [
+        'en-us' => 'Change',
+        'zh-cn' => '切换',
     ],
     'AddDisk' => [
         'en-us' => 'Add Disk',
