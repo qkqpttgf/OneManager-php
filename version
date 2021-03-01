@@ -1,7 +1,10 @@
+20210301-1745.32
+Onedrive client secret extend. export&import config. adding Googledrive. add reffer: only listing domains can refer.  add diskDescription: tips of disk. Heroku change function_name to HerokuappId. try fix domainforproxy. fix create in Aliyundrive. fix other bugs.
+Onedrive 的client延期。可以导入导出配置了。初步添加Googledrive。添加reffer：只有指定域名能引用。添加diskDescription：可以对盘备注了。Heroku中将function_name改为使用HerokuappId。尝试修复domainforproxy在个人帐号时的问题。修复阿里云盘不能新建与加密。修复其它bug。
+
 20210118-1600.31
 can change Ondrive to Sharepoint, can copy a disk. fix a bug that 500 error in setup.
 Onedrive跟Sharepoint可以切换了，可以复制一个盘。修复bug。
-
 20210115-1111.30
 <font color=red>v3, after update, please AddDisk again, please set passfile again.</font> themes of php deleted, or you can use branch v2_last.
 <font color=red>v3，一键升级后请重新添加盘，passfile失效，重新设置。</font>php主题删掉了，要么就用v2_last分支。
