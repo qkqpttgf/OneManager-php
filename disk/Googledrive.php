@@ -127,26 +127,21 @@ class Googledrive {
                         } else {
                             if (isset($item['id'])&&$item['shared']!==true) $this->permission('create', $item['id']);
                             //$this->permission('delete', $files['id']);
-                            if (!isset($item['downUrl'])) {
-                                $res = curl('GET', $item['webContentLink'], '', '', 1);
-                                $weblink = $res['returnhead']['Location'];
-                                if ($weblink!==null) $item['downUrl'] = $weblink;
-                                else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
-                            }
+                            
                             //if (isset($item['mimeType']) && $item['mimeType']!='application/vnd.google-apps.folder') {
                                 if (in_array(splitlast($item['name'],'.')[1], $exts['txt'])) {
                                     if (!(isset($item['content'])&&$item['content']['stat']==200)) {
-                                        if (isset($item['downUrl'])) {
-                                            $content1 = curl('GET', $item['downUrl']);
-                                            $item['content'] = $content1;
-                                        }
-                                        //else $content1 = $res;
-
-                                        //if ($content1['stat']==302) {
-                                        //    $content1 = curl('GET', $content1['returnhead']['Location'], '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"], 1);
+                                        //if (!isset($item['downUrl'])) {
+                                            $res = curl('GET', $item['webContentLink'], '', '', 1);
+                                            $weblink = $res['returnhead']['Location'];
+                                            //if ($weblink!==null) $item['downUrl'] = $weblink;
+                                            //else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
                                         //}
+                                        if ($res['stat']==302) {
+                                            $content1 = curl('GET', $weblink, '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"], 1);
+                                            $item['content'] = $content1;
+                                        } else $content1 = $res;
                                         //error_log1($item['name'] . '~' . json_encode($content1, JSON_PRETTY_PRINT) . PHP_EOL);
-                                        //$item['content'] = $content1;
                                         $parent_folder['files'][$i] = $item;
                                         savecache('path_' . $path, $parent_folder, $this->disktag);
                                     }
