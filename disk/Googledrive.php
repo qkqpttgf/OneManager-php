@@ -71,7 +71,7 @@ class Googledrive {
                     $tmp['list'][$filename]['type'] = 'file';
                     //var_dump($file);
                     //echo $file['name'] . ':' . $this->DownurlStrName . ':' . $file[$this->DownurlStrName] . PHP_EOL;
-                    $tmp['list'][$filename]['url'] = $file['webContentLink'];
+                    $tmp['list'][$filename]['url'] = ($file['downUrl']?$file['downUrl']:$file['webContentLink']);
                     $tmp['list'][$filename]['mime'] = $file['mimeType'];
                 }
                 $tmp['list'][$filename]['id'] = $file['id'];
@@ -86,7 +86,7 @@ class Googledrive {
             $tmp['time'] = $files['modifiedTime'];
             $tmp['size'] = $files['size'];
             $tmp['mime'] = $files['mimeType'];
-            $tmp['url'] = $files['webContentLink'];
+            $tmp['url'] = ($files['downUrl']?$files['downUrl']:$files['webContentLink']);
             $tmp['content'] = $files['content'];
         } else/*if (isset($files['error']))*/ {
             return $files;
@@ -125,23 +125,35 @@ class Googledrive {
                             $files['time'] = $item['modifiedTime'];
                             $files['size'] = $item['size'];
                         } else {
+                            if (isset($item['id'])&&$item['shared']!==true) $this->permission('create', $item['id']);
+                            //$this->permission('delete', $files['id']);
+                            if (!isset($item['downUrl'])) {
+                                $res = curl('GET', $item['webContentLink'], '', '', 1);
+                                $weblink = $res['returnhead']['Location'];
+                                if ($weblink!==null) $item['downUrl'] = $weblink;
+                                else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
+                            }
                             //if (isset($item['mimeType']) && $item['mimeType']!='application/vnd.google-apps.folder') {
                                 if (in_array(splitlast($item['name'],'.')[1], $exts['txt'])) {
                                     if (!(isset($item['content'])&&$item['content']['stat']==200)) {
-                                        $content1 = curl('GET', $item['webContentLink'], '', '', 1);
-                                        //error_log1(json_encode($tmp, JSON_PRETTY_PRINT));
-                                        if ($content1['stat']==302) {
-                                            $content1 = curl('GET', $content1['returnhead']['Location'], '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"], 1);
+                                        if (isset($item['downUrl'])) {
+                                            $content1 = curl('GET', $item['downUrl']);
+                                            $item['content'] = $content1;
                                         }
-                                        error_log1($item['name'] . '~' . json_encode($content1, JSON_PRETTY_PRINT) . PHP_EOL);
-                                        $item['content'] = $content1;
+                                        //else $content1 = $res;
+
+                                        //if ($content1['stat']==302) {
+                                        //    $content1 = curl('GET', $content1['returnhead']['Location'], '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"], 1);
+                                        //}
+                                        //error_log1($item['name'] . '~' . json_encode($content1, JSON_PRETTY_PRINT) . PHP_EOL);
+                                        //$item['content'] = $content1;
                                         $parent_folder['files'][$i] = $item;
                                         savecache('path_' . $path, $parent_folder, $this->disktag);
                                     }
                                 }
-                                if (isset($item['id'])&&$item['shared']===false) $this->permission('create', $item['id']);
-                                //$this->permission('delete', $files['id']);
                             //}
+                            
+                            //error_log1(json_encode($item, JSON_PRETTY_PRINT));
                             $files = $item;
                         } 
                     }
@@ -169,8 +181,19 @@ class Googledrive {
     protected function fileList($parent_file_id = '')
     {
         $url = $this->api_url . 'files';
-        if ($parent_file_id!='') $url .= '/' . $parent_file_id;
+
         $url .= '?fields=files(id,name,mimeType,size,modifiedTime,parents,webContentLink,thumbnailLink,shared,permissions,permissionIds),nextPageToken';
+        //$url .= '?fields=files(*),nextPageToken';
+        //$url .= '?q=mimeType=\'application/vnd.google-apps.folder\'';
+        if ($parent_file_id!='') {
+            $q = ${parent_file_id};
+        } else {
+            if ($this->default_drive_id!='') $q = $this->default_drive_id;
+            else $q = 'root';
+        }
+        $q = '\'' . $q . '\' in parents and trashed = false';
+        $q = urlencode($q);
+        $url .= '&q=' . $q;
         if ($this->default_drive_id!='') $url .= '&driveId=' . $this->default_drive_id . '&corpora=teamDrive&includeItemsFromAllDrives=true&supportsAllDrives=true';
 
         $header['Authorization'] = 'Bearer ' . $this->access_token;
@@ -199,7 +222,7 @@ class Googledrive {
         $header['Authorization'] = 'Bearer ' . $this->access_token;
 
         $res = curl($method, $url, $data, $header);
-        //error_log1(json_encode($res, JSON_PRETTY_PRINT));
+        //error_log1('Set Share' . json_encode($res, JSON_PRETTY_PRINT));
         return $res;
     }
     
