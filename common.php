@@ -48,6 +48,7 @@ $EnvConfigs = [
     'siteid'            => 0b100,
     'refresh_token'     => 0b100,
     'token_expires'     => 0b100,
+    'activeLimit'       => 0b100,
     'default_drive_id'  => 0b100,
     'default_sbox_drive_id'=> 0b100,
 
