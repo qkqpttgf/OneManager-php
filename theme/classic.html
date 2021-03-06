@@ -620,7 +620,6 @@
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
         $head.innerHTML = marked(document.getElementById('head-md').innerText);
-        
     }
 <!--HeadmdEnd-->
 <!--ReadmemdStart-->
@@ -895,6 +894,7 @@
             td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             var xhr1 = new XMLHttpRequest();
             xhr1.open("POST", '?action=upbigfile');
+            xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.onprogress = function(e){
                 td2.innerHTML+='.';
@@ -929,7 +929,7 @@
                     getuplink(i);
                 }
             }
-            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
+            xhr1.send('upbigfilename='+ encodeURIComponent(upbigfilename) +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
 <!--GuestStart-->
             }
         }
@@ -1112,6 +1112,7 @@
                 } else {
                     var xhr1 = new XMLHttpRequest();
                     xhr1.open("POST", '?action=upbigfile');
+                    xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                     xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                     xhr1.onload = function(e){
                         //console.log(xhr1.status+xhr1.responseText);
@@ -1144,7 +1145,7 @@
                             getuplink(i);
                         }
                     }
-                    xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
+                    xhr1.send('upbigfilename='+ encodeURIComponent(upbigfilename) +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
                 }
             }
             reader.readAsArrayBuffer(file);
@@ -1194,6 +1195,7 @@
                 if (asize>totalsize) {
                     var xhr1 = new XMLHttpRequest();
                     xhr1.open("POST", '?action=upbigfile');
+                    xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                     xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                     xhr1.onload = function(e){
                         console.log(xhr1.responseText+','+xhr1.status);
@@ -1263,6 +1265,7 @@
                                 // 上传结束
                                 var xhr1 = new XMLHttpRequest();
                                 xhr1.open("POST", '?action=upbigfile');
+                                xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                                 xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                                 xhr1.onload = function(e){
                                     console.log(xhr1.responseText+','+xhr1.status);
@@ -1389,6 +1392,7 @@
         var num=document.getElementById(str+'_sid').value;
         var xhr = new XMLHttpRequest();
         xhr.open("POST", '');
+        xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
         xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
         xhr.onload = function(e){
             var html;
