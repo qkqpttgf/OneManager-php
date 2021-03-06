@@ -17,7 +17,6 @@ class Onedrive {
         $this->oauth_url = 'https://login.microsoftonline.com/common/oauth2/v2.0/';
         $this->api_url = 'https://graph.microsoft.com/v1.0';
         $this->scope = 'https://graph.microsoft.com/Files.ReadWrite.All offline_access';
-
         $this->client_secret = urlencode($this->client_secret);
         $this->scope = urlencode($this->scope);
         $this->DownurlStrName = '@microsoft.graph.downloadUrl';
@@ -73,12 +72,7 @@ class Onedrive {
                 if (substr($url,-1)=='/') $url=substr($url,0,-1);
             }
             $url .= '?expand=children(select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName.')';
-            $retry = 0;
-            $arr = [];
-            while ($retry<3&&!$arr['stat']) {
-                $arr = curl('GET', $url, '', ['Authorization' => 'Bearer ' . $this->access_token], 1);
-                $retry++;
-            }
+            $arr = $this->MSAPI('GET', $url);
             //echo $url . '<br><pre>' . json_encode($arr, JSON_PRETTY_PRINT) . '</pre>';
             if ($arr['stat']<500) {
                 $files = json_decode($arr['body'], true);
@@ -187,7 +181,7 @@ class Onedrive {
                 $url .= ':';
             }
             $url .= '/children?$top=' . ($page-1)*200 . '&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName;
-            $children_tmp = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+            $children_tmp = json_decode($this->MSAPI('GET', $url)['body'], true);
             //echo $url . '<br><pre>' . json_encode($children_tmp, JSON_PRETTY_PRINT) . '</pre>';
             $p = 1;
             $i = 0;
@@ -204,7 +198,7 @@ class Onedrive {
             }
 
             $url = $children_tmp['@odata.nextLink'];
-            $children_tmp = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+            $children_tmp = json_decode($this->MSAPI('GET', $url)['body'], true);
             //echo $url . '<br><pre>' . json_encode($children_tmp, JSON_PRETTY_PRINT) . '</pre>';
             $p = $page;
             $i = 0;
@@ -254,7 +248,7 @@ class Onedrive {
                             $url .= ':';
                         }
                         $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName;
-                        $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+                        $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                         // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
                         savecache('files_' . $path . '_page_' . $page1, $children, $this->disktag);
                         $nextlink=getcache('nextlink_' . $path . '_page_' . $page1, $this->disktag);
@@ -267,7 +261,7 @@ class Onedrive {
                         $url = $children['@odata.nextLink'];
                         for ($page2=$page1+1;$page2<=$page;$page2++) {
                             sleep(1);
-                            $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+                            $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                             savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag);
                             $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
                             if ($nextlink!=$children['@odata.nextLink']) {
@@ -287,13 +281,13 @@ class Onedrive {
                         $pageinfocache['dirsize'] = $files['size'];
                         $pageinfocache['cachesize'] = $cachefile['size'];
                         $pageinfocache['size'] = $files['size']-$cachefile['size'];
-                        if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT), $this->access_token)['body'];
+                        if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT))['body'];
                         return $files;*/
                     }
                 } else {
                     for ($page2=$page3+1;$page2<=$page;$page2++) {
                         sleep(1);
-                        $children = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+                        $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                         savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag, 3300);
                         $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
                         if ($nextlink!=$children['@odata.nextLink']) {
@@ -313,7 +307,7 @@ class Onedrive {
                     $pageinfocache['dirsize'] = $files['size'];
                     $pageinfocache['cachesize'] = $cachefile['size'];
                     $pageinfocache['size'] = $files['size']-$cachefile['size'];
-                    if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT), $this->access_token)['body'];
+                    if ($pageinfochange == 1) $this->MSAPI('PUT', path_format($path.'/'.$cachefilename), json_encode($pageinfocache, JSON_PRETTY_PRINT))['body'];
                     return $files;*/
                 }
             }
@@ -336,23 +330,23 @@ class Onedrive {
         $oldname = path_format($file['path'] . '/' . $oldname);
         $data = '{"name":"' . $newname . '"}';
                 //echo $oldname;
-        $result = $this->MSAPI('PATCH', $oldname, $data, $this->access_token);
+        $result = $this->MSAPI('PATCH', $oldname, $data);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
     public function Delete($file) {
         $filename = spurlencode($file['name']);
         $filename = path_format($file['path'] . '/' . $filename);
                 //echo $filename;
-        $result = $this->MSAPI('DELETE', $filename, '', $this->access_token);
+        $result = $this->MSAPI('DELETE', $filename, '');
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         return output($result['body'], $result['stat']);
     }
     public function Encrypt($folder, $passfilename, $pass) {
         $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
         if ($pass==='') {
-            $result = $this->MSAPI('DELETE', $filename, '', $this->access_token);
+            $result = $this->MSAPI('DELETE', $filename, '');
         } else {
-            $result = $this->MSAPI('PUT', $filename, $pass, $this->access_token);
+            $result = $this->MSAPI('PUT', $filename, $pass);
         }
         $path1 = $folder['path'];
         if ($path1!='/'&&substr($path1, -1)=='/') $path1 = substr($path1, 0, -1);
@@ -364,7 +358,7 @@ class Onedrive {
         $filename = spurlencode($file['name']);
         $filename = path_format($file['path'] . '/' . $filename);
         $data = '{"parentReference":{"path": "/drive/root:' . $folder['path'] . '"}}';
-        $result = $this->MSAPI('PATCH', $filename, $data, $this->access_token);
+        $result = $this->MSAPI('PATCH', $filename, $data);
         $path2 = spurlencode($folder['path'], '/');
         if ($path2!='/'&&substr($path2, -1)=='/') $path2 = substr($path2, 0, -1);
         savecache('path_' . $path2, json_decode('{}', true), $this->disktag, 1);
@@ -383,7 +377,7 @@ class Onedrive {
             $newname = '.' . $namearr[1] . ' (' . date("Ymd\THis\Z") . ')';
         }
         $data = '{ "name": "' . $newname . '" }';
-        $result = $this->MSAPI('copy', $filename, $data, $this->access_token);
+        $result = $this->MSAPI('copy', $filename, $data);
         /*$num = 0;
         while ($result['stat']==409 && json_decode($result['body'], true)['error']['code']=='nameAlreadyExists') {
             $num++;
@@ -395,7 +389,7 @@ class Onedrive {
             }
             //$newname = spurlencode($newname);
             $data = '{ "name": "' . $newname . '" }';
-            $result = $this->MSAPI('copy', $filename, $data, $this->access_token);
+            $result = $this->MSAPI('copy', $filename, $data);
         }*/
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         return output($result['body'], $result['stat']);
@@ -406,7 +400,7 @@ class Onedrive {
         $response=MSAPI('POST',$filename,'{"item": { "@microsoft.graph.conflictBehavior": "replace"  }}',$_SERVER['access_token']);
         $uploadurl=json_decode($response,true)['uploadUrl'];
         echo MSAPI('PUT',$uploadurl,$data,$_SERVER['access_token']);*/
-        $result = $this->MSAPI('PUT', $file['path'], $content, $this->access_token);
+        $result = $this->MSAPI('PUT', $file['path'], $content);
         //return output($result['body'], $result['stat']);
         //echo $result;
         $resultarry = json_decode($result['body'],true);
@@ -417,11 +411,11 @@ class Onedrive {
         if ($type=='file') {
             $filename = spurlencode($name);
             $filename = path_format($parent['path'] . '/' . $filename);
-            $result = $this->MSAPI('PUT', $filename, $content, $this->access_token);
+            $result = $this->MSAPI('PUT', $filename, $content);
         }
         if ($type=='folder') {
             $data = '{ "name": "' . $name . '",  "folder": { },  "@microsoft.graph.conflictBehavior": "rename" }';
-            $result = $this->MSAPI('children', $parent['path'], $data, $this->access_token);
+            $result = $this->MSAPI('children', $parent['path'], $data);
         }
         //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
@@ -446,7 +440,7 @@ class Onedrive {
                     return message($html, $title, 201);
                 }
                 $response = $this->get_access_token($refresh_token);
-                if (!$response) return message($this->error['body'], 'Error', $this->error['stat']);
+                if (!$response) return message($this->error['body'], $this->error['stat'] . ' Error', $this->error['stat']);
             }
 
             $tmp = null;
@@ -516,7 +510,7 @@ class Onedrive {
                     return message($html, $title, 201);
                 }
                 $response = $this->get_access_token($refresh_token);
-                if (!$response) return message($this->error['body'], 'Error', $this->error['stat']);
+                if (!$response) return message($this->error['body'], $this->error['stat'] . ' Error', $this->error['stat']);
             }
 
             $api = $this->api_url . '/sites/root';
@@ -709,7 +703,7 @@ class Onedrive {
             </div>
         </div>
         <br>';
-        if ($_SERVER['language']=='zh-cn') $html .= '你要理解 scfonedrive.github.io 是github上的静态网站，<br>除非github真的挂掉了，<br>不然，稍后你如果连不上，请检查你的运营商或其它“你懂的”问题！<br>';
+        if ($_SERVER['language']=='zh-cn') $html .= '你要理解 scfonedrive.github.io 是github上的静态网站，<br><font color="red">除非github真的挂掉</font>了，<br>不然，稍后你如果<font color="red">连不上</font>，请检查你的运营商或其它“你懂的”问题！<br>';
         $html .='
         <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
@@ -840,7 +834,7 @@ class Onedrive {
             $filename = '.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $_GET['filename'] . '.tmp';
         }
         $filename = path_format( path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($filename, '/') );
-        $tmp = $this->MSAPI('DELETE', $filename, '', $this->access_token);
+        $tmp = $this->MSAPI('DELETE', $filename, '');
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
         if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
         savecache('path_' . $path1, json_decode('{}',true), $this->disktag, 1);
@@ -898,24 +892,30 @@ class Onedrive {
                 if ( json_decode( curl('GET', $getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
             }
         }
-        $response = $this->MSAPI('createUploadSession', path_format($path . '/' . $filename), '{"item": { "@microsoft.graph.conflictBehavior": "fail" }}', $this->access_token);
+        $response = $this->MSAPI('createUploadSession', path_format($path . '/' . $filename), '{"item": { "@microsoft.graph.conflictBehavior": "fail" }}');
         if ($response['stat']<500) {
             $responsearry = json_decode($response['body'],true);
             if (isset($responsearry['error'])) return output($response['body'], $response['stat']);
             $fileinfo['uploadUrl'] = $responsearry['uploadUrl'];
-            if ($fileinfo['size']>10*1024*1024) $this->MSAPI('PUT', path_format($path . '/' . $cachefilename), json_encode($fileinfo, JSON_PRETTY_PRINT), $this->access_token);
+            if ($fileinfo['size']>10*1024*1024) $this->MSAPI('PUT', path_format($path . '/' . $cachefilename), json_encode($fileinfo, JSON_PRETTY_PRINT));
         }
         return output($response['body'], $response['stat']);
     }
 
-    protected function MSAPI($method, $path, $data = '', $access_token)
+    protected function MSAPI($method, $path, $data = '')
     {
+        $activeLimit = getConfig('activeLimit', $this->disktag);
+        if ($activeLimit!='') {
+            if ($activeLimit>time()) {
+                $tmp['error']['code'] = 'Retry-After';
+                $tmp['error']['message'] = 'MS limit until ' . date('Y-m-d H:i:s', $activeLimit);
+                return [ 'stat' => 429, 'body' => json_encode($tmp) ];
+            } else {
+                setConfig(['activeLimit' => ''], $this->disktag);
+            }
+        }
         if (substr($path,0,7) == 'http://' or substr($path,0,8) == 'https://') {
-            $url=$path;
-            $lenth=strlen($data);
-            $headers['Content-Length'] = $lenth;
-            $lenth--;
-            $headers['Content-Range'] = 'bytes 0-' . $lenth . '/' . $headers['Content-Length'];
+            $url = $path;
         } else {
             $url = $this->api_url . $this->ext_api_url;
             if ($path=='' or $path=='/') {
@@ -947,7 +947,7 @@ class Onedrive {
                 $headers['Content-Type'] = 'application/json';
             }
         }
-        $headers['Authorization'] = 'Bearer ' . $access_token;
+        $headers['Authorization'] = 'Bearer ' . $this->access_token;
         if (!isset($headers['Accept'])) $headers['Accept'] = '*/*';
         //if (!isset($headers['Referer'])) $headers['Referer'] = $url;*
         $sendHeaders = array();
@@ -966,9 +966,19 @@ class Onedrive {
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, 0);
         //curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
-        $response['body'] = curl_exec($ch);
-        $response['stat'] = curl_getinfo($ch,CURLINFO_HTTP_CODE);
+        $retry = 0;
+        $response = [];
+        while ($retry<3&&!$response['stat']) {
+            $response['body'] = curl_exec($ch);
+            $response['stat'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+            $retry++;
+        }
         //$response['Location'] = curl_getinfo($ch);
+        if ($response['stat']==429) {
+            $res = json_decode($response['body'], true);
+            $retryAfter = $res['error']['retryAfterSeconds'];
+            setConfig(['activeLimit' => time()+$retryAfter], $this->disktag);
+        }
         curl_close($ch);
         error_log1($response['stat'].'
     '.$response['body'].'
