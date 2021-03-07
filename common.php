@@ -1433,10 +1433,10 @@ function EnvOpt($needUpdate = 0)
         xhr.send("pass=" + config_f.pass.value + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value);
     }
 </script><br>';
-    $Diver_arr = scandir(__DIR__ . $slash . 'disk');
+    $Driver_arr = scandir(__DIR__ . $slash . 'disk');
     $html .= '
 <select name="DriveType" onchange="changedrivetype(this.options[this.options.selectedIndex].value)">';
-    foreach ($Diver_arr as $v1) {
+    foreach ($Driver_arr as $v1) {
         if ($v1!='.' && $v1!='..') {
             //$v1 = substr($v1, 0, -4);
             $v1 = splitlast($v1, '.php')[0];
@@ -1871,30 +1871,26 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--IsNotHiddenEnd-->', '', $html);
             }
         }
+        $DriverFile = scandir(__DIR__ . $slash . 'disk');
+        $Driver_arr = null;
+        foreach ($DriverFile as $v1) {
+            if ($v1!='.' && $v1!='..') {
+                $v1 = splitlast($v1, '.php')[0];
+                $Driver_arr[] = $v1;
+            }
+        }
         if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&$files['type']=='folder'&&$_SERVER['ishidden']<4 )) {
-            while (strpos($html, '<!--UploadJsStart-->')) {
-                while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
-                while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
-            }
-            if (baseclassofdrive()=='Onedrive') while (strpos($html, '<!--OnedriveUploadJsStart-->')) {
-                while (strpos($html, '<!--OnedriveUploadJsStart-->')) $html = str_replace('<!--OnedriveUploadJsStart-->', '', $html);
-                while (strpos($html, '<!--OnedriveUploadJsEnd-->')) $html = str_replace('<!--OnedriveUploadJsEnd-->', '', $html);
-                $tmp[1] = 'a';
-                while ($tmp[1]!='') {
-                    $tmp = splitfirst($html, '<!--AliyundriveUploadJsStart-->');
+            while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
+            while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
+            $now_driver = baseclassofdrive();
+            unset($Driver_arr[$now_driver]);
+            while (strpos($html, '<!--' . $now_driver . 'UploadJsStart-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsStart-->', '', $html);
+            while (strpos($html, '<!--' . $now_driver . 'UploadJsEnd-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsEnd-->', '', $html);
+            foreach ($Driver_arr as $driver) {
+                while (strpos($html, '<!--' . $driver . 'UploadJsStart-->')) {
+                    $tmp = splitfirst($html, '<!--' . $driver . 'UploadJsStart-->');
                     $html = $tmp[0];
-                    $tmp = splitfirst($tmp[1], '<!--AliyundriveUploadJsEnd-->');
-                    $html .= $tmp[1];
-                }
-            }
-            if (baseclassofdrive()=='Aliyundrive') while (strpos($html, '<!--AliyundriveUploadJsStart-->')) {
-                while (strpos($html, '<!--AliyundriveUploadJsStart-->')) $html = str_replace('<!--AliyundriveUploadJsStart-->', '', $html);
-                while (strpos($html, '<!--AliyundriveUploadJsEnd-->')) $html = str_replace('<!--AliyundriveUploadJsEnd-->', '', $html);
-                $tmp[1] = 'a';
-                while ($tmp[1]!='') {
-                    $tmp = splitfirst($html, '<!--OnedriveUploadJsStart-->');
-                    $html = $tmp[0];
-                    $tmp = splitfirst($tmp[1], '<!--OnedriveUploadJsEnd-->');
+                    $tmp = splitfirst($tmp[1], '<!--' . $driver . 'UploadJsEnd-->');
                     $html .= $tmp[1];
                 }
             }
@@ -1907,19 +1903,13 @@ function render_list($path = '', $files = [])
                 $tmp = splitfirst($tmp[1], '<!--UploadJsEnd-->');
                 $html .= $tmp[1];
             }
-            $tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--OnedriveUploadJsStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--OnedriveUploadJsEnd-->');
-                $html .= $tmp[1];
-            }
-            $tmp[1] = 'a';
-            while ($tmp[1]!='') {
-                $tmp = splitfirst($html, '<!--AliyundriveUploadJsStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--AliyundriveUploadJsEnd-->');
-                $html .= $tmp[1];
+            foreach ($Driver_arr as $driver) {
+                while (strpos($html, '<!--' . $driver . 'UploadJsStart-->')) {
+                    $tmp = splitfirst($html, '<!--' . $driver . 'UploadJsStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--' . $driver . 'UploadJsEnd-->');
+                    $html .= $tmp[1];
+                }
             }
         }
 
