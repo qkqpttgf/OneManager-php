@@ -179,11 +179,11 @@
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
                         <textarea id="url" title="url" rows="1" style="width: 100%; margin-top: 2px;" readonly><!--FileEncodeUrl--></textarea>
-                        <a href="<!--FileUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
+                        <a href="<!--FileEncodeUrl-->"><ion-icon name="download" style="line-height: 16px;vertical-align: middle;"></ion-icon>&nbsp;<!--constStr@Download--></a>
                     </div>
                     <div style="margin: 24px">
 <!--IsimgFileStart-->
-                        <img src="<!--FileDownUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
+                        <img src="<!--FileEncodeUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
 <!--IsimgFileEnd-->
 <!--IsvideoFileStart-->
                         <div id="video-a0"></div>
