@@ -530,16 +530,7 @@ class Aliyundrive {
                 if ($tmp1[0]==''||$tmp1[1]=='') $filename = $_POST['filesha1'];
                 else $filename = $_POST['filesha1'] . '.' . $tmp1[1];
             }
-            /*if ($fileinfo['size']>10*1024*1024) {
-                $cachefilename = spurlencode( $fileinfo['path'] . '/.' . $fileinfo['filelastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
-                $getoldupinfo=$this->list_path(path_format($path . '/' . $cachefilename));
-                //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
-                if ($getoldupinfo['type']=='file'&&$getoldupinfo['size']<5120) {
-                    $getoldupinfo_j = curl('GET', $getoldupinfo['url']);
-                    $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
-                    //if ( json_decode( curl('GET', $getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
-                }
-            }*/
+
             $parent = $this->list_path($path . '/' . $fileinfo['path']);
             if (isset($parent['file_id'])) {
                 $parent_file_id = $parent['file_id'];
