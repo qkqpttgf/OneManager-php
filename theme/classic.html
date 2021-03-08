@@ -894,7 +894,7 @@
             td2.innerHTML='<!--constStr@GetUploadLink--> ...';
             var xhr1 = new XMLHttpRequest();
             xhr1.open("POST", '?action=upbigfile');
-            xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+            //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
             xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
             xhr1.onprogress = function(e){
                 td2.innerHTML+='.';
@@ -1112,7 +1112,7 @@
                 } else {
                     var xhr1 = new XMLHttpRequest();
                     xhr1.open("POST", '?action=upbigfile');
-                    xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                    //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                     xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                     xhr1.onload = function(e){
                         //console.log(xhr1.status+xhr1.responseText);
@@ -1195,7 +1195,7 @@
                 if (asize>totalsize) {
                     var xhr1 = new XMLHttpRequest();
                     xhr1.open("POST", '?action=upbigfile');
-                    xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                    //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                     xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                     xhr1.onload = function(e){
                         console.log(xhr1.responseText+','+xhr1.status);
@@ -1265,7 +1265,7 @@
                                 // 上传结束
                                 var xhr1 = new XMLHttpRequest();
                                 xhr1.open("POST", '?action=upbigfile');
-                                xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                                //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
                                 xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
                                 xhr1.onload = function(e){
                                     console.log(xhr1.responseText+','+xhr1.status);
