@@ -462,14 +462,15 @@
     <div id="login_div" class="operatediv" style="display:none">
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
-	        <center>
-	            <form action="<!--IsPreview?-->admin" method="post">
-		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
-		        <input type="submit" value="<!--constStr@Login-->">
-	            </form>
+            <center>
+                <form action="<!--IsPreview?-->admin" method="post" onsubmit="return sha1loginpass(this);">
+                    <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+                    <input name="timestamp" type="hidden" value="">
+                    <input type="submit" value="<!--constStr@Login-->">
+                </form>
             </center>
         </div>
-	</div>
+    </div>
 <!--LoginEnd-->
     <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
 </body>
@@ -478,7 +479,8 @@
 <!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
 <script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
-<!--AliyundriveUploadJsStart--><script src="//cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
+<!--LoginStart--><script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--LoginEnd-->
+<!--AliyundriveUploadJsStart--><script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -1525,6 +1527,14 @@
         document.getElementById('login_div').style.left=(document.body.clientWidth-document.getElementById('login_div').offsetWidth)/2 +'px';
         document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
         document.getElementById('login_input').focus();
+    }
+    function sha1loginpass(f) {
+        if (f.password1.value=="") return false;
+        timestamp = new Date().getTime() + "";
+        timestamp = timestamp.substr(0, timestamp.length-3);
+        f.timestamp.value = timestamp;
+        f.password1.value = sha1(timestamp + "" + f.password1.value);
+        return true;
     }
 <!--LoginEnd-->
 <!--EncryptedStart-->
