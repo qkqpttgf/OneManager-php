@@ -1184,6 +1184,24 @@ function EnvOpt($needUpdate = 0)
             return output("{\"Error\": \"Admin pass error\"}", 403);
         }
     }
+    if (isset($_POST['changePass'])) {
+        if (!is_numeric($_POST['timestamp'])) return message("Error time<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        if (abs(time() - $_POST['timestamp']/1000) > 5*60) return message("Timeout<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        if ($_POST['newPass1']==''||$_POST['newPass2']=='') return message("Empty new pass<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        if ($_POST['newPass1']!==$_POST['newPass2']) return message("Twice new pass not the same<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        if ($_POST['newPass1']==getConfig('admin')) return message("New pass same to old one<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        if ($_POST['oldPass']==sha1(getConfig('admin') . $_POST['timestamp'])) {
+            $tmp['admin'] = $_POST['newPass1'];
+            $response = setConfigResponse( setConfig($tmp) );
+            if (api_error($response)) {
+                return message(api_error_msg($response) . "<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+            } else {
+                return message("Success<a href=\"\">" . getconstStr('Back') . "</a>", "Success", 200);
+            }
+        } else {
+            return message("Old pass error<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
+        }
+    }
 
     if (isset($_GET['preview'])) {
         $preurl = $_SERVER['PHP_SELF'] . '?preview';
@@ -1388,14 +1406,31 @@ function EnvOpt($needUpdate = 0)
     $html .= '
 <script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
 <table>
-    <form id="config_f" name="config" action="" method="POST" onsubmit="return false;">
+    <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
     <tr>
-        <td>admin pass:<input type="password" name="pass"></td>
-        <td><button name="config_b" value="export" onclick="exportConfig(this);">export</button></td>
+        <td>old pass:</td><td><input type="password" name="oldPass">
+        <input type="hidden" name="timestamp"></td>
     </tr>
     <tr>
-        <td>config:<textarea name="config_t"></textarea></td>
-        <td><button name="config_b" value="import" onclick="importConfig(this);">import</button></td>
+        <td>new pass:</td><td><input type="password" name="newPass1"></td>
+    </tr>
+    <tr>
+        <td>reinput:</td><td><input type="password" name="newPass2"></td>
+    </tr>
+    <tr>
+        <td></td><td><button name="changePass" value="changePass">Change Admin Pass</button></td>
+    </tr>
+    </form>
+</table><br>
+<table>
+    <form id="config_f" name="config" action="" method="POST" onsubmit="return false;">
+    <tr>
+        <td>admin pass:<input type="password" name="pass">
+        <button name="config_b" value="export" onclick="exportConfig(this);">export</button></td>
+    </tr>
+    <tr>
+        <td>config:<textarea name="config_t"></textarea>
+        <button name="config_b" value="import" onclick="importConfig(this);">import</button></td>
     </tr>
     </form>
 </table>
@@ -1460,6 +1495,24 @@ function EnvOpt($needUpdate = 0)
             alert("Network Error "+xhr.status);
         }
         xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value + "&timestamp=" + timestamp);
+    }
+    function changePassword(f) {
+        if (f.oldPass.value==""||f.newPass1.value==""||f.newPass2.value=="") {
+            alert("Input");
+            return false;
+        }
+        if (f.oldPass.value==f.newPass1.value) {
+            alert("Same password");
+            return false;
+        }
+        if (f.newPass1.value!==f.newPass1.value) {
+            alert("Input twice new password");
+            return false;
+        }
+        var timestamp = new Date().getTime();
+        f.timestamp.value = timestamp;
+        f.oldPass.value = sha1(f.oldPass.value + "" + timestamp);
+        return true;
     }
 </script><br>';
     $Driver_arr = scandir(__DIR__ . $slash . 'disk');
