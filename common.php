@@ -166,11 +166,11 @@ function main($path)
         } else {
             $url = path_format($_SERVER['PHP_SELF'] . '/');
         }
-        if ($_POST['password1']==getConfig('admin')) {
-            return adminform('admin', pass2cookie('admin', $_POST['password1']), $url);
+        if (compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'))) {
+            return adminform('admin', adminpass2cookie('admin', getConfig('admin')), $url);
         } else return adminform();
     }
-    if ( isset($_COOKIE['admin'])&&$_COOKIE['admin']==pass2cookie('admin', getConfig('admin')) ) {
+    if ( isset($_COOKIE['admin'])&&compareadminmd5($_COOKIE['admin'], 'admin', getConfig('admin')) ) {
         $_SERVER['admin']=1;
         $_SERVER['needUpdate'] = needUpdate();
     } else {
@@ -436,9 +436,27 @@ function isreferhost() {
     return false;
 }
 
-function pass2cookie($name, $pass)
+function adminpass2cookie($name, $pass)
 {
-    return md5($name . ':' . md5($pass));
+    $timestamp = time()+7*24*60*60;
+    return md5($name . ':' . md5($pass) . '@' . $timestamp) . "(" . $timestamp . ")";
+}
+function compareadminmd5($admincookie, $name, $pass)
+{
+    $c = splitfirst($admincookie, '(');
+    $c_md5 = $c[0];
+    $c_time = substr($c[1], 0, -1);
+    if (!is_numeric($c_time)) return false;
+    if (time() > $c_time) return false;
+    if (md5($name . ':' . md5($pass) . '@' . $c_time) == $c_md5) return true;
+    else return false;
+}
+function compareadminsha1($adminsha1, $timestamp, $pass)
+{
+    if (!is_numeric($timestamp)) return false;
+    if (abs(time()-$timestamp) > 5*60) return false;
+    if ($adminsha1 == sha1($timestamp . $pass)) return true;
+    else return false;
 }
 
 function proxy_replace_domain($url, $domainforproxy)
@@ -868,9 +886,9 @@ function adminform($name = '', $pass = '', $path = '')
 <body>
     <div>
     <center><h4>' . getconstStr('InputPassword') . '</h4>
-    <form action="" method="post" onsubmit="return md5pass(this);">
+    <form action="" method="post" onsubmit="return sha1loginpass(this);">
         <div>
-            <input name="password1" type="password"/>
+            <input id="password1" name="password1" type="password"/>
             <input name="timestamp" type="hidden"/>
             <input type="submit" value="' . getconstStr('Login') . '">
         </div>
@@ -879,12 +897,16 @@ function adminform($name = '', $pass = '', $path = '')
     </div>
 </body>';
     $html .= '
+<script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
 <script>
-    function md5pass(f) {
-        return true;
-        var timestamp = new Date().getTime();
+    document.getElementById("password1").focus();
+    function sha1loginpass(f) {
+        if (f.password1.value=="") return false;
+        timestamp = new Date().getTime() + "";
+        timestamp = timestamp.substr(0, timestamp.length-3);
         f.timestamp.value = timestamp;
-        //f.password1.value = 
+        f.password1.value = sha1(timestamp + "" + f.password1.value);
+        return true;
     }
 </script>';
     $html .= '</html>';
@@ -1105,8 +1127,11 @@ function EnvOpt($needUpdate = 0)
         return message($html, $title);
     }
     if (isset($_POST['config_b'])) {
-        //return output(json_encode($_POST));
-        if ($_POST['pass']!=''&&$_POST['pass']==getConfig('admin')) {
+        if (!$_POST['pass']) return output("{\"Error\": \"No admin pass\"}", 403);
+        if (!is_numeric($_POST['timestamp'])) return output("{\"Error\": \"Error time\"}", 403);
+        if (abs(time() - $_POST['timestamp']/1000) > 5*60) return output("{\"Error\": \"Timeout\"}", 403);
+
+        if ($_POST['pass']==sha1(getConfig('admin') . $_POST['timestamp'])) {
             if ($_POST['config_b'] == 'export') {
                 foreach ($EnvConfigs as $env => $v) {
                     if (isCommonEnv($env)) {
@@ -1156,7 +1181,7 @@ function EnvOpt($needUpdate = 0)
             }
             return output(json_encode($_POST), 500);
         } else {
-            return output("{\"Error\": \"Error admin pass\"}", 403);
+            return output("{\"Error\": \"Admin pass error\"}", 403);
         }
     }
 
@@ -1361,6 +1386,7 @@ function EnvOpt($needUpdate = 0)
         }
     }
     $html .= '
+<script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
 <table>
     <form id="config_f" name="config" action="" method="POST" onsubmit="return false;">
     <tr>
@@ -1380,6 +1406,7 @@ function EnvOpt($needUpdate = 0)
             alert("admin pass");
             return false;
         }
+        var timestamp = new Date().getTime();
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "");
         xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
@@ -1398,7 +1425,7 @@ function EnvOpt($needUpdate = 0)
         xhr.onerror = function(e){
             alert("Network Error "+xhr.status);
         }
-        xhr.send("pass=" + config_f.pass.value + "&config_b=" + b.value);
+        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_b=" + b.value + "&timestamp=" + timestamp);
     }
     function importConfig(b) {
         if (config_f.pass.value=="") {
@@ -1416,6 +1443,7 @@ function EnvOpt($needUpdate = 0)
                 return false;
             }
         }
+        var timestamp = new Date().getTime();
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "");
         xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
@@ -1431,7 +1459,7 @@ function EnvOpt($needUpdate = 0)
         xhr.onerror = function(e){
             alert("Network Error "+xhr.status);
         }
-        xhr.send("pass=" + config_f.pass.value + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value);
+        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value + "&timestamp=" + timestamp);
     }
 </script><br>';
     $Driver_arr = scandir(__DIR__ . $slash . 'disk');
