@@ -1,7 +1,10 @@
+20210311-2004.34
+try fix: can not login, sha1.js not loaded(changed a cdn), show error log.
+尝试修复登录不了的情况：可能sha1.js没有载入（换了源），在登录页显示出错信息。
+
 20210309-1718.33
 Googledrive can operate now, but the uploading can not done on explorer without token. Onedrive try deal with activeLimit. Can change admin password now. Admin password will sha1 when submitting. Fix some bugs.
 Googledrive可以管理操作了，但因为没法在浏览器端不带token上传，所以上传操作作罢。Onedrive尝试处理activeLimit。可以修改admin密码了。登录等提交admin密码时，会sha1加密再提交。修复一些bug。
-
 20210301-1745.32
 Onedrive client secret extend. export&import config. adding Googledrive. add reffer: only listing domains can refer.  add diskDescription: tips of disk. Heroku change function_name to HerokuappId. try fix domainforproxy. fix create in Aliyundrive. fix other bugs.
 Onedrive 的client延期。可以导入导出配置了。初步添加Googledrive。添加reffer：只有指定域名能引用。添加diskDescription：可以对盘备注了。Heroku中将function_name改为使用HerokuappId。尝试修复domainforproxy在个人帐号时的问题。修复阿里云盘不能新建与加密。修复其它bug。
