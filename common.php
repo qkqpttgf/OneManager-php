@@ -457,7 +457,10 @@ function compareadminmd5($admincookie, $name, $pass)
 function compareadminsha1($adminsha1, $timestamp, $pass)
 {
     if (!is_numeric($timestamp)) return 'Timestamp not Number';
-    if (abs(time()-$timestamp) > 5*60) return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d\TH:i:s\Z") . '),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d\TH:i:s\Z", $timestamp) . ')';
+    if (abs(time()-$timestamp) > 5*60) {
+        date_default_timezone_set('UTC');
+        return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d\TH:i:s\Z") . '),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d\TH:i:s\Z", $timestamp) . ')';
+    }
     if ($adminsha1 == sha1($timestamp . $pass)) return '';
     else return 'Error password';
 }
@@ -899,18 +902,23 @@ function adminform($name = '', $pass = '', $path = '')
     </div>
 </body>';
     $html .= '
-<script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
 <script>
     document.getElementById("password1").focus();
     function sha1loginpass(f) {
         if (f.password1.value=="") return false;
-        timestamp = new Date().getTime() + "";
-        timestamp = timestamp.substr(0, timestamp.length-3);
-        f.timestamp.value = timestamp;
-        f.password1.value = sha1(timestamp + "" + f.password1.value);
-        return true;
+        try {
+            timestamp = new Date().getTime() + "";
+            timestamp = timestamp.substr(0, timestamp.length-3);
+            f.timestamp.value = timestamp;
+            f.password1.value = sha1(timestamp + "" + f.password1.value);
+            return true;
+        } catch {
+            alert("sha1.js not loaded.");
+            return false;
+        }
     }
-</script>';
+</script>
+<script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>';
     $html .= '</html>';
     return output($html, $statusCode);
 }
@@ -1406,7 +1414,7 @@ function EnvOpt($needUpdate = 0)
         }
     }
     $html .= '
-<script src="https://cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script>
+<script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>
 <table>
     <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
     <tr>
