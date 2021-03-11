@@ -114,5 +114,4 @@ it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部
 ### head.omf foot.omf  
 it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
 
-QQ Group: 943919989 (请看完上面的中英双语再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
