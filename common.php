@@ -166,8 +166,11 @@ function main($path)
         } else {
             $url = path_format($_SERVER['PHP_SELF'] . '/');
         }
-        if (compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'))) {
-            return adminform('admin', adminpass2cookie('admin', getConfig('admin')), $url);
+        if (isset($_POST['password1'])) {
+            $compareresult = compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'));
+            if ($compareresult=='') {
+                return adminform('admin', adminpass2cookie('admin', getConfig('admin')), $url);
+            } else return adminform($compareresult);
         } else return adminform();
     }
     if ( isset($_COOKIE['admin'])&&compareadminmd5($_COOKIE['admin'], 'admin', getConfig('admin')) ) {
@@ -453,10 +456,10 @@ function compareadminmd5($admincookie, $name, $pass)
 }
 function compareadminsha1($adminsha1, $timestamp, $pass)
 {
-    if (!is_numeric($timestamp)) return false;
-    if (abs(time()-$timestamp) > 5*60) return false;
-    if ($adminsha1 == sha1($timestamp . $pass)) return true;
-    else return false;
+    if (!is_numeric($timestamp)) return 'Timestamp not Number';
+    if (abs(time()-$timestamp) > 5*60) return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d\TH:i:s\Z") . '),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d\TH:i:s\Z", $timestamp) . ')';
+    if ($adminsha1 == sha1($timestamp . $pass)) return '';
+    else return 'Error password';
 }
 
 function proxy_replace_domain($url, $domainforproxy)
@@ -870,10 +873,9 @@ function time_format($ISO)
 
 function adminform($name = '', $pass = '', $path = '')
 {
-    $html = '<html><head><title>' . getconstStr('AdminLogin') . '</title><meta charset=utf-8></head>';
-    if ($name!=''&&$pass!='') {
+    $html = '<html><head><title>' . getconstStr('AdminLogin') . '</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"></head>';
+    if ($name=='admin'&&$pass!='') {
         $html .= '<meta http-equiv="refresh" content="3;URL=' . $path . '">
-        <meta name=viewport content="width=device-width,initial-scale=1">
         <body>' . getconstStr('LoginSuccess') . '</body></html>';
         $statusCode = 201;
         date_default_timezone_set('UTC');
@@ -882,10 +884,10 @@ function adminform($name = '', $pass = '', $path = '')
     }
     $statusCode = 401;
     $html .= '
-<meta name=viewport content="width=device-width,initial-scale=1">
 <body>
     <div>
     <center><h4>' . getconstStr('InputPassword') . '</h4>
+    ' . $name . '
     <form action="" method="post" onsubmit="return sha1loginpass(this);">
         <div>
             <input id="password1" name="password1" type="password"/>
