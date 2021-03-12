@@ -132,7 +132,7 @@ class Googledrive {
                                 if (in_array(splitlast($item['name'],'.')[1], $exts['txt'])) {
                                     if (!(isset($item['content'])&&$item['content']['stat']==200)) {
                                         //if (!isset($item['downUrl'])) {
-                                            $res = curl('GET', $item['webContentLink'], '', '', 1);
+                                            $res = curl('GET', $item['webContentLink'], '', [], 1);
                                             $weblink = $res['returnhead']['Location'];
                                             //if ($weblink!==null) $item['downUrl'] = $weblink;
                                             //else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
