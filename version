@@ -1,7 +1,10 @@
+20210313-1352.35
+use driveId, after update, <font color="red">Aliyundrive and Googledrive please click the Change link after Driver type</font>. try fix: php8 will run error 500. change layout in settup. fix: uploading non-englist file name. try fix: sha1 a big file.
+换用driveId，更新后<font color="red">Aliyundrive与Googledrive请点一下那个切换链接</font>。尝试修复php8的500 ERROR。改变设置页面的布局。修复上传中文名文件时最终文件以url代码命名。阿里云盘上传时可以sha1大文件了。
+
 20210311-2004.34
 try fix: can not login, sha1.js not loaded(changed a cdn), show error log.
 尝试修复登录不了的情况：可能sha1.js没有载入（换了源），在登录页显示出错信息。
-
 20210309-1718.33
 Googledrive can operate now, but the uploading can not done on explorer without token. Onedrive try deal with activeLimit. Can change admin password now. Admin password will sha1 when submitting. Fix some bugs.
 Googledrive可以管理操作了，但因为没法在浏览器端不带token上传，所以上传操作作罢。Onedrive尝试处理activeLimit。可以修改admin密码了。登录等提交admin密码时，会sha1加密再提交。修复一些bug。
