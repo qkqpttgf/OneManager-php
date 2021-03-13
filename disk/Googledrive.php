@@ -23,7 +23,7 @@ class Googledrive {
         $this->scope = urlencode($this->scope);
         //$this->DownurlStrName = '@microsoft.graph.downloadUrl';
         //$this->ext_api_url = '/me/drive/root';
-        $this->default_drive_id = getConfig('default_drive_id', $tag);
+        $this->driveId = getConfig('driveId', $tag);
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
 
@@ -42,8 +42,7 @@ class Googledrive {
 
     public function ext_show_innerenv()
     {
-        if ($this->default_drive_id!='') return ['default_drive_id'];
-        return [];
+        return ['driveId'];
     }
 
     public function list_files($path = '/')
@@ -103,7 +102,7 @@ class Googledrive {
 
         if (!($files = getcache('path_' . $path, $this->disktag))) {
             //$response = curl('GET', $this->api_url . '/drives', '', ['Authorization' => 'Bearer ' . $this->access_token]);
-            //$response = curl('GET', $this->api_url . '/files?fields=*,files(id,name,mimeType,size,modifiedTime,parents,webContentLink,thumbnailLink),nextPageToken' . (($this->default_drive_id!='')?'&driveId=' . $this->default_drive_id . '&corpora=teamDrive&includeItemsFromAllDrives=true&supportsAllDrives=true':''), '', ['Authorization' => 'Bearer ' . $this->access_token]);
+            //$response = curl('GET', $this->api_url . '/files?fields=*,files(id,name,mimeType,size,modifiedTime,parents,webContentLink,thumbnailLink),nextPageToken' . (($this->driveId!='')?'&driveId=' . $this->driveId . '&corpora=teamDrive&includeItemsFromAllDrives=true&supportsAllDrives=true':''), '', ['Authorization' => 'Bearer ' . $this->access_token]);
             if ($path == '/' || $path == '') {
                 $files = $this->fileList();
                 //error_log1('root_id' . $files['id']);
@@ -181,15 +180,14 @@ class Googledrive {
         //$url .= '?fields=files(*),nextPageToken';
         //$url .= '?q=mimeType=\'application/vnd.google-apps.folder\'';
         if ($parent_file_id!='') {
-            $q = ${parent_file_id};
+            $q = $parent_file_id;
         } else {
-            if ($this->default_drive_id!='') $q = $this->default_drive_id;
-            else $q = 'root';
+            $q = $this->driveId;
         }
         $q = '\'' . $q . '\' in parents and trashed = false';
         $q = urlencode($q);
         $url .= '&q=' . $q;
-        if ($this->default_drive_id!='') $url .= '&driveId=' . $this->default_drive_id . '&corpora=teamDrive&includeItemsFromAllDrives=true&supportsAllDrives=true';
+        if ($this->driveId!='root') $url .= '&driveId=' . $this->driveId . '&corpora=teamDrive&includeItemsFromAllDrives=true&supportsAllDrives=true';
 
         $header['Authorization'] = 'Bearer ' . $this->access_token;
 
@@ -249,8 +247,7 @@ class Googledrive {
                 $folder['id'] = $res['id'];
             }
             if (!$folder['id']) {
-                if ($this->default_drive_id!='') $folder['id'] = $this->default_drive_id;
-                else $folder['id'] = 'root';
+                $folder['id'] = $this->driveId;
             }
             $result = $this->createFile_c($folder['id'], $passfilename, $pass);
         }
@@ -261,8 +258,7 @@ class Googledrive {
     public function Move($file, $folder) {
         $nowParentId = $this->list_path($file['path'])['id'];
         if (!$nowParentId) {
-            if ($this->default_drive_id!='') $nowParentId = $this->default_drive_id;
-            else $nowParentId = 'root';
+            $nowParentId = $this->driveId;
         }
         if (!$folder['id']) {
             $res = $this->list_path($folder['path']);
@@ -270,8 +266,7 @@ class Googledrive {
             $folder['id'] = $res['id'];
         }
         if (!$folder['id']) {
-            if ($this->default_drive_id!='') $folder['id'] = $this->default_drive_id;
-            else $folder['id'] = 'root';
+            $folder['id'] = $this->driveId;
         }
         $url = $this->api_url . '/files/' . $file['id'] . '?removeParents=' . $nowParentId . '&addParents=' . $folder['id'] . '&supportsAllDrives=true';
         //$tmp['name'] = $newname;
@@ -323,8 +318,7 @@ class Googledrive {
             $parent['id'] = $res['id'];
         }
         if (!$parent['id']) {
-            if ($this->default_drive_id!='') $parent['id'] = $this->default_drive_id;
-            else $parent['id'] = 'root';
+            $parent['id'] = $this->driveId;
         }
 
         if ($type=='file') {
@@ -389,8 +383,7 @@ class Googledrive {
         //error_log1('找ID:' . json_encode($res));
         $parentId = $res['id'];
         if (!$parentId) {
-            if ($this->default_drive_id!='') $parentId = $this->default_drive_id;
-            else $parentId = 'root';
+            $parentId = $this->driveId;
         }
         $tmp['name'] = $_POST['upbigfilename'];
         $tmp['parents'][0] = $parentId;
@@ -503,10 +496,10 @@ class Googledrive {
 
             $tmp = null;
             if ($_POST['DriveType']=='Googledrive') {
-                $tmp['default_drive_id'] = '';
+                $tmp['driveId'] = 'root';
             } else {
                 // 直接是id
-                $tmp['default_drive_id'] = $_POST['DriveType'];
+                $tmp['driveId'] = $_POST['DriveType'];
             }
 
             $response = setConfigResponse( setConfig($tmp, $this->disktag) );
