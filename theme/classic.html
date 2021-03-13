@@ -954,7 +954,7 @@
                     getuplink(i);
                 }
             }
-            xhr1.send('upbigfilename='+ encodeURIComponent(upbigfilename) +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
+            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
 <!--GuestStart-->
             }
         }
@@ -1111,69 +1111,85 @@
                 return;
             }*/
             var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
+            var spark = sha1.create();
             var reader = new FileReader();
-            reader.onprogress = function(e) {
-                td2.innerText = '计算SHA1... ' + (e.loaded*100/file.size).toFixed(2) + " %";
+            var chunksize=10*1024*1024;
+            var asize = 0;
+            var filesha1;
+            function readblob(start) {
+                var end=start+chunksize;
+                var blob = file.slice(start,end);
+                reader.readAsArrayBuffer(blob);
             }
-            reader.onload = function(e) {
-                var filesha1 = sha1(this.result);
-<!--GuestStart-->
-                function getext(str) {
-                    let p = str.lastIndexOf('.');
-                    if (p===-1) return '';
-                    if (p===0) return '';
-                    return str.substr(p);
-                }
-                var ext = getext(file.webkitRelativePath||file.name);
-                upbigfilename = filesha1 + ext;
-<!--GuestEnd-->
-                while (upbigfilename.indexOf('%2F')>0) upbigfilename = upbigfilename.replace('%2F', '/');
-                td2.innerHTML='<!--constStr@GetUploadLink--> ...';
-                var html = JSON.parse(localStorage.getItem(filesha1));
-                //console.log(html);
-                if (html!==null && ('part_info_list' in html)) {
-                    td2.innerHTML='<!--constStr@UploadStart--> ...';
-                    binupfile(file, html, timea+'_'+i, upbigfilename, filesha1, chunksize);
+            readblob(asize);
+
+            reader.onload = function(e){
+                td2.innerHTML='<!--constStr@Calculate--> SHA1: '+(asize*100/file.size).toFixed(2)+'%';
+                var binary = this.result;
+                spark.update(binary);
+                asize += chunksize;
+                if (asize < file.size) {
+                    readblob(asize);
                 } else {
-                    var xhr1 = new XMLHttpRequest();
-                    xhr1.open("POST", '?action=upbigfile');
-                    //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
-                    xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
-                    xhr1.onload = function(e){
-                        //console.log(xhr1.status+xhr1.responseText);
-                        td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
-                        if (xhr1.status==201) {
-                            if (xhr1.responseText=='') {
-                                getuplink(i,1);
-                                return;
-                            }
-                            var html=JSON.parse(xhr1.responseText);
-                            //console.log(html);
-                            if (!html['part_info_list']) {
-                                if (html.name!='') {
-                                    if (html.exist==true) td2.innerHTML=html.name+' 文件名已有';
-                                    else if (html.rapid_upload==true) td2.innerHTML=html.name+' 秒传';
-                                    else td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
-                                    td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
-                                } else {
-                                    td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
-                                }
-                            } else {
-                                td2.innerHTML='<!--constStr@UploadStart--> ...';
-                                //console.log(html);
-                                localStorage.setItem(filesha1, JSON.stringify(html));
-                                binupfile(file, html, timea+'_'+i, upbigfilename, filesha1, chunksize);
-                            }
-                        }
-                        if (i<files.length-1) {
-                            i++;
-                            getuplink(i);
-                        }
+                    filesha1 = spark.hex();
+                    td2.innerHTML='SHA1: ' + filesha1;
+<!--GuestStart-->
+                    function getext(str) {
+                        let p = str.lastIndexOf('.');
+                        if (p===-1) return '';
+                        if (p===0) return '';
+                        return str.substr(p);
                     }
-                    xhr1.send('upbigfilename='+ encodeURIComponent(upbigfilename) +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
+                    var ext = getext(file.webkitRelativePath||file.name);
+                    upbigfilename = filesha1 + ext;
+<!--GuestEnd-->
+                    while (upbigfilename.indexOf('%2F')>0) upbigfilename = upbigfilename.replace('%2F', '/');
+                    td2.innerHTML='<!--constStr@GetUploadLink--> ...';
+                    var html = JSON.parse(localStorage.getItem(filesha1));
+                    //console.log(html);
+                    if (html!==null && ('part_info_list' in html)) {
+                        td2.innerHTML='<!--constStr@UploadStart--> ...';
+                        binupfile(file, html, timea+'_'+i, upbigfilename, filesha1, chunksize);
+                    } else {
+                        var xhr1 = new XMLHttpRequest();
+                        xhr1.open("POST", '?action=upbigfile');
+                        //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                        xhr1.setRequestHeader('x-requested-with','XMLHttpRequest');
+                        xhr1.onload = function(e){
+                            //console.log(xhr1.status+xhr1.responseText);
+                            td2.innerHTML='<font color="red">'+xhr1.responseText+'</font>';
+                            if (xhr1.status==201) {
+                                if (xhr1.responseText=='') {
+                                    getuplink(i,1);
+                                    return;
+                                }
+                                var html=JSON.parse(xhr1.responseText);
+                                //console.log(html);
+                                if (!html['part_info_list']) {
+                                    if (html.name!='') {
+                                        if (html.exist==true) td2.innerHTML=html.name+' 文件名已有';
+                                        else if (html.rapid_upload==true) td2.innerHTML=html.name+' 秒传';
+                                        else td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                                        td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
+                                    } else {
+                                        td2.innerHTML='<font color="red">'+xhr1.responseText+'</font><br>';
+                                    }
+                                } else {
+                                    td2.innerHTML='<!--constStr@UploadStart--> ...';
+                                    //console.log(html);
+                                    localStorage.setItem(filesha1, JSON.stringify(html));
+                                    binupfile(file, html, timea+'_'+i, upbigfilename, filesha1, chunksize);
+                                }
+                            }
+                            if (i<files.length-1) {
+                                i++;
+                                getuplink(i);
+                            }
+                        }
+                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
+                    }
                 }
             }
-            reader.readAsArrayBuffer(file);
         }
         uploadbuttonshow();
     }
