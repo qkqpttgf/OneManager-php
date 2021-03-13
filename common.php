@@ -1656,8 +1656,11 @@ function EnvOpt($needUpdate = 0)
 </script><br>';
     }
     $html .= '
+<style type="text/css">
+    .tabs td { padding: 7px; }
+</style>
 <table border=0>
-    <tr>';
+    <tr class="tabs">';
     if ($_GET['frame']=='home') $html .= '
     <td>' . getconstStr('Home') . '</td>';
     else $html .= '
