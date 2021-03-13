@@ -49,8 +49,7 @@ $EnvConfigs = [
     'refresh_token'     => 0b100,
     'token_expires'     => 0b100,
     'activeLimit'       => 0b100,
-    'default_drive_id'  => 0b100,
-    'default_sbox_drive_id'=> 0b100,
+    'driveId'           => 0b100,
 
     'diskname'          => 0b111,
     'diskDescription'   => 0b111,
@@ -277,6 +276,7 @@ function main($path)
             if (!$_SERVER['admin']) {
                 if (!$_SERVER['is_guestup_path']) return output('Not_Guest_Upload_Folder', 400);
                 if (strpos($_GET['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
+                if (strpos($_POST['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
             }
             $path1 = path_format($_SERVER['list_path'] . path_format($path));
             if (substr($path1, -1)=='/') $path1=substr($path1, 0, -1);
@@ -459,7 +459,7 @@ function compareadminsha1($adminsha1, $timestamp, $pass)
     if (!is_numeric($timestamp)) return 'Timestamp not Number';
     if (abs(time()-$timestamp) > 5*60) {
         date_default_timezone_set('UTC');
-        return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d\TH:i:s\Z") . '),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d\TH:i:s\Z", $timestamp) . ')';
+        return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d H:i:s") . ' UTC),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d H:i:s", $timestamp) . ' UTC)';
     }
     if ($adminsha1 == sha1($timestamp . $pass)) return '';
     else return 'Error password';
@@ -1219,40 +1219,37 @@ function EnvOpt($needUpdate = 0)
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
     }
     $html .= '
-<a href="'.$preurl.'">'.getconstStr('Back').'</a><br>
-<a href="https://github.com/qkqpttgf/OneManager-php">Github</a><br>';
-
-    $html .= '
+<a href="' . $preurl . '">' . getconstStr('Back') . '</a><br>
+';
+    if (isset($_GET['frame'])&&$_GET['frame']=='platform') {
+        $frame .= '
 <table border=1 width=100%>
-    <form name="common" action="" method="post">
-        <tr>
-            <td colspan="2">'.getconstStr('PlatformConfig').'</td>
-        </tr>';
+    <form name="common" action="" method="post">';
     foreach ($EnvConfigs as $key => $val) if (isCommonEnv($key) && isShowedEnv($key)) {
-        $html .= '
+        $frame .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%>';
         if ($key=='timezone') {
-            $html .= '
+            $frame .= '
                 <select name="' . $key .'">';
             foreach (array_keys($timezones) as $zone) {
-                $html .= '
+                $frame .= '
                     <option value="'.$zone.'" '.($zone==getConfig($key)?'selected="selected"':'').'>'.$zone.'</option>';
             }
-            $html .= '
+            $frame .= '
                 </select>
                 ' . getconstStr('EnvironmentsDescription')[$key];
         } elseif ($key=='theme') {
             $theme_arr = scandir(__DIR__ . $slash . 'theme');
-            $html .= '
+            $frame .= '
                 <select name="' . $key .'">
                     <option value=""></option>';
             foreach ($theme_arr as $v1) {
-                if ($v1!='.' && $v1!='..') $html .= '
+                if ($v1!='.' && $v1!='..') $frame .= '
                     <option value="'.$v1.'" '.($v1==getConfig($key)?'selected="selected"':'').'>'.$v1.'</option>';
             }
-            $html .= '
+            $frame .= '
                 </select>
                 ' . getconstStr('EnvironmentsDescription')[$key];
         } /*elseif ($key=='domain_path') {
@@ -1262,24 +1259,144 @@ function EnvOpt($needUpdate = 0)
                 $domain_path .= $k1 . ':' . $v1 . '|';
             }
             $domain_path = substr($domain_path, 0, -1);
-            $html .= '
+            $frame .= '
         <tr>
             <td><label>' . $key . '</label></td>
             <td width=100%><input type="text" name="' . $key .'" value="' . $domain_path . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
         </tr>';
-        }*/ else $html .= '
+        }*/ else $frame .= '
                 <input type="text" name="' . $key . '" value="' . htmlspecialchars(getConfig($key)) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%">';
-        $html .= '
+        $frame .= '
             </td>
         </tr>';
     }
-    $html .= '
-        <tr><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>
+    $frame .= '
+        <tr><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td><td></td></tr>
     </form>
 </table><br>';
-
-    if (count($disktags)>1) {
-        $html .= '
+    } elseif (isset($_GET['frame'])&&in_array($_GET['frame'], $disktags)) {
+        $disktag = $_GET['frame'];
+        $disk_tmp = null;
+        $diskok = driveisfine($disktag, $disk_tmp);
+        $frame .= '
+<table width=100%>
+    <tr>
+        <td>
+            <form action="" method="post" style="margin: 0" onsubmit="return renametag(this);">
+                <input type="hidden" name="disktag_rename" value="' . $disktag . '">
+                <input type="text" name="disktag_newname" value="' . $disktag . '" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '">
+                <input type="submit" name="submit1" value="' . getconstStr('RenameDisk') . '">
+            </form>
+        </td>
+    </tr>
+</table>
+<table border=1 width=100%>
+<tr>
+    <td>Driver</td>
+    <td>' . getConfig('Driver', $disktag);
+        if ($diskok) $frame .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">' . getconstStr('ChangeDrivetype') . '</a>';
+        $frame .= '</td>
+</tr>
+';
+        if ($diskok) {
+            foreach (extendShow_diskenv($disk_tmp) as $ext_env) {
+                $frame .= '<tr><td>' . $ext_env . '</td><td>' . getConfig($ext_env, $disktag) . '</td></tr>
+';
+            }
+            $frame .= '
+<form name="' . $disktag . '" action="" method="post">
+    <input type="hidden" name="disk" value="' . $disktag . '">';
+            foreach ($EnvConfigs as $key => $val) if (isInnerEnv($key) && isShowedEnv($key)) {
+                $frame .= '
+    <tr>
+        <td><label>' . $key . '</label></td>
+        <td width=100%><input type="text" name="' . $key . '" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
+    </tr>';
+            }
+            $frame .= '
+    <tr><td></td><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+</form>';
+        } else {
+            $frame .= '
+<tr>
+    <td colspan="2">' . ($disk_tmp->error['body']?$disk_tmp->error['stat'] . '<br>' . $disk_tmp->error['body']:'Add this disk again.') . '</td>
+</tr>';
+        }
+        $frame .= '
+</table><br>
+<table>
+<tr>
+    <td>
+        <form action="" method="post" style="margin: 0" onsubmit="return deldiskconfirm(this);">
+            <input type="hidden" name="disktag_del" value="' . $disktag . '">
+            <input type="submit" name="submit1" value="' . getconstStr('DelDisk') . '">
+        </form>
+    </td>
+    <td>
+        <form action="" method="post" style="margin: 0" onsubmit="return cpdiskconfirm(this);">
+            <input type="hidden" name="disktag_copy" value="' . $disktag . '">
+            <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
+        </form>
+    </td>
+</tr>
+</table>
+<script>
+    function deldiskconfirm(t) {
+        var msg="' . getconstStr('Delete') . ' ??";
+        if (confirm(msg)==true) return true;
+        else return false;
+    }
+    function cpdiskconfirm(t) {
+        var msg="' . getconstStr('Copy') . ' ??";
+        if (confirm(msg)==true) return true;
+        //else 
+        return false;
+    }
+    function renametag(t) {
+        if (t.disktag_newname.value==\'\') {
+            alert(\'' . getconstStr('DiskTag') . '\');
+            return false;
+        }
+        if (t.disktag_newname.value==t.disktag_rename.value) {
+            return false;
+        }
+        envs = [' . $envs . '];
+        if (envs.indexOf(t.disktag_newname.value)>-1) {
+            alert(\'Do not input ' . $envs . '\');
+            return false;
+        }
+        var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
+        if (!reg.test(t.disktag_newname.value)) {
+            alert(\'' . getconstStr('TagFormatAlert') . '\');
+            return false;
+        }
+        return true;
+    }
+</script>';
+    } else {
+        $_GET['frame'] = 'home';
+        $Driver_arr = scandir(__DIR__ . $slash . 'disk');
+        $frame .= '
+<select name="DriveType" onchange="changedrivetype(this.options[this.options.selectedIndex].value)">';
+        foreach ($Driver_arr as $v1) {
+            if ($v1!='.' && $v1!='..') {
+                //$v1 = substr($v1, 0, -4);
+                $v1 = splitlast($v1, '.php')[0];
+                $frame .= '
+    <option value="' . $v1 . '"' . ($v1=='Onedrive'?' selected="selected"':'') . '>' . $v1 . '</option>';
+            }
+        }
+        $frame .= '
+</select>
+<a id="AddDisk_link" href="?AddDisk=Onedrive">' . getconstStr('AddDisk') . '</a>
+<script>
+    function changedrivetype(d) {
+        document.getElementById(\'AddDisk_link\').href="?AddDisk=" + d;
+    }
+</script>
+<br><br>';
+        if (count($disktags)>1) {
+            $frame .= '
 <script src="//cdn.bootcss.com/Sortable/1.8.3/Sortable.js"></script>
 <style>
     .sortable-ghost {
@@ -1295,15 +1412,15 @@ function EnvOpt($needUpdate = 0)
     <form id="sortdisks_form" action="" method="post" style="margin: 0" onsubmit="return dragsort(this);">
     <tr id="sortdisks">
         <input type="hidden" name="disktag_sort" value="">';
-        $num = 0;
-        foreach ($disktags as $disktag) {
-            if ($disktag!='') {
-                $num++;
-                $html .= '
+            $num = 0;
+            foreach ($disktags as $disktag) {
+                if ($disktag!='') {
+                    $num++;
+                    $frame .= '
         <td>' . $disktag . '</td>';
+                }
             }
-        }
-        $html .= '
+            $frame .= '
     </tr>
     <tr><td colspan="' . $num . '">' . getconstStr('DragSort') . '<input type="submit" name="submit1" value="' . getconstStr('SubmitSortdisks') . '"></td></tr>
     </form>
@@ -1352,68 +1469,80 @@ function EnvOpt($needUpdate = 0)
         }
     });
 </script><br>';
-    }
-    foreach ($disktags as $disktag) {
-        if ($disktag!='') {
-            $disk_tmp = null;
-            $diskok = driveisfine($disktag, $disk_tmp);
-            $html .= '
-<table border=1 width=100%>
-    <tr>
-        <td>
-            <form action="" method="post" style="margin: 0" onsubmit="return deldiskconfirm(this);">
-                <input type="hidden" name="disktag_del" value="' . $disktag . '">
-                <input type="submit" name="submit1" value="' . getconstStr('DelDisk') . '">
-            </form>
-            <form action="" method="post" style="margin: 0">
-                <input type="hidden" name="disktag_copy" value="' . $disktag . '">
-                <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
-            </form>
-        </td>
-        <td>
-            <form action="" method="post" style="margin: 0" onsubmit="return renametag(this);">
-                <input type="hidden" name="disktag_rename" value="' . $disktag . '">
-                <input type="text" name="disktag_newname" value="' . $disktag . '" placeholder="' . getconstStr('EnvironmentsDescription')['disktag'] . '">
-                <input type="submit" name="submit1" value="' . getconstStr('RenameDisk') . '">
-            </form>
-        </td>
-    </tr>
-    <tr>
-        <td>Driver</td>
-        <td>' . getConfig('Driver', $disktag);
-            if ($diskok && baseclassofdrive($disk_tmp)!='Aliyundrive') $html .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">' . getconstStr('ChangeDrivetype') . '</a>';
-            $html .= '</td>
-    </tr>
-    ';
-            if ($diskok) {
-                foreach (extendShow_diskenv($disk_tmp) as $ext_env) {
-                    $html .= '<tr><td>' . $ext_env . '</td><td>' . getConfig($ext_env, $disktag) . '</td></tr>
-    ';
-                }
-                $html .= '
-    <form name="' . $disktag . '" action="" method="post">
-        <input type="hidden" name="disk" value="' . $disktag . '">';
-                foreach ($EnvConfigs as $key => $val) if (isInnerEnv($key) && isShowedEnv($key)) {
-                    $html .= '
-        <tr>
-            <td><label>' . $key . '</label></td>
-            <td width=100%><input type="text" name="' . $key . '" value="' . getConfig($key, $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')[$key] . '" style="width:100%"></td>
-        </tr>';
-                }
-                $html .= '
-        <tr><td></td><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
-    </form>';
-            } else {
-                $html .= '
-    <tr>
-        <td colspan="2">' . ($disk_tmp->error['body']?$disk_tmp->error['stat'] . '<br>' . $disk_tmp->error['body']:'Add this disk again.') . '</td>
-    </tr>';
-            }
-            $html .= '
-</table><br>';
         }
+
+        $canOneKeyUpate = 0;
+        if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
+            $canOneKeyUpate = 1;
+        } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
+            $canOneKeyUpate = 1;
+        } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+            $canOneKeyUpate = 1;
+        } elseif ($_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
+            $canOneKeyUpate = 1;
+        } elseif ($_SERVER['_APP_SHARE_DIR']==='/var/share/CFF/processrouter') {
+            $canOneKeyUpate = 1;
+        } else {
+            $tmp = time();
+            if ( mkdir(''.$tmp, 0777) ) {
+                rmdir(''.$tmp);
+                $canOneKeyUpate = 1;
+            }
+        }
+        $frame .= '<a href="https://github.com/qkqpttgf/OneManager-php">Github</a>';
+        if (!$canOneKeyUpate) {
+            $frame .= '
+' . getconstStr('CannotOneKeyUpate') . '<br>';
+        } else {
+            $frame .= '
+<form name="updateform" action="" method="post">
+    <input type="text" name="auth" size="6" placeholder="auth" value="qkqpttgf">
+    <input type="text" name="project" size="12" placeholder="project" value="OneManager-php">
+    <button name="QueryBranchs" onclick="querybranchs();return false;">' . getconstStr('QueryBranchs') . '</button>
+    <select name="branch">
+        <option value="master">master</option>
+    </select>
+    <input type="submit" name="updateProgram" value="' . getconstStr('updateProgram') . '">
+</form>
+<script>
+    function querybranchs()
+    {
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
+        //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
+        xhr.onload = function(e){
+            console.log(xhr.responseText+","+xhr.status);
+            if (xhr.status==200) {
+                document.updateform.branch.options.length=0;
+                JSON.parse(xhr.responseText).forEach( function (e) {
+                    document.updateform.branch.options.add(new Option(e.name,e.name));
+                    if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
+                });
+                document.updateform.QueryBranchs.style.display="none";
+            } else {
+                alert(xhr.responseText+"\n"+xhr.status);
+            }
+        }
+        xhr.onerror = function(e){
+            alert("Network Error "+xhr.status);
+        }
+        xhr.send(null);
     }
-    $html .= '
+</script>
+';
+        }
+        if ($needUpdate) {
+            $frame .= '<div style="position: relative; word-wrap: break-word;">
+        ' . str_replace("\r", '<br>', $_SERVER['github_ver_new']) . '
+</div>
+<button onclick="document.getElementById(\'github_ver_old\').style.display=(document.getElementById(\'github_ver_old\').style.display==\'none\'?\'\':\'none\');">More...</button>
+<div id="github_ver_old" style="position: relative; word-wrap: break-word; display: none">
+        ' . str_replace("\r", '<br>', $_SERVER['github_ver_old']) . '
+</div>';
+        }/* else {
+            $frame .= getconstStr('NotNeedUpdate');
+        }*/
+        $frame .= '<br>
 <script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>
 <table>
     <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
@@ -1525,123 +1654,30 @@ function EnvOpt($needUpdate = 0)
         return true;
     }
 </script><br>';
-    $Driver_arr = scandir(__DIR__ . $slash . 'disk');
-    $html .= '
-<select name="DriveType" onchange="changedrivetype(this.options[this.options.selectedIndex].value)">';
-    foreach ($Driver_arr as $v1) {
-        if ($v1!='.' && $v1!='..') {
-            //$v1 = substr($v1, 0, -4);
-            $v1 = splitlast($v1, '.php')[0];
-            $html .= '
-    <option value="' . $v1 . '"' . ($v1=='Onedrive'?' selected="selected"':'') . '>' . $v1 . '</option>';
-        }
     }
     $html .= '
-</select>
-<a id="AddDisk_link" href="?AddDisk=Onedrive">' . getconstStr('AddDisk') . '</a>
-<script>
-    function changedrivetype(d) {
-        document.getElementById(\'AddDisk_link\').href="?AddDisk=" + d;
-    }
-</script>
-<br><br>';
-
-    $canOneKeyUpate = 0;
-    if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
-        $canOneKeyUpate = 1;
-    } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
-        $canOneKeyUpate = 1;
-    } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
-        $canOneKeyUpate = 1;
-    } elseif ($_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
-        $canOneKeyUpate = 1;
-    } elseif ($_SERVER['_APP_SHARE_DIR']==='/var/share/CFF/processrouter') {
-        $canOneKeyUpate = 1;
-    } else {
-        $tmp = time();
-        if ( mkdir(''.$tmp, 0777) ) {
-            rmdir(''.$tmp);
-            $canOneKeyUpate = 1;
+<table border=0>
+    <tr>';
+    if ($_GET['frame']=='home') $html .= '
+    <td>' . getconstStr('Home') . '</td>';
+    else $html .= '
+    <td><a href="?setup&frame=home">' . getconstStr('Home') . '</a></td>';
+    if ($_GET['frame']=='platform') $html .= '
+    <td>' . getconstStr('PlatformConfig') . '</td>';
+    else $html .= '
+    <td><a href="?setup&frame=platform">' . getconstStr('PlatformConfig') . '</a></td>';
+    foreach ($disktags as $disktag) {
+        if ($disktag!='') {
+            if ($_GET['frame']==$disktag) $html .= '
+            <td>' . $disktag . '</td>';
+            else $html .= '
+            <td><a href="?setup&frame=' . $disktag . '">' . $disktag . '</a></td>';
         }
     }
-    if (!$canOneKeyUpate) {
-        $html .= '
-' . getconstStr('CannotOneKeyUpate') . '<br>';
-    } else {
-        $html .= '
-<form name="updateform" action="" method="post">
-    <input type="text" name="auth" size="6" placeholder="auth" value="qkqpttgf">
-    <input type="text" name="project" size="12" placeholder="project" value="OneManager-php">
-    <button name="QueryBranchs" onclick="querybranchs();return false;">' . getconstStr('QueryBranchs') . '</button>
-    <select name="branch">
-        <option value="master">master</option>
-    </select>
-    <input type="submit" name="updateProgram" value="' . getconstStr('updateProgram') . '">
-</form>
-<script>
-    function deldiskconfirm(t) {
-        var msg="' . getconstStr('Delete') . ' ??";
-        if (confirm(msg)==true) return true;
-        else return false;
-    }
-    function renametag(t) {
-        if (t.disktag_newname.value==\'\') {
-            alert(\'' . getconstStr('DiskTag') . '\');
-            return false;
-        }
-        if (t.disktag_newname.value==t.disktag_rename.value) {
-            return false;
-        }
-        envs = [' . $envs . '];
-        if (envs.indexOf(t.disktag_newname.value)>-1) {
-            alert(\'Do not input ' . $envs . '\');
-            return false;
-        }
-        var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
-        if (!reg.test(t.disktag_newname.value)) {
-            alert(\'' . getconstStr('TagFormatAlert') . '\');
-            return false;
-        }
-        return true;
-    }
-
-    function querybranchs()
-    {
-        var xhr = new XMLHttpRequest();
-        xhr.open("GET", "https://api.github.com/repos/"+document.updateform.auth.value+"/"+document.updateform.project.value+"/branches");
-        //xhr.setRequestHeader("User-Agent","qkqpttgf/OneManager");
-        xhr.onload = function(e){
-            console.log(xhr.responseText+","+xhr.status);
-            if (xhr.status==200) {
-                document.updateform.branch.options.length=0;
-                JSON.parse(xhr.responseText).forEach( function (e) {
-                    document.updateform.branch.options.add(new Option(e.name,e.name));
-                    if ("master"==e.name) document.updateform.branch.options[document.updateform.branch.options.length-1].selected = true; 
-                });
-                document.updateform.QueryBranchs.style.display="none";
-            } else {
-                alert(xhr.responseText+"\n"+xhr.status);
-            }
-        }
-        xhr.onerror = function(e){
-            alert("Network Error "+xhr.status);
-        }
-        xhr.send(null);
-    }
-</script>
-';
-    }
-    if ($needUpdate) {
-        $html .= '<div style="position: relative; word-wrap: break-word;">
-        ' . str_replace("\r", '<br>', $_SERVER['github_ver_new']) . '
-</div>
-<button onclick="document.getElementById(\'github_ver_old\').style.display=(document.getElementById(\'github_ver_old\').style.display==\'none\'?\'\':\'none\');">More...</button>
-<div id="github_ver_old" style="position: relative; word-wrap: break-word; display: none">
-        ' . str_replace("\r", '<br>', $_SERVER['github_ver_old']) . '
-</div>';
-    }/* else {
-        $html .= getconstStr('NotNeedUpdate');
-    }*/
+    $html .= '
+    </tr>
+</table><br>';
+    $html .= $frame;
     return message($html, getconstStr('Setup'));
 }
 
