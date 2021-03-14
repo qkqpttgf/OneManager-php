@@ -317,8 +317,8 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $githubfile = file_get_contents($url);
     if (!$githubfile) return 0;
     file_put_contents($tarfile, $githubfile);
-    if (splitfirst(PHP_VERSION, '.')[0] == '7') {
-        $phar = new PharData($tarfile); // need php7
+    if (splitfirst(PHP_VERSION, '.')[0] > '5') {
+        $phar = new PharData($tarfile); // need php5.3, 7, 8
         $phar->extractTo($projectPath, null, true);//路径 要解压的文件 是否覆盖
     } else {
         ob_start();
