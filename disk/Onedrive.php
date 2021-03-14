@@ -851,7 +851,7 @@ class Onedrive {
                 if (substr($url,-1)=='/') $url=substr($url,0,-1);
             }
             $url .= ':/thumbnails/0/medium';
-            $files = json_decode(curl('GET', $url, false, ['Authorization' => 'Bearer ' . $this->access_token])['body'], true);
+            $files = json_decode($this->MSAPI('GET', $url)['body'], true);
             if (isset($files['url'])) {
                 savecache('thumb_' . $path, $files['url'], $this->disktag);
                 $thumb_url = $files['url'];
@@ -900,6 +900,19 @@ class Onedrive {
             if ($fileinfo['size']>10*1024*1024) $this->MSAPI('PUT', path_format($path . '/' . $cachefilename), json_encode($fileinfo, JSON_PRETTY_PRINT));
         }
         return output($response['body'], $response['stat']);
+    }
+    public function getDiskSpace() {
+        if (!($diskSpace = getcache('diskSpace', $this->disktag))) {
+            $url = $this->api_url . $this->ext_api_url;
+            if (substr($url, -5)=='/root') $url = substr($url, 0, -5);
+            else return $url;
+            $response = json_decode($this->MSAPI('GET', $url)['body'], true)['quota'];
+            $used = size_format($response['used']);
+            $total = size_format($response['total']);
+            $diskSpace = $used . ' / ' . $total;
+            savecache('diskSpace', $diskSpace, $this->disktag);
+        }
+        return $diskSpace;
     }
 
     protected function MSAPI($method, $path, $data = '')
