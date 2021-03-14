@@ -768,6 +768,9 @@ class Googledrive {
         }
         return true;
     }
+    public function getDiskSpace() {
+        return '';
+    }
 
     protected function GDAPI($method, $url, $data = '')
     {
