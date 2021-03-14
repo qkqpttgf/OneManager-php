@@ -859,7 +859,7 @@ function size_format($byte)
     while (abs($byte) >= 1024) {
         $byte = $byte / 1024;
         $i++;
-        if ($i == 3) break;
+        if ($i == 4) break;
     }
     $units = array('B', 'KB', 'MB', 'GB', 'TB');
     $ret = round($byte, 2);
@@ -1291,18 +1291,25 @@ function EnvOpt($needUpdate = 0)
     </tr>
 </table>
 <table border=1 width=100%>
-<tr>
-    <td>Driver</td>
-    <td>' . getConfig('Driver', $disktag);
+    <tr>
+        <td>Driver</td>
+        <td>' . getConfig('Driver', $disktag);
         if ($diskok) $frame .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">' . getconstStr('ChangeDrivetype') . '</a>';
         $frame .= '</td>
-</tr>
-';
+    </tr>';
         if ($diskok) {
+            $frame .= '
+    <tr>
+        <td>diskSpace</td><td>' . $disk_tmp->getDiskSpace() . '</td>
+    </tr>';
             foreach (extendShow_diskenv($disk_tmp) as $ext_env) {
-                $frame .= '<tr><td>' . $ext_env . '</td><td>' . getConfig($ext_env, $disktag) . '</td></tr>
-';
+                $frame .= '
+    <tr>
+        <td>' . $ext_env . '</td>
+        <td>' . getConfig($ext_env, $disktag) . '</td>
+    </tr>';
             }
+            
             $frame .= '
 <form name="' . $disktag . '" action="" method="post">
     <input type="hidden" name="disk" value="' . $disktag . '">';
@@ -1314,7 +1321,7 @@ function EnvOpt($needUpdate = 0)
     </tr>';
             }
             $frame .= '
-    <tr><td></td><td><input type="submit" name="submit1" value="'.getconstStr('Setup').'"></td></tr>
+    <tr><td></td><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>
 </form>';
         } else {
             $frame .= '
@@ -1657,7 +1664,7 @@ function EnvOpt($needUpdate = 0)
     }
     $html .= '
 <style type="text/css">
-    .tabs td { padding: 7px; }
+    .tabs td { padding: 5px; }
 </style>
 <table border=0>
     <tr class="tabs">';
