@@ -813,4 +813,19 @@ class Aliyundrive {
         }
         return true;
     }
+    public function getDiskSpace() {
+        if (!($diskSpace = getcache('diskSpace', $this->disktag))) {
+            $url = $this->api_url . '/databox/get_personal_info';
+            $header["content-type"] = "application/json; charset=utf-8";
+            $header['authorization'] = 'Bearer ' . $this->access_token;
+            $response = curl('POST', $url, '', $header);
+            //error_log1(json_encode($response));
+            $res = json_decode($response['body'], true)['personal_space_info'];
+            $used = size_format($res['used_size']);
+            $total = size_format($res['total_size']);
+            $diskSpace = $used . ' / ' . $total;
+            savecache('diskSpace', $diskSpace, $this->disktag);
+        }
+        return $diskSpace;
+    }
 }
