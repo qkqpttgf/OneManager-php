@@ -769,7 +769,19 @@ class Googledrive {
         return true;
     }
     public function getDiskSpace() {
-        return '';
+        if ($this->driveId!='root') return '0 / 0';
+        if (!($diskSpace = getcache('diskSpace', $this->disktag))) {
+            $url = $this->api_url . '/about?fields=storageQuota';
+            $response = $this->GDAPI('GET', $url);
+            if ($response['stat']==200) {
+                $res = json_decode($response['body'], true)['storageQuota'];
+                $used = size_format($res['usage']);
+                $total = size_format($res['limit']);
+                $diskSpace = $used . ' / ' . $total;
+                savecache('diskSpace', $diskSpace, $this->disktag);
+            } else return json_encode($res);
+        }
+        return $diskSpace;
     }
 
     protected function GDAPI($method, $url, $data = '')
