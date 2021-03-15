@@ -779,7 +779,7 @@ class Googledrive {
                 $total = size_format($res['limit']);
                 $diskSpace = $used . ' / ' . $total;
                 savecache('diskSpace', $diskSpace, $this->disktag);
-            } else return json_encode($res);
+            } else return json_encode($response);
         }
         return $diskSpace;
     }
