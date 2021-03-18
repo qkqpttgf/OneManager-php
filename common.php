@@ -192,42 +192,43 @@ function main($path)
     $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     $disktags = explode("|", getConfig('disktag'));
     //    echo 'count$disk:'.count($disktags);
-    if (count($disktags)>1) {
-        if ($path=='/'||$path=='') {
-            $files['type'] = 'folder';
-            $files['childcount'] = count($disktags);
-            $files['showname'] = 'root';
-            foreach ($disktags as $disktag) {
-                $files['list'][$disktag]['type'] = 'folder';
-                $files['list'][$disktag]['name'] = $disktag;
-                $files['list'][$disktag]['showname'] = getConfig('diskname', $disktag);
-            }
-            if ($_GET['json']) {
-                // return a json
-                return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
-            }
-            if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
-        } else {
-            $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
-            //$pos = strpos($path, '/');
-            //if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
-            if (!in_array($_SERVER['disktag'], $disktags)) {
-                $tmp = path_format($_SERVER['base_path'] . '/' . $disktags[0] . '/' . $path);
-                if (!!$_GET) {
-                    $tmp .= '?';
-                    foreach ($_GET as $k => $v) {
-                        if ($v === true) $tmp .= $k . '&';
-                        else $tmp .= $k . '=' . $v . '&';
-                    }
-                    $tmp = substr($tmp, 0, -1);
-                }
-                return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 302, [ 'Location' => $tmp ]);
-                //return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
-            }
-            $path = substr($path, strlen('/' . $_SERVER['disktag']));
-            if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path'] . '/' . $_SERVER['disktag'] . '/');
-        }
-    } else $_SERVER['disktag'] = $disktags[0];
+    // if (count($disktags)>1) {
+    //     if ($path=='/'||$path=='') {
+    //         $files['type'] = 'folder';
+    //         $files['childcount'] = count($disktags);
+    //         $files['showname'] = 'root';
+    //         foreach ($disktags as $disktag) {
+    //             $files['list'][$disktag]['type'] = 'folder';
+    //             $files['list'][$disktag]['name'] = $disktag;
+    //             $files['list'][$disktag]['showname'] = getConfig('diskname', $disktag);
+    //         }
+    //         if ($_GET['json']) {
+    //             // return a json
+    //             return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
+    //         }
+    //         if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+    //     } else {
+    //         $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
+    //         //$pos = strpos($path, '/');
+    //         //if ($pos>1) $_SERVER['disktag'] = substr($path, 0, $pos);
+    //         if (!in_array($_SERVER['disktag'], $disktags)) {
+    //             $tmp = path_format($_SERVER['base_path'] . '/' . $disktags[0] . '/' . $path);
+    //             if (!!$_GET) {
+    //                 $tmp .= '?';
+    //                 foreach ($_GET as $k => $v) {
+    //                     if ($v === true) $tmp .= $k . '&';
+    //                     else $tmp .= $k . '=' . $v . '&';
+    //                 }
+    //                 $tmp = substr($tmp, 0, -1);
+    //             }
+    //             return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 302, [ 'Location' => $tmp ]);
+    //             //return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
+    //         }
+    //         $path = substr($path, strlen('/' . $_SERVER['disktag']));
+    //         if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path'] . '/' . $_SERVER['disktag'] . '/');
+    //     }
+    // } else 
+    $_SERVER['disktag'] = $disktags[rand(0,count($disktags)-1)];
     //    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
