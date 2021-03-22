@@ -30,7 +30,7 @@ function GetPathSetting($event, $context)
     $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($event['headers']['accept-language'],';')[0],',')[0]);
     $_SERVER['function_name'] = $context['function_name'];
     $_SERVER['namespace'] = $context['namespace'];
-    $_SERVER['Region'] = getenv('TENCENTCLOUD_REGION');
+    $_SERVER['Region'] = $context['tencentcloud_region'];
     $host_name = $event['headers']['host'];
     $_SERVER['HTTP_HOST'] = $host_name;
     $serviceId = $event['requestContext']['serviceId'];
