@@ -825,6 +825,22 @@
         }
         return num.toFixed(2) + ' GB';
     }
+    function seconds2hour(seconds) {
+        let h, m, s;
+        if (parseFloat(seconds)<60) {
+            return seconds + 's';
+        } else {
+            s = (seconds % 60).toFixed(0);
+            m = parseInt(seconds / 60);
+            if (parseInt(m)<60) {
+                return m + 'm' + s + 's';
+            } else {
+                h = parseInt(m / 60);
+                m = m % 60;
+                return h + 'h' + m + 'm' + s + 's';
+            }
+        }
+    }
     function uploadbuttonhide() {
         document.getElementById('upload_btns').style.display='none';
         /*document.getElementById('upload_submit').disabled='disabled';
@@ -859,7 +875,7 @@
                 if (Object.keys(uploading).length<5) {
                     getuplink(i);
                     i++;
-                } else console.log(Object.keys(uploading).length);
+                }// else console.log(Object.keys(uploading).length);
             } else clearInterval(uploadList);
         }, 1000);
         //getuplink(i);
@@ -875,7 +891,7 @@
                 tr1.appendChild(td1);
                 td1.setAttribute('style','width:30%;word-break:break-word;');
                 td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
-                td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
+                td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size)+' ('+(i+1)+'/'+files.length+')';
                 td2=document.createElement('td');
                 tr1.appendChild(td2);
                 td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
@@ -1023,7 +1039,7 @@
                                 var tmptime = new Date();
                                 var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+remaintime.toFixed(1)+'s';
+                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                             }
                         }
                         var C_starttime = new Date();
@@ -1103,7 +1119,7 @@
                 if (Object.keys(uploading).length<5) {
                     getuplink(i);
                     i++;
-                } else console.log(Object.keys(uploading).length);
+                }// else console.log(Object.keys(uploading).length);
             } else clearInterval(uploadList);
         }, 1000);
         //getuplink(i);
@@ -1119,7 +1135,7 @@
                 tr1.appendChild(td1);
                 td1.setAttribute('style','width:30%;word-break:break-word;');
                 td1.setAttribute('id','upfile_td1_'+timea+'_'+i);
-                td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size);
+                td1.innerHTML=(file.webkitRelativePath||file.name)+'<br>'+size_format(file.size)+' ('+(i+1)+'/'+files.length+')';
                 td2=document.createElement('td');
                 tr1.appendChild(td2);
                 td2.setAttribute('id','upfile_td2_'+timea+'_'+i);
@@ -1313,7 +1329,7 @@
                             var tmptime = new Date();
                             var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                             var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+remaintime.toFixed(1)+'s';
+                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                         }
                     }
                     var C_starttime = new Date();
