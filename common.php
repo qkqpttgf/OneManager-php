@@ -25,7 +25,7 @@ $EnvConfigs = [
     'background'        => 0b011,
     'backgroundm'       => 0b011,
     'disableShowThumb'  => 0b010,
-    'disableChangeTheme'=> 0b010,
+    //'disableChangeTheme'=> 0b010,
     'disktag'           => 0b000,
     'hideFunctionalityFile'=> 0b010,
     'timezone'          => 0b010,
@@ -1750,8 +1750,9 @@ function render_list($path = '', $files = [])
 -->';
     //$authinfo = $path . '<br><pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
 
-    if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
-    if ( !file_exists(__DIR__ . $slash .'theme' . $slash . $theme) ) $theme = '';
+    //if (isset($_COOKIE['theme'])&&$_COOKIE['theme']!='') $theme = $_COOKIE['theme'];
+    //if ( !file_exists(__DIR__ . $slash .'theme' . $slash . $theme) ) $theme = '';
+    if ($_SERVER['admin']) $theme = 'classic.html';
     if ( $theme=='' ) {
         $tmp = getConfig('customTheme');
         if ( $tmp!='' ) $theme = $tmp;
@@ -2631,7 +2632,7 @@ function render_list($path = '', $files = [])
         $html = str_replace('<!--FootStr-->', date("Y-m-d H:i:s") . " " . getconstStr('Week')[date("w")] . " " . $_SERVER['REMOTE_ADDR'] . $city . ' Runningtime:' . $exetime . 's Mem:' . size_format(memory_get_usage()), $html);
     }
 
-    if ($_SERVER['admin']||!getConfig('disableChangeTheme')) {
+    /*if ($_SERVER['admin']||!getConfig('disableChangeTheme')) {
         $theme_arr = scandir(__DIR__ . $slash . 'theme');
         $selecttheme = '
     <div style="position: fixed;right: 10px;bottom: 10px;">
@@ -2658,7 +2659,7 @@ function render_list($path = '', $files = [])
 </script>';
         $tmp = splitfirst($html, '</body>');
         $html = $tmp[0] . $selecttheme . '</body>' . $selectthemescript . $tmp[1];
-    }
+    }*/
 
     $tmp = splitfirst($html, '</title>');
     $html = $tmp[0] . '</title>' . $authinfo . $tmp[1];
