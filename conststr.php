@@ -1151,8 +1151,8 @@ $constStr = [
         'zh-tw' => '配置儲存在環境變數',
     ],
     'ONEMANAGER_CONFIG_SAVE_FILE' => [
-        'en-us' => 'Config save in code file, may cause fee',
-        'zh-cn' => '配置保存在代码文件中，可能产生费用',
+        'en-us' => 'Config save in code file, may cause fee, please reinstall later',
+        'zh-cn' => '配置保存在代码文件中，可能产生费用，切换后，请从头再安装一次。',
         'zh-tw' => '配置儲存在程式碼文件中，可能產生費用',
     ],
 ];
