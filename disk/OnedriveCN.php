@@ -15,7 +15,7 @@ class OnedriveCN extends Onedrive {
         }
         $this->oauth_url = 'https://login.partner.microsoftonline.cn/common/oauth2/v2.0/';
         $this->api_url = 'https://microsoftgraph.chinacloudapi.cn/v1.0';
-        $this->scope = 'https://microsoftgraph.chinacloudapi.cn/Files.ReadWrite.All offline_access';
+        $this->scope = 'https://microsoftgraph.chinacloudapi.cn/Files.ReadWrite.All https://microsoftgraph.chinacloudapi.cn/Sites.ReadWrite.All offline_access';
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
 
         $this->client_secret = urlencode($this->client_secret);
