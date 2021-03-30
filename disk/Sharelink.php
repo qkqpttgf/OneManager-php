@@ -21,13 +21,14 @@ class Sharelink extends Onedrive {
         if (!($this->access_token = getcache('access_token', $this->disktag))) {
             $shareurl = getConfig('shareurl', $this->disktag);
             if (!($this->sharecookie = getcache('sharecookie', $this->disktag))) {
-                $this->sharecookie = curl('GET', $shareurl, false, [], 1)['returnhead']['Set-Cookie'];
-                //$tmp = curl_request($shareurl, false, [], 1);
-                //$tmp['body'] .= json_encode($tmp['returnhead'],JSON_PRETTY_PRINT);
-                //return $tmp;
-                //$_SERVER['sharecookie'] = $tmp['returnhead']['Set-Cookie'];
-                //if ($tmp['stat']==302) $url = $tmp['returnhead']['Location'];
-                //return curl('GET', $url, [ 'Accept' => 'application/json;odata=verbose', 'Content-Type' => 'application/json;odata=verbose', 'Cookie' => $_SERVER['sharecookie'] ]);
+                $res = curl('GET', $shareurl, '', [], 1);
+                error_log1(json_encode($res, JSON_PRETTY_PRINT));
+                if (isset($res['returnhead']['Set-Cookie'])) $this->sharecookie = $res['returnhead']['Set-Cookie'];
+                if (isset($res['returnhead']['set-cookie'])) $this->sharecookie = $res['returnhead']['set-cookie'];
+                if ($this->sharecookie=='') {
+                    $this->error = $res;
+                    return false;
+                }
                 savecache('sharecookie', $this->sharecookie, $this->disktag);
             }
             $tmp1 = splitlast($shareurl, '/')[0];
@@ -44,9 +45,11 @@ class Sharelink extends Onedrive {
             if (!$this->access_token) {
                 error_log1($domain . "/personal/" . $account . "/_api/web/GetListUsingPath(DecodedUrl=@a1)/RenderListDataAsStream?@a1='" . urlencode("/personal/" . $account . "/Documents") . "'&RootFolder=" . urlencode("/personal/" . $account . "/Documents/") . "&TryNewExperienceSingle=TRUE");
                 error_log1('failed to get share access_token. response' . json_encode($ret));
-                $response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
-                $response['body'] .= '\nfailed to get shareurl access_token.';
-                return $response;
+                //$response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
+                $response['body'] .= '<br>' .json_decode($response['body'], true)['error']['message']['value'];
+                $response['body'] .= '<br>failed to get shareurl access_token.';
+                $this->error = $response;
+                return false;
                 //throw new Exception($response['stat'].', failed to get share access_token.'.$response['body']);
             }
             //$tmp = $ret;
@@ -56,7 +59,7 @@ class Sharelink extends Onedrive {
             $tmp1 = null;
             if (getConfig('shareapiurl', $this->disktag)!=$this->api_url) $tmp1['shareapiurl'] = $this->api_url;
             //if (getConfig('sharecookie', $this->disktag)!=$this->sharecookie) $tmp1['sharecookie'] = $this->sharecookie;
-            if (!!$tmp1) setConfig($tmp1);
+            if (!!$tmp1) setConfig($tmp1, $this->disktag);
             return true;
         }
         return true;
