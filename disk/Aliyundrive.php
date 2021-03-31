@@ -6,7 +6,8 @@ class Aliyundrive {
 
     function __construct($tag) {
         $this->disktag = $tag;
-        $this->auth_url = 'https://websv.aliyundrive.com/token/refresh';
+        //$this->auth_url = 'https://websv.aliyundrive.com/token/refresh';
+        $this->auth_url = 'https://auth.aliyundrive.com/v2/account/token';
         $this->api_url = 'https://api.aliyundrive.com/v2';
         $this->driveId = getConfig('driveId', $tag);
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
@@ -121,7 +122,9 @@ class Aliyundrive {
             if ($files['type']=='file') {
                 if (in_array(splitlast($files['name'],'.')[1], $exts['txt'])) {
                     if (!(isset($files['content'])&&$files['content']['stat']==200)) {
-                        $content1 = curl('GET', $files['download_url']);
+                        $header['Referer'] = 'https://www.aliyundrive.com/';
+                        $header['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36';
+                        $content1 = curl('GET', $files['download_url'], '', $header);
                         $files['content'] = $content1;
                         savecache('path_' . $path, $files, $this->disktag);
                     }
@@ -130,7 +133,7 @@ class Aliyundrive {
             }
             if (!$files) {
                 $files['error']['code'] = 'Not Found';
-                $files['error']['message'] = 'Not Found';
+                $files['error']['message'] = $path . ' Not Found';
                 $files['error']['stat'] = 404;
             } elseif (isset($files['stat'])) {
                 $files['error']['stat'] = $files['stat'];
@@ -612,7 +615,7 @@ class Aliyundrive {
         if (isset($_GET['SelectDrive'])) {
             if ($this->access_token == '') {
                 if (isset($_POST['refresh_token'])) {
-                    $res = curl('POST', $this->auth_url, json_encode([ 'refresh_token' => $_POST['refresh_token'] ]), ["content-type"=>"application/json; charset=utf-8"]);
+                    $res = curl('POST', $this->auth_url, json_encode([ 'refresh_token' => $_POST['refresh_token'], 'grant_type' => 'refresh_token' ]), ["content-type"=>"application/json; charset=utf-8"]);
                     //return output($res['body']);
                     if ($res['stat']!=200) {
                         return message($res['body'], $res['stat'], $res['stat']);
@@ -645,7 +648,7 @@ class Aliyundrive {
                 }
             }
             if (!isset($result['default_drive_id'])) {
-                $res = curl('POST', $this->auth_url, json_encode([ 'refresh_token' => getConfig('refresh_token', $this->disktag) ]), ["content-type"=>"application/json; charset=utf-8"]);
+                $res = curl('POST', $this->auth_url, json_encode([ 'refresh_token' => getConfig('refresh_token', $this->disktag), 'grant_type' => 'refresh_token' ]), ["content-type"=>"application/json; charset=utf-8"]);
                     //return output($res['body']);
                 if ($res['stat']!=200) {
                     return message($res['body'], $res['stat'], $res['stat']);
@@ -789,6 +792,7 @@ class Aliyundrive {
         if (!($this->access_token = getcache('access_token', $this->disktag))) {
             $p=0;
             $tmp1['refresh_token'] = $refresh_token;
+            $tmp1['grant_type'] = 'refresh_token';
             while ($response['stat']==0&&$p<3) {
                 $response = curl('POST', $this->auth_url, json_encode($tmp1), ["content-type"=>"application/json; charset=utf-8"]);
                 $p++;
