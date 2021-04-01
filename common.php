@@ -27,6 +27,7 @@ $EnvConfigs = [
     'disableShowThumb'  => 0b010,
     //'disableChangeTheme'=> 0b010,
     'disktag'           => 0b000,
+    'forceHttps'        => 0b010,
     'hideFunctionalityFile'=> 0b010,
     'timezone'          => 0b010,
     'passfile'          => 0b011,
@@ -152,6 +153,19 @@ function main($path)
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     
+    if (getConfig('forceHttps')=='1'&&$_SERVER['REQUEST_SCHEME']=='http') {
+        $url = $_SERVER['PHP_SELF'];
+        if ($_GET) {
+            $tmp = '';
+            foreach ($_GET as $k => $v) {
+                if ($v===true) $tmp .= '&' . $k;
+                else $tmp .= '&' . $k . '=' . $v;
+            }
+            $tmp = substr($tmp, 1);
+            if ($tmp!='') $url .= '?' . $tmp;
+        }
+        return output(getConfig('forceHttps'), 302, [ 'Location' => str_replace('http://', 'https://', $_SERVER['host'] . $url) ]);
+    }
 
     if (getConfig('admin')=='') return install();
     if (getConfig('adminloginpage')=='') {
