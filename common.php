@@ -1151,7 +1151,7 @@ function EnvOpt($needUpdate = 0)
                 }
                 foreach ($disktags as $disktag) {
                     $d = getConfig($disktag);
-                    if ($d === '') {
+                    if ($d == '') {
                         $d = '';
                     } elseif (gettype($d)=='array') {
                         $tmp[$disktag] = $d;
@@ -1168,7 +1168,7 @@ function EnvOpt($needUpdate = 0)
                 $c = splitlast($c, '}')[0] . '}';
                 $tmp = json_decode($c, true);
                 if (!!!$tmp) return output("{\"Error\": \"Config input error. " . $c . "\"}", 403);
-                $tmptag = $tmp['disktag'];
+                if (isset($tmp['disktag'])) $tmptag = $tmp['disktag'];
                 foreach ($EnvConfigs as $env => $v) {
                     if (isCommonEnv($env)) {
                         if (isShowedEnv($env)) {
@@ -1178,11 +1178,11 @@ function EnvOpt($needUpdate = 0)
                         }
                     }
                 }
-                foreach ($disktags as $disktag) {
-                    if (!isset($tmp[$disktag])) $tmp[$disktag] = '';
+                if ($disktags) foreach ($disktags as $disktag) {
+                    if ($disktag!=''&&!isset($tmp[$disktag])) $tmp[$disktag] = '';
                 }
-                $tmp['disktag'] = $tmptag;
-                $response = setConfigResponse( setConfig($tmp, $_SERVER['disk_oprating']) );
+                if ($tmptag) $tmp['disktag'] = $tmptag;
+                $response = setConfigResponse( setConfig($tmp) );
                 if (api_error($response)) {
                     return output("{\"Error\": \"" . api_error_msg($response) . "\"}", 500);
                 } else {
