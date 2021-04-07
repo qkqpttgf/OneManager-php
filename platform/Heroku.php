@@ -103,7 +103,7 @@ function setConfig($arr, $disktag = '')
 {
     if ($disktag=='') $disktag = $_SERVER['disktag'];
     $disktags = explode("|",getConfig('disktag'));
-    $diskconfig = json_decode(getenv($disktag), true);
+    if ($disktag!='') $diskconfig = json_decode(getenv($disktag), true);
     $tmp = [];
     $indisk = 0;
     $operatedisk = 0;
