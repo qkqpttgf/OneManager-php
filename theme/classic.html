@@ -54,6 +54,7 @@
         .operate{display:inline-table;margin:0;margin-right:5px;list-style:none}
         .operate ul{position:absolute;display:none;background:#fffaaa;border:0px #f7f7f7 solid;border-radius:5px;margin:-7px 0 0 0;padding:0 7px;color:#205D67;z-index:1;}
         .operate:hover ul{position:absolute;display:inline-table;}
+        body .active ul{position:absolute;display:inline-table;} /*for some mobile browser */
         .operate ul li{padding:7px;list-style:none;display:block;}
         .list-table tr[data-to]:hover .operate ul li a{color:black}
 <!--AdminEnd-->
@@ -1436,6 +1437,22 @@
         document.cookie = "admin=; path=/; "+expires;
         location.href = location.href;
     }
+    /*for some mobile browser*/
+    function menu_click(e){
+        var ee=document.getElementsByClassName("active");
+        for(var i=0;i<ee.length;i++){
+            ee[i].classList.remove("active");
+        }
+        if(e.type!="mouseout")this.classList.add("active");
+    }
+    (function(){
+        var e=document.getElementsByClassName("operate");
+        document.body.addEventListener("touchstart", menu_click);
+        for(var i=0;i<e.length;i++){
+            e[i].addEventListener("touchstart", menu_click);
+            e[i].addEventListener("mouseout", menu_click);
+        }
+    })();
 <!--IsFolderStart-->
     function showdiv(event,action,num) {
         var $operatediv=document.getElementsByName('operatediv');
