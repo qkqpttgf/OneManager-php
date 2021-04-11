@@ -806,8 +806,9 @@ class Onedrive {
             $sharepointname = $tmp[1];
         }
         $tmp = splitlast($tmp[0], '/');
-        if (getConfig('Driver', $this->disktag)=='Onedrive') $url = 'https://graph.microsoft.com/v1.0/sites/root:/' . $tmp[1] . '/' . $sharepointname;
-        if (getConfig('Driver', $this->disktag)=='OnedriveCN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/' . $tmp[1] . '/' . $sharepointname;
+        //if (getConfig('Driver', $this->disktag)=='Onedrive') $url = 'https://graph.microsoft.com/v1.0/sites/root:/' . $tmp[1] . '/' . $sharepointname;
+        //if (getConfig('Driver', $this->disktag)=='OnedriveCN') $url = 'https://microsoftgraph.chinacloudapi.cn/v1.0/sites/root:/' . $tmp[1] . '/' . $sharepointname;
+        $url = $this->api_url . '/sites/root:/' . $tmp[1] . '/' . $sharepointname;
 
         $i=0;
         $response = [];
