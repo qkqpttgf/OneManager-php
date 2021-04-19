@@ -1289,6 +1289,22 @@ function EnvOpt($needUpdate = 0)
             </form>
         </td>
     </tr>
+</table><br>
+<table>
+<tr>
+    <td>
+        <form action="" method="post" style="margin: 0" onsubmit="return deldiskconfirm(this);">
+            <input type="hidden" name="disktag_del" value="' . $disktag . '">
+            <input type="submit" name="submit1" value="' . getconstStr('DelDisk') . '">
+        </form>
+    </td>
+    <td>
+        <form action="" method="post" style="margin: 0" onsubmit="return cpdiskconfirm(this);">
+            <input type="hidden" name="disktag_copy" value="' . $disktag . '">
+            <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
+        </form>
+    </td>
+</tr>
 </table>
 <table border=1 width=100%>
     <tr>
@@ -1309,7 +1325,7 @@ function EnvOpt($needUpdate = 0)
         <td>' . getConfig($ext_env, $disktag) . '</td>
     </tr>';
             }
-            
+
             $frame .= '
 <form name="' . $disktag . '" action="" method="post">
     <input type="hidden" name="disk" value="' . $disktag . '">';
@@ -1330,23 +1346,8 @@ function EnvOpt($needUpdate = 0)
 </tr>';
         }
         $frame .= '
-</table><br>
-<table>
-<tr>
-    <td>
-        <form action="" method="post" style="margin: 0" onsubmit="return deldiskconfirm(this);">
-            <input type="hidden" name="disktag_del" value="' . $disktag . '">
-            <input type="submit" name="submit1" value="' . getconstStr('DelDisk') . '">
-        </form>
-    </td>
-    <td>
-        <form action="" method="post" style="margin: 0" onsubmit="return cpdiskconfirm(this);">
-            <input type="hidden" name="disktag_copy" value="' . $disktag . '">
-            <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
-        </form>
-    </td>
-</tr>
 </table>
+
 <script>
     function deldiskconfirm(t) {
         var msg="' . getconstStr('Delete') . ' ??";
@@ -1383,25 +1384,6 @@ function EnvOpt($needUpdate = 0)
     } else {
         $_GET['frame'] = 'home';
         $Driver_arr = scandir(__DIR__ . $slash . 'disk');
-        $frame .= '
-<select name="DriveType" onchange="changedrivetype(this.options[this.options.selectedIndex].value)">';
-        foreach ($Driver_arr as $v1) {
-            if ($v1!='.' && $v1!='..') {
-                //$v1 = substr($v1, 0, -4);
-                $v1 = splitlast($v1, '.php')[0];
-                $frame .= '
-    <option value="' . $v1 . '"' . ($v1=='Onedrive'?' selected="selected"':'') . '>' . $v1 . '</option>';
-            }
-        }
-        $frame .= '
-</select>
-<a id="AddDisk_link" href="?AddDisk=Onedrive">' . getconstStr('AddDisk') . '</a>
-<script>
-    function changedrivetype(d) {
-        document.getElementById(\'AddDisk_link\').href="?AddDisk=" + d;
-    }
-</script>
-<br><br>';
         if (count($disktags)>1) {
             $frame .= '
 <script src="//cdn.bootcss.com/Sortable/1.8.3/Sortable.js"></script>
@@ -1477,6 +1459,24 @@ function EnvOpt($needUpdate = 0)
     });
 </script><br>';
         }
+        $frame .= '
+<select name="DriveType" onchange="changedrivetype(this.options[this.options.selectedIndex].value)">';
+        foreach ($Driver_arr as $v1) {
+            if ($v1!='.' && $v1!='..') {
+                //$v1 = substr($v1, 0, -4);
+                $v2 = splitlast($v1, '.php')[0];
+                if ($v2 . '.php'==$v1) $frame .= '
+    <option value="' . $v2 . '"' . ($v2=='Onedrive'?' selected="selected"':'') . '>' . $v2 . '</option>';
+            }
+        }
+        $frame .= '
+</select>
+<a id="AddDisk_link" href="?AddDisk=Onedrive">' . getconstStr('AddDisk') . '</a><br><br>
+<script>
+    function changedrivetype(d) {
+        document.getElementById(\'AddDisk_link\').href="?AddDisk=" + d;
+    }
+</script>';
 
         $canOneKeyUpate = 0;
         if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
@@ -1579,12 +1579,18 @@ function EnvOpt($needUpdate = 0)
         <button name="config_b" value="import" onclick="importConfig(this);">import</button></td>
     </tr>
     </form>
-</table>
+</table><br>
 <script>
     var config_f = document.getElementById("config_f");
     function exportConfig(b) {
         if (config_f.pass.value=="") {
             alert("admin pass");
+            return false;
+        }
+        try {
+            sha1(1);
+        } catch {
+            alert("sha1.js not loaded.");
             return false;
         }
         var timestamp = new Date().getTime();
@@ -1624,6 +1630,12 @@ function EnvOpt($needUpdate = 0)
                 return false;
             }
         }
+        try {
+            sha1(1);
+        } catch {
+            alert("sha1.js not loaded.");
+            return false;
+        }
         var timestamp = new Date().getTime();
         var xhr = new XMLHttpRequest();
         xhr.open("POST", "");
@@ -1655,12 +1667,18 @@ function EnvOpt($needUpdate = 0)
             alert("Input twice new password");
             return false;
         }
+        try {
+            sha1(1);
+        } catch {
+            alert("sha1.js not loaded.");
+            return false;
+        }
         var timestamp = new Date().getTime();
         f.timestamp.value = timestamp;
         f.oldPass.value = sha1(f.oldPass.value + "" + timestamp);
         return true;
     }
-</script><br>';
+</script>';
     }
     $html .= '
 <style type="text/css">
