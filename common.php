@@ -1221,7 +1221,7 @@ function EnvOpt($needUpdate = 0)
     $html .= '
 <a href="' . $preurl . '">' . getconstStr('Back') . '</a><br>
 ';
-    if (isset($_GET['frame'])&&$_GET['frame']=='platform') {
+    if ($_GET['setup']==='platform') {
         $frame .= '
 <table border=1 width=100%>
     <form name="common" action="" method="post">';
@@ -1274,8 +1274,8 @@ function EnvOpt($needUpdate = 0)
         <tr><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td><td></td></tr>
     </form>
 </table><br>';
-    } elseif (isset($_GET['frame'])&&in_array($_GET['frame'], $disktags)) {
-        $disktag = $_GET['frame'];
+    } elseif (isset($_GET['disktag'])&&in_array($_GET['disktag'], $disktags)) {
+        $disktag = $_GET['disktag'];
         $disk_tmp = null;
         $diskok = driveisfine($disktag, $disk_tmp);
         $frame .= '
@@ -1382,7 +1382,7 @@ function EnvOpt($needUpdate = 0)
     }
 </script>';
     } else {
-        $_GET['frame'] = 'home';
+        //$_GET['disktag'] = '';
         $Driver_arr = scandir(__DIR__ . $slash . 'disk');
         if (count($disktags)>1) {
             $frame .= '
@@ -1686,20 +1686,22 @@ function EnvOpt($needUpdate = 0)
 </style>
 <table border=0>
     <tr class="tabs">';
-    if ($_GET['frame']=='home') $html .= '
-    <td>' . getconstStr('Home') . '</td>';
-    else $html .= '
-    <td><a href="?setup&frame=home">' . getconstStr('Home') . '</a></td>';
-    if ($_GET['frame']=='platform') $html .= '
-    <td>' . getconstStr('PlatformConfig') . '</td>';
-    else $html .= '
-    <td><a href="?setup&frame=platform">' . getconstStr('PlatformConfig') . '</a></td>';
+    if ($_GET['disktag']=='') {
+        if ($_GET['setup']==='platform') $html .= '
+        <td><a href="?setup">' . getconstStr('Home') . '</a></td>
+        <td>' . getconstStr('PlatformConfig') . '</td>';
+        else $html .= '
+        <td>' . getconstStr('Home') . '</td>
+        <td><a href="?setup=platform">' . getconstStr('PlatformConfig') . '</a></td>';
+    } else $html .= '
+        <td><a href="?setup">' . getconstStr('Home') . '</a></td>
+        <td><a href="?setup=platform">' . getconstStr('PlatformConfig') . '</a></td>';
     foreach ($disktags as $disktag) {
         if ($disktag!='') {
-            if ($_GET['frame']==$disktag) $html .= '
-            <td>' . $disktag . '</td>';
+            if ($_GET['disktag']==$disktag) $html .= '
+        <td>' . $disktag . '</td>';
             else $html .= '
-            <td><a href="?setup&frame=' . $disktag . '">' . $disktag . '</a></td>';
+        <td><a href="?setup&disktag=' . $disktag . '">' . $disktag . '</a></td>';
         }
     }
     $html .= '
