@@ -2124,7 +2124,7 @@ function render_list($path = '', $files = [])
             }
             //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files['url'], $html);
             while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path)), $html);
-            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path)), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files['url']), $html);
             //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
