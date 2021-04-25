@@ -885,9 +885,9 @@ class Onedrive {
         }
         if ($fileinfo['size']>10*1024*1024) {
             $cachefilename = spurlencode( $fileinfo['path'] . '/.' . $fileinfo['filelastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
-            $getoldupinfo=$this->list_files(path_format($path . '/' . $cachefilename));
-            //echo json_encode($getoldupinfo, JSON_PRETTY_PRINT);
-            if (isset($getoldupinfo['file'])&&$getoldupinfo['size']<5120) {
+            $getoldupinfo = $this->list_files(path_format($path . '/' . $cachefilename));
+            //error_log1(json_encode($getoldupinfo, JSON_PRETTY_PRINT));
+            if (isset($getoldupinfo['url'])&&$getoldupinfo['size']<5120) {
                 $getoldupinfo_j = curl('GET', $getoldupinfo['url']);
                 $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
                 if ( json_decode( curl('GET', $getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
@@ -998,10 +998,10 @@ class Onedrive {
             }
         }
         curl_close($ch);
-        error_log1($response['stat'].'
+        /*error_log1($response['stat'].'
     '.$response['body'].'
     '.$url.'
-    ');
+    ');*/
         return $response;
     }
 
