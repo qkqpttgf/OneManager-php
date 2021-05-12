@@ -37,6 +37,7 @@ $EnvConfigs = [
     'theme'             => 0b010,
     'dontBasicAuth'     => 0b010,
     'referrer'          => 0b011,
+    'forceHttps'        => 0b010,
 
     'Driver'            => 0b100,
     'client_id'         => 0b100,
@@ -133,6 +134,19 @@ function main($path)
     if (strpos(__DIR__, ':')) $slash = '\\';
     $_SERVER['php_starttime'] = microtime(true);
     $path = path_format($path);
+    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
+    if (getConfig('forceHttps')&&$_SERVER['REQUEST_SCHEME']=='http') {
+        if ($_GET) {
+            $tmp = '';
+            foreach ($_GET as $k => $v) {
+                if ($v===true) $tmp .= '&' . $k;
+                else $tmp .= '&' . $k . '=' . $v;
+            }
+            $tmp = substr($tmp, 1);
+            if ($tmp!='') $param = '?' . $tmp;
+        }
+        return output('visit via https.', 302, [ 'Location' => 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . $param ]);
+    }
     if (in_array($_SERVER['firstacceptlanguage'], array_keys($constStr['languages']))) {
         $constStr['language'] = $_SERVER['firstacceptlanguage'];
     } else {
@@ -150,8 +164,6 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
-    $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
-    
 
     if (getConfig('admin')=='') return install();
     if (getConfig('adminloginpage')=='') {
@@ -304,12 +316,13 @@ function main($path)
                 if ($thumb_url!='') {
                     if ($_GET['location']) {
                         $url = $thumb_url;
+                        $header['Location'] = $url;
                         $domainforproxy = '';
                         $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
                         if ($domainforproxy!='') {
-                            $url = proxy_replace_domain($url, $domainforproxy);
+                            $url = proxy_replace_domain($url, $domainforproxy, $header);
                         }
-                        return output('', 302, [ 'Location' => $url ]);
+                        return output('', 302, $header);
                     } else return output($thumb_url);
                 }
                 return output('', 404);
@@ -350,12 +363,13 @@ function main($path)
             if (count($tmp)>0) {
                 $url = $tmp[rand(0, count($tmp)-1)];
                 if (isset($_GET['url'])) return output($url, 200);
+                $header['Location'] = $url;
                 $domainforproxy = '';
                 $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
                 if ($domainforproxy!='') {
-                    $url = proxy_replace_domain($url, $domainforproxy);
+                    $url = proxy_replace_domain($url, $domainforproxy, $header);
                 }
-                return output('', 302, [ 'Location' => $url ]);
+                return output('', 302, $header);
             } else return output('No ' . $_GET['random'] . 'file', 404);
         } else return output('Hidden', 401);
     }
@@ -363,15 +377,15 @@ function main($path)
     if ($files['type']=='file' && !isset($_GET['preview'])) {
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt', $_SERVER['disktag'])&&$files['name']!=getConfig('passfile')) ) {
             $url = $files['url'];
-            $domainforproxy = '';
-            $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
-            if ($domainforproxy!='') {
-                $url = proxy_replace_domain($url, $domainforproxy);
-            }
             if ( strtolower(splitlast($files['name'], '.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
             else {
                 if ($_SERVER['HTTP_RANGE']!='') $header['Range'] = $_SERVER['HTTP_RANGE'];
                 $header['Location'] = $url;
+                $domainforproxy = '';
+                $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
+                if ($domainforproxy!='') {
+                    $url = proxy_replace_domain($url, $domainforproxy, $header);
+                }
                 return output('', 302, $header);
             }
         }
@@ -454,6 +468,7 @@ function compareadminmd5($admincookie, $name, $pass)
     if (md5($name . ':' . md5($pass) . '@' . $c_time) == $c_md5) return true;
     else return false;
 }
+
 function compareadminsha1($adminsha1, $timestamp, $pass)
 {
     if (!is_numeric($timestamp)) return 'Timestamp not Number';
@@ -465,8 +480,9 @@ function compareadminsha1($adminsha1, $timestamp, $pass)
     else return 'Error password';
 }
 
-function proxy_replace_domain($url, $domainforproxy)
+function proxy_replace_domain($url, $domainforproxy, &$header)
 {
+    global $drive;
     $tmp = splitfirst($url, '//');
     $http = $tmp[0];
     $tmp = splitfirst($tmp[1], '/');
@@ -475,10 +491,14 @@ function proxy_replace_domain($url, $domainforproxy)
     if (substr($domainforproxy, 0, 7)=='http://' || substr($domainforproxy, 0, 8)=='https://') $aim = $domainforproxy;
     else $aim = $http . '//' . $domainforproxy;
     if (substr($aim, -1)=='/') $aim = substr($aim, 0, -1);
+    //$header['Location'] = $aim . '/' . $uri;
+    //return $aim . '/' . $uri;
     if (strpos($url, '?')>0) $sp = '&';
     else $sp = '?';
+    $aim .= '/' . $uri . $sp . 'Origindomain=' . $domain;
+    if ($drive->show_base_class()=='Aliyundrive') $aim .= '&Aliyundrive';
+    $header['Location'] = $aim;
     return $aim . '/' . $uri . $sp . 'Origindomain=' . $domain;
-    //$url = str_replace($tmp, $domainforproxy, $url).'&Origindomain='.$tmp;
 }
 
 function isHideFile($name)
@@ -489,6 +509,7 @@ function isHideFile($name)
         'head.omf',
         'foot.omf',
         'favicon.ico',
+        'robots.txt',
         'index.html',
     ];
 
@@ -823,8 +844,9 @@ function needUpdate()
 function output($body, $statusCode = 200, $headers = ['Content-Type' => 'text/html'], $isBase64Encoded = false)
 {
     if (isset($_SERVER['Set-Cookie'])) $headers['Set-Cookie'] = $_SERVER['Set-Cookie'];
-    $headers['Referrer-Policy'] = 'no-referrer'; //$headers['Referrer-Policy'] = 'same-origin';
-    $headers['X-Frame-Options'] = 'sameorigin';
+    //$headers['Referrer-Policy'] = 'no-referrer';
+    //$headers['Referrer-Policy'] = 'same-origin';
+    //$headers['X-Frame-Options'] = 'sameorigin';
     return [
         'isBase64Encoded' => $isBase64Encoded,
         'statusCode' => $statusCode,
@@ -1792,7 +1814,7 @@ function render_list($path = '', $files = [])
         } else {
             if (!($html = getcache('customTheme'))) {
                 $file_path = $theme;
-                $tmp = curl('GET', $file_path, false, [], 1);
+                $tmp = curl('GET', $file_path, '', [], 1);
                 if ($tmp['stat']==302) {
                     error_log1(json_encode($tmp));
                     $tmp = curl('GET', $tmp["returnhead"]["Location"]);
