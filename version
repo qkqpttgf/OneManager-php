@@ -1,7 +1,10 @@
+20210512-1648.37
+add setting "forceHttps", can force 302 jump to https. fix preview office files. fix manage in safari.fix disktag can be "home". fix some bugs.
+新增一个设置，可以强制跳转https。修复office文档预览。修复safari上点不了管理。盘的标签可以是home了，随便命名了。修复一些其它问题。
+
 20210331-1530.36
 admin can only use classic theme after admin login, and guest can not change theme now. fix: Sharelink can not work in php8. show disk space. limit 5 files in uploading. do with activityLimitReached. fix some bugs.
 暂时解决昨天阿里云盘最新防盗链。管理登录后只能用classic主题，游客不能再切换主题了。修复Sharelink在php8下不能正常工作。显示盘空间。同时上传文件数限制5个。对activityLimitReached稍微处理。修复一些bug。
-
 20210313-1352.35
 use driveId, after update, <font color="red">Aliyundrive and Googledrive please click the Change link after Driver type</font>. try fix: php8 will run error 500. change layout in settup. fix: uploading non-englist file name. try fix: sha1 a big file.
 换用driveId，更新后<font color="red">Aliyundrive与Googledrive请点一下那个切换链接</font>。尝试修复php8的500 ERROR。改变设置页面的布局。修复上传中文名文件时最终文件以url代码命名。阿里云盘上传时可以sha1大文件了。
