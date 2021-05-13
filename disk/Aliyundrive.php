@@ -76,7 +76,7 @@ class Aliyundrive {
                 $tmp['list'][$filename]['name'] = $file['name'];
                 $tmp['list'][$filename]['time'] = $file['updated_at'];
                 $tmp['list'][$filename]['size'] = $file['size'];
-                $tmp['childcount']++;
+                //$tmp['childcount']++;
             }
         } elseif (isset($files['code'])||isset($files['error'])) {
             return $files;
@@ -90,8 +90,6 @@ class Aliyundrive {
         global $exts;
         while (substr($path, -1)=='/') $path = substr($path, 0, -1);
         if ($path == '') $path = '/';
-        //$files = getcache('path_' . $path, $this->disktag);
-        //if (!$files) {
         if (!($files = getcache('path_' . $path, $this->disktag))) {
             if ($path == '/' || $path == '') {
                 $files = $this->fileList('root');
@@ -113,9 +111,7 @@ class Aliyundrive {
                             $files['time'] = $item['updated_at'];
                             $files['size'] = $item['size'];
                         } else $files = $item;
-                        
                     }
-                    
                 }
                 //echo $files['name'];
             }
@@ -190,8 +186,8 @@ class Aliyundrive {
         $header["content-type"] = "application/json; charset=utf-8";
         $header['authorization'] = 'Bearer ' . $this->access_token;
 
-        $data['limit'] = 50;
-        $data['marker'] = NULL;
+        $data['limit'] = 200;
+        $data['marker'] = null;
         $data['drive_id'] = $this->driveId;
         $data['parent_file_id'] = $parent_file_id;
         $data['image_thumbnail_process'] = 'image/resize,w_160/format,jpeg';
@@ -203,7 +199,19 @@ class Aliyundrive {
 
         $res = curl('POST', $url, json_encode($data), $header);
         //error_log1($res['stat'] . $res['body']);
-        if ($res['stat']==200) return json_decode($res['body'], true);
+        if ($res['stat']==200) {
+            $body = json_decode($res['body'], true);
+            $body1 = $body;
+            while ($body1['next_marker']!='') {
+                $data['marker'] = $body1['next_marker'];
+                $res1 = null;
+                $res1 = curl('POST', $url, json_encode($data), $header);
+                $body1 = json_decode($res1['body'], true);
+                $body['items'] = array_merge($body['items'], $body1['items']);
+            }
+            return $body;
+            //return json_decode($res['body'], true);
+        }
         else return $res;
     }
 
