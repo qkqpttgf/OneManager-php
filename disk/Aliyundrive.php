@@ -120,15 +120,28 @@ class Aliyundrive {
                 //echo $files['name'];
             }
             if ($files['type']=='file') {
-                if (in_array(splitlast($files['name'],'.')[1], $exts['txt'])) {
-                    if (!(isset($files['content'])&&$files['content']['stat']==200)) {
-                        $header['Referer'] = 'https://www.aliyundrive.com/';
-                        $header['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36';
-                        $content1 = curl('GET', $files['download_url'], '', $header);
-                        $files['content'] = $content1;
-                        savecache('path_' . $path, $files, $this->disktag);
+                if (in_array(strtolower(splitlast($files['name'],'.')[1]), $exts['txt'])) {
+                    if ($files['size']<1024*1024) {
+                        if (!(isset($files['content'])&&$files['content']['stat']==200)) {
+                            $header['Referer'] = 'https://www.aliyundrive.com/';
+                            $header['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36';
+                            $content1 = curl('GET', $files['download_url'], '', $header);
+                            $tmp = null;
+                            $tmp = json_decode(json_encode($content1), true);
+                            if ($tmp['body']===null) {
+                                $tmp['body'] = iconv("GBK", 'UTF-8//TRANSLIT', $content1['body']);
+                                $tmp = json_decode(json_encode($tmp), true);
+                                if ($tmp['body']!==null) $content1['body'] = $tmp['body'];
+                            }
+                            //error_log1('body : ' . $content1['body'] . PHP_EOL);
+                            $files['content'] = $content1;
+                            savecache('path_' . $path, $files, $this->disktag);
+                        }
+                    } else {
+                        $files['content']['stat'] = 202;
+                        $files['content']['body'] = 'File too large.';
                     }
-                    error_log1($files['name'] . ' : ' . json_encode($files['content']) . PHP_EOL);
+                    //error_log1($files['name'] . ' : ' . json_encode($files['content']) . PHP_EOL);
                 }
             }
             if (!$files) {
