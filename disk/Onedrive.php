@@ -52,7 +52,7 @@ class Onedrive {
             $pos = splitlast($path, '/');
             $parentpath = $pos[0];
             if ($parentpath=='') $parentpath = '/';
-            $filename = $pos[1];
+            $filename = strtolower($pos[1]);
             if ($parentfiles = getcache('path_' . $parentpath, $this->disktag)) {
                 if (isset($parentfiles['children'][$filename][$this->DownurlStrName])) {
                     if (in_array(splitlast($filename,'.')[1], $exts['txt'])) {
@@ -93,9 +93,9 @@ class Onedrive {
                         }
                     } else {
                     // files num < 200 , then cache
-                        //if (isset($files['children'])) {
-                            //$files['children'] = children_name($files['children']);
-                        //}
+                        if (isset($files['children'])) {
+                            $files['children'] = children_name($files['children']);
+                        }
                         savecache('path_' . $path, $files, $this->disktag);
                     }
                 }
