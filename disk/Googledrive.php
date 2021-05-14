@@ -128,21 +128,33 @@ class Googledrive {
                             //$this->permission('delete', $files['id']);
                             
                             //if (isset($item['mimeType']) && $item['mimeType']!='application/vnd.google-apps.folder') {
-                                if (in_array(splitlast($item['name'],'.')[1], $exts['txt'])) {
-                                    if (!(isset($item['content'])&&$item['content']['stat']==200)) {
-                                        //if (!isset($item['downUrl'])) {
-                                            $res = curl('GET', $item['webContentLink'], '', [], 1);
-                                            $weblink = $res['returnhead']['Location'];
-                                            //if ($weblink!==null) $item['downUrl'] = $weblink;
-                                            //else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
-                                        //}
-                                        if ($res['stat']==302) {
-                                            $content1 = curl('GET', $weblink, '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"]);
-                                            $item['content'] = $content1;
-                                        }// else $content1 = $res;
-                                        //error_log1($item['name'] . '~' . json_encode($content1, JSON_PRETTY_PRINT) . PHP_EOL);
-                                        $parent_folder['files'][$i] = $item;
-                                        savecache('path_' . $path, $parent_folder, $this->disktag);
+                                if (in_array(strtolower(splitlast($item['name'],'.')[1]), $exts['txt'])) {
+                                    if ($files['size']<1024*1024) {
+                                        if (!(isset($item['content'])&&$item['content']['stat']==200)) {
+                                            //if (!isset($item['downUrl'])) {
+                                                $res = curl('GET', $item['webContentLink'], '', [], 1);
+                                                $weblink = $res['returnhead']['Location'];
+                                                //if ($weblink!==null) $item['downUrl'] = $weblink;
+                                                //else error_log1('Cant get link:' . json_encode($res, JSON_PRETTY_PRINT));
+                                            //}
+                                            if ($res['stat']==302) {
+                                                $content1 = curl('GET', $weblink, '', ["User-Agent"=>"qkqpttgf/OneManager 3.0.0", "Accept"=>"*/*"]);
+                                                $tmp = null;
+                                                $tmp = json_decode(json_encode($content1), true);
+                                                if ($tmp['body']===null) {
+                                                    $tmp['body'] = iconv("GBK", 'UTF-8//TRANSLIT', $content1['body']);
+                                                    $tmp = json_decode(json_encode($tmp), true);
+                                                    if ($tmp['body']!==null) $content1['body'] = $tmp['body'];
+                                                }
+                                                $item['content'] = $content1;
+                                            }// else $content1 = $res;
+                                            //error_log1($item['name'] . '~' . json_encode($content1, JSON_PRETTY_PRINT) . PHP_EOL);
+                                            $parent_folder['files'][$i] = $item;
+                                            savecache('path_' . $path, $parent_folder, $this->disktag);
+                                        }
+                                    } else {
+                                        $files['content']['stat'] = 202;
+                                        $files['content']['body'] = 'File too large.';
                                     }
                                 }
                             //}
