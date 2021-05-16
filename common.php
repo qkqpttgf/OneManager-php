@@ -738,7 +738,7 @@ function comppass($pass)
 function encode_str_replace($str)
 {
     $str = str_replace('%','%25',$str);
-    //$str = str_replace('&','&amp;',$str);
+    if (strpos($str, '&amp;')) $str = str_replace('&amp;', '&amp;amp;', $str);
     $str = str_replace('+','%2B',$str);
     $str = str_replace('#','%23',$str);
     return $str;
@@ -2117,9 +2117,9 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--IsFileStart-->', '', $html);
                 $html = str_replace('<!--IsFileEnd-->', '', $html);
             }
-            $html = str_replace('<!--FileEncodeUrl-->', str_replace('%2523', '%23', str_replace('%26amp%3B','&amp;',spurlencode(path_format($_SERVER['base_disk_path'] . '/' . $path), '/'))), $html);
-            $html = str_replace('<!--FileUrl-->', path_format($_SERVER['base_disk_path'] . '/' . $path), $html);
-            
+            $html = str_replace('<!--FileEncodeUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path))), $html);
+            $html = str_replace('<!--FileUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path))), $html);
+
             $ext = strtolower(substr($path, strrpos($path, '.') + 1));
             if (in_array($ext, $exts['img'])) $ext = 'img';
             elseif (in_array($ext, $exts['video'])) $ext = 'video';
@@ -2145,8 +2145,8 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--Is'.$ext.'FileEnd-->', '', $html);
             }
             //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files['url'], $html);
-            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path)), $html);
-            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files['url']), $html);
             //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
@@ -2196,7 +2196,7 @@ function render_list($path = '', $files = [])
                 if ($file['type']=='folder') {
                     if ($_SERVER['admin'] or !isHideFile($file['name'])) {
                         $filenum++;
-                        $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path . '/' . $file['name'])), $FolderList);
+                        $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path) . '/' . $file['name'])), $FolderList);
                         $FolderListStr = str_replace('<!--FileId-->', $file['id'], $FolderListStr);
                         $FolderListStr = str_replace('<!--FileEncodeReplaceName-->', str_replace('&','&amp;', $file['showname']?$file['showname']:$file['name']), $FolderListStr);
                         $FolderListStr = str_replace('<!--lastModifiedDateTime-->', time_format($file['time']), $FolderListStr);
@@ -2218,7 +2218,7 @@ function render_list($path = '', $files = [])
                         $filenum++;
                         $ext = strtolower(substr($file['name'], strrpos($file['name'], '.') + 1));
                         $FolderListStr = $FolderList;
-                        while (strpos($FolderListStr, '<!--FileEncodeReplaceUrl-->')) $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', path_format(encode_str_replace($_SERVER['base_disk_path'] . '/' . $path . '/' . $file['name'])), $FolderListStr);
+                        while (strpos($FolderListStr, '<!--FileEncodeReplaceUrl-->')) $FolderListStr = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path) . '/' . $file['name'])), $FolderListStr);
                         $FolderListStr = str_replace('<!--FileExt-->', $ext, $FolderListStr);
                         if (in_array($ext, $exts['music'])) $FolderListStr = str_replace('<!--FileExtType-->', 'audio', $FolderListStr);
                         elseif (in_array($ext, $exts['video'])) $FolderListStr = str_replace('<!--FileExtType-->', 'iframe', $FolderListStr);
@@ -2403,7 +2403,7 @@ function render_list($path = '', $files = [])
                 $tmp1 = splitfirst($tmp_path, '/');
                 $folder1 = $tmp1[0];
                 if ($folder1!='') {
-                    $tmp_url .= $folder1 . '/';
+                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                     $html .= $PathArrayStr1;
@@ -2424,7 +2424,7 @@ function render_list($path = '', $files = [])
                 $tmp1 = splitfirst($tmp_path, '/');
                 $folder1 = $tmp1[0];
                 if ($folder1!='') {
-                    $tmp_url .= $folder1 . '/';
+                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', ($folder1==$_SERVER['disktag']?(getConfig('diskname')==''?$_SERVER['disktag']:getConfig('diskname')):$folder1), $PathArrayStr1);
                     $html .= $PathArrayStr1;
