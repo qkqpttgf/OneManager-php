@@ -738,7 +738,7 @@ function comppass($pass)
 function encode_str_replace($str)
 {
     $str = str_replace('%','%25',$str);
-    $str = str_replace('&','&amp;',$str);
+    //$str = str_replace('&','&amp;',$str);
     $str = str_replace('+','%2B',$str);
     $str = str_replace('#','%23',$str);
     return $str;
