@@ -237,7 +237,7 @@ function install()
             url += "app.json";
             //alert(url);
             var xhr4 = new XMLHttpRequest();
-            xhr4.open("GET", url);
+            xhr4.open("POST", url);
             xhr4.setRequestHeader("x-requested-with","XMLHttpRequest");
             xhr4.send(null);
             xhr4.onload = function(e){
