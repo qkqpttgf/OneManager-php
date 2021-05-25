@@ -1,5 +1,4 @@
-Install program first, then add onedrive in setup after login.  
-先安装程序，登录后在设置中添加onedrive。  
+Notice: the release is used as archive. 注意：release只是用来存档的。
 
 # Deploy to Heroku  
 Official: https://heroku.com  
@@ -31,6 +30,46 @@ How to Install:
 添加网盘时，SCF可能会反应不过来，不跳转到微软，导致添加失败，请不要删除这个盘，再添加一次相同标签的盘就可以了。  
 
 
+# Deploy to Huawei cloud Function Graph (FG 华为云函数工作流)  
+Official: https://console.huaweicloud.com/functiongraph/  
+DEMO:  无  
+注意：FG中，环境变量整体大小为2KB，所以最多添加2个盘（一个onedrive一个aliyundrive）。  
+
+How to Install:  
+  1，在函数列表，点右边创建函数  
+  2，输入名称，选择运行时语言为PHP7.3，点上传ZIP文件，选择文件，然后点右边的创建函数（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。）  
+  3，创建触发器：选API网关，安全认证选None，后端超时（毫秒）将5000改成30000，上面创建分组一下，其它的点点点  
+  4，访问触发器给的url，开始安装  
+  5，在触发器界面点触发器名称，跳到API网关管理，右边更多URL，可以添加自定义域名，自定义域名后发现还是要 xxxx.com/函数名 来访问，点上方的编辑，第1页不用改，点下一步，请求Path改成/，注意匹配模式是前缀匹配，Method为ANY，然后不用点下一步了，点立即完成，然后去发布生效  
+
+
+# Deploy to Aliyun Function Compute (FC 阿里云函数计算)  
+Official: https://fc.console.aliyun.com/  
+DEMO:  无  
+
+How to Install:  
+  1，新建函数 -- HTTP函数  
+  2，运行环境选择php7.2  
+  3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
+  4，上传代码  
+  5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
+  6，访问你的域名，开始安装  
+
+
+# Deploy to Baidu Cloud Function Compute (CFC 百度云函数计算)  
+Official: https://console.bce.baidu.com/cfc/#/cfc/functions  
+DEMO:  无  
+自定义域名需要另外使用API网关，并备案。  
+
+How to Install:  
+  1，在函数列表，点创建函数  
+  2，创建方式改为空白函数，点下一步  
+  3，输入名称，选择运行时为PHP7.2，点下一步  
+  4，触发器：下拉选择HTTP触发器，URL路径填 /{filepath+} ，HTTP方法全选，身份验证：不验证，点提交  
+  5，进入代码编辑页，编辑类型改上传函数ZIP包，选择文件（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。），开始上传  
+  6，点击右边触发器，复制并访问提供的url，开始安装  
+
+
 # Deploy to Virtual Private Server (VPS 或空间)  
 DEMO:  无  
 How to Install:  
@@ -44,46 +83,6 @@ How to Install:
     使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
     5.View the website in chrome or other.  
     在浏览器中访问。  
-
-
-# Deploy to Huawei cloud Function Graph (FG 华为云函数工作流)  
-Official: https://console.huaweicloud.com/functiongraph/  
-DEMO:  无  
-注意：FG中，环境变量整体大小为2KB，所以最多添加2个盘。  
-
-How to Install:  
-1，在函数列表，点右边创建函数  
-2，输入名称，选择运行时语言为PHP7.3，点上传ZIP文件，选择文件，然后点右边的创建函数（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。）  
-3，创建触发器：选API网关，安全认证选None，后端超时（毫秒）将5000改成30000，上面创建分组一下，其它的点点点  
-4，访问触发器给的url，开始安装  
-5，在触发器界面点触发器名称，跳到API网关管理，右边更多URL，可以添加自定义域名，自定义域名后发现还是要 xxxx.com/函数名 来访问，点上方的编辑，第1页不用改，点下一步，请求Path改成/，注意匹配模式是前缀匹配，Method为ANY，然后不用点下一步了，点立即完成，然后去发布生效  
-
-
-# Deploy to Aliyun Function Compute (FC 阿里云函数计算)  
-Official: https://fc.console.aliyun.com/  
-DEMO:  无  
-
-How to Install:  
-1，新建函数 -- HTTP函数  
-2，运行环境选择php7.2  
-3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
-4，上传代码  
-5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
-6，访问你的域名，开始安装  
-
-
-# Deploy to Baidu Cloud Function Compute (CFC 百度云函数计算)  
-Official: https://console.bce.baidu.com/cfc/#/cfc/functions  
-DEMO:  无  
-自定义域名需要另外使用API网关，并备案。  
-
-How to Install:  
-1，在函数列表，点创建函数  
-2，创建方式改为空白函数，点下一步  
-3，输入名称，选择运行时为PHP7.2，点下一步  
-4，触发器：下拉选择HTTP触发器，URL路径填 /{filepath+} ，HTTP方法全选，身份验证：不验证，点提交  
-5，进入代码编辑页，编辑类型改上传函数ZIP包，选择文件（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。），开始上传  
-6，点击右边触发器，复制并访问提供的url，开始安装  
 
 
 # Features 特性  
@@ -114,4 +113,5 @@ it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部
 ### head.omf foot.omf  
 it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
 
+QQ Group: 212088653 (请看完上面的中英双语再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
