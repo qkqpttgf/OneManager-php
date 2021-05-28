@@ -1,4 +1,6 @@
-Notice: the release is used as archive. 注意：release只是用来存档的。
+# NOTICE: the release is used as archive. 
+# 注意：release只是用来存档的。
+Please read the descriptions of settings before raising an issue. 请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
 
 # Deploy to Heroku  
 Official: https://heroku.com  
