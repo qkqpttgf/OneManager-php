@@ -950,7 +950,9 @@ class Onedrive {
                 $url .= ':' . $path;
                 if (substr($url,-1)=='/') $url=substr($url,0,-1);
             }
-            if ($method=='PUT') {
+            if ($method=='GET') {
+                $method = 'GET'; // do nothing
+            } elseif ($method=='PUT') {
                 if ($path=='' or $path=='/') {
                     $url .= 'content';
                 } else {
