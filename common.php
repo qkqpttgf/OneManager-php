@@ -347,6 +347,11 @@ function main($path)
         if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
         $files = $drive->list_files($path1);
     }
+    if ($files['type']=='folder' && !$_SERVER['admin']) {
+        foreach ($files['list'] as $k => $v) {
+            if (isHideFile($k)) unset($files['list'][$k]);
+        }
+    }
 
     if ($_GET['json']) {
         // return a json
