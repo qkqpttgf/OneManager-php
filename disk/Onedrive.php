@@ -928,7 +928,7 @@ class Onedrive {
         return $diskSpace;
     }
 
-    protected function MSAPI($method, $path, $data = '')
+    protected function MSAPI($method, $path, $data = '', $headers = [])
     {
         $activeLimit = getConfig('activeLimit', $this->disktag);
         if ($activeLimit!='') {
