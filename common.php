@@ -2565,8 +2565,8 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
         if (isset($files['list']['readme.md'])) {
-            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'], $tmp[0]);
-            $html .= $Readmemd . $tmp[1];
+            $Readmemd = get_content(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'];
+            $html .= $tmp[0] . $tmp[1];
             while (strpos($html, '<!--ReadmemdStart-->')) {
                 $html = str_replace('<!--ReadmemdStart-->', '', $html);
                 $html = str_replace('<!--ReadmemdEnd-->', '', $html);
@@ -2671,6 +2671,9 @@ function render_list($path = '', $files = [])
         //while (strpos($html, "\r\r")) $html = str_replace("\r\r", "\r", $html);
         while (strpos($html, "\n\n")) $html = str_replace("\n\n", "\n", $html);
         //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
+        if (isset($Readmemd)) {
+            $html = str_replace('<!--ReadmemdContent-->', $Readmemd, $html);
+        }  // 保留Readmemd的换行
 
         $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
         //$ip2city = json_decode(curl('GET', 'http://ip.taobao.com/outGetIpInfo?ip=' . $_SERVER['REMOTE_ADDR'] . '&accessKey=alibaba-inc')['body'], true);
