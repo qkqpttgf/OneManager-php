@@ -5,6 +5,9 @@ include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
 
+//允许跨域
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET');
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/TencentSCF_file.php';
