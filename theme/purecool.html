@@ -3,9 +3,9 @@
     "music":"musical-notes",
     "video":"logo-youtube",
     "img":"image",
-    "office":"paper",
+    "office":"newspaper",
     "txt":"clipboard",
-    "zip":"filing",
+    "zip":"file-tray-full",
     "iso":"disc",
     "apk":"logo-android",
     "exe":"logo-windows",
@@ -89,7 +89,7 @@
         <li class="operate"><ion-icon name="construct"></ion-icon><!--constStr@Operate--><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle"></ion-icon><!--constStr@Create--></a></li>
-            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+            <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock-closed"></ion-icon><!--constStr@Encrypt--></a></li>
             <li><a href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a></li>
 <!--IsFolderEnd-->
             <li><a href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a></li>
@@ -240,7 +240,7 @@
 <!--AdminStart-->
                             <li class="operate"><ion-icon name="construct"></ion-icon><a><!--constStr@Operate--></a>
                             <ul>
-                                <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a></li>
+                                <li><a onclick="showdiv(event,'encrypt',<!--filenum-->);"><ion-icon name="lock-closed"></ion-icon><!--constStr@Encrypt--></a></li>
                                 <li><a onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a></li>
                                 <li><a onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a></li>
                                 <li><a onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a></li>
@@ -1248,6 +1248,6 @@
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <!--customScript-->
 </html>
