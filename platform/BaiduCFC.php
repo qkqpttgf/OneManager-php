@@ -363,7 +363,7 @@ function api_error_msg($response)
 {
     if (isset($response['code'])) $html = $response['code'] . '<br>
 ' . $response['message'];
-    else $html = var_dump($response);
+    else $html = json_encode($response, JSON_PRETTY_PRINT);
     return $html . '<br><br>
 BRN: ' . $_SERVER['functionBrn'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
