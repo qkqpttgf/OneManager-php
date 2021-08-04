@@ -1512,9 +1512,11 @@ function EnvOpt($needUpdate = 0)
             $canOneKeyUpate = 1;
         } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
             $canOneKeyUpate = 1;
-        } elseif ($_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
+        } elseif (isset($_SERVER['BCE_CFC_RUNTIME_NAME'])&&$_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
             $canOneKeyUpate = 1;
-        } elseif ($_SERVER['_APP_SHARE_DIR']==='/var/share/CFF/processrouter') {
+        } elseif (isset($_SERVER['_APP_SHARE_DIR'])&&$_SERVER['_APP_SHARE_DIR']==='/var/share/CFF/processrouter') {
+            $canOneKeyUpate = 1;
+        } elseif (isset($_SERVER['DOCUMENT_ROOT'])&&$_SERVER['DOCUMENT_ROOT']==='/var/task/user') {
             $canOneKeyUpate = 1;
         } else {
             $tmp = time();
