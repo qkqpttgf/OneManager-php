@@ -342,7 +342,8 @@ class Onedrive {
         $oldname = path_format($file['path'] . '/' . $oldname);
         $data = '{"name":"' . $newname . '"}';
                 //echo $oldname;
-        $result = $this->MSAPI('PATCH', $oldname, $data);
+        if ($file['id']) $result = $this->MSAPI('PATCH', "/items/" . $file['id'], $data);
+        else $result = $this->MSAPI('PATCH', $oldname, $data);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
     public function Delete($file) {
@@ -946,6 +947,9 @@ class Onedrive {
             $url = $this->api_url . $this->ext_api_url;
             if ($path=='' or $path=='/') {
                 $url .= '/';
+            } elseif (substr($path, 0, 6)=="/items") {
+                $url = substr($url, 0, -5);
+                $url .= $path;
             } else {
                 $url .= ':' . $path;
                 if (substr($url,-1)=='/') $url=substr($url,0,-1);
