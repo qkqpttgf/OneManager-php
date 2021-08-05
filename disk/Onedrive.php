@@ -457,6 +457,7 @@ class Onedrive {
             }
 
             $tmp = null;
+            $tmp['Driver'] = get_class($this);
             if ($_POST['DriveType']=='Onedrive') {
                 /*$api = $this->api_url . '/me';
                 $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ], 1);
