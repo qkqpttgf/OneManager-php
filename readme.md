@@ -1,6 +1,7 @@
 # NOTICE: the release is used as archive. 
 # 注意：release只是用来存档的。
-Please read the descriptions of settings before raising an issue. 请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
+Please read the descriptions of settings before raising an issue.  
+请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
 
 # Deploy to Heroku  
 Official: https://heroku.com  
@@ -16,6 +17,17 @@ Official: https://glitch.com/
 Demo: https://onemanager.glitch.me/  
 
 How to Install: New Project -> Import form Github -> paste "https://github.com/qkqpttgf/OneManager-php", after done, Show -> In a New Window.  
+
+
+# Deploy to Vercel  
+Official: https://vercel.com/  
+Demo: null  
+Notice: 
+> 1, you must wait 30-50s to make sure deploy READY after change config;  
+> 2, the max size of environment is 4k, so you can add 3 onedrive or less;  
+> 3, Vercel limit 100 deploy every day.  
+
+How to Install: https://scfonedrive.github.io/Vercel/Deploy.html .  
 
 
 # Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
