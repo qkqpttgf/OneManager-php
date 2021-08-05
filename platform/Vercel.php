@@ -86,8 +86,12 @@ function getConfig($str, $disktag = '')
 function setConfig($arr, $disktag = '')
 {
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    $disktags = explode("|",getConfig('disktag'));
-    if ($disktag!='') $diskconfig = json_decode(getenv($disktag), true);
+    $disktags = explode("|", getenv('disktag'));
+    if ($disktag!='') {
+        $tmp = getenv($disktag);
+        if (is_array($tmp)) $diskconfig = $tmp;
+        else $diskconfig = json_decode($tmp, true);
+    }
     $tmp = [];
     $indisk = 0;
     $operatedisk = 0;
@@ -380,34 +384,4 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     if ($outPath=='') return '{"error":{"message":"no outpath"}}';
 
     return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
-}
-
-function moveFolder($from, $to, $slash)
-{
-    if (substr($from, -1)==$slash) $from = substr($from, 0, -1);
-    if (substr($to, -1)==$slash) $to = substr($to, 0, -1);
-    if (!file_exists($to)) mkdir($to, 0777);
-    $handler=opendir($from);
-    while($filename=readdir($handler)) {
-        if($filename != '.' && $filename != '..'){
-            $fromfile = $from . $slash . $filename;
-            $tofile = $to . $slash . $filename;
-            if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
-                $response = moveFolder($fromfile, $tofile, $slash);
-                if (api_error(setConfigResponse($response))) return $response;
-            }else{
-                //if (file_exists($tofile)) unlink($tofile);
-                $response = rename($fromfile, $tofile);
-                if (!$response) {
-                    $tmp['code'] = "Move Failed";
-                    $tmp['message'] = "Can not move " . $fromfile . " to " . $tofile;
-                    return json_encode($tmp);
-                }
-                if (file_exists($fromfile)) unlink($fromfile);
-            }
-        }
-    }
-    closedir($handler);
-    rmdir($from);
-    return json_encode( [ 'response' => 'success' ] );
 }
