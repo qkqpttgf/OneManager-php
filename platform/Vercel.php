@@ -15,8 +15,7 @@ function getpath()
     }
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $_SERVER['HTTP_REFERER'])[2];
-    if (isset($_SERVER['DOCUMENT_ROOT'])&&$_SERVER['DOCUMENT_ROOT']==='/app') $_SERVER['base_path'] = '/';
-    else $_SERVER['base_path'] = path_format(substr($_SERVER['SCRIPT_NAME'], 0, -10) . '/');
+    $_SERVER['base_path'] = "/";
     if (isset($_SERVER['UNENCODED_URL'])) $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
     $p = strpos($_SERVER['REQUEST_URI'],'?');
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
@@ -70,7 +69,9 @@ function getConfig($str, $disktag = '')
 {
     if (isInnerEnv($str)) {
         if ($disktag=='') $disktag = $_SERVER['disktag'];
-        $env = json_decode(getenv($disktag), true);
+        $tmp = getenv($disktag);
+        if (is_array($tmp)) $env = $tmp;
+        else $env = json_decode($tmp, true);
         if (isset($env[$str])) {
             if (isBase64Env($str)) return base64y_decode($env[$str]);
             else return $env[$str];
