@@ -9,7 +9,7 @@ Demo: https://herooneindex.herokuapp.com/
 
 How to Install:   
 > ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
-> Fork this project, create an heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
+> Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
 
 
 # Deploy to Glitch  
@@ -129,5 +129,9 @@ it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部
 ### head.omf foot.omf  
 it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
 
+# A cup of coffee  
+paypal.me/qkqpttgf  
+
+# Chat  
 QQ Group: 212088653 (请看完上面的中英双语再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
