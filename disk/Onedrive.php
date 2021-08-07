@@ -352,7 +352,7 @@ class Onedrive {
                 //echo $filename;
         $result = $this->MSAPI('DELETE', $filename);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Encrypt($folder, $passfilename, $pass) {
         $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
@@ -365,7 +365,7 @@ class Onedrive {
         if ($path1!='/'&&substr($path1, -1)=='/') $path1 = substr($path1, 0, -1);
         savecache('path_' . $path1 . '/?password', '', $this->disktag, 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Move($file, $folder) {
         $filename = spurlencode($file['name']);
@@ -376,7 +376,7 @@ class Onedrive {
         if ($path2!='/'&&substr($path2, -1)=='/') $path2 = substr($path2, 0, -1);
         savecache('path_' . $path2, json_decode('{}', true), $this->disktag, 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Copy($file) {
         $filename = spurlencode($file['name']);
@@ -405,7 +405,7 @@ class Onedrive {
             $result = $this->MSAPI('copy', $filename, $data);
         }*/
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Edit($file, $content) {
         /*TXT一般不会超过4M，不用二段上传
@@ -432,7 +432,7 @@ class Onedrive {
         }
         //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
 
     public function AddDisk() {
