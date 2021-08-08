@@ -3,9 +3,9 @@
     "music":"musical-notes",
     "video":"logo-youtube",
     "img":"image",
-    "office":"paper",
+    "office":"newspaper",
     "txt":"clipboard",
-    "zip":"filing",
+    "zip":"file-tray-full",
     "iso":"disc",
     "apk":"logo-android",
     "exe":"logo-windows",
@@ -109,7 +109,7 @@
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 <!--IsFolderStart-->
                                 <a  class="dropdown-item" data-toggle="modal" data-target="#NewFileModal"><ion-icon name="create"></ion-icon><!--constStr@Create--></a>
-                                <a  class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value=''"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a>
+                                <a  class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value=''"><ion-icon name="lock-closed"></ion-icon><!--constStr@Encrypt--></a>
                                 <a class="dropdown-item" href="?RefreshCache"><ion-icon name="refresh"></ion-icon><!--constStr@RefreshCache--></a>
 <!--IsFolderEnd-->
                                 <a class="dropdown-item" href="<!--IsPreview?-->setup"><ion-icon name="settings"></ion-icon><!--constStr@Setup--></a>
@@ -177,7 +177,7 @@
                 <div style="padding:20px">
 	            <center>
 	                <form action="" method="post">
-		            <input name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+		            <input id="password1" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
 		            <input type="submit" value="<!--constStr@Submit-->">
 	                </form>
                 </center>
@@ -287,7 +287,7 @@
         <ion-icon name="construct"></ion-icon>
     </a>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-        <a class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value='<!--FileEncodeReplaceName-->'"><ion-icon name="lock"></ion-icon><!--constStr@Encrypt--></a>
+        <a class="dropdown-item" data-toggle="modal" data-target="#exampleencrypt" onclick="document.getElementById('encrypt_hidden').value='<!--FileEncodeReplaceName-->'"><ion-icon name="lock-closed"></ion-icon><!--constStr@Encrypt--></a>
         <a class="dropdown-item" data-toggle="modal" data-target="#renameModal" onclick="showdiv(event, 'rename',<!--filenum-->);"><ion-icon name="create"></ion-icon><!--constStr@Rename--></a>
         <a class="dropdown-item" data-toggle="modal" data-target="#MoveModal" onclick="showdiv(event, 'move',<!--filenum-->);"><ion-icon name="move"></ion-icon><!--constStr@Move--></a>
         <a class="dropdown-item" data-toggle="modal" data-target="#CopyModal" onclick="showdiv(event, 'copy',<!--filenum-->);"><ion-icon name="copy"></ion-icon><!--constStr@Copy--></a>
@@ -1747,7 +1747,7 @@ return false;
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<script src="//unpkg.zhimg.com/ionicons@4.4.4/dist/ionicons.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <script src="//cdn.bootcdn.net/ajax/libs/jquery/3.3.1/jquery.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="//cdn.bootcdn.net/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="//cdn.bootcdn.net/ajax/libs/twitter-bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>

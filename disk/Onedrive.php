@@ -342,7 +342,8 @@ class Onedrive {
         $oldname = path_format($file['path'] . '/' . $oldname);
         $data = '{"name":"' . $newname . '"}';
                 //echo $oldname;
-        $result = $this->MSAPI('PATCH', $oldname, $data);
+        if ($file['id']) $result = $this->MSAPI('PATCH', "/items/" . $file['id'], $data);
+        else $result = $this->MSAPI('PATCH', $oldname, $data);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
     public function Delete($file) {
@@ -350,8 +351,9 @@ class Onedrive {
         $filename = path_format($file['path'] . '/' . $filename);
                 //echo $filename;
         $result = $this->MSAPI('DELETE', $filename);
-        return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        if ($result['stat']!=204) $r_body = json_encode($this->files_format(json_decode($result['body'], true)));
+        return output($r_body, $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Encrypt($folder, $passfilename, $pass) {
         $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
@@ -364,7 +366,7 @@ class Onedrive {
         if ($path1!='/'&&substr($path1, -1)=='/') $path1 = substr($path1, 0, -1);
         savecache('path_' . $path1 . '/?password', '', $this->disktag, 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Move($file, $folder) {
         $filename = spurlencode($file['name']);
@@ -375,7 +377,7 @@ class Onedrive {
         if ($path2!='/'&&substr($path2, -1)=='/') $path2 = substr($path2, 0, -1);
         savecache('path_' . $path2, json_decode('{}', true), $this->disktag, 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Copy($file) {
         $filename = spurlencode($file['name']);
@@ -404,7 +406,7 @@ class Onedrive {
             $result = $this->MSAPI('copy', $filename, $data);
         }*/
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
     public function Edit($file, $content) {
         /*TXT一般不会超过4M，不用二段上传
@@ -431,7 +433,7 @@ class Onedrive {
         }
         //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
-        return output($result['body'], $result['stat']);
+        //return output($result['body'], $result['stat']);
     }
 
     public function AddDisk() {
@@ -456,6 +458,7 @@ class Onedrive {
             }
 
             $tmp = null;
+            $tmp['Driver'] = get_class($this);
             if ($_POST['DriveType']=='Onedrive') {
                 /*$api = $this->api_url . '/me';
                 $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ], 1);
@@ -946,6 +949,9 @@ class Onedrive {
             $url = $this->api_url . $this->ext_api_url;
             if ($path=='' or $path=='/') {
                 $url .= '/';
+            } elseif (substr($path, 0, 6)=="/items") {
+                $url = substr($url, 0, -5);
+                $url .= $path;
             } else {
                 $url .= ':' . $path;
                 if (substr($url,-1)=='/') $url=substr($url,0,-1);

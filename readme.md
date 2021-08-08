@@ -1,6 +1,7 @@
 # NOTICE: the release is used as archive. 
 # 注意：release只是用来存档的。
-Please read the descriptions of settings before raising an issue. 请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
+Please read the descriptions of settings before raising an issue.  
+请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
 
 # Deploy to Heroku  
 Official: https://heroku.com  
@@ -8,7 +9,7 @@ Demo: https://herooneindex.herokuapp.com/
 
 How to Install:   
 > ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
-> Fork this project, create an heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
+> Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
 
 
 # Deploy to Glitch  
@@ -16,6 +17,17 @@ Official: https://glitch.com/
 Demo: https://onemanager.glitch.me/  
 
 How to Install: New Project -> Import form Github -> paste "https://github.com/qkqpttgf/OneManager-php", after done, Show -> In a New Window.  
+
+
+# Deploy to Vercel  
+Official: https://vercel.com/  
+Demo: null  
+Notice: 
+> 1, you must wait 30-50s to make sure deploy READY after change config;  
+> 2, the max size of environment is 4k, so you can add 3 onedrive or less;  
+> 3, Vercel limit 100 deploy every day.  
+
+How to Install: https://scfonedrive.github.io/Vercel/Deploy.html .  
 
 
 # Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
@@ -117,5 +129,9 @@ it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部
 ### head.omf foot.omf  
 it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
 
+# A cup of coffee  
+paypal.me/qkqpttgf  
+
+# Chat  
 QQ Group: 212088653 (请看完上面的中英双语再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
