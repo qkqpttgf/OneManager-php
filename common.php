@@ -35,7 +35,7 @@ $EnvConfigs = [
     'customCss'         => 0b011,
     'customTheme'       => 0b011,
     'theme'             => 0b010,
-    'dontBasicAuth'     => 0b010,
+    'useBasicAuth'      => 0b010,
     'referrer'          => 0b011,
     'forceHttps'        => 0b010,
 
@@ -727,7 +727,7 @@ function comppass($pass)
         return 2;
     }
     if ($_COOKIE['password'] !== '') if ($_COOKIE['password'] === $pass ) return 3;
-    if (!getConfig('dontBasicAuth')) {
+    if (getConfig('useBasicAuth')) {
         // use Basic Auth
         //$_SERVER['PHP_AUTH_USER']
         if ($_SERVER['PHP_AUTH_PW'] !== '') if (md5($_SERVER['PHP_AUTH_PW']) === $pass ) {
@@ -1935,7 +1935,7 @@ function render_list($path = '', $files = [])
 
         if ($_SERVER['ishidden']==4) {
             // 加密状态
-            if (!getConfig('dontBasicAuth')) {
+            if (getConfig('useBasicAuth')) {
                 // use Basic Auth
                 return output('Need password.', 401, ['WWW-Authenticate'=>'Basic realm="Secure Area"']);
             }
