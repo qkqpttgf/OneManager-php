@@ -497,3 +497,7 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
     }
     return true;
 }
+
+function WaitFunction() {
+    return true;
+}

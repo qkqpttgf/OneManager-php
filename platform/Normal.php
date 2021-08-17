@@ -246,7 +246,7 @@ function install()
                     document.getElementById("submitbtn").disabled = false;
                     document.getElementById("formdiv").style.display = "";
                 } else {
-                    alert("Url: " + url + "\nExpect http code 201, but received " + xhr4.status);
+                    alert("' . getconstStr('MakesuerRewriteOn') . '?\nfalse\n\nUrl: " + url + "\nExpect http code 201, but received " + xhr4.status);
                 }
             }
         }
@@ -384,4 +384,8 @@ function moveFolder($from, $to, $slash)
     closedir($handler);
     rmdir($from);
     return json_encode( [ 'response' => 'success' ] );
+}
+
+function WaitFunction() {
+    return true;
 }

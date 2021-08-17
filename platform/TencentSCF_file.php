@@ -645,3 +645,8 @@ function addFileToZip($zip, $rootpath, $path = '')
     }
     @closedir($path);
 }
+
+function WaitFunction() {
+    if ( json_decode(getfunctioninfo($_SERVER['function_name'], $_SERVER['Region'], $_SERVER['namespace'], getConfig('SecretId'), getConfig('SecretKey')),true)['Response']['Status']=='Active' ) return true;
+    else return false;
+}

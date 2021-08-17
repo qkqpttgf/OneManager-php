@@ -487,3 +487,7 @@ function addFileToZip($zip, $rootpath, $path = '')
     }
     @closedir($path);
 }
+
+function WaitFunction() {
+    return true;
+}

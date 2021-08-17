@@ -504,14 +504,23 @@ class Onedrive {
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
-                $str .= '<meta http-equiv="refresh" content="5;URL=' . $url . '">
-                <script>
+                $html .= '<script>
                 var expd = new Date();
                 expd.setTime(expd.getTime()+1);
                 var expires = "expires="+expd.toGMTString();
                 document.cookie=\'disktag=; path=/; \'+expires;
+                var i = 0;
+                var status = "' . $response['status'] . '";
+                var uploadList = setInterval(function(){
+                    if (document.getElementById("dis").style.display=="none") {
+                        console.log(i++);
+                    } else {
+                        clearInterval(uploadList);
+                        location.href = "' . $url . '";
+                    }
+                }, 1000);
                 </script>';
-                return message($str, getconstStr('WaitJumpIndex'), 201);
+                return message($html, getconstStr('WaitJumpIndex'), 201, 1);
             }
         }
 
@@ -607,9 +616,19 @@ class Onedrive {
                     return message($html, $title, 201);
                 } else {
                     savecache('access_token', $ret['access_token'], $this->disktag, $ret['expires_in'] - 60);
-                    $str .= '
-                <meta http-equiv="refresh" content="3;URL=' . $url . '?AddDisk=' . get_class($this) . '&disktag=' . $_GET['disktag'] . '&SelectDrive">';
-                    return message($str, getconstStr('Wait') . ' 3s', 201);
+                    $html .= '<script>
+                    var i = 0;
+                    var status = "' . $response['status'] . '";
+                var uploadList = setInterval(function(){
+                    if (document.getElementById("dis").style.display=="none") {
+                        console.log(i++);
+                    } else {
+                        clearInterval(uploadList);
+                        location.href = "' . $url . '?AddDisk=' . get_class($this) . '&disktag=' . $_GET['disktag'] . '&SelectDrive";
+                    }
+                }, 1000);
+                </script>';
+                    return message($html, getconstStr('Wait') . ' 3s', 201, 1);
                 }
             }
             return message('<pre>' . json_encode(json_decode($tmp['body']), JSON_PRETTY_PRINT) . '</pre>', $tmp['stat']);
@@ -639,7 +658,7 @@ class Onedrive {
                 $f = substr($_POST['disktag_add'], 0, 1);
                 if (strlen($_POST['disktag_add'])==1) $_POST['disktag_add'] .= '_';
                 if (isCommonEnv($_POST['disktag_add'])) {
-                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 201);
+                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 400);
                 } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
                     return message('Please start with letters<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>
                     <script>
@@ -647,7 +666,7 @@ class Onedrive {
                     expd.setTime(expd.getTime()+1);
                     var expires = "expires="+expd.toGMTString();
                     document.cookie=\'disktag=; path=/; \'+expires;
-                    </script>', 'Error', 201);
+                    </script>', 'Error', 400);
                 }
 
                 $tmp = null;
@@ -673,12 +692,26 @@ class Onedrive {
                 if (api_error($response)) {
                     $html = api_error_msg($response);
                     $title = 'Error';
+                    return message($html, $title, 400);
                 } else {
                     $title = getconstStr('MayinEnv');
-                    $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '?install1&disktag=' . $_GET['disktag'] . '&AddDisk=' . $_POST['Drive_ver'] . '">';
-                    if ($_POST['Drive_ver']=='Sharelink') $html = getconstStr('Wait') . ' 3s<meta http-equiv="refresh" content="3;URL=' . $url . '">';
+                    $html = getconstStr('Wait');
+                    if ($_POST['Drive_ver']!='Sharelink') $url .= '?install1&disktag=' . $_GET['disktag'] . '&AddDisk=' . $_POST['Drive_ver'];
+                    $html .= '<script>
+                    var i = 0;
+                    var status = "' . $response['status'] . '";
+                var uploadList = setInterval(function(){
+                    if (document.getElementById("dis").style.display=="none") {
+                        console.log(i++);
+                    } else {
+                        clearInterval(uploadList);
+                        location.href = "' . $url . '";
+                    }
+                }, 1000);
+                </script>';
+                    return message($html, $title, 201, 1);
                 }
-                return message($html, $title, 201);
+                
             }
         }
 

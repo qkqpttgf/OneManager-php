@@ -629,8 +629,19 @@ class Aliyundrive {
                 $title = 'Error';
                 return message($html, $title, 201);
             } else {
-                $str .= '<meta http-equiv="refresh" content="5;URL=' . $url . '">';
-                return message($str, getconstStr('WaitJumpIndex'), 201);
+                $str .= '
+<script>
+    var status = "' . $response['status'] . '";
+    var uploadList = setInterval(function(){
+        if (document.getElementById("dis").style.display=="none") {
+            console.log(min++);
+        } else {
+            clearInterval(uploadList);
+            location.href = "' . $url . '";
+        }
+    }, 1000);
+</script>';
+                return message($str, getconstStr('WaitJumpIndex'), 201, 1);
             }
         }
         if (isset($_GET['SelectDrive'])) {
@@ -691,17 +702,18 @@ class Aliyundrive {
     </form>
 </div>
 <script>
-        function notnull(t)
-        {
-            if (t.driveId.value==\'\') {
-                    alert(\'Select a Disk\');
-                    return false;
-            }
-            return true;
+    var status = "' . $response['status'] . '";
+    function notnull(t)
+    {
+        if (t.driveId.value==\'\') {
+                alert(\'Select a Disk\');
+                return false;
         }
-    </script>
+        return true;
+    }
+</script>
     ';
-            return message($html, $title, 201);
+            return message($html, $title, 201, 1);
         }
         if (isset($_GET['install0']) && $_POST['disktag_add']!='') {
             $_POST['disktag_add'] = preg_replace('/[^0-9a-zA-Z|_]/i', '', $_POST['disktag_add']);
@@ -737,7 +749,7 @@ class Aliyundrive {
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
-                return message($html, $title, 201);
+                return message($html, $title, 400);
             } else {
                 $title = 'Refresh token';
                 $html = '
@@ -756,9 +768,10 @@ class Aliyundrive {
             }
             return true;
         }
+        var status = "' . $response['status'] . '";
     </script>
     ';
-                return message($html, $title, 201);
+                return message($html, $title, 201, 1);
             }
         }
 
