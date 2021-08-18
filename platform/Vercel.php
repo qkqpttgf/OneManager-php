@@ -75,7 +75,7 @@ function getConfig($str, $disktag = '')
         if (isset($env[$str])) {
             if (isBase64Env($str)) return base64y_decode($env[$str]);
             else return $env[$str];
-    }
+        }
     } else {
         if (isBase64Env($str)) return base64y_decode(getenv($str));
         else return getenv($str);
@@ -112,7 +112,7 @@ function setConfig($arr, $disktag = '')
             $operatedisk = 1;
         } elseif ($k=='disktag_copy') {
             $newtag = $v . '_' . date("Ymd_His");
-            $tagvalue = getConfig($v);
+            $tagvalue = getenv($v);
             if (is_array($tagvalue)) $tmp[$newtag] = json_encode($tagvalue);
             else $tmp[$newtag] = $tagvalue;
             array_push($disktags, $newtag);
@@ -136,7 +136,7 @@ function setConfig($arr, $disktag = '')
                 else array_push($tags, $tag);
             }
             $tmp['disktag'] = implode('|', $tags);
-            $tagvalue = getConfig($arr['disktag_rename']);
+            $tagvalue = getenv($arr['disktag_rename']);
             if (is_array($tagvalue)) $tmp[$arr['disktag_newname']] = json_encode($tagvalue);
             else $tmp[$arr['disktag_newname']] = $tagvalue;
             $tmp[$arr['disktag_rename']] = null;
@@ -149,8 +149,9 @@ function setConfig($arr, $disktag = '')
     }
     foreach ($tmp as $key => $val) if ($val=='') $tmp[$key]=null;
 
+    //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT));
+    //echo json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT);
     return setVercelConfig($tmp, getConfig('HerokuappId'), getConfig('APIKey'));
-    error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT));
 }
 
 function install()
@@ -326,10 +327,10 @@ function setVercelConfig($envs, $appId, $token)
         } else {
             if ($value) $response = curl("POST", $url, json_encode($tmp), $header);
         }
-        //echo $key . ":" . $value . ", " . json_encode($response, JSON_PRETTY_PRINT) . "<br>";
+        //echo $key . " = " . $value . ", <br>" . json_encode($response, JSON_PRETTY_PRINT) . "<br>";
+        if ($response['stat']!=200) return $response['body'];
     }
     return VercelUpdate($appId, $token);
-    //return $response;
 }
 
 function VercelUpdate($appId, $token, $sourcePath = "")
