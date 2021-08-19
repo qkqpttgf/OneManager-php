@@ -314,8 +314,8 @@ function setVercelConfig($envs, $appId, $token)
     foreach ($result["envs"] as $key => $value) {
         $existEnvs[$value["key"]] = $value["id"];
     }
-    $response = null;
     foreach ($envs as $key => $value) {
+        $response = null;
         $tmp = null;
         $tmp["type"] = "encrypted";
         $tmp["key"] = $key;
@@ -327,8 +327,8 @@ function setVercelConfig($envs, $appId, $token)
         } else {
             if ($value) $response = curl("POST", $url, json_encode($tmp), $header);
         }
-        //echo $key . " = " . $value . ", <br>" . json_encode($response, JSON_PRETTY_PRINT) . "<br>";
-        if ($response['stat']!=200) return $response['body'];
+        //echo $key . " = " . $value . ", <br>" . $response . json_encode($response, JSON_PRETTY_PRINT) . "<br>";
+        if (!!$response && $response['stat']!=200) return $response['body'];
     }
     return VercelUpdate($appId, $token);
 }
@@ -351,6 +351,7 @@ function VercelUpdate($appId, $token, $sourcePath = "")
 
     //echo json_encode($data, JSON_PRETTY_PRINT) . " ,data<br>";
     $response = curl("POST", $url, json_encode($data), $header);
+    //echo json_encode($response, JSON_PRETTY_PRINT) . " ,res<br>";
     $result = json_decode($response["body"], true);
     $result['status'] = $result['id'];
     return json_encode($result);
