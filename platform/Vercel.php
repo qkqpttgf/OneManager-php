@@ -436,6 +436,11 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     //error_log1($outPath);
     if ($outPath=='') return '{"error":{"message":"no outpath"}}';
 
+    // put in config
+    $coderoot = __DIR__;
+    $coderoot = splitlast($coderoot, '/')[0] . '/';
+    copy($coderoot . '.data/config.php', $outPath . '/api/.data/config.php');
+
     return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
 }
 
