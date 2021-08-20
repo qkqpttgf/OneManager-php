@@ -1,7 +1,10 @@
+20210820-1810.40
+because Vercel must redeploy after change Environment Variables, and it must <4k, so decide that, save config in code file. <font color=red>in Vercel, after update, please install again. if you want continue use Environment, please add a ( name: "ONEMANAGER_CONFIG_SAVE", value: "env" ) in Environment Variables in Project Settings before update.</font>
+因为Vercel修改环境变量也必须重新部署才生效，而且环境变量只能小于4k，所以决定将配置保存在代码文件中。<font color=red>升级更新后，用Vercel的请重新安装。如果还想继续使用环境变量，请在更新前，在Project Settings的Environment Variables中，新增一个( name: "ONEMANAGER_CONFIG_SAVE", value: "env" )的环境变量。</font>
+
 20210817-2030.39
 fix bugs in Vercel. add wait function in operating. change update method in SCF. add payme in readme.
 修复一些Vercel上的bug。在操作完后添加等待功能，确认平台已经准备好。SCF的更新方式改变。在readme中添加讨饭链接。
-
 20210804-1535.38
 try fix "&"/"&amp;" in filename. try show an img too height. change upload chunk size when upload speed>10M/s. fix forceHttps when custom domain in Glitch. fix ionicons svg lost.try use file id when rename. background (or other) based on width/height not only width. fix some bugs. Pre-Add platform Vercel, just wait bugs fixed.
 尝试修复文件名含 "&"/"&amp;"。尝试在一屏内显示过长的图片。上传时分割的块大小随着上传速度改变。修复Glitch中使用自定义域名时forceHttps问题。修复ionicons图标失踪。尝试在重命名时使用file id来操作。背景（或其它）基于长宽来看是竖屏还是横屏，不再只看宽度。修复其它bug。预加入Vercel平台，等修复bugs。
