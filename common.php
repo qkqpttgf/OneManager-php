@@ -1638,34 +1638,34 @@ function EnvOpt($needUpdate = 0)
         }/* else {
             $frame .= getconstStr('NotNeedUpdate');
         }*/
-        $frame .= '<br>
+        $frame .= '<br><br>
 <script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>
 <table>
     <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
     <tr>
-        <td>old pass:</td><td><input type="password" name="oldPass">
+        <td>' . getconstStr('OldPassword') . ':</td><td><input type="password" name="oldPass">
         <input type="hidden" name="timestamp"></td>
     </tr>
     <tr>
-        <td>new pass:</td><td><input type="password" name="newPass1"></td>
+        <td>' . getconstStr('NewPassword') . ':</td><td><input type="password" name="newPass1"></td>
     </tr>
     <tr>
-        <td>reinput:</td><td><input type="password" name="newPass2"></td>
+        <td>' . getconstStr('ReInput') . ':</td><td><input type="password" name="newPass2"></td>
     </tr>
     <tr>
-        <td></td><td><button name="changePass" value="changePass">Change Admin Pass</button></td>
+        <td></td><td><button name="changePass" value="changePass">' . getconstStr('ChangAdminPassword') . '</button></td>
     </tr>
     </form>
 </table><br>
 <table>
     <form id="config_f" name="config" action="" method="POST" onsubmit="return false;">
     <tr>
-        <td>admin pass:<input type="password" name="pass">
-        <button name="config_b" value="export" onclick="exportConfig(this);">export</button></td>
+        <td>' . getconstStr('AdminPassword') . ':<input type="password" name="pass">
+        <button name="config_b" value="export" onclick="exportConfig(this);">' . getconstStr('export') . '</button></td>
     </tr>
     <tr>
-        <td>config:<textarea name="config_t"></textarea>
-        <button name="config_b" value="import" onclick="importConfig(this);">import</button></td>
+        <td>' . getconstStr('config') . ':<textarea name="config_t"></textarea>
+        <button name="config_b" value="import" onclick="importConfig(this);">' . getconstStr('import') . '</button></td>
     </tr>
     </form>
 </table><br>
@@ -2729,9 +2729,9 @@ function render_list($path = '', $files = [])
         }
 
         // 最后清除换行
-        while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
+        //while (strpos($html, "\r\n\r\n")) $html = str_replace("\r\n\r\n", "\r\n", $html);
         //while (strpos($html, "\r\r")) $html = str_replace("\r\r", "\r", $html);
-        while (strpos($html, "\n\n")) $html = str_replace("\n\n", "\n", $html);
+        //while (strpos($html, "\n\n")) $html = str_replace("\n\n", "\n", $html);
         //while (strpos($html, PHP_EOL.PHP_EOL)) $html = str_replace(PHP_EOL.PHP_EOL, PHP_EOL, $html);
 
         $exetime = round(microtime(true)-$_SERVER['php_starttime'],3);
