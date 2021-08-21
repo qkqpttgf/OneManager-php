@@ -1,4 +1,5 @@
 <?php
+// https://devcenter.heroku.com/articles/platform-api-reference#build-create
 
 function getpath()
 {
@@ -338,4 +339,8 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
 function setConfigResponse($response)
 {
     return json_decode( $response['body'], true );
+}
+
+function WaitFunction() {
+    return true;
 }

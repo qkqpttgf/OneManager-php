@@ -8,7 +8,7 @@ Official: https://heroku.com
 Demo: https://herooneindex.herokuapp.com/  
 
 How to Install:   
-> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
+> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
 > Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
 
 
@@ -24,8 +24,7 @@ Official: https://vercel.com/
 Demo: null  
 Notice: 
 > 1, you must wait 30-50s to make sure deploy READY after change config;  
-> 2, the max size of environment is 4k, so you can add 3 onedrive or less;  
-> 3, Vercel limit 100 deploy every day.  
+> 2, Vercel limit 100 deploy every day.  
 
 How to Install: https://scfonedrive.github.io/Vercel/Deploy.html .  
 
@@ -130,7 +129,7 @@ it will showed at top or bottom as markdown. 以MD语法显示在顶部或底部
 it will showed at top or bottom as html (javascript works!). 以html显示在顶部或底部（可以跑js）。  
 
 # A cup of coffee  
-paypal.me/qkqpttgf  
+https://paypal.me/qkqpttgf  
 
 # Chat  
 QQ Group: 212088653 (请看完上面的中英双语再加群，谢谢！)  

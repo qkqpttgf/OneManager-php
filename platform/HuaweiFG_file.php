@@ -868,3 +868,7 @@ class Signer
         return $curl;
     }
 }
+
+function WaitFunction() {
+    return true;
+}

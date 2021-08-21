@@ -198,6 +198,13 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
+    if (isset($_GET['WaitFunction'])) {
+        $response = WaitFunction($_GET['WaitFunction']);
+        //var_dump($response);
+        if ($response===true) return output("ok", 200);
+        elseif ($response===false) return output("", 206);
+        else return $response;
+    }
 
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
@@ -295,6 +302,7 @@ function main($path)
             return $drive->bigfileupload($path1);
         }
     }
+
     if ($_SERVER['admin']) {
         $tmp = adminoperate($path);
         if ($tmp['statusCode'] > 0) {
@@ -800,9 +808,9 @@ function get_timezone($timezone = '8')
     return $timezones[$timezone];
 }
 
-function message($message, $title = 'Message', $statusCode = 200)
+function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
 {
-    return output('
+    $html = '
 <html lang="' . $_SERVER['language'] . '">
 <html>
     <meta charset=utf-8>
@@ -810,14 +818,61 @@ function message($message, $title = 'Message', $statusCode = 200)
     <body>
         <h1>' . $title . '</h1>
         <a href="' . $_SERVER['base_path'] . '">' . getconstStr('Back') . getconstStr('Home') . '</a>
-        <p>
+        <div id="dis" style="display: none;">
 
 ' . $message . '
 
-        </p>
+        </div>';
+    if ($wainstat) {
+        $html .= '
+        <div id="err"></div>
+        <script>
+            var dis = document.getElementById("dis");
+            var errordiv = document.getElementById("err");
+            //var deployTime = new Date().getTime();
+            dis.style.display = "none";
+            var x = "";
+            var min = 0;
+            function getStatus() {
+                x += ".";
+                min++;
+                var xhr = new XMLHttpRequest();
+                var url = "?WaitFunction" + (status!=""?"=" + status:"");
+                xhr.open("GET", url);
+                //xhr.setRequestHeader("Authorization", "Bearer ");
+                xhr.onload = function(e) {
+                    if (xhr.status==200) {
+                        //var deployStat = JSON.parse(xhr.responseText).readyState;
+                        if (xhr.responseText=="ok") {
+                            errordiv.innerHTML = "";
+                            dis.style.display = "";
+                        } else {
+                            errordiv.innerHTML = "ERROR<br>" + xhr.responseText;
+                            //setTimeout(function() { getStatus() }, 1000);
+                        }
+                    } else if (xhr.status==206) {
+                        errordiv.innerHTML = min + "<br>' . getconstStr('Wait') . '" + x;
+                        setTimeout(function() { getStatus() }, 1000);
+                    } else {
+                        errordiv.innerHTML = "ERROR<br>" + xhr.status + "<br>" + xhr.responseText;
+                        console.log(xhr.status);
+                        console.log(xhr.responseText);
+                    }
+                }
+                xhr.send(null);
+            }
+            getStatus();
+            //setTimeout(function() { getStatus() }, 3000);
+        </script>';
+    } else {
+        $html .= '
+        <script>document.getElementById("dis").style.display = "";</script>';
+    }
+    $html .= '
     </body>
 </html>
-', $statusCode);
+';
+    return output($html, $statusCode);
 }
 
 function needUpdate()
@@ -1109,12 +1164,13 @@ function EnvOpt($needUpdate = 0)
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
+            return message($html, $title, 400);
         } else {
             //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a>';
+            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['status'] . '";</script>';
             $title = getconstStr('Setup');
+            return message($html, $title, 202, 1);
         }
-        return message($html, $title);
     }
     if (isset($_POST['submit1'])) {
         $_SERVER['disk_oprating'] = '';
@@ -1127,11 +1183,11 @@ function EnvOpt($needUpdate = 0)
                 $f = substr($v, 0, 1);
                 if (strlen($v)==1) $v .= '_';
                 if (isCommonEnv($v)) {
-                    return message('Do not input ' . $envs . '<br><a href="">' . getconstStr('Back') . '</a>', 'Error', 201);
+                    return message('Do not input ' . $envs . '<br><a href="">' . getconstStr('Back') . '</a>', 'Error', 400);
                 } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
-                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Please start with letters', 201);
+                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Please start with letters', 400);
                 } elseif (getConfig($v)) {
-                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Same tag', 201);
+                    return message('<a href="">' . getconstStr('Back') . '</a>', 'Same tag', 400);
                 } else {
                     $tmp[$k] = $v;
                 }
@@ -1139,7 +1195,7 @@ function EnvOpt($needUpdate = 0)
             if ($k=='disktag_sort') {
                 $td = implode('|', json_decode($v));
                 if (strlen($td)==strlen(getConfig('disktag'))) $tmp['disktag'] = $td;
-                else return message('Something wrong.');
+                else return message('Something wrong.', 'ERROR', 400);
             }
             if ($k == 'disk') $_SERVER['disk_oprating'] = $v;
         }
@@ -1156,12 +1212,16 @@ function EnvOpt($needUpdate = 0)
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
+            return message($html, $title, 409);
         } else {
             $html .= getconstStr('Success') . '!<br>
-            <a href="">' . getconstStr('Back') . '</a>';
+            <a href="">' . getconstStr('Back') . '</a>
+            <script>
+                var status = "' . $response['status'] . '";
+            </script>';
             $title = getconstStr('Setup');
+            return message($html, $title, 200, 1);
         }
-        return message($html, $title);
     }
     if (isset($_POST['config_b'])) {
         if (!$_POST['pass']) return output("{\"Error\": \"No admin pass\"}", 403);
@@ -1233,7 +1293,7 @@ function EnvOpt($needUpdate = 0)
             if (api_error($response)) {
                 return message(api_error_msg($response) . "<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
             } else {
-                return message("Success<a href=\"\">" . getconstStr('Back') . "</a>", "Success", 200);
+                return message("Success<a href=\"\">" . getconstStr('Back') . "</a><script>var status = \"" . $response['status'] . "\";</script>", "Success", 200, 1);
             }
         } else {
             return message("Old pass error<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);

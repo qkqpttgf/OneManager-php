@@ -32,7 +32,8 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     http_response_code($re['statusCode']);
     echo $re['body'];
 } elseif (isset($_SERVER['DOCUMENT_ROOT'])&&$_SERVER['DOCUMENT_ROOT']==='/var/task/user') {
-    include 'platform/Vercel.php';
+    if (getenv('ONEMANAGER_CONFIG_SAVE')=='env') include 'platform/Vercel_env.php';
+    else include 'platform/Vercel.php';
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();

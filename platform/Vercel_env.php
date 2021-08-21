@@ -67,24 +67,18 @@ function getGET()
 
 function getConfig($str, $disktag = '')
 {
-    $projectPath = splitlast(__DIR__, '/')[0];
-    $configPath = $projectPath . '/.data/config.php';
-    $s = file_get_contents($configPath);
-    $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
-    if ($configs!='') {
-        $envs = json_decode($configs, true);
-        if (isInnerEnv($str)) {
-            if ($disktag=='') $disktag = $_SERVER['disktag'];
-            if (isset($envs[$disktag][$str])) {
-                if (isBase64Env($str)) return base64y_decode($envs[$disktag][$str]);
-                else return $envs[$disktag][$str];
-            }
-        } else {
-            if (isset($envs[$str])) {
-                if (isBase64Env($str)) return base64y_decode($envs[$str]);
-                else return $envs[$str];
-            }
+    if (isInnerEnv($str)) {
+        if ($disktag=='') $disktag = $_SERVER['disktag'];
+        $tmp = getenv($disktag);
+        if (is_array($tmp)) $env = $tmp;
+        else $env = json_decode($tmp, true);
+        if (isset($env[$str])) {
+            if (isBase64Env($str)) return base64y_decode($env[$str]);
+            else return $env[$str];
         }
+    } else {
+        if (isBase64Env($str)) return base64y_decode(getenv($str));
+        else return getenv($str);
     }
     return '';
 }
@@ -92,45 +86,47 @@ function getConfig($str, $disktag = '')
 function setConfig($arr, $disktag = '')
 {
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    $projectPath = splitlast(__DIR__, '/')[0];
-    $configPath = $projectPath . '/.data/config.php';
-    $s = file_get_contents($configPath);
-    $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
-    if ($configs!='') $envs = json_decode($configs, true);
-    $disktags = explode("|",getConfig('disktag'));
+    $disktags = explode("|", getenv('disktag'));
+    if ($disktag!='') {
+        $tmp = getenv($disktag);
+        if (is_array($tmp)) $diskconfig = $tmp;
+        else $diskconfig = json_decode($tmp, true);
+    }
+    $tmp = [];
     $indisk = 0;
     $operatedisk = 0;
     foreach ($arr as $k => $v) {
         if (isCommonEnv($k)) {
-            if (isBase64Env($k)) $envs[$k] = base64y_encode($v);
-            else $envs[$k] = $v;
+            if (isBase64Env($k)) $tmp[$k] = base64y_encode($v);
+            else $tmp[$k] = $v;
         } elseif (isInnerEnv($k)) {
-            if (isBase64Env($k)) $envs[$disktag][$k] = base64y_encode($v);
-            else $envs[$disktag][$k] = $v;
+            if (isBase64Env($k)) $diskconfig[$k] = base64y_encode($v);
+            else $diskconfig[$k] = $v;
             $indisk = 1;
         } elseif ($k=='disktag_add') {
             array_push($disktags, $v);
             $operatedisk = 1;
         } elseif ($k=='disktag_del') {
             $disktags = array_diff($disktags, [ $v ]);
-            $envs[$v] = '';
+            $tmp[$v] = '';
             $operatedisk = 1;
         } elseif ($k=='disktag_copy') {
             $newtag = $v . '_' . date("Ymd_His");
-            $envs[$newtag] = $envs[$v];
+            $tagvalue = getenv($v);
+            if (is_array($tagvalue)) $tmp[$newtag] = json_encode($tagvalue);
+            else $tmp[$newtag] = $tagvalue;
             array_push($disktags, $newtag);
             $operatedisk = 1;
         } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
             if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
         } else {
-            $envs[$k] = $v;
+            $tmp[$k] = json_encode($v);
         }
     }
     if ($indisk) {
-        $diskconfig = $envs[$disktag];
         $diskconfig = array_filter($diskconfig, 'array_value_isnot_null');
         ksort($diskconfig);
-        $envs[$disktag] = $diskconfig;
+        $tmp[$disktag] = json_encode($diskconfig);
     }
     if ($operatedisk) {
         if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
@@ -139,21 +135,23 @@ function setConfig($arr, $disktag = '')
                 if ($tag==$arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
                 else array_push($tags, $tag);
             }
-            $envs['disktag'] = implode('|', $tags);
-            $envs[$arr['disktag_newname']] = $envs[$arr['disktag_rename']];
-            $envs[$arr['disktag_rename']] = '';
+            $tmp['disktag'] = implode('|', $tags);
+            $tagvalue = getenv($arr['disktag_rename']);
+            if (is_array($tagvalue)) $tmp[$arr['disktag_newname']] = json_encode($tagvalue);
+            else $tmp[$arr['disktag_newname']] = $tagvalue;
+            $tmp[$arr['disktag_rename']] = null;
         } else {
             $disktags = array_unique($disktags);
             foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-            if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
-            else $envs['disktag'] = '';
+            if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
+            else $tmp['disktag'] = null;
         }
     }
-    $envs = array_filter($envs, 'array_value_isnot_null');
-    //ksort($envs);
-    //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT));
-    //echo json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT);
-    return setVercelConfig($envs, getConfig('HerokuappId'), getConfig('APIKey'));
+    foreach ($tmp as $key => $val) if ($val=='') $tmp[$key]=null;
+
+    //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT));
+    //echo json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT);
+    return setVercelConfig($tmp, getConfig('HerokuappId'), getConfig('APIKey'));
 }
 
 function install()
@@ -305,41 +303,34 @@ language:<br>';
     return message($html, $title, 201);
 }
 
-function copyFolder($from, $to)
-{
-    if (substr($from, -1)=='/') $from = substr($from, 0, -1);
-    if (substr($to, -1)=='/') $to = substr($to, 0, -1);
-    if (!file_exists($to)) mkdir($to, 0777, 1);
-    $handler=opendir($from);
-    while($filename=readdir($handler)) {
-        if($filename != '.' && $filename != '..'){
-            $fromfile = $from.'/'.$filename;
-            $tofile = $to.'/'.$filename;
-            if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
-                copyFolder($fromfile, $tofile);
-            }else{
-                copy($fromfile, $tofile);
-            }
-        }
-    }
-    closedir($handler);
-    return 1;
-}
-
+// POST /v8/projects/:id/env
 function setVercelConfig($envs, $appId, $token)
 {
-    //sortConfig($envs); cant view in vercel, not need sort.
-    $outPath = '/tmp/code/';
-    $outPath_Api = $outPath . 'api/';
-    $coderoot = __DIR__;
-    $coderoot = splitlast($coderoot, '/')[0] . '/';
-    //echo $outPath_Api . '<br>' . $coderoot . '<br>';
-    copyFolder($coderoot, $outPath_Api);
-    $prestr = '<?php $configs = \'' . PHP_EOL;
-    $aftstr = PHP_EOL . '\';';
-    file_put_contents($outPath_Api . '.data/config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
-
-    return VercelUpdate($appId, $token, $outPath);
+    $url = "https://api.vercel.com/v8/projects/" . $appId . "/env";
+    $header["Authorization"] = "Bearer " . $token;
+    $header["Content-Type"] = "application/json";
+    $response = curl("GET", $url, "", $header);
+    $result = json_decode($response['body'], true);
+    foreach ($result["envs"] as $key => $value) {
+        $existEnvs[$value["key"]] = $value["id"];
+    }
+    foreach ($envs as $key => $value) {
+        $response = null;
+        $tmp = null;
+        $tmp["type"] = "encrypted";
+        $tmp["key"] = $key;
+        $tmp["value"] = $value;
+        $tmp["target"] = [ "development", "production", "preview" ];
+        if (isset($existEnvs[$key])) {
+            if ($value) $response = curl("PATCH", $url . "/" . $existEnvs[$key], json_encode($tmp), $header);
+            else $response = curl("DELETE", $url . "/" . $existEnvs[$key], "", $header);
+        } else {
+            if ($value) $response = curl("POST", $url, json_encode($tmp), $header);
+        }
+        //echo $key . " = " . $value . ", <br>" . $response . json_encode($response, JSON_PRETTY_PRINT) . "<br>";
+        if (!!$response && $response['stat']!=200) return $response['body'];
+    }
+    return VercelUpdate($appId, $token);
 }
 
 function VercelUpdate($appId, $token, $sourcePath = "")
@@ -424,7 +415,7 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     $outPath = '';
     $tmp = scandir($tmppath);
     $name = $auth . '-' . $project;
-    mkdir($tmppath . "/" . $name, 0777, 1);
+    mkdir($tmppath . "/" . $name, 0777);
     foreach ($tmp as $f) {
         if ( substr($f, 0, strlen($name)) == $name) {
             rename($tmppath . '/' . $f, $tmppath . "/" . $name . '/api');
@@ -435,11 +426,6 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     //echo $outPath . "<br>";
     //error_log1($outPath);
     if ($outPath=='') return '{"error":{"message":"no outpath"}}';
-
-    // put in config
-    $coderoot = __DIR__;
-    $coderoot = splitlast($coderoot, '/')[0] . '/';
-    copy($coderoot . '.data/config.php', $outPath . '/api/.data/config.php');
 
     return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
 }
