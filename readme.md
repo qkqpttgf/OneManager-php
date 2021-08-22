@@ -120,5 +120,5 @@ DEMO:  无
 https://paypal.me/qkqpttgf  
 
 # 聊天  
-QQ Group: 212088653 (请看完上面的中英双语再加群，谢谢！)  
+QQ Group: 212088653 (请看完上面的README再加群，谢谢！)  
 Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
