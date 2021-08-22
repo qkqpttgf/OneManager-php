@@ -1140,6 +1140,46 @@ $constStr = [
         'zh-cn' => '查询分支',
         'zh-tw' => '查詢分支',
     ],
+    'OldPassword' => [
+        'en-us' => 'Old Password',
+        'zh-cn' => '旧密码',
+        'zh-tw' => '旧密碼',
+    ],
+    'NewPassword' => [
+        'en-us' => 'New Password',
+        'zh-cn' => '新密码',
+        'zh-tw' => '新密碼',
+    ],
+    'ReInput' => [
+        'en-us' => 'ReInput',
+        'zh-cn' => '再输入一次',
+        'zh-tw' => '再输入一次',
+    ],
+    'ChangAdminPassword' => [
+        'en-us' => 'Chang Admin Password',
+        'zh-cn' => '修改管理密码',
+        'zh-tw' => '修改管理密碼',
+    ],
+    'AdminPassword' => [
+        'en-us' => 'Admin Password',
+        'zh-cn' => '管理密码',
+        'zh-tw' => '管理密碼',
+    ],
+    'export' => [
+        'en-us' => 'export',
+        'zh-cn' => '导出',
+        'zh-tw' => '导出',
+    ],
+    'config' => [
+        'en-us' => 'config',
+        'zh-cn' => '配置',
+        'zh-tw' => '配置',
+    ],
+    'import' => [
+        'en-us' => 'import',
+        'zh-cn' => '导入',
+        'zh-tw' => '导入',
+    ],
     'ONEMANAGER_CONFIG_SAVE_ENV' => [
         'en-us' => 'Config save in Environments',
         'zh-cn' => '配置保存在环境变量',
