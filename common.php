@@ -2586,7 +2586,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
         if (isset($files['list']['head.omf'])) {
-            $headomf = str_replace('<!--HeadomfContent-->', get_content(spurlencode(path_format($path . '/head.omf'), '/'))['content']['body'], $tmp[0]);
+            $headomf = str_replace('<!--HeadomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.omf']['name']), '/'))['content']['body'], $tmp[0]);
         }
         $html .= $headomf . $tmp[1];
         
@@ -2594,7 +2594,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
         if (isset($files['list']['head.md'])) {
-            $headmd = str_replace('<!--HeadmdContent-->', get_content(spurlencode(path_format($path . '/head.md'), '/'))['content']['body'], $tmp[0]);
+            $headmd = str_replace('<!--HeadmdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.md']['name']), '/'))['content']['body'], $tmp[0]);
             $html .= $headmd . $tmp[1];
             while (strpos($html, '<!--HeadmdStart-->')) {
                 $html = str_replace('<!--HeadmdStart-->', '', $html);
@@ -2627,7 +2627,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
         if (isset($files['list']['readme.md'])) {
-            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'], $tmp[0]);
+            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['readme.md']['name']),'/'))['content']['body'], $tmp[0]);
             $html .= $Readmemd . $tmp[1];
             while (strpos($html, '<!--ReadmemdStart-->')) {
                 $html = str_replace('<!--ReadmemdStart-->', '', $html);
@@ -2649,7 +2649,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
         if (isset($files['list']['foot.omf'])) {
-            $Footomf = str_replace('<!--FootomfContent-->', get_content(spurlencode(path_format($path . '/foot.omf'),'/'))['content']['body'], $tmp[0]);
+            $Footomf = str_replace('<!--FootomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['foot.omf']['name']),'/'))['content']['body'], $tmp[0]);
         }
         $html .= $Footomf . $tmp[1];
 
