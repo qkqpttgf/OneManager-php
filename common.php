@@ -816,8 +816,8 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
     <meta charset=utf-8>
     <meta name=viewport content="width=device-width,initial-scale=1">
     <body>
-        <h1>' . $title . '</h1>
         <a href="' . $_SERVER['base_path'] . '">' . getconstStr('Back') . getconstStr('Home') . '</a>
+        <h1>' . $title . '</h1>
         <div id="dis" style="display: none;">
 
 ' . $message . '
