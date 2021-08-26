@@ -631,7 +631,7 @@ class Aliyundrive {
             } else {
                 $str .= '
 <script>
-    var status = "' . $response['status'] . '";
+    var status = "' . $response['DplStatus'] . '";
     var uploadList = setInterval(function(){
         if (document.getElementById("dis").style.display=="none") {
             console.log(min++);
@@ -702,7 +702,7 @@ class Aliyundrive {
     </form>
 </div>
 <script>
-    var status = "' . $response['status'] . '";
+    var status = "' . $response['DplStatus'] . '";
     function notnull(t)
     {
         if (t.driveId.value==\'\') {
@@ -768,7 +768,7 @@ class Aliyundrive {
             }
             return true;
         }
-        var status = "' . $response['status'] . '";
+        var status = "' . $response['DplStatus'] . '";
     </script>
     ';
                 return message($html, $title, 201, 1);

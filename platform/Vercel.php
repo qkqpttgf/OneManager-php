@@ -187,14 +187,14 @@ function install()
                 return message($html, $title, 400);
             } else {
                 /*$html = '<script>
-        var status = "' . $response['status'] . '";
+        var status = "' . $response['DplStatus'] . '";
         var expd = new Date();
         expd.setTime(expd.getTime()+1000);
         var expires = "expires="+expd.toGMTString();
         document.cookie=\'language=; path=/; \'+expires;
     </script>';
                 return message($html, $title, 201, 1);*/
-                $data["dplId"] = $response['status'];
+                $data["dplId"] = $response['DplStatus'];
                 return output(json_encode($data), 201);
             }
         }
@@ -362,7 +362,7 @@ function VercelUpdate($appId, $token, $sourcePath = "")
     $response = curl("POST", $url, json_encode($data), $header);
     //echo json_encode($response, JSON_PRETTY_PRINT) . " ,res<br>";
     $result = json_decode($response["body"], true);
-    $result['status'] = $result['id'];
+    $result['DplStatus'] = $result['id'];
     return json_encode($result);
 }
 
@@ -444,7 +444,12 @@ function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 
     return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
 }
 
-function WaitFunction($deployid) {
+function WaitFunction($deployid = '') {
+    if ($buildId=='1') {
+        $tmp['stat'] = 400;
+        $tmp['body'] = 'id must provided.';
+        return $tmp;
+    }
     $header["Authorization"] = "Bearer " . getConfig('APIKey');
     $header["Content-Type"] = "application/json";
     $url = "https://api.vercel.com/v11/now/deployments/" . $deployid;

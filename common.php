@@ -837,7 +837,7 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                 x += ".";
                 min++;
                 var xhr = new XMLHttpRequest();
-                var url = "?WaitFunction" + (status!=""?"=" + status:"");
+                var url = "?WaitFunction=" + (status!=""?status:"1");
                 xhr.open("GET", url);
                 //xhr.setRequestHeader("Authorization", "Bearer ");
                 xhr.onload = function(e) {
@@ -862,7 +862,6 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                 xhr.send(null);
             }
             getStatus();
-            //setTimeout(function() { getStatus() }, 3000);
         </script>';
     } else {
         $html .= '
@@ -1167,7 +1166,7 @@ function EnvOpt($needUpdate = 0)
             return message($html, $title, 400);
         } else {
             //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['status'] . '";</script>';
+            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['DplStatus'] . '";</script>';
             $title = getconstStr('Setup');
             return message($html, $title, 202, 1);
         }
@@ -1217,7 +1216,7 @@ function EnvOpt($needUpdate = 0)
             $html .= getconstStr('Success') . '!<br>
             <a href="">' . getconstStr('Back') . '</a>
             <script>
-                var status = "' . $response['status'] . '";
+                var status = "' . $response['DplStatus'] . '";
             </script>';
             $title = getconstStr('Setup');
             return message($html, $title, 200, 1);
@@ -1293,7 +1292,7 @@ function EnvOpt($needUpdate = 0)
             if (api_error($response)) {
                 return message(api_error_msg($response) . "<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
             } else {
-                return message("Success<a href=\"\">" . getconstStr('Back') . "</a><script>var status = \"" . $response['status'] . "\";</script>", "Success", 200, 1);
+                return message("Success<a href=\"\">" . getconstStr('Back') . "</a><script>var status = \"" . $response['DplStatus'] . "\";</script>", "Success", 200, 1);
             }
         } else {
             return message("Old pass error<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
