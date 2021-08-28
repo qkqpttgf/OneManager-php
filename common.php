@@ -816,8 +816,8 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
     <meta charset=utf-8>
     <meta name=viewport content="width=device-width,initial-scale=1">
     <body>
-        <h1>' . $title . '</h1>
         <a href="' . $_SERVER['base_path'] . '">' . getconstStr('Back') . getconstStr('Home') . '</a>
+        <h1>' . $title . '</h1>
         <div id="dis" style="display: none;">
 
 ' . $message . '
@@ -837,7 +837,7 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                 x += ".";
                 min++;
                 var xhr = new XMLHttpRequest();
-                var url = "?WaitFunction" + (status!=""?"=" + status:"");
+                var url = "?WaitFunction=" + (status!=""?status:"1");
                 xhr.open("GET", url);
                 //xhr.setRequestHeader("Authorization", "Bearer ");
                 xhr.onload = function(e) {
@@ -862,7 +862,6 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                 xhr.send(null);
             }
             getStatus();
-            //setTimeout(function() { getStatus() }, 3000);
         </script>';
     } else {
         $html .= '
@@ -1167,7 +1166,7 @@ function EnvOpt($needUpdate = 0)
             return message($html, $title, 400);
         } else {
             //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['status'] . '";</script>';
+            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['DplStatus'] . '";</script>';
             $title = getconstStr('Setup');
             return message($html, $title, 202, 1);
         }
@@ -1217,7 +1216,7 @@ function EnvOpt($needUpdate = 0)
             $html .= getconstStr('Success') . '!<br>
             <a href="">' . getconstStr('Back') . '</a>
             <script>
-                var status = "' . $response['status'] . '";
+                var status = "' . $response['DplStatus'] . '";
             </script>';
             $title = getconstStr('Setup');
             return message($html, $title, 200, 1);
@@ -1293,7 +1292,7 @@ function EnvOpt($needUpdate = 0)
             if (api_error($response)) {
                 return message(api_error_msg($response) . "<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
             } else {
-                return message("Success<a href=\"\">" . getconstStr('Back') . "</a><script>var status = \"" . $response['status'] . "\";</script>", "Success", 200, 1);
+                return message("Success<a href=\"\">" . getconstStr('Back') . "</a><script>var status = \"" . $response['DplStatus'] . "\";</script>", "Success", 200, 1);
             }
         } else {
             return message("Old pass error<a href=\"\">" . getconstStr('Back') . "</a>", "Error", 403);
@@ -2586,7 +2585,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
         if (isset($files['list']['head.omf'])) {
-            $headomf = str_replace('<!--HeadomfContent-->', get_content(spurlencode(path_format($path . '/head.omf'), '/'))['content']['body'], $tmp[0]);
+            $headomf = str_replace('<!--HeadomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.omf']['name']), '/'))['content']['body'], $tmp[0]);
         }
         $html .= $headomf . $tmp[1];
         
@@ -2594,7 +2593,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
         if (isset($files['list']['head.md'])) {
-            $headmd = str_replace('<!--HeadmdContent-->', get_content(spurlencode(path_format($path . '/head.md'), '/'))['content']['body'], $tmp[0]);
+            $headmd = str_replace('<!--HeadmdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.md']['name']), '/'))['content']['body'], $tmp[0]);
             $html .= $headmd . $tmp[1];
             while (strpos($html, '<!--HeadmdStart-->')) {
                 $html = str_replace('<!--HeadmdStart-->', '', $html);
@@ -2627,7 +2626,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
         if (isset($files['list']['readme.md'])) {
-            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/readme.md'),'/'))['content']['body'], $tmp[0]);
+            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['readme.md']['name']),'/'))['content']['body'], $tmp[0]);
             $html .= $Readmemd . $tmp[1];
             while (strpos($html, '<!--ReadmemdStart-->')) {
                 $html = str_replace('<!--ReadmemdStart-->', '', $html);
@@ -2649,7 +2648,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
         if (isset($files['list']['foot.omf'])) {
-            $Footomf = str_replace('<!--FootomfContent-->', get_content(spurlencode(path_format($path . '/foot.omf'),'/'))['content']['body'], $tmp[0]);
+            $Footomf = str_replace('<!--FootomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['foot.omf']['name']),'/'))['content']['body'], $tmp[0]);
         }
         $html .= $Footomf . $tmp[1];
 

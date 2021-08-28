@@ -510,7 +510,7 @@ class Onedrive {
                 var expires = "expires="+expd.toGMTString();
                 document.cookie=\'disktag=; path=/; \'+expires;
                 var i = 0;
-                var status = "' . $response['status'] . '";
+                var status = "' . $response['DplStatus'] . '";
                 var uploadList = setInterval(function(){
                     if (document.getElementById("dis").style.display=="none") {
                         console.log(i++);
@@ -618,7 +618,7 @@ class Onedrive {
                     savecache('access_token', $ret['access_token'], $this->disktag, $ret['expires_in'] - 60);
                     $html .= '<script>
                     var i = 0;
-                    var status = "' . $response['status'] . '";
+                    var status = "' . $response['DplStatus'] . '";
                 var uploadList = setInterval(function(){
                     if (document.getElementById("dis").style.display=="none") {
                         console.log(i++);
@@ -699,7 +699,7 @@ class Onedrive {
                     if ($_POST['Drive_ver']!='Sharelink') $url .= '?install1&disktag=' . $_GET['disktag'] . '&AddDisk=' . $_POST['Drive_ver'];
                     $html .= '<script>
                     var i = 0;
-                    var status = "' . $response['status'] . '";
+                    var status = "' . $response['DplStatus'] . '";
                 var uploadList = setInterval(function(){
                     if (document.getElementById("dis").style.display=="none") {
                         console.log(i++);
