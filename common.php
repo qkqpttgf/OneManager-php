@@ -38,7 +38,6 @@ $EnvConfigs = [
     'useBasicAuth'      => 0b010,
     'referrer'          => 0b011,
     'forceHttps'        => 0b010,
-    'littleFileCacheTime'        => 0b010,
 
     'Driver'            => 0b100,
     'client_id'         => 0b100,
@@ -60,6 +59,8 @@ $EnvConfigs = [
     'guestup_path'      => 0b111,
     'domainforproxy'    => 0b111,
     'public_path'       => 0b111,
+    'fileConduitSize'   => 0b110,
+    'fileConduitCacheTime'   => 0b110,
 ];
 
 $timezones = array( 
@@ -393,14 +394,17 @@ function main($path)
             $url = $files['url'];
             if ( strtolower(splitlast($files['name'], '.')[1])=='html' ) return output($files['content']['body'], $files['content']['stat']);
             else {
-                $littleFileCacheTime = getConfig('littleFileCacheTime');
-                if ($files['size']<1024*1024 && !!$littleFileCacheTime) {
-                    if ($littleFileCacheTime>1) $littleFileCacheTime *= 3600;
-                    else $littleFileCacheTime = 3600;
-                    return output(
+                $fileConduitSize = getConfig('fileConduitSize', $_SERVER['disktag']);
+                $fileConduitCacheTime = getConfig('fileConduitCacheTime', $_SERVER['disktag']);
+                if (!!$fileConduitSize || !!$fileConduitCacheTime) {
+                    if ($fileConduitSize>1) $fileConduitSize *= 1024*1024;
+                    else $fileConduitSize = 1024*1024;
+                    if ($fileConduitCacheTime>1) $fileConduitCacheTime *= 3600;
+                    else $fileConduitCacheTime = 3600;
+                    if ($files['size']<$fileConduitSize) return output(
                         base64_encode(file_get_contents($files['url'])),
                         200,
-                        ['Content-Type' => $files['mime'], 'Cache-Control' => 'max-age=' . $littleFileCacheTime],
+                        ['Content-Type' => $files['mime'], 'Cache-Control' => 'max-age=' . $fileConduitCacheTime],
                         true
                     );
                 }
