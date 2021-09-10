@@ -30,7 +30,8 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    echo $re['body'];
+    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
+    else echo $re['body'];
 } elseif (isset($_SERVER['DOCUMENT_ROOT'])&&$_SERVER['DOCUMENT_ROOT']==='/var/task/user') {
     if (getenv('ONEMANAGER_CONFIG_SAVE')=='env') include 'platform/Vercel_env.php';
     else include 'platform/Vercel.php';
@@ -44,7 +45,8 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    echo $re['body'];
+    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
+    else echo $re['body'];
 } else {
     include 'platform/Normal.php';
     $path = getpath();
@@ -58,7 +60,8 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
         header($headerName . ': ' . $headerVal, true);
     }
     http_response_code($re['statusCode']);
-    echo $re['body'];
+    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
+    else echo $re['body'];
 }
 
 // Tencent SCF

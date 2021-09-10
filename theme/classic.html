@@ -601,12 +601,12 @@
             });
         }
     }
-    addVideos(['<!--FileEncodeUrl-->']);
+    addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
     var loadingTask = pdfjsLib.getDocument({
-        url: '<!--FileDownUrl-->',
+        url: "<!--FileDownUrl-->",
         cMapUrl: "//cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/cmaps/",
         cMapPacked: true,
         rangeChunkSize: 65535
