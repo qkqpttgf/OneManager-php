@@ -49,10 +49,12 @@
         .more-disk a{flex-grow: 1;text-align: center;font-size: 15px;padding:14px 20px;transition-duration: 0.4s;background-color: #f4f5f8; color: #353535;display: inline-block;}
         .more-disk a:hover, .more-disk a[now]{ background-color: rgb(79 116 220); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:33px}
+        .list-table tr{height:2rem; line-height: 1.5rem;}
         .list-table tr[data-to]:hover{background: rgb(79 116 220);color:white;}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
+        .list-table tr[data-to]:hover .operate ul li a{color:black}
+        .list-table tr ion-icon {vertical-align: middle;}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
         .list-table .size,.list-table .updated_at{text-align:right}
         .updated_at{width:25%}
@@ -66,7 +68,6 @@
         body .active ul{position:absolute;display:inline-table;} /*for some mobile browser */
         .operate ul li{padding:7px;list-style:none;display:block;}
         .operate ul li:hover {background-color: #f4f5f8;}
-        .list-table tr[data-to]:hover .operate ul li a{color:black}
         #tr0{height: 40px;}
 <!--AdminEnd-->
         .operatediv{position:absolute;border-radius: 8px;background-color:#ffffff;z-index:2;box-shadow: 5px 5px 10px 0 #00000033;padding: 15px 4px;}
