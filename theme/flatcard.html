@@ -103,6 +103,10 @@
             display: inline-block;
             position:relative
         }
+        .list-table tbody.grid-view td.file a > span {
+            position: absolute;
+            left: 3px;
+        }
         .list-table tbody.grid-view td.file .download {
             display: none;
         }
@@ -746,13 +750,38 @@
     }
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
+    var isGrid = false;
+    var isthumbLoaded = false;
     function showthumbnails(obj) {
+
         images = [<!--ImgExts-->];
         var files=document.getElementsByName('filelist');
 
-        // turn to grid view
-        var list_body = document.getElementById('list-table').firstElementChild
-        list_body.classList.add('grid-view')
+        if (document.getElementById('originalpic').checked==true){
+            if(isGrid){
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.remove('grid-view')
+                isGrid = false
+            }
+        }else {
+            if(!isGrid){
+                // turn to grid view
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.add('grid-view')
+                isGrid = true
+                if (isthumbLoaded) {
+                    return
+                }else {
+                    isthumbLoaded = true
+                }
+            } else {
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.remove('grid-view')
+                isGrid = false
+                return
+            }
+        }
+
 
         for ($i=0;$i<files.length;$i++) {
             str=files[$i].innerText;
@@ -772,7 +801,7 @@
                 }
             }
         }
-        obj.disabled='disabled';
+        // obj.disabled='disabled';
     }
     function get_thumbnails_url(url, name, filea) {
         var xhr = new XMLHttpRequest();
@@ -780,7 +809,7 @@
         xhr.send('');
         xhr.onload = function(e){
             if (xhr.status==200) {
-                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+name+'">';
+                if (xhr.responseText!='') filea.innerHTML= '<span>' + filea.innerHTML + '</span>' + '<img src="'+xhr.responseText+'" alt="'+name+'">';
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
