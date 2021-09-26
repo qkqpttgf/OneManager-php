@@ -49,14 +49,29 @@
         .more-disk a{flex-grow: 1;text-align: center;font-size: 15px;padding:14px 20px;transition-duration: 0.4s;background-color: #f4f5f8; color: #353535;display: inline-block;}
         .more-disk a:hover, .more-disk a[now]{ background-color: rgb(79 116 220); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
-        .list-table tr{height:33px}
+        .list-table tr{height:2rem; line-height: 1.5rem;}
         .list-table tr[data-to]:hover{background: rgb(79 116 220);color:white;}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
+        .list-table tr[data-to]:hover .operate ul li a{color:black}
+        .list-table tr ion-icon {vertical-align: middle; height: 2rem;}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
+        .list-table td.file a {vertical-align: middle;}
         .list-table .size,.list-table .updated_at{text-align:right}
         .updated_at{width:25%}
         .size{width:15%}
+        .list-table tbody.grid-view {display: flex;flex-wrap: wrap;position: relative;width: 100%;grid-template: repeat(auto-fill, 100px) / repeat(auto-fill, minmax(100px, 50%));grid-auto-rows: 100px;}
+        .list-table tbody.grid-view td, .list-table tbody.grid-view th {padding:0;}
+        .list-table tbody.grid-view img {height: 150px;width: 100%;object-fit: cover;position:relative;}
+        .list-table tbody.grid-view #tr0{width: 100%;height: 33px;background-color: unset !important;}
+        .list-table  tbody.grid-view tr {width: unset;height: 150px;background-color: #efefef;margin: 2px;position: relative;flex-grow: 1;min-width: 100px;}
+        .list-table tbody.grid-view td.file {display: block;width: 100%;height: 100%;}
+        .list-table tbody.grid-view td.file a {width: 100%;height: 100%;display: inline-block;position:relative}
+        .list-table tbody.grid-view td.file a > span {position: absolute;left: 3px;}
+        .list-table tbody.grid-view td.file .download {display: none;}
+        .list-table tbody.grid-view td.file ion-icon{position: absolute;top: calc(50% - 25px);left: calc(50% - 25px);width: 50px;height: 50px;color: #0002}
+        .list-table tbody.grid-view td.updated_at {position: absolute;bottom: 0px;height: 1.5em;overflow-y: hidden;width: 100%;background-image: linear-gradient(#ffffff00, #0000008f);color: #fffc;z-index: 3;}
+        .list-table tbody.grid-view td.size {display: none;}
         .mask{position:absolute;left:0px;top:0px;width:100%;background-color:#000;filter:alpha(opacity=50);opacity:0.5;z-index:2;}
 <!--AdminStart-->
         #top-op {position: absolute;color: white;font-size: 12px;}
@@ -66,7 +81,6 @@
         body .active ul{position:absolute;display:inline-table;} /*for some mobile browser */
         .operate ul li{padding:7px;list-style:none;display:block;}
         .operate ul li:hover {background-color: #f4f5f8;}
-        .list-table tr[data-to]:hover .operate ul li a{color:black}
         #tr0{height: 40px;}
 <!--AdminEnd-->
         .operatediv{position:absolute;border-radius: 8px;background-color:#ffffff;z-index:2;box-shadow: 5px 5px 10px 0 #00000033;padding: 15px 4px;}
@@ -677,9 +691,39 @@
     }
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
+    var isGrid = false;
+    var isthumbLoaded = false;
     function showthumbnails(obj) {
+
         images = [<!--ImgExts-->];
         var files=document.getElementsByName('filelist');
+
+        if (document.getElementById('originalpic').checked==true){
+            if(isGrid){
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.remove('grid-view')
+                isGrid = false
+            }
+        }else {
+            if(!isGrid){
+                // turn to grid view
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.add('grid-view')
+                isGrid = true
+                if (isthumbLoaded) {
+                    return
+                }else {
+                    isthumbLoaded = true
+                }
+            } else {
+                var list_body = document.getElementById('list-table').firstElementChild
+                list_body.classList.remove('grid-view')
+                isGrid = false
+                return
+            }
+        }
+
+
         for ($i=0;$i<files.length;$i++) {
             str=files[$i].innerText;
             if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
@@ -698,7 +742,7 @@
                 }
             }
         }
-        obj.disabled='disabled';
+        // obj.disabled='disabled';
     }
     function get_thumbnails_url(url, name, filea) {
         var xhr = new XMLHttpRequest();
@@ -706,7 +750,7 @@
         xhr.send('');
         xhr.onload = function(e){
             if (xhr.status==200) {
-                if (xhr.responseText!='') filea.innerHTML='<img src="'+xhr.responseText+'" alt="'+name+'">';
+                if (xhr.responseText!='') filea.innerHTML= '<span>' + filea.innerHTML + '</span>' + '<img src="'+xhr.responseText+'" alt="'+name+'">';
             } else console.log(xhr.status+'\n'+xhr.responseText);
         }
     }
