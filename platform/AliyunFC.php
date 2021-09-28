@@ -37,7 +37,7 @@ function GetPathSetting($event, $context)
     $_SERVER['region'] = $context['region'];
     $_SERVER['service_name'] = $context['service']['name'];
     $_SERVER['function_name'] = $context['function']['name'];
-    $path = $event['path'];
+    $path = str_replace('%5D', ']', str_replace('%5B', '[', $event['path']));
     $tmp = $event['requestURI'];
     if (strpos($tmp, '?')) $tmp = substr($tmp, 0, strpos($tmp, '?'));
     if ($path=='/'||$path=='') {
