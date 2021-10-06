@@ -1921,11 +1921,11 @@ function render_list($path = '', $files = [])
         //$htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'), '/'))['content'];
         $htmlcontent = get_content(spurlencode(path_format(urldecode($path) . '/index.html'), '/'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
-    }//echo $path . "<br>\n";
+    }
     //$path = str_replace('%20','%2520',$path);
     $path = str_replace('+','%2B',$path);
-    $path = str_replace('&','&amp;',path_format(urldecode($path))) ;
-    //echo $path . "<br>\n";
+    $path = path_format(urldecode($path));
+    //$path = str_replace('&','&amp;', $path) ;
     //$path = str_replace('%20',' ',$path);
     $path = str_replace('#','%23',$path);
     $p_path='';
