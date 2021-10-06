@@ -56,7 +56,8 @@ function GetPathSetting($event, $context)
     //$_SERVER['REQUEST_SCHEME'] = $event['headers']['x-forwarded-proto'];
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $event['headers']['referer'])[2];
-    $_SERVER['HTTP_TRANSLATE']==$event['headers']['translate'];//'f'
+    $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
+    $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['if-modified-since'];
     $_SERVER['USER'] = 'qcloud';
     return $path;
 }

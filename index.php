@@ -108,7 +108,7 @@ function handler($event, $context)
 
         $re = main($path);
 
-        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['body']);
+        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['isBase64Encoded']?base64_decode($re['body']):$re['body']);
 
     } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
         // Huawei FG
