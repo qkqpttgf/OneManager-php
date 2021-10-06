@@ -1,4 +1,7 @@
 <?php
+            // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
+            // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
+            // https://developer.microsoft.com/zh-cn/graph/graph-explorer
 
 class Onedrive {
     protected $access_token;
@@ -46,9 +49,6 @@ class Onedrive {
     {
         global $exts;
         if (!($files = getcache('path_' . $path, $this->disktag))) {
-            // https://docs.microsoft.com/en-us/graph/api/driveitem-get?view=graph-rest-1.0
-            // https://docs.microsoft.com/zh-cn/graph/api/driveitem-put-content?view=graph-rest-1.0&tabs=http
-            // https://developer.microsoft.com/zh-cn/graph/graph-explorer
             $pos = splitlast($path, '/');
             $parentpath = $pos[0];
             if ($parentpath=='') $parentpath = '/';
@@ -350,7 +350,8 @@ class Onedrive {
         $filename = spurlencode($file['name']);
         $filename = path_format($file['path'] . '/' . $filename);
                 //echo $filename;
-        $result = $this->MSAPI('DELETE', $filename);
+        if ($file['id']) $result = $this->MSAPI('DELETE', "/items/" . $file['id']);
+        else $result = $this->MSAPI('DELETE', $filename);
         if ($result['stat']!=204) $r_body = json_encode($this->files_format(json_decode($result['body'], true)));
         return output($r_body, $result['stat']);
         //return output($result['body'], $result['stat']);
@@ -358,7 +359,7 @@ class Onedrive {
     public function Encrypt($folder, $passfilename, $pass) {
         $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
         if ($pass==='') {
-            $result = $this->MSAPI('DELETE', $filename, '');
+            $result = $this->MSAPI('DELETE', $filename);
         } else {
             $result = $this->MSAPI('PUT', $filename, $pass);
         }
@@ -372,7 +373,8 @@ class Onedrive {
         $filename = spurlencode($file['name']);
         $filename = path_format($file['path'] . '/' . $filename);
         $data = '{"parentReference":{"path": "/drive/root:' . $folder['path'] . '"}}';
-        $result = $this->MSAPI('PATCH', $filename, $data);
+        if ($file['id']) $result = $this->MSAPI('PATCH', "/items/" . $file['id'], $data);
+        else $result = $this->MSAPI('PATCH', $filename, $data);
         $path2 = spurlencode($folder['path'], '/');
         if ($path2!='/'&&substr($path2, -1)=='/') $path2 = substr($path2, 0, -1);
         savecache('path_' . $path2, json_decode('{}', true), $this->disktag, 1);
@@ -391,7 +393,8 @@ class Onedrive {
             $newname = '.' . $namearr[1] . ' (' . date("Ymd\THis\Z") . ')';
         }
         $data = '{ "name": "' . $newname . '" }';
-        $result = $this->MSAPI('copy', $filename, $data);
+        if ($file['id']) $result = $this->MSAPI('copy', "/items/" . $file['id'], $data);
+        else $result = $this->MSAPI('copy', $filename, $data);
         /*$num = 0;
         while ($result['stat']==409 && json_decode($result['body'], true)['error']['code']=='nameAlreadyExists') {
             $num++;
@@ -1008,7 +1011,7 @@ class Onedrive {
                 if ($path=='' or $path=='/') {
                     $url .= $method;
                 } else {
-                    $url .= ':/' . $method;
+                    $url .= '/' . $method;
                 }
                 $method='POST';
                 $headers['Content-Type'] = 'application/json';
