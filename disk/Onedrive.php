@@ -1010,8 +1010,10 @@ class Onedrive {
             } else {
                 if ($path=='' or $path=='/') {
                     $url .= $method;
-                } else {
+                } elseif (substr($path, 0, 6)=="/items") {
                     $url .= '/' . $method;
+                } else {
+                    $url .= ':/' . $method;
                 }
                 $method='POST';
                 $headers['Content-Type'] = 'application/json';
