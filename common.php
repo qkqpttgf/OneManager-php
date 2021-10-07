@@ -389,7 +389,7 @@ function main($path)
                     $url = proxy_replace_domain($url, $domainforproxy, $header);
                 }
                 return output('', 302, $header);
-            } else return output('No ' . $_GET['random'] . 'file', 404);
+            } else return output('No ' . htmlspecialchars($_GET['random']) . 'file', 404);
         } else return output('Hidden', 401);
     }
     // is file && not preview mode, download file
