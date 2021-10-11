@@ -23,8 +23,10 @@ Please read the descriptions of settings before raising an issue.
 > ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~
 > 
 > (`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
+> > (`“我们无法部署您的应用程序，因为源代码违反了 Salesforce 可接受使用和面向外部的服务政策。"`)  
 >
-> Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
+> Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.  
+>  > Fork 这个项目，创建一个 heroku 应用程序，然后转到 Deploy 选项卡，通过连接到你的 github fork 进行部署。 
 
 ---
 
@@ -52,7 +54,7 @@ Please read the descriptions of settings before raising an issue.
 
 ### Demo
 
-​	null
+​   暂无
 
 ### Notice
 
