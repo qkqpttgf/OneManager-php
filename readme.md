@@ -59,8 +59,10 @@ Please read the descriptions of settings before raising an issue.
 ### Notice
 
 > 1. you must wait 30-50s to make sure deploy READY after change config;  
+>>1. 您必须等待 30-50 秒以确保在更改配置后部署；
 >
 > 2. Vercel limit 100 deploy every day.  
+>>2. Vercel 限制每天部署 100 次。
 
 ### How to Install
 
@@ -176,23 +178,23 @@ Please read the descriptions of settings before raising an issue.
 
 1. Start web service on your server (httpd or other), make sure you can visit it.  
 
-    >启动web服务器，确保你能访问到。  
+    > 启动web服务器，确保你能访问到。  
 
 2. Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
-
-    >开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
+ 
+    > 开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
 
 3. Upload code.  
 
-    >上传好代码。  
+    > 上传好代码。  
 
 4. Change the file .data/config.php can be read&write (666 is suggested).  
 
-    >使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
+    > 使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
 
 5. View the website in chrome or other.  
 
-    >在浏览器中访问。  
+    > 在浏览器中访问。  
 
 ----
 
@@ -246,17 +248,13 @@ show content of index.html as html.
 
 > 将index.html以静态网页显示出来。  
 
-### head.md
-
-### readme.md
+### head.md & readme.md
 
 it will showed at top or bottom as markdown.
 
 > 以MD语法显示在顶部或底部。  
 
-### head.omf
-
-### foot.omf
+### head.omf & foot.omf
 
 it will showed at top or bottom as html (javascript works!). 
 
