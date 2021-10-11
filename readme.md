@@ -20,7 +20,9 @@ Please read the descriptions of settings before raising an issue.
 
 ### How to Install
 
-> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
+> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~
+> 
+> (`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
 >
 > Fork this project, create a heroku app, then turn to Deploy tab, deploy via connect to your github fork.   
 
@@ -81,13 +83,9 @@ Please read the descriptions of settings before raising an issue.
 ### How to Install
 
 1. 进入函数服务，上方选择地区，然后点击新建。
-
 2. 输入函数名称，选择模板函数，在模糊搜索中输入onedrive，大小写随意，选择那个【获取onedrive信息.....】，点下一步，在代码界面不用动，直接点完成。
-
 3. 点击触发管理，创建触发器，触发方式改成API网关触发，底下勾选启用集成响应，提交。
-
 4. 在触发管理中可以看到一个 访问路径，访问它，开始安装。 
-
     （重点：**勾选集成响应**）  
 
 > **添加网盘时，SCF可能会反应不过来，不跳转到微软，导致添加失败，请不要删除这个盘，再添加一次相同标签的盘就可以了。**
@@ -127,7 +125,7 @@ Please read the descriptions of settings before raising an issue.
 
 ### DEMO
 
-​	无  
+​	暂无  
 
 ### How to Install
 
@@ -158,10 +156,10 @@ Please read the descriptions of settings before raising an issue.
 
 1. 在函数列表，点创建函数  
 2. 创建方式改为空白函数，点下一步  
-  3. 输入名称，选择运行时为PHP7.2，点下一步  
-  4. 触发器：下拉选择HTTP触发器，URL路径填 /{filepath+} ，HTTP方法全选，身份验证：不验证，点提交  
-  5. 进入代码编辑页，编辑类型改上传函数ZIP包，选择文件（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。），开始上传  
-  6. 点击右边触发器，复制并访问提供的url，开始安装  
+3. 输入名称，选择运行时为PHP7.2，点下一步  
+4. 触发器：下拉选择HTTP触发器，URL路径填 /{filepath+} ，HTTP方法全选，身份验证：不验证，点提交  
+5. 进入代码编辑页，编辑类型改上传函数ZIP包，选择文件（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。），开始上传  
+6. 点击右边触发器，复制并访问提供的url，开始安装  
 
 ---
 
@@ -170,7 +168,7 @@ Please read the descriptions of settings before raising an issue.
 
 ### DEMO
 
-暂无
+​	暂无
 
 ### How to Install
 
@@ -262,11 +260,6 @@ it will showed at top or bottom as html (javascript works!).
 
 > 以html显示在顶部或底部（可以跑js）。  
 
-----
-
-# A cup of coffee
-
-https://paypal.me/qkqpttgf  
 
 -----
 
@@ -281,3 +274,15 @@ https://paypal.me/qkqpttgf
 ### Telegram Group
 
 https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
+
+----
+
+# A cup of coffee
+
+|PayPal|WeChat|
+|:--:|:--:|
+|<a href="https://www.paypal.com/paypalme/qkqpttgf"><img src="https://user-images.githubusercontent.com/49548316/136726721-9e1caef8-4288-4974-84fc-1f6398101a4f.png" width="300px"></a>|<img src="https://user-images.githubusercontent.com/49548316/136726627-da91533d-1ad8-415c-ae68-46fbd45b693d.png" width="300px">|
+
+
+
+
