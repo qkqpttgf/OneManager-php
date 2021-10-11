@@ -281,7 +281,7 @@ https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw
 
 |PayPal|WeChat|
 |:--:|:--:|
-|<a href="https://www.paypal.com/paypalme/qkqpttgf"><img src="https://user-images.githubusercontent.com/49548316/136726721-9e1caef8-4288-4974-84fc-1f6398101a4f.png" width="300px"></a>|<img src="https://user-images.githubusercontent.com/49548316/136726627-da91533d-1ad8-415c-ae68-46fbd45b693d.png" width="300px">|
+|<a href="https://www.paypal.com/paypalme/qkqpttgf"><img src="https://user-images.githubusercontent.com/49548316/136726721-9e1caef8-4288-4974-84fc-1f6398101a4f.png" width="500px"></a>|<img src="https://user-images.githubusercontent.com/49548316/136726627-da91533d-1ad8-415c-ae68-46fbd45b693d.png" width="500px">|
 
 
 
