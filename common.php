@@ -1399,7 +1399,7 @@ output:
         let inputarea = document.getElementById(\'inputarea\');
         //console.log(a + ", " + inputarea.value);
         inputarea.focus();
-        inputarea.setSelectionRange(0, inputarea.value.length);
+        inputarea.setSelectionRange(inputarea.value.length, inputarea.value.length);
     }, 500);
 </script>';
         return message($html, 'Run cmd', $statusCode);
