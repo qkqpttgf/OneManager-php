@@ -268,7 +268,7 @@ function main($path)
                 return $drive->AddDisk();
         } else {
             $url = $_SERVER['PHP_SELF'];
-            if ($_GET) {
+            /*if ($_GET) {
                 $tmp = null;
                 $tmp = '';
                 foreach ($_GET as $k => $v) {
@@ -279,7 +279,8 @@ function main($path)
                 }
                 $tmp = substr($tmp, 1);
                 if ($tmp!='') $url .= '?' . $tmp;
-            }
+            }*/
+            // not need GET adddisk, remove it
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
     }
