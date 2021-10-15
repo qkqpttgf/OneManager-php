@@ -2582,9 +2582,9 @@ function render_list($path = '', $files = [])
             $tmp_path = str_replace('&','&amp;', substr(urldecode($_SERVER['PHP_SELF']), strlen($tmp_url)));
             while ($tmp_path!='') {
                 $tmp1 = splitfirst($tmp_path, '/');
-                $folder1 = $tmp1[0];
+                $folder1 = str_replace('&amp;', '&', $tmp1[0]);
                 if ($folder1!='') {
-                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
+                    $tmp_url .= $folder1 . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                     $html .= $PathArrayStr1;
@@ -2603,9 +2603,9 @@ function render_list($path = '', $files = [])
             $tmp_path = str_replace('&','&amp;', substr(urldecode($_SERVER['PHP_SELF']), strlen($tmp_url)));
             while ($tmp_path!='') {
                 $tmp1 = splitfirst($tmp_path, '/');
-                $folder1 = $tmp1[0];
+                $folder1 = str_replace('&amp;', '&', $tmp1[0]);
                 if ($folder1!='') {
-                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
+                    $tmp_url .= $folder1 . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', ($folder1==$_SERVER['disktag']?(getConfig('diskname')==''?$_SERVER['disktag']:getConfig('diskname')):$folder1), $PathArrayStr1);
                     $html .= $PathArrayStr1;
