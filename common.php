@@ -1924,11 +1924,11 @@ function render_list($path = '', $files = [])
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     //$path = str_replace('%20','%2520',$path);
-    $path = str_replace('+','%2B',$path);
+    //$path = str_replace('+','%2B',$path);
     $path = path_format(urldecode($path));
     //$path = str_replace('&','&amp;', $path) ;
     //$path = str_replace('%20',' ',$path);
-    $path = str_replace('#','%23',$path);
+    //$path = str_replace('#','%23',$path);
     $p_path='';
     if ($path !== '/') {
         if ($files['type']=='file') {
