@@ -1962,7 +1962,7 @@ function render_list($path = '', $files = [])
     }
     $n_path = str_replace('&amp;','&',$n_path);
     $p_path = str_replace('&amp;','&',$p_path);
-    $pretitle = str_replace('%23','#',$pretitle);
+    //$pretitle = str_replace('%23','#',$pretitle);
     $statusCode = 200;
     date_default_timezone_set(get_timezone($_SERVER['timezone']));
     $authinfo = '
