@@ -268,7 +268,7 @@ function main($path)
                 return $drive->AddDisk();
         } else {
             $url = $_SERVER['PHP_SELF'];
-            if ($_GET) {
+            /*if ($_GET) {
                 $tmp = null;
                 $tmp = '';
                 foreach ($_GET as $k => $v) {
@@ -279,7 +279,8 @@ function main($path)
                 }
                 $tmp = substr($tmp, 1);
                 if ($tmp!='') $url .= '?' . $tmp;
-            }
+            }*/
+            // not need GET adddisk, remove it
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
     }
@@ -1399,7 +1400,7 @@ output:
         let inputarea = document.getElementById(\'inputarea\');
         //console.log(a + ", " + inputarea.value);
         inputarea.focus();
-        inputarea.setSelectionRange(0, inputarea.value.length);
+        inputarea.setSelectionRange(inputarea.value.length, inputarea.value.length);
     }, 500);
 </script>';
         return message($html, 'Run cmd', $statusCode);
@@ -1923,11 +1924,11 @@ function render_list($path = '', $files = [])
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     //$path = str_replace('%20','%2520',$path);
-    $path = str_replace('+','%2B',$path);
+    //$path = str_replace('+','%2B',$path);
     $path = path_format(urldecode($path));
     //$path = str_replace('&','&amp;', $path) ;
     //$path = str_replace('%20',' ',$path);
-    $path = str_replace('#','%23',$path);
+    //$path = str_replace('#','%23',$path);
     $p_path='';
     if ($path !== '/') {
         if ($files['type']=='file') {
@@ -1961,7 +1962,7 @@ function render_list($path = '', $files = [])
     }
     $n_path = str_replace('&amp;','&',$n_path);
     $p_path = str_replace('&amp;','&',$p_path);
-    $pretitle = str_replace('%23','#',$pretitle);
+    //$pretitle = str_replace('%23','#',$pretitle);
     $statusCode = 200;
     date_default_timezone_set(get_timezone($_SERVER['timezone']));
     $authinfo = '
@@ -2581,9 +2582,9 @@ function render_list($path = '', $files = [])
             $tmp_path = str_replace('&','&amp;', substr(urldecode($_SERVER['PHP_SELF']), strlen($tmp_url)));
             while ($tmp_path!='') {
                 $tmp1 = splitfirst($tmp_path, '/');
-                $folder1 = $tmp1[0];
+                $folder1 = str_replace('&amp;', '&', $tmp1[0]);
                 if ($folder1!='') {
-                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
+                    $tmp_url .= $folder1 . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', $folder1, $PathArrayStr1);
                     $html .= $PathArrayStr1;
@@ -2602,9 +2603,9 @@ function render_list($path = '', $files = [])
             $tmp_path = str_replace('&','&amp;', substr(urldecode($_SERVER['PHP_SELF']), strlen($tmp_url)));
             while ($tmp_path!='') {
                 $tmp1 = splitfirst($tmp_path, '/');
-                $folder1 = $tmp1[0];
+                $folder1 = str_replace('&amp;', '&', $tmp1[0]);
                 if ($folder1!='') {
-                    $tmp_url .= str_replace('&amp;', '&', $folder1) . '/';
+                    $tmp_url .= $folder1 . '/';
                     $PathArrayStr1 = str_replace('<!--PathArrayLink-->', encode_str_replace($folder1==$files['name']?'':$tmp_url), $PathArrayStr);
                     $PathArrayStr1 = str_replace('<!--PathArrayName-->', ($folder1==$_SERVER['disktag']?(getConfig('diskname')==''?$_SERVER['disktag']:getConfig('diskname')):$folder1), $PathArrayStr1);
                     $html .= $PathArrayStr1;

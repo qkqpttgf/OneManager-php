@@ -46,6 +46,7 @@ function GetPathSetting($event, $context)
     if ($path=='/'||$path=='') {
         $_SERVER['base_path'] = $tmp;
     } else {
+        $tmp = str_replace('&amp;', '&', $tmp);
         while ($tmp!=urldecode($tmp)) $tmp = urldecode($tmp);
         $tmp1 = urldecode($event['path']);
         while ($tmp1!=urldecode($tmp1)) $tmp1 = urldecode($tmp1);
