@@ -1589,7 +1589,6 @@ output:
 <table border=1>
     <form id="sortdisks_form" action="" method="post" style="margin: 0" onsubmit="return dragsort(this);">
     <tr id="sortdisks">
-        <input name="_admin" type="hidden" value="">
         <input type="hidden" name="disktag_sort" value="">';
             $num = 0;
             foreach ($disktags as $disktag) {
@@ -1600,6 +1599,7 @@ output:
                 }
             }
             $frame .= '
+        <input name="_admin" type="hidden" value="">
     </tr>
     <tr><td colspan="' . $num . '">' . getconstStr('DragSort') . '<input type="submit" name="submit1" value="' . getconstStr('SubmitSortdisks') . '"></td></tr>
     </form>
