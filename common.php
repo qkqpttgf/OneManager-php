@@ -373,26 +373,35 @@ function main($path)
         return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
     }
     // random file
-    if (isset($_GET['random'])&&$_GET['random']!=='') {
-        if ($_SERVER['ishidden']<4) {
-            $tmp = [];
-            foreach (array_keys($files['list']) as $filename) {
-                if (strtolower(splitlast($filename, '.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['list'][$filename]['url'];
-            }
-            $tmp = array_values($tmp);
-            if (count($tmp)>0) {
-                $url = $tmp[rand(0, count($tmp)-1)];
-                if (isset($_GET['url'])) return output($url, 200);
-                $header['Location'] = $url;
-                $domainforproxy = '';
-                $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
-                if ($domainforproxy!='') {
-                    $url = proxy_replace_domain($url, $domainforproxy, $header);
+    if (isset($_GET['random']))
+        if ($_GET['random']!==true) {
+            if ($_SERVER['ishidden']<4) {
+                if (!isset($files['list'])) {
+                    $distfolder = splitlast($path, '/');
+                    if ($distfolder[1]=='') $tmpfolder = splitlast($distfolder[0], '/')[1];
+                    else $tmpfolder = $distfolder[1];
+                    if ($tmpfolder=='') $tmpfolder = '/';
+                    return output('No files in folder " ' . htmlspecialchars($tmpfolder) . ' ".', 404);
                 }
-                return output('', 302, $header);
-            } else return output('No ' . htmlspecialchars($_GET['random']) . 'file', 404);
-        } else return output('Hidden', 401);
-    }
+                $tmp = [];
+                foreach (array_keys($files['list']) as $filename) {
+                    if (strtolower(splitlast($filename, '.')[1])==strtolower($_GET['random'])) $tmp[$filename] = $files['list'][$filename]['url'];
+                }
+                $tmp = array_values($tmp);
+                if (count($tmp)>0) {
+                    $url = $tmp[rand(0, count($tmp)-1)];
+                    if (isset($_GET['url'])) return output($url, 200);
+                    $header['Location'] = $url;
+                    $domainforproxy = '';
+                    $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
+                    if ($domainforproxy!='') {
+                        $url = proxy_replace_domain($url, $domainforproxy, $header);
+                    }
+                    return output('', 302, $header);
+                } else return output('No "' . htmlspecialchars($_GET['random']) . '" files', 404);
+            } else return output('Hidden', 401);
+        } else return output('must provide a suffix, like "?random=gif".', 401);
+
     // is file && not preview mode, download file
     if ($files['type']=='file' && !isset($_GET['preview'])) {
         if ( $_SERVER['ishidden']<4 || (!!getConfig('downloadencrypt', $_SERVER['disktag'])&&$files['name']!=getConfig('passfile')) ) {
