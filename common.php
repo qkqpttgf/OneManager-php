@@ -1938,24 +1938,24 @@ function render_list($path = '', $files = [])
     }
     //$path = str_replace('%20','%2520',$path);
     //$path = str_replace('+','%2B',$path);
-    $path = path_format(urldecode($path));
+    $path1 = path_format(urldecode($path));
     //$path = str_replace('&','&amp;', $path) ;
     //$path = str_replace('%20',' ',$path);
     //$path = str_replace('#','%23',$path);
     $p_path='';
-    if ($path !== '/') {
+    if ($path1 !== '/') {
         if ($files['type']=='file') {
             $pretitle = str_replace('&','&amp;', $files['name']);
             $n_path = $pretitle;
-            $tmp = splitlast(splitlast($path,'/')[0],'/');
+            $tmp = splitlast(splitlast($path1,'/')[0],'/');
             if ($tmp[1]=='') {
                 $p_path = $tmp[0];
             } else {
                 $p_path = $tmp[1];
             }
         } else {
-            if (substr($path, 0, 1)=='/') $pretitle = substr($path, 1);
-            if (substr($path, -1)=='/') $pretitle = substr($pretitle, 0, -1);
+            if (substr($path1, 0, 1)=='/') $pretitle = substr($path1, 1);
+            if (substr($path1, -1)=='/') $pretitle = substr($pretitle, 0, -1);
             $tmp=splitlast($pretitle,'/');
             if ($tmp[1]=='') {
                 $n_path = $tmp[0];
@@ -2311,8 +2311,8 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--IsFileEnd-->', '', $html);
             }
             //$html = str_replace('<!--FileEncodeUrl-->', encode_str_replace(path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
-            $html = str_replace('<!--FileEncodeUrl-->', encode_str_replace(splitlast($path, '/')[1]), $html);
-            $html = str_replace('<!--FileUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
+            $html = str_replace('<!--FileEncodeUrl-->', encode_str_replace(splitlast($path1, '/')[1]), $html);
+            $html = str_replace('<!--FileUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path1)), $html);
 
             $ext = strtolower(substr($path, strrpos($path, '.') + 1));
             if (in_array($ext, $exts['img'])) $ext = 'img';
@@ -2340,10 +2340,10 @@ function render_list($path = '', $files = [])
             }
             //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', $files['url'], $html);
             //while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
-            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', encode_str_replace(splitlast($path, '/')[1]), $html);
+            while (strpos($html, '<!--FileDownUrl-->')) $html = str_replace('<!--FileDownUrl-->', encode_str_replace(splitlast($path1, '/')[1]), $html);
             //echo $path . "<br>\n";
             //while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', (path_format($_SERVER['base_disk_path'] . '/' . str_replace('&amp;', '&', $path))), $html);
-            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(splitlast($path, '/')[1]), $html);
+            while (strpos($html, '<!--FileEncodeReplaceUrl-->')) $html = str_replace('<!--FileEncodeReplaceUrl-->', encode_str_replace(splitlast($path1, '/')[1]), $html);
             while (strpos($html, '<!--FileName-->')) $html = str_replace('<!--FileName-->', $files['name'], $html);
             while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($files['url']), $html);
             //while (strpos($html, '<!--FileEncodeDownUrl-->')) $html = str_replace('<!--FileEncodeDownUrl-->', urlencode($_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path)), $html);
@@ -2351,7 +2351,8 @@ function render_list($path = '', $files = [])
             $html = str_replace('<!--constStr@CancelEdit-->', getconstStr('CancelEdit'), $html);
             $html = str_replace('<!--constStr@Save-->', getconstStr('Save'), $html);
             if (strpos($html, '<!--TxtContent-->')) {
-                $tmp_content = get_content(spurlencode(path_format(urldecode($path)), '/'))['content']['body'];
+                //$tmp_content = get_content(spurlencode(path_format(urldecode($path)), '/'))['content']['body'];
+                $tmp_content = $files['content']['body'];
                 if (strlen($tmp_content)==$files['size']) $html = str_replace('<!--TxtContent-->', htmlspecialchars($tmp_content), $html);
                 else $html = str_replace('<!--TxtContent-->', $files['size']<1024*1024?htmlspecialchars(curl('GET', $files['url'], '', [], 0, 1)['body']):"File too large: " . $files['size'] . " B.", $html);
             }
@@ -2543,7 +2544,7 @@ function render_list($path = '', $files = [])
 
         while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', (substr($_SERVER['base_disk_path'],-1)=='/'?substr($_SERVER['base_disk_path'],0,-1):$_SERVER['base_disk_path']), $html);
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
-        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', path_format($path.'/'))), $html);
+        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', path_format($path1.'/'))), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
 
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
@@ -2721,7 +2722,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
         if (isset($files['list']['head.omf'])) {
-            $headomf = str_replace('<!--HeadomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.omf']['name']), '/'))['content']['body'], $tmp[0]);
+            $headomf = str_replace('<!--HeadomfContent-->', get_content(path_format($path . '/' . $files['list']['head.omf']['name']))['content']['body'], $tmp[0]);
         }
         $html .= $headomf . $tmp[1];
         
@@ -2729,7 +2730,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
         if (isset($files['list']['head.md'])) {
-            $headmd = str_replace('<!--HeadmdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['head.md']['name']), '/'))['content']['body'], $tmp[0]);
+            $headmd = str_replace('<!--HeadmdContent-->', get_content(path_format($path . '/' . $files['list']['head.md']['name']))['content']['body'], $tmp[0]);
             $html .= $headmd . $tmp[1];
             while (strpos($html, '<!--HeadmdStart-->')) {
                 $html = str_replace('<!--HeadmdStart-->', '', $html);
@@ -2762,7 +2763,8 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--ReadmemdEnd-->');
         if (isset($files['list']['readme.md'])) {
-            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['readme.md']['name']),'/'))['content']['body'], $tmp[0]);
+            //$Readmemd = str_replace('<!--ReadmemdContent-->', get_content(spurlencode(path_format($path1 . '/' . $files['list']['readme.md']['name']),'/'))['content']['body'], $tmp[0]);
+            $Readmemd = str_replace('<!--ReadmemdContent-->', get_content(path_format($path . '/' . $files['list']['readme.md']['name']))['content']['body'], $tmp[0]);
             $html .= $Readmemd . $tmp[1];
             while (strpos($html, '<!--ReadmemdStart-->')) {
                 $html = str_replace('<!--ReadmemdStart-->', '', $html);
@@ -2784,7 +2786,7 @@ function render_list($path = '', $files = [])
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
         if (isset($files['list']['foot.omf'])) {
-            $Footomf = str_replace('<!--FootomfContent-->', get_content(spurlencode(path_format($path . '/' . $files['list']['foot.omf']['name']),'/'))['content']['body'], $tmp[0]);
+            $Footomf = str_replace('<!--FootomfContent-->', get_content(path_format($path . '/' . $files['list']['foot.omf']['name']))['content']['body'], $tmp[0]);
         }
         $html .= $Footomf . $tmp[1];
 
