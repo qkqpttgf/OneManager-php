@@ -1932,8 +1932,7 @@ function render_list($path = '', $files = [])
     global $slash;
 
     if (isset($files['list']['index.html']) && !$_SERVER['admin']) {
-        //$htmlcontent = fetch_files(spurlencode(path_format(urldecode($path) . '/index.html'), '/'))['content'];
-        $htmlcontent = get_content(spurlencode(path_format(urldecode($path) . '/index.html'), '/'))['content'];
+        $htmlcontent = get_content(path_format($path . '/index.html'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     //$path = str_replace('%20','%2520',$path);
