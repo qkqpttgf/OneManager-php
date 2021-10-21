@@ -1955,7 +1955,8 @@ function render_list($path = '', $files = [])
         } else {
             if (substr($path1, 0, 1)=='/') $pretitle = substr($path1, 1);
             if (substr($path1, -1)=='/') $pretitle = substr($pretitle, 0, -1);
-            $tmp=splitlast($pretitle,'/');
+            $pretitle = str_replace('&','&amp;', $pretitle);
+            $tmp = splitlast($pretitle, '/');
             if ($tmp[1]=='') {
                 $n_path = $tmp[0];
             } else {
