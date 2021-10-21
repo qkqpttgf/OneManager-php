@@ -1485,7 +1485,7 @@ output:
         <tr><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td><td></td></tr>
     </form>
 </table><br>';
-    } elseif (isset($_GET['disktag'])&&in_array($_GET['disktag'], $disktags)) {
+    } elseif (isset($_GET['disktag'])&&$_GET['disktag']!==true&&in_array($_GET['disktag'], $disktags)) {
         $disktag = $_GET['disktag'];
         $disk_tmp = null;
         $diskok = driveisfine($disktag, $disk_tmp);
@@ -1907,7 +1907,7 @@ output:
 </style>
 <table border=0>
     <tr class="tabs">';
-    if ($_GET['disktag']=='') {
+    if ($_GET['disktag']==''||!in_array($_GET['disktag'], $disktags)) {
         if ($_GET['setup']==='platform') $html .= '
         <td><a href="?setup">' . getconstStr('Home') . '</a></td>
         <td>' . getconstStr('PlatformConfig') . '</td>';
@@ -1919,7 +1919,7 @@ output:
         <td><a href="?setup=platform">' . getconstStr('PlatformConfig') . '</a></td>';
     foreach ($disktags as $disktag) {
         if ($disktag!='') {
-            if ($_GET['disktag']==$disktag) $html .= '
+            if ($_GET['disktag']===$disktag) $html .= '
         <td>' . $disktag . '</td>';
             else $html .= '
         <td><a href="?setup&disktag=' . $disktag . '">' . $disktag . '</a></td>';
