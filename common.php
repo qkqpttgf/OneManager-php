@@ -174,11 +174,11 @@ function main($path)
         $adminloginpage = getConfig('adminloginpage');
     }
     if (isset($_GET[$adminloginpage])) {
-        if (isset($_GET['preview'])) {
+        /*if (isset($_GET['preview'])) {
             $url = $_SERVER['PHP_SELF'] . '?preview';
         } else {
             $url = path_format($_SERVER['PHP_SELF'] . '/');
-        }
+        }*/
         if (isset($_POST['password1'])) {
             $compareresult = compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'));
             if ($compareresult=='') {
@@ -186,7 +186,7 @@ function main($path)
                 $randnum = rand(10, 99999);
                 $admincookie = adminpass2cookie('admin', getConfig('admin'), $timestamp, $randnum);
                 $adminlocalstorage = adminpass2storage('admin', getConfig('admin'), $timestamp, $randnum);
-                return adminform('admin', $admincookie, $adminlocalstorage, $url);
+                return adminform('admin', $admincookie, $adminlocalstorage);
             } else return adminform($compareresult);
         } else return adminform();
     }
@@ -1021,14 +1021,27 @@ function time_format($ISO)
 
 function adminform($name = '', $pass = '', $storage = '', $path = '')
 {
-    $html = '<html><head><title>' . getconstStr('AdminLogin') . '</title><meta charset=utf-8><meta name=viewport content="width=device-width,initial-scale=1"></head>';
+    $html = '<html>
+    <head>
+        <title>' . getconstStr('AdminLogin') . '</title>
+        <meta charset=utf-8>
+        <meta name=viewport content="width=device-width,initial-scale=1">
+    </head>';
     if ($name=='admin'&&$pass!='') {
-        $html .= '<meta http-equiv="refresh" content="3;URL=' . $path . '">
-        <body>' . getconstStr('LoginSuccess') . '
+        $html .= '
+        <!--<meta http-equiv="refresh" content="3;URL=' . $path . '">-->
+    <body>
+        ' . getconstStr('LoginSuccess') . '
         <script>
-        localStorage.setItem("admin", "' . $storage . '");
+            localStorage.setItem("admin", "' . $storage . '");
+            var url = location.href;
+            var search = location.search;
+            url = url.substr(0, url.length-search.length);
+            if (search.indexOf("preview")>0) url += "?preview";
+            location = url;
         </script>
-        </body></html>';
+    </body>
+</html>';
         $statusCode = 201;
         date_default_timezone_set('UTC');
         $_SERVER['Set-Cookie'] = $name . '=' . $pass . '; path=' . $_SERVER['base_path'] . '; expires=' . date(DATE_COOKIE, strtotime('+7day'));
