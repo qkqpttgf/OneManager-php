@@ -1907,7 +1907,7 @@ output:
 </style>
 <table border=0>
     <tr class="tabs">';
-    if ($_GET['disktag']==''||!in_array($_GET['disktag'], $disktags)) {
+    if ($_GET['disktag']==''||$_GET['disktag']===true||!in_array($_GET['disktag'], $disktags)) {
         if ($_GET['setup']==='platform') $html .= '
         <td><a href="?setup">' . getconstStr('Home') . '</a></td>
         <td>' . getconstStr('PlatformConfig') . '</td>';
