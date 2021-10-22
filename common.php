@@ -1790,7 +1790,6 @@ output:
 </table><br>
 <table>
     <form id="config_f" name="config" action="" method="POST" onsubmit="return false;">
-        <input name="_admin" type="hidden" value="">
     <tr>
         <td>' . getconstStr('AdminPassword') . ':<input type="password" name="pass">
         <button name="config_b" value="export" onclick="exportConfig(this);">' . getconstStr('export') . '</button></td>
@@ -1833,7 +1832,7 @@ output:
         xhr.onerror = function(e){
             alert("Network Error "+xhr.status);
         }
-        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_b=" + b.value + "&timestamp=" + timestamp);
+        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_b=" + b.value + "&timestamp=" + timestamp + "&_admin=" + localStorage.getItem("admin"));
     }
     function importConfig(b) {
         if (config_f.pass.value=="") {
@@ -1873,7 +1872,7 @@ output:
         xhr.onerror = function(e){
             alert("Network Error "+xhr.status);
         }
-        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value + "&timestamp=" + timestamp);
+        xhr.send("pass=" + sha1(config_f.pass.value + "" + timestamp) + "&config_t=" + encodeURIComponent(config_f.config_t.value) + "&config_b=" + b.value + "&timestamp=" + timestamp + "&_admin=" + localStorage.getItem("admin"));
     }
     function changePassword(f) {
         if (f.oldPass.value==""||f.newPass1.value==""||f.newPass2.value=="") {
