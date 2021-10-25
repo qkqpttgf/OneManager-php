@@ -49,6 +49,7 @@ function GetPathSetting($event, $context)
     $host_name = $event['headers']['host'];
     $_SERVER['HTTP_HOST'] = $host_name;
     $path = path_format($event['pathParameters'][''].'/');
+    $path = str_replace('+', '%2B', $path);
     $_SERVER['base_path'] = path_format($event['path'].'/');
     if (  $_SERVER['base_path'] == $path ) {
         $_SERVER['base_path'] = '/';
