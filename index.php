@@ -4,7 +4,7 @@ error_reporting(0);
 include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
-
+header("Strict-Transport-Security: max-age=63072000; includeSubdomains; preload");
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_ENV, JSON_PRETTY_PRINT).'</pre>';
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
@@ -108,7 +108,7 @@ function handler($event, $context)
 
         $re = main($path);
 
-        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['isBase64Encoded']?base64_decode($re['body']):$re['body']);
+        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['body']);
 
     } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
         // Huawei FG

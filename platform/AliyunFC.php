@@ -37,23 +37,14 @@ function GetPathSetting($event, $context)
     $_SERVER['region'] = $context['region'];
     $_SERVER['service_name'] = $context['service']['name'];
     $_SERVER['function_name'] = $context['function']['name'];
-    //$path = str_replace('%5D', ']', str_replace('%5B', '[', $event['path']));//%5B
-    //$path = $event['path'];
-    $path = $event['requestURI'];
-    if (strpos($path, '?')) $path = substr($path, 0, strpos($path, '?'));
-    $tmp = urldecode($event['requestURI']);
+    $path = $event['path'];
+    $tmp = $event['requestURI'];
     if (strpos($tmp, '?')) $tmp = substr($tmp, 0, strpos($tmp, '?'));
     if ($path=='/'||$path=='') {
         $_SERVER['base_path'] = $tmp;
     } else {
-        $tmp = str_replace('&amp;', '&', $tmp);
-        while ($tmp!=urldecode($tmp)) $tmp = urldecode($tmp);
-        $tmp1 = urldecode($event['path']);
-        while ($tmp1!=urldecode($tmp1)) $tmp1 = urldecode($tmp1);
-        $_SERVER['base_path'] = substr($tmp, 0, strlen($tmp)-strlen($tmp1)+1);
-        //$_SERVER['base_path'] = substr($tmp, 0, strlen(urldecode($event['path'])));
+        $_SERVER['base_path'] = substr($tmp, 0, strlen($tmp)-strlen($path)+1);
     }
-    $_SERVER['base_path'] = spurlencode($_SERVER['base_path'], '/');
 
     if (substr($path,-1)=='/') $path=substr($path,0,-1);
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
@@ -69,10 +60,8 @@ function GetPathSetting($event, $context)
     $_SERVER['REQUEST_SCHEME'] = $event['headers']['X-Forwarded-Proto'][0];
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $event['headers']['Referer'][0])[2];
-    $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['If-Modified-Since'][0];
     $_SERVER['FC_SERVER_PATH'] = '/var/fc/runtime/php7.2';
     return $path;
-    //return spurlencode($path, '/');
 }
 
 function getConfig($str, $disktag = '')

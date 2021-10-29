@@ -94,12 +94,12 @@
         </ul></li>
 <!--AdminEnd-->
         &nbsp;
-        <!--<select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
+        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
             <option value="">Language</option>
 <!--SelectLanguageStart-->
                 <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
 <!--SelectLanguageEnd-->
-        </select>-->
+        </select>
     </div>
 <!--NeedUpdateStart-->
     <div style='position:absolute;'><font color='red'><!--constStr@NeedUpdate--></font></div>
@@ -202,7 +202,6 @@
                         <div id="txt">
 <!--AdminStart-->
                         <form id="txt-form" action="" method="POST">
-                            <input name="_admin" type="hidden" value="">
                             <a onclick="document.getElementById('txt-a').readOnly='';document.getElementById('txt-save').style.display='';document.getElementById('txt-editbutton').style.display='none';document.getElementById('txt-cancelbutton').style.display='';" id="txt-editbutton"><ion-icon name="create"></ion-icon><!--constStr@ClicktoEdit--></a>
                             <a onclick="document.getElementById('txt-a').readOnly='readonly';document.getElementById('txt-save').style.display='none';document.getElementById('txt-editbutton').style.display='';document.getElementById('txt-cancelbutton').style.display='none';" id="txt-cancelbutton" style="display:none"><ion-icon name="close"></ion-icon><!--constStr@CancelEdit--></a>&nbsp;&nbsp;&nbsp;
                             <a id="txt-save" style="display:none"><ion-icon name="save"></ion-icon><!--constStr@Save--></a>
@@ -210,12 +209,6 @@
                             <textarea id="txt-a" name="editfile" readonly style="width: 100%; margin-top: 2px;" <!--AdminStart-->onchange="document.getElementById('txt-save').onclick=function(){document.getElementById('txt-form').submit();}"<!--AdminEnd--> ><!--TxtContent--></textarea>
 <!--AdminStart-->
                             </form>
-                            <script>
-                                var inputAdminStorage = document.getElementsByName("_admin");
-                                for (i=0;i<inputAdminStorage.length;i++) {
-                                    inputAdminStorage[i].value = localStorage.getItem("admin");
-                                }
-                            </script>
 <!--AdminEnd-->
                         </div>
 <!--IstxtFileEnd-->
@@ -529,10 +522,7 @@
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
-        //$url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
-        let url = location.href;
-        url = url.substr(0, url.length-8);
-        $url.innerHTML = url.replace(/&amp;/g, '&amp;amp;');
+        $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
         $url.style.height = $url.scrollHeight + 'px';
     }
 <!--IsofficeFileStart-->
@@ -998,7 +988,7 @@
                     delete uploading[upbigfilename];
                 }
             }
-            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5 + '&_admin=' + localStorage.getItem("admin"));
+            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
 <!--GuestStart-->
             }
         }
@@ -1249,7 +1239,7 @@
                                 getuplink(i);
                             }*/
                         }
-                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
+                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
                     }
                 }
             }
@@ -1335,7 +1325,7 @@
                         }
                         delete uploading[filename];
                     }
-                    xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
+                    xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']));
                 } else {
                     var binary = this.result;
                     var xhr = new XMLHttpRequest();
@@ -1406,7 +1396,7 @@
                                     }
                                     delete uploading[filename];
                                 }
-                                xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
+                                xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']));
                                 // uploadbuttonshow();
                             } else {
                                 readblob(asize);
@@ -1449,7 +1439,7 @@
         var expd = new Date();
         expd.setTime(expd.getTime()+1000);
         var expires = "expires="+expd.toGMTString();
-        document.cookie = "admin=; path=<!--base_path-->; "+expires;
+        document.cookie = "admin=; path=/; "+expires;
         location.href = location.href;
     }
     /*for some mobile browser*/
@@ -1543,7 +1533,7 @@
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
-        xhr.send(serializeForm(str+'_form') + '&_admin=' + localStorage.getItem("admin"));
+        xhr.send(serializeForm(str+'_form'));
         return false;
     }
     function addelement(html) {
