@@ -131,7 +131,7 @@ class Onedrive {
                 } else {
                     $files['error']['stat'] = 503;
                     $files['error']['code'] = 'unknownError';
-                    $files['error']['message'] = 'unknownError';
+                    $files['error']['message'] = 'unknownError ' . $arr['body'] . " ~";
                 }
                 //$files = json_decode( '{"unknownError":{ "stat":'.$arr['stat'].',"message":"'.$arr['body'].'"}}', true);
                 //error_log1(json_encode($files, JSON_PRETTY_PRINT));
@@ -180,6 +180,7 @@ class Onedrive {
             return $files;
         }
         //error_log1(json_encode($tmp));
+        //echo '<pre>' . json_encode($tmp, JSON_PRETTY_PRINT) . '</pre>';
         return $tmp;
     }
 
@@ -357,7 +358,7 @@ class Onedrive {
         //return output($result['body'], $result['stat']);
     }
     public function Encrypt($folder, $passfilename, $pass) {
-        $filename = path_format($folder['path'] . '/' . urlencode($passfilename));
+        $filename = '/items/' . $folder['id'] . ':/' . urlencode($passfilename);
         if ($pass==='') {
             $result = $this->MSAPI('DELETE', $filename);
         } else {
