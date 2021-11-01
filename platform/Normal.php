@@ -278,8 +278,14 @@ language:<br>';
         $title = getconstStr('SelectLanguage');
         return message($html, $title, 201);
     }
-    $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
-    $title = 'Install';
+
+    if (function_exists('curl_init')) {
+        $title = 'Install';
+        $html = '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
+    } else {
+        $title = 'Error';
+        $html = '<font color="red">Need curl</font>, please install php-curl.';
+    }
     return message($html, $title, 201);
 }
 
