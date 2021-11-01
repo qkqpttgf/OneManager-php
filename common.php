@@ -2394,6 +2394,7 @@ function render_list($path = '', $files = [])
                 $html = str_replace('<!--IsFolderEnd-->', '', $html);
             }
             $html = str_replace('<!--constStr@File-->', getconstStr('File'), $html);
+            while (strpos($html, '<!--FolderId-->')) $html = str_replace('<!--FolderId-->', $files['id'], $html);
             $html = str_replace('<!--constStr@ShowThumbnails-->', getconstStr('ShowThumbnails'), $html);
             $html = str_replace('<!--constStr@CopyAllDownloadUrl-->', getconstStr('CopyAllDownloadUrl'), $html);
             $html = str_replace('<!--constStr@EditTime-->', getconstStr('EditTime'), $html);
