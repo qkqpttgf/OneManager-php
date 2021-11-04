@@ -49,6 +49,9 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     else echo $re['body'];
 } else {
     include 'platform/Normal.php';
+    if (!function_exists('curl_init')) {
+        return message('<font color="red">Need curl</font>, please install php-curl.', 'Error', 500);
+    }
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();
