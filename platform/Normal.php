@@ -279,13 +279,8 @@ language:<br>';
         return message($html, $title, 201);
     }
 
-    if (function_exists('curl_init')) {
-        $title = 'Install';
-        $html = '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
-    } else {
-        $title = 'Error';
-        $html = '<font color="red">Need curl</font>, please install php-curl.';
-    }
+    $title = 'Install';
+    $html = '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
     return message($html, $title, 201);
 }
 
