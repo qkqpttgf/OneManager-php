@@ -256,6 +256,8 @@ function main($path)
     //    echo 'main.disktag:'.$_SERVER['disktag'].'，path:'.$path.'';
     $_SERVER['list_path'] = getListpath($_SERVER['HTTP_HOST']);
     if ($_SERVER['list_path']=='') $_SERVER['list_path'] = '/';
+    $path1 = path_format($_SERVER['list_path'] . path_format($path));
+    if ($path1!='/' && substr($path1,-1)=='/') $path1 = substr($path1, 0, -1);
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
     $_SERVER['ajax']=0;
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
@@ -308,8 +310,6 @@ function main($path)
                 if (strpos($_GET['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
                 if (strpos($_POST['upbigfilename'], '../')!==false) return output('Not_Allow_Cross_Path', 400);
             }
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            if (substr($path1, -1)=='/') $path1=substr($path1, 0, -1);
             return $drive->bigfileupload($path1);
         }
     }
@@ -317,8 +317,6 @@ function main($path)
     if ($_SERVER['admin']) {
         $tmp = adminoperate($path);
         if ($tmp['statusCode'] > 0) {
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            if ($path1!='/'&&substr($path1,-1)=='/') $path1 = substr($path1, 0, -1);
             savecache('path_' . $path1, '', $_SERVER['disktag'], 1);
             return $tmp;
         }
@@ -329,8 +327,6 @@ function main($path)
     if (isset($_GET['thumbnails'])) {
         if ($_SERVER['ishidden']<4) {
             if (in_array(strtolower(substr($path, strrpos($path, '.') + 1)), $exts['img'])) {
-                $path1 = path_format($_SERVER['list_path'] . path_format($path));
-                if ($path1!='/'&&substr($path1, -1)=='/') $path1=substr($path1, 0, -1);
                 $thumb_url = $drive->get_thumbnails_url($path1);
                 if ($thumb_url!='') {
                     if ($_GET['location']) {
@@ -356,15 +352,21 @@ function main($path)
         if (!getConfig('downloadencrypt', $_SERVER['disktag'])) {
             $files = json_decode('{"type":"folder"}', true);
         } else {
-            $path1 = path_format($_SERVER['list_path'] . path_format($path));
-            if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
             $files = $drive->list_files($path1);
             if ($files['type']=='folder') $files = json_decode('{"type":"folder"}', true);
         }
     } else {
-        $path1 = path_format($_SERVER['list_path'] . path_format($path));
-        if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1, 0, -1);
         $files = $drive->list_files($path1);
+    }
+    if ( $files['type']=='folder' && substr($path, -1)!=='/' ) {
+        $tmp = path_format($_SERVER['base_disk_path'] . $path . '/');
+        return output('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>308 Permanent Redirect</title>
+</head><body>
+<h1>Permanent Redirect</h1>
+<p>The document has moved <a href="' . $tmp . '">here</a>.</p>
+</body></html>', 308, [ 'Location' => $tmp ]);
     }
 
     if ($_GET['json']) {
