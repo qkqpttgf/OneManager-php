@@ -2,7 +2,7 @@
 
 # NOTICE: 
 
-  The release is used as archive.  
+  The Releases is used as archive, not newest code.  
 
   Please read the descriptions of settings before raising an issue.  
 
