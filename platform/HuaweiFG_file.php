@@ -57,8 +57,6 @@ function GetPathSetting($event, $context)
         $_SERVER['base_path'] = substr($_SERVER['base_path'], 0, -strlen($path));
         if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     }
-    if (substr($path,-1)=='/') $path=substr($path,0,-1);
-    $_SERVER['is_guestup_path'] = is_guestup_path($path);
     //$_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['REMOTE_ADDR'] = $event['headers']['x-real-ip'];
     $_SERVER['HTTP_X_REQUESTED_WITH'] = $event['headers']['x-requested-with'];
