@@ -358,7 +358,7 @@ function main($path)
     } else {
         $files = $drive->list_files($path1);
     }
-    if ( $files['type']=='folder' && substr($path, -1)!=='/' ) {
+    if ($path!=='') if ( $files['type']=='folder' && substr($path, -1)!=='/' ) {
         $tmp = path_format($_SERVER['base_disk_path'] . $path . '/');
         return output('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
