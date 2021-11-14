@@ -194,8 +194,8 @@ class Aliyundrive {
         $data['image_url_process'] = 'image/resize,w_1920/format,jpeg';
         $data['video_thumbnail_process'] = 'video/snapshot,t_0,f_jpg,w_300';
         $data['fields'] = '*';
-        $data['order_by'] = 'updated_at';
-        $data['order_direction'] = 'DESC';
+        $data['order_by'] = 'name'; //updated_at
+        $data['order_direction'] = 'ASC'; //DESC
 
         $res = curl('POST', $url, json_encode($data), $header);
         //error_log1($res['stat'] . $res['body']);
