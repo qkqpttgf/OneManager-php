@@ -278,8 +278,9 @@ language:<br>';
         $title = getconstStr('SelectLanguage');
         return message($html, $title, 201);
     }
-    $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
+
     $title = 'Install';
+    $html = '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
     return message($html, $title, 201);
 }
 
