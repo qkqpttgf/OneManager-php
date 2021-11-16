@@ -2559,7 +2559,7 @@ function render_list($path = '', $files = [])
 
         while (strpos($html, '<!--base_disk_path-->')) $html = str_replace('<!--base_disk_path-->', (substr($_SERVER['base_disk_path'],-1)=='/'?substr($_SERVER['base_disk_path'],0,-1):$_SERVER['base_disk_path']), $html);
         while (strpos($html, '<!--base_path-->')) $html = str_replace('<!--base_path-->', $_SERVER['base_path'], $html);
-        while (strpos($html, '<!--Path-->')) $html = str_replace('<!--Path-->', str_replace('%23', '#', str_replace('&','&amp;', path_format($path1.'/'))), $html);
+        $html = str_replace('<!--Path-->', str_replace('\'', '\\\'', str_replace('%23', '#', str_replace('&','&amp;', path_format($path1.'/')))), $html);
         while (strpos($html, '<!--constStr@Home-->')) $html = str_replace('<!--constStr@Home-->', getconstStr('Home'), $html);
 
         $html = str_replace('<!--customCss-->', getConfig('customCss'), $html);
