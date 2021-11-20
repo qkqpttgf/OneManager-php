@@ -494,6 +494,12 @@
     function getShortUrl(str)
     {
         var urlStr = String(document.location);
+        var api_key = "your_api_key_for_reurl_cc"
+        if(api_key == "")
+        {
+            alert("网站没有启用短链接生成功能.");
+            return;
+        }
         if (str == 'Preview' && urlStr.indexOf("?preview") == -1)
         {
             urlStr = urlStr + "?preview";
@@ -505,7 +511,7 @@
         var httpRequest = new XMLHttpRequest();
         httpRequest.open('POST', 'https://api.reurl.cc/shorten', true);
         httpRequest.setRequestHeader("Content-type","application/json");
-        httpRequest.setRequestHeader("reurl-api-key","your_api_key_for_reurl_cc");
+        httpRequest.setRequestHeader("reurl-api-key", api_key);
         httpRequest.send('{ "url" : "'+urlStr+'" }');
         httpRequest.onreadystatechange = function ()
         {
