@@ -150,7 +150,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
-                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd-->&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Download');">生成短链</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Preview');">生成预览短链</button></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -184,7 +184,7 @@
                     </div>
                     <div style="margin: 24px">
 <!--IsimgFileStart-->
-                        <img src="<!--FileEncodeUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';if (this.offsetHeight>document.documentElement.clientHeight) this.style.height=document.documentElement.clientHeight + 'px';" />
+                        <img src="<!--FileEncodeUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';if (this.offsetHeight>document.documentElement.clientHeight) this.style.height='100%';" />
 <!--IsimgFileEnd-->
 <!--IsvideoFileStart-->
                         <div id="video-a0"></div>
@@ -491,6 +491,51 @@
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
+
+    function getShortUrl(str)
+    {
+        /*
+        try
+        {
+            var urlStr = document.getElementById('url').innerHTML;
+        }
+        catch (error)
+        {
+            var urlStr = String(document.location);
+        }
+        */
+        //alert(typeof(urlStr));
+        //alert(document.URL+'\n'+document.location+'\n'+self.location.href+'\n'+window.location.href);
+        var urlStr = String(document.location);
+        if (str == 'Preview' && urlStr.indexOf("?preview") == -1)
+        {
+            urlStr = urlStr + "?preview";
+        }
+        if (str == 'Download' && urlStr.indexOf("?preview") != -1)
+        {
+            urlStr = urlStr.replace(/\?preview/g, "");
+        }
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://api.reurl.cc/shorten', true);
+        httpRequest.setRequestHeader("Content-type","application/json");
+        httpRequest.setRequestHeader("reurl-api-key","your_api_key");
+        httpRequest.send('{ "url" : "'+urlStr+'" }');
+        httpRequest.onreadystatechange = function ()
+        {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var json = httpRequest.responseText;
+                var json_loads = eval('('+json+')');
+                var tmptextarea=document.createElement('textarea');
+                document.body.appendChild(tmptextarea);
+                tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
+                tmptextarea.innerHTML = json_loads.short_url;
+                tmptextarea.select();
+                tmptextarea.setSelectionRange(0, tmptextarea.value.length);
+                document.execCommand("copy");
+                alert(tmptextarea.innerHTML+"\n复制"+"<!--constStr@Success-->");
+            }
+        };
+    }
     function changelanguage(str)
     {
         if (str=='Language') str = '';
@@ -785,6 +830,8 @@
     }
     function size_reformat(str) {
         if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+        if (str.substr(-2)=='PB') num=str.substr(0,str.length-3)*1024*1024*1024*1024*1024;
+        if (str.substr(-2)=='TB') num=str.substr(0,str.length-3)*1024*1024*1024*1024;
         if (str.substr(-2)=='GB') num=str.substr(0,str.length-3)*1024*1024*1024;
         if (str.substr(-2)=='MB') num=str.substr(0,str.length-3)*1024*1024;
         if (str.substr(-2)=='KB') num=str.substr(0,str.length-3)*1024;
@@ -834,7 +881,12 @@
         } else {
             return num.toFixed(2) + ' MB';
         }
-        return num.toFixed(2) + ' GB';
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' GB';
+        }
+        return num.toFixed(2) + ' TB';
     }
     function seconds2hour(seconds) {
         let h, m, s;
@@ -952,7 +1004,7 @@
                 filemd5 = spark.end();
                 td2.innerHTML='md5: '+filemd5;
                 delete uploading[upbigfilename];
-                upbigfilename = filemd5+ext;
+                upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
                 uploading[upbigfilename] = i;
 <!--GuestEnd-->
             td2.innerHTML='<!--constStr@GetUploadLink--> ...';
@@ -1201,7 +1253,7 @@
                         return str.substr(p);
                     }
                     var ext = getext(file.webkitRelativePath||file.name);
-                    upbigfilename = filesha1 + ext;
+                    upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
 <!--GuestEnd-->
                     //while (upbigfilename.indexOf('%2F')>0) upbigfilename = upbigfilename.replace('%2F', '/');
                     td2.innerHTML='<!--constStr@GetUploadLink--> ...';
