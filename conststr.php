@@ -115,6 +115,7 @@ $constStr = [
             'domainforproxy' => 'Will replace the https://xxxxx-my.sharepoint.com with this value.Add &Origindomain=xxxxx-my.sharepoint.com at last',
             'public_path' => 'Show this Onedrive dir when through the long url of API Gateway.',
             'sitename' => 'sitename',
+            'reurl_cc_api' => 'the api_key of short URL site of reurl.cc',
         ],
         'zh-cn' => [
             'admin' => '管理密码，不添加时不显示登录页面且无法登录。',
@@ -145,6 +146,7 @@ $constStr = [
             'domainforproxy' => '会将https://xxxxx-my.sharepoint.com替换成这个值，在目标需要自己设置反代。会加上&Origindomain=原域名',
             'public_path' => '使用API长链接访问时，显示网盘文件的路径，不设置时默认为根目录。',
             'sitename' => '网站的名称',
+            'reurl_cc_api' => 'reurl.cc 短链接网站的api key',
         ],
         'zh-tw' => [
             'admin' => '管理密碼，不設定密碼將不顯示登入頁面且無法登入。',
@@ -170,6 +172,7 @@ $constStr = [
             'domainforproxy' => '會將https://xxxxx-my.sharepoint.com取代成這個值，在目標需要自己設定反代。會加上&Origindomain=原域名',
             'public_path' => '使用API長連結訪問時，顯示網路硬碟檔案的路徑，不設定時預設為根目錄。',
             'sitename' => '網站的名稱',
+            'reurl_cc_api' => 'reurl.cc 短連結網站的api key',
         ],
         'ja' => [
             'admin' => 'パスワードを管理する、追加しない場合、ログインページは表示されず、ログインできません。',
@@ -195,6 +198,7 @@ $constStr = [
             'domainforproxy' => '会将https://xxxy-my.sharepoint.comこの値に代えて、目標には自分で反世代を設定する必要があります。に加えて&amp;Originndomain=元のドメイン名',
             'public_path' => 'APIのロングリンクアクセスを使用する場合、ネットワークディスクファイルのパスが表示されますが、設定されていない場合はデフォルトでルートディレクトリになり。',
             'sitename' => 'ウェブサイト名',
+            'reurl_cc_api' => 'reurl.cc ショートリンクサイトのapi key',
         ],
         'ko-kr' => [
             'admin' => '비밀번호를 관리하고 로그인 페이지를 표시하지 않으며 추가하지 않으면 로그인 할 수 없습니다.',

@@ -150,7 +150,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
-                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd--></h3>
+                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd-->&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Download');">生成短链</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Preview');">生成预览短链</button></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -491,6 +491,42 @@
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
+    function getShortUrl(str)
+    {
+        var urlStr = String(document.location);
+        if (str == 'Preview' && urlStr.indexOf("?preview") == -1)
+        {
+            urlStr = urlStr + "?preview";
+        }
+        if (str == 'Download' && urlStr.indexOf("?preview") != -1)
+        {
+            urlStr = urlStr.replace(/\?preview/g, "");
+        }
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.open('POST', 'https://api.reurl.cc/shorten', true);
+        httpRequest.setRequestHeader("Content-type","application/json");
+        httpRequest.setRequestHeader("reurl-api-key","your_api_key_for_reurl_cc");
+        httpRequest.send('{ "url" : "'+urlStr+'" }');
+        httpRequest.onreadystatechange = function ()
+        {
+            if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                var json = httpRequest.responseText;
+                var json_loads = eval('('+json+')');
+                var tmptextarea=document.createElement('textarea');
+                document.body.appendChild(tmptextarea);
+                tmptextarea.setAttribute('style','position:absolute;left:-100px;width:0px;height:0px;');
+                tmptextarea.innerHTML = json_loads.short_url;
+                tmptextarea.select();
+                tmptextarea.setSelectionRange(0, tmptextarea.value.length);
+                document.execCommand("copy");
+                alert(tmptextarea.innerHTML+"\n复制"+"<!--constStr@Success-->");
+            }
+            else
+            {
+                alert("网络出错, error code "+httpRequest.status);
+            }
+        };
+    }    
     function changelanguage(str)
     {
         if (str=='Language') str = '';

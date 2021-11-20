@@ -61,6 +61,8 @@ $EnvConfigs = [
     'public_path'       => 0b111,
     'fileConduitSize'   => 0b110,
     'fileConduitCacheTime'   => 0b110,
+
+    'reurl_cc_api'      => 0b010, //shortUrlSite_apiKey
 ];
 
 $timezones = array( 
@@ -2923,6 +2925,8 @@ function render_list($path = '', $files = [])
 
     $tmp = splitfirst($html, '</title>');
     $html = $tmp[0] . '</title>' . $authinfo . $tmp[1];
+    //短链接apikey处理
+    $html = str_replace('your_api_key_for_reurl_cc', strval(getConfig('reurl_cc_api')), $html);
     //if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html, $statusCode);
 }
