@@ -249,7 +249,8 @@ function main($path)
                 return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 302, [ 'Location' => $tmp ]);
                 //return message('<meta http-equiv="refresh" content="2;URL='.$_SERVER['base_path'].'">Please visit from <a href="'.$_SERVER['base_path'].'">Home Page</a>.', 'Error', 404);
             }
-            $path = substr($path, strlen('/' . $_SERVER['disktag']));
+            //$path = substr($path, strlen('/' . $_SERVER['disktag']));
+            $path = splitfirst($path, $_SERVER['disktag'])[1];
             if ($_SERVER['disktag']!='') $_SERVER['base_disk_path'] = path_format($_SERVER['base_disk_path'] . '/' . $_SERVER['disktag'] . '/');
         }
     } else $_SERVER['disktag'] = $disktags[0];
@@ -358,7 +359,8 @@ function main($path)
     } else {
         $files = $drive->list_files($path1);
     }
-    if ($path!=='') if ( $files['type']=='folder' && substr($path, -1)!=='/' ) {
+    //if ($path!=='') 
+    if ( $files['type']=='folder' && substr($path, -1)!=='/' ) {
         $tmp = path_format($_SERVER['base_disk_path'] . $path . '/');
         return output('<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
@@ -1207,6 +1209,7 @@ function splitfirst($str, $split)
         $tmp[0] = '';
         $tmp[1] = substr($str, $len);
     }
+    if ($tmp[1]===false) $tmp[1] = '';
     return $tmp;
 }
 
@@ -1224,6 +1227,7 @@ function splitlast($str, $split)
         $tmp[0] = '';
         $tmp[1] = substr($str, $len);
     }
+    if ($tmp[1]===false) $tmp[1] = '';
     return $tmp;
 }
 
