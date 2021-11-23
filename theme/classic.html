@@ -785,6 +785,7 @@
     }
     function size_reformat(str) {
         if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+        if (str.substr(-2)=='TB') num=str.substr(0,str.length-3)*1024*1024*1024*1024;
         if (str.substr(-2)=='GB') num=str.substr(0,str.length-3)*1024*1024*1024;
         if (str.substr(-2)=='MB') num=str.substr(0,str.length-3)*1024*1024;
         if (str.substr(-2)=='KB') num=str.substr(0,str.length-3)*1024;
