@@ -1396,19 +1396,10 @@ function EnvOpt($needUpdate = 0)
         }
     } else return message('please login again', 'Need login', 403);
 
-    if (isset($_GET['preview'])) {
-        $preurl = $_SERVER['PHP_SELF'] . '?preview';
-    } else {
-        $preurl = path_format($_SERVER['PHP_SELF'] . '/');
-    }
     $html .= '
-<a id="back" href="">' . getconstStr('Back') . '</a><br>
+<a id="back" href="./">' . getconstStr('Back') . '</a><br>
     <script>
-        var url = location.href;
-        var search = location.search;
-        url = url.substr(0, url.length-search.length);
-        if (search.indexOf("preview")>0) url += "?preview";
-        document.getElementById("back").href = url;
+        if (location.search.indexOf("preview")>0) document.getElementById("back").href = "?preview";
     </script>
 ';
     if ($_GET['setup']==='cmd') {
