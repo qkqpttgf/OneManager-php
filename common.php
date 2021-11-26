@@ -1402,7 +1402,14 @@ function EnvOpt($needUpdate = 0)
         $preurl = path_format($_SERVER['PHP_SELF'] . '/');
     }
     $html .= '
-<a href="' . $preurl . '">' . getconstStr('Back') . '</a><br>
+<a id="back" href="">' . getconstStr('Back') . '</a><br>
+    <script>
+        var url = location.href;
+        var search = location.search;
+        url = url.substr(0, url.length-search.length);
+        if (search.indexOf("preview")>0) url += "?preview";
+        document.getElementById("back").href = url;
+    </script>
 ';
     if ($_GET['setup']==='cmd') {
         $statusCode = 200;
