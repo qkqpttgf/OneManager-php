@@ -167,6 +167,13 @@ function main($path)
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
 
+    if (isset($_GET['WaitFunction'])) {
+        $response = WaitFunction($_GET['WaitFunction']);
+        //var_dump($response);
+        if ($response===true) return output("ok", 200);
+        elseif ($response===false) return output("", 206);
+        else return $response;
+    }
     if (getConfig('admin')=='') return install();
     if (getConfig('adminloginpage')=='') {
         $adminloginpage = 'admin';
@@ -204,13 +211,6 @@ function main($path)
             $url = path_format($_SERVER['PHP_SELF'] . '/');
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
-    if (isset($_GET['WaitFunction'])) {
-        $response = WaitFunction($_GET['WaitFunction']);
-        //var_dump($response);
-        if ($response===true) return output("ok", 200);
-        elseif ($response===false) return output("", 206);
-        else return $response;
-    }
 
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
@@ -616,7 +616,7 @@ function filecache($disktag)
 {
     $dir = sys_get_temp_dir();
     if (!is_writable($dir)) {
-        $tmp = __DIR__ . '/tmp/';
+        $tmp = $_SERVER['HTTP_HOST'] . '/tmp/';
         if (file_exists($tmp)) {
             if ( is_writable($tmp) ) $dir = $tmp;
         } elseif ( mkdir($tmp) ) $dir = $tmp;
@@ -636,10 +636,10 @@ function sortConfig(&$arr)
 {
     ksort($arr);
 
-    $tags = explode('|', $arr['disktag']);
-    unset($arr['disktag']);
-    if ($tags[0]!='') {
-        foreach($tags as $tag) {
+    if (isset($arr['disktag'])) {
+        $tags = explode('|', $arr['disktag']);
+        unset($arr['disktag']);
+        foreach($tags as $tag) if (isset($arr[$tag])) {
             $disks[$tag] = $arr[$tag];
             unset($arr[$tag]);
         }
@@ -920,7 +920,7 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                             //setTimeout(function() { getStatus() }, 1000);
                         }
                     } else if (xhr.status==206) {
-                        errordiv.innerHTML = min + "<br>' . getconstStr('Wait') . '" + x;
+                        errordiv.innerHTML = "' . getconstStr('Wait') . '" + x + "<br>" + min;
                         setTimeout(function() { getStatus() }, 1000);
                     } else {
                         errordiv.innerHTML = "ERROR<br>" + xhr.status + "<br>" + xhr.responseText;
@@ -1405,8 +1405,9 @@ function EnvOpt($needUpdate = 0)
     if ($_GET['setup']==='cmd') {
         $statusCode = 200;
         $html .= '
+OneManager DIR: ' . __DIR__ . '
 <form name="form1" method="POST" action="">
-    <input id="inputarea" name="cmd" style="width:100%" value="' . $_POST['cmd'] . '"><br>
+    <input id="inputarea" name="cmd" style="width:100%" value="' . $_POST['cmd'] . '" placeholder="ls, pwd, cat"><br>
     <input type="submit" value="post">
 </form>';
         if ($_POST['cmd']!='') {
@@ -1435,6 +1436,9 @@ output:
     }, 500);
 </script>';
         return message($html, 'Run cmd', $statusCode);
+    }
+    if ($_GET['setup']==='auth') {
+        return changeAuthKey();
     }
     if ($_GET['setup']==='platform') {
         $frame .= '
