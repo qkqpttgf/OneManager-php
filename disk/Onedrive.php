@@ -611,6 +611,7 @@ class Onedrive {
                 texta[i].style.height = texta[i].scrollHeight + \'px\';
             }
         </script>';
+                $tmptoken['Driver'] = get_class($this);
                 $tmptoken['refresh_token'] = $refresh_token;
                 $tmptoken['token_expires'] = time()+7*24*60*60;
                 $response = setConfigResponse( setConfig($tmptoken, $this->disktag) );
@@ -733,7 +734,7 @@ class Onedrive {
                 <label><input type="checkbox" name="NT_Drive_custom" onclick="document.getElementById(\'NT_secret\').style.display=(this.checked?\'\':\'none\');">' . getconstStr('CustomIdSecret') . '</label><br>
                 <div id="NT_secret" style="display:none;margin:10px 35px">
                     <a href="https://portal.azure.com/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps" target="_blank">' . getconstStr('GetSecretIDandKEY') . '</a><br>
-                    return_uri(Reply URL):<br>https://scfonedrive.github.io/<br>
+                    return_uri(Reply URL):<br>' . $this->redirect_uri . '<br>
                     client_id:<input type="text" name="NT_client_id" style="width:100%" placeholder="a1b2c345-90ab-cdef-ghij-klmnopqrstuv"><br>
                     client_secret:<input type="text" name="NT_client_secret" style="width:100%"><br>
                 </div>
@@ -743,7 +744,7 @@ class Onedrive {
                 <label><input type="checkbox" name="CN_Drive_custom" onclick="document.getElementById(\'CN_secret\').style.display=(this.checked?\'\':\'none\');">' . getconstStr('CustomIdSecret') . '</label><br>
                 <div id="CN_secret" style="display:none;margin:10px 35px">
                     <a href="https://portal.azure.cn/#blade/Microsoft_AAD_IAM/ActiveDirectoryMenuBlade/RegisteredApps" target="_blank">' . getconstStr('GetSecretIDandKEY') . '</a><br>
-                    return_uri(Reply URL):<br>https://scfonedrive.github.io/<br>
+                    return_uri(Reply URL):<br>' . $this->redirect_uri . '<br>
                     client_id:<input type="text" name="CN_client_id" style="width:100%" placeholder="a1b2c345-90ab-cdef-ghij-klmnopqrstuv"><br>
                     client_secret:<input type="text" name="CN_client_secret" style="width:100%"><br>
                 </div>
