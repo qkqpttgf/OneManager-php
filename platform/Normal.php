@@ -390,3 +390,7 @@ function moveFolder($from, $to, $slash)
 function WaitFunction() {
     return true;
 }
+
+function changeAuthKey() {
+    return message("Not need.", 'Change platform Auth token or key', 404);
+}
