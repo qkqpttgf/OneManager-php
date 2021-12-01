@@ -185,16 +185,16 @@ function install()
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $AccessKeyID = getConfig('AccessKeyID');
-            if ($AccessKeyID=='') {
+            //$AccessKeyID = getConfig('AccessKeyID');
+            //if ($AccessKeyID=='') {
                 $AccessKeyID = $_POST['AccessKeyID'];
                 $tmp['AccessKeyID'] = $AccessKeyID;
-            }
-            $AccessKeySecret = getConfig('AccessKeySecret');
-            if ($AccessKeySecret=='') {
+            //}
+            //$AccessKeySecret = getConfig('AccessKeySecret');
+            //if ($AccessKeySecret=='') {
                 $AccessKeySecret = $_POST['AccessKeySecret'];
                 $tmp['AccessKeySecret'] = $AccessKeySecret;
-            }
+            //}
             $response = setConfigResponse( SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret) );
             if (api_error($response)) {
                 $html = api_error_msg($response);
@@ -229,12 +229,13 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') $html .= '
-        <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">'.getconstStr('Create').' AccessKeyID & AccessKeySecret</a><br>
-        <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
-        <label>AccessKeySecret:<input name="AccessKeySecret" type="text" placeholder="" size=""></label><br>';
+        //if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') 
         $html .= '
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">' . getconstStr('Create') . ' AccessKeyID & AccessKeySecret</a><br>
+        <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
+        <label>AccessKeySecret:<input name="AccessKeySecret" type="password" placeholder="" size=""></label><br>';
+        $html .= '
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         var nowtime= new Date();
@@ -253,7 +254,8 @@ language:<br>';
         }
         function notnull(t)
         {';
-        if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') $html .= '
+        //if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') 
+        $html .= '
             if (t.AccessKeyID.value==\'\') {
                 alert(\'input AccessKeyID\');
                 return false;
@@ -269,7 +271,7 @@ language:<br>';
         $title = getconstStr('SelectLanguage');
         return message($html, $title, 201);
     }
-    $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
+    $html .= '<a href="?install0">' . getconstStr('ClickInstall').'</a>, ' . getconstStr('LogintoBind');
     $title = 'Install';
     return message($html, $title, 201);
 }
@@ -508,4 +510,53 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 
 function WaitFunction() {
     return true;
+}
+
+function changeAuthKey() {
+    if ($_POST['AccessKeyID']!=''&&$_POST['AccessKeySecret']!='') {
+        $tmp['AccessKeyID'] = $_POST['AccessKeyID'];
+        $tmp['AccessKeySecret'] = $_POST['AccessKeySecret'];
+        $response = setConfigResponse( SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $tmp['AccessKeyID'], $tmp['AccessKeySecret']) );
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+    <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">' . getconstStr('Create') . ' AccessKeyID & AccessKeySecret</a><br>
+    <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
+    <label>AccessKeySecret:<input name="AccessKeySecret" type="password" placeholder="" size=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.AccessKeyID.value==\'\') {
+                alert(\'input AccessKeyID\');
+                return false;
+            }
+            if (t.AccessKeySecret.value==\'\') {
+                alert(\'input SecretKey\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }
