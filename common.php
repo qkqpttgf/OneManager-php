@@ -616,12 +616,12 @@ function filecache($disktag)
 {
     $dir = sys_get_temp_dir();
     if (!is_writable($dir)) {
-        $tmp = $_SERVER['HTTP_HOST'] . '/tmp/';
+        $tmp = __DIR__ . '/tmp/';
         if (file_exists($tmp)) {
             if ( is_writable($tmp) ) $dir = $tmp;
         } elseif ( mkdir($tmp) ) $dir = $tmp;
     }
-    $tag = __DIR__ . '/OneManager/' . $disktag;
+    $tag = $_SERVER['HTTP_HOST'] . '/OneManager/' . $disktag;
     while (strpos($tag, '/')>-1) $tag = str_replace('/', '_', $tag);
     if (strpos($tag, ':')>-1) {
         $tag = str_replace(':', '_', $tag);
