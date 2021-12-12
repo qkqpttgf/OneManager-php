@@ -60,7 +60,30 @@
 
 ### How to Install
 
-  https://scfonedrive.github.io/Vercel/Deploy.html .  
+> https://scfonedrive.github.io/Vercel/Deploy.html .  
+
+---
+
+# Deploy to Replit  
+
+### Official
+
+  https://repl.it/  
+  https://replit.com/  
+
+### Demo
+
+  null  
+
+### Notice
+
+> `Import from Github` useing the `.replit` file in code files will cause an empty web page, may someone help me?  
+
+### How to Install
+
+> 1. Click the "+" or "Create Repl", find template "PHP Web Server" (via input "php"), input a name for your project in "Title" or left it default, Click the "+ Create Repl".  
+> 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -f OneManager-php/* ./ && mv -f OneManager-php/.[^.]* ./ && rm -r OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
+> 3. Click the green button "Run", it will show the web page on the right, you can open it in a new tab or window.  
 
 ---
 
