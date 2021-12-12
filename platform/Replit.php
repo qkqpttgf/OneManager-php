@@ -152,7 +152,7 @@ function setConfig($arr, $disktag = '')
     foreach ($tmp as $key => $val) {
       if (!!$val) $response = ReplitAPI('w', $key, $val);
       else $response = ReplitAPI('d', $key);
-      if (api_error($response)) return ['stat'=>500, 'body'=>$response['body']];
+      if (api_error($response)) return ['stat'=>$response['stat'], 'body'=>$response['body'] . "<br>\nError in writting " . $key . "=" . $val];
     }
     //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($tmp, JSON_PRETTY_PRINT));
     return $response;
@@ -286,7 +286,7 @@ function ConfigWriteable()
 
 function api_error($response)
 {
-  return !($response['stat']==200||$response['stat']==204);
+  return !($response['stat']==200||$response['stat']==204||$response['stat']==404);
     //return isset($response['message']);
 }
 
