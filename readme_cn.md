@@ -62,6 +62,29 @@
 
 ---
 
+# 部署到 Replit  
+
+### 官网
+
+  https://repl.it/  
+  https://replit.com/  
+
+### Demo
+
+  null  
+
+### 注意
+
+> 直接`Import from Github`通过`.replit`文件指定php时，网页会空白，有人帮忙解决吗？  
+
+### 安装
+
+> 1. 点右上的 "+" 或左上的 "+ Create Repl"，template中输入php，点选"PHP Web Server"，在"Title"里输入你想要的名称或者让它默认, 点下面的"+ Create Repl"。  
+> 2. 结束后，在右边的Console或Shell里输入 `git clone https://github.com/qkqpttgf/OneManager-php && mv -f OneManager-php/* ./ && mv -f OneManager-php/.[^.]* ./ && rm -r OneManager-php` 敲回车运行。  
+> 3. 点上方的绿色 "Run" 按钮，右边会显示一个网页，你可以在新窗口打开它来安装。  
+
+---
+
 # 部署到腾讯无服务器云函数 Serverless Cloud Function (SCF)  
 
 ### 官网
