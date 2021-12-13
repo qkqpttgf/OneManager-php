@@ -2,6 +2,8 @@
 
 # 注意：
 
+  请关掉浏览器的翻译。  
+
   Releases只是当存档在用的，并不是最新代码。  
 
   请将设置中所有的设置项的说明都读一遍，有些问题就不用问了。  
@@ -71,7 +73,7 @@
 
 ### Demo
 
-  null  
+  https://onemanager.qkqpttgf.repl.co/  
 
 ### 注意
 
@@ -81,7 +83,7 @@
 
 > 1. 点右上的 "+" 或左上的 "+ Create Repl"，template中输入php，点选"PHP Web Server"，在"Title"里输入你想要的名称或者让它默认, 点下面的"+ Create Repl"。  
 > 2. 结束后，在右边的Console或Shell里输入 `git clone https://github.com/qkqpttgf/OneManager-php && mv -f OneManager-php/* ./ && mv -f OneManager-php/.[^.]* ./ && rm -r OneManager-php` 敲回车运行。  
-> 3. 点上方的绿色 "Run" 按钮，右边会显示一个网页，你可以在新窗口打开它来安装。  
+> 3. 点上方的绿色 "Run" 按钮，右边会显示一个网页，你要在新窗口打开它来安装，不然不能登录。  
 
 ---
 
