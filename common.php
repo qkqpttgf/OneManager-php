@@ -1085,7 +1085,7 @@ function adminform($name = '', $pass = '', $storage = '', $path = '')
         }
     }
 </script>
-<script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>';
+<script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script>';
     $html .= '</html>';
     return output($html, $statusCode);
 }
@@ -1778,7 +1778,7 @@ output:
             $frame .= getconstStr('NotNeedUpdate');
         }*/
         $frame .= '<br><br>
-<script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script>
 <table>
     <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
         <input name="_admin" type="hidden" value="">
