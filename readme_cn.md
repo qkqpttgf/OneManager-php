@@ -10,38 +10,6 @@
 
 ---
 
-# 部署到 Heroku  
-
-### 官网
-
-  https://heroku.com  
-
-### Demo
-
-  https://herooneindex.herokuapp.com/  
-
-### 安装
-
-> 给这个项目点star，然后fork，在Heroku创建一个app，然后点进Deploy页，在"Deployment method"处点"Connect GitHub"，选择你的fork。   
-
----
-
-# 部署到 Glitch  
-
-### 官网
-
-  https://glitch.com/  
-
-### Demo
-
-  https://onemanager.glitch.me/  
-
-### 安装
-
-  点 [New Project] -> 点 [Import form Github] -> 粘贴 "https://github.com/qkqpttgf/OneManager-php" ，结束后，左上角点 [Show] -> [In a New Window]。  
-
----
-
 # 部署到 Vercel  
 
 ### 官网
@@ -84,6 +52,38 @@
 > 1. 点右上的 "+" 或左上的 "+ Create Repl"，template中输入php，点选"PHP Web Server"，在"Title"里输入你想要的名称或者让它默认, 点下面的"+ Create Repl"。  
 > 2. 结束后，在右边的Console或Shell里输入 `git clone https://github.com/qkqpttgf/OneManager-php && mv -f OneManager-php/* ./ && mv -f OneManager-php/.[^.]* ./ && rm -r OneManager-php` 敲回车运行。  
 > 3. 点上方的绿色 "Run" 按钮，右边会显示一个网页，你要在新窗口打开它来安装，不然不能登录。  
+
+---
+
+# 部署到 Heroku  
+
+### 官网
+
+  https://heroku.com  
+
+### Demo
+
+  https://herooneindex.herokuapp.com/  
+
+### 安装
+
+> 给这个项目点star，然后fork，在Heroku创建一个app，然后点进Deploy页，在"Deployment method"处点"Connect GitHub"，选择你的fork。   
+
+---
+
+# 部署到 Glitch  
+
+### 官网
+
+  https://glitch.com/  
+
+### Demo
+
+  https://onemanager.glitch.me/  
+
+### 安装
+
+  点 [New Project] -> 点 [Import form Github] -> 粘贴 "https://github.com/qkqpttgf/OneManager-php" ，结束后，左上角点 [Show] -> [In a New Window]。  
 
 ---
 
