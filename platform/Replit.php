@@ -158,6 +158,7 @@ function setConfig($arr, $disktag = '')
         }
     }
     $envs = array_filter($envs, 'array_value_isnot_null');
+    sortConfig($envs);
     $response = ReplitAPI('w', 'REPLIT_CONFIG', json_encode($envs));
     //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT));
     savecache('REPLIT_CONFIG', null, '', 0);
