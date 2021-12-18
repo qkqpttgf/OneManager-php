@@ -48,7 +48,7 @@
 ### How to Install
 
 > 1. Click the "+" or "Create Repl", find template "PHP Web Server" (via input "php"), input a name for your project in "Title" or left it default, Click the "+ Create Repl".  
-> 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -f OneManager-php/* ./ && mv -f OneManager-php/.[^.]* ./ && rm -r OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
+> 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -b OneManager-php/* ./ && mv -b OneManager-php/.[^.]* ./ && rm -rf *~ && rm -rf OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
 > 3. Click the green button "Run", it will show the web page on the right, you can open it in a new tab or window.  
 
 ---
@@ -67,7 +67,7 @@
 
 > ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
 >
-> Star this project, then Fork, create a app in Heroku, then turn to the Deploy tab, "Deployment method" via "Connect GitHub", select your github fork.   
+> Star this project, then Fork, create an app in Heroku, then turn to the Deploy tab, "Deployment method" via "Connect GitHub", select your github fork.   
 
 ---
 
