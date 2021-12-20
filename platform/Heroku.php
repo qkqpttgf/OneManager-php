@@ -340,10 +340,15 @@ function_name:' . $_SERVER['function_name'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
-    $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
+        $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $source = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return ['stat'=>403, 'body'=>json_encode(['id'=>'Error', 'message'=>'Git Source input Error!'])];
+
     return updateHerokuapp(getConfig('HerokuappId'), getConfig('APIKey'), $source);
 }
 
