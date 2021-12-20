@@ -1852,11 +1852,11 @@ output:
         }
         if ($needUpdate) {
             $frame .= '<div style="position: relative; word-wrap: break-word;">
-        ' . str_replace("\r", '<br>', $_SERVER['github_ver_new']) . '
+        ' . str_replace("\n", '<br>', $_SERVER['github_ver_new']) . '
 </div>
 <button onclick="document.getElementById(\'github_ver_old\').style.display=(document.getElementById(\'github_ver_old\').style.display==\'none\'?\'\':\'none\');">More...</button>
 <div id="github_ver_old" style="position: relative; word-wrap: break-word; display: none">
-        ' . str_replace("\r", '<br>', $_SERVER['github_ver_old']) . '
+        ' . str_replace("\n", '<br>', $_SERVER['github_ver_old']) . '
 </div>';
         }/* else {
             $frame .= getconstStr('NotNeedUpdate');
