@@ -555,7 +555,7 @@ function compareadminsha1($adminsha1, $timestamp, $pass)
     if (!is_numeric($timestamp)) return 'Timestamp not Number';
     if (abs(time()-$timestamp) > 5*60) {
         date_default_timezone_set('UTC');
-        return 'The timestamp in server is ' . time() . ' (' . date("Y-m-d H:i:s") . ' UTC),<br>and your posted timestamp is ' . $timestamp . ' (' . date("Y-m-d H:i:s", $timestamp) . ' UTC)';
+        return 'The time in server is ' . time() . ' (' . date("Y-m-d H:i:s") . ' UTC),<br>and your time is ' . $timestamp . ' (' . date("Y-m-d H:i:s", $timestamp) . ' UTC)';
     }
     if ($adminsha1 == sha1($timestamp . $pass)) return '';
     else return 'Error password';
