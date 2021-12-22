@@ -187,10 +187,10 @@
 </path></svg></div>
     <div style="padding:1px" id="top-div">
 <!--LoginStart-->
-        <a class="login" href="?admin"><ion-icon name="ban-outline"></ion-icon></a><!--onclick="login();"-->
+        <a class="login" href="?admin"><ion-icon name="add-circle-outline"></ion-icon></a><!--onclick="login();"-->
 <!--LoginEnd-->
 <!--AdminStart-->
-        <li class="operate" id="opflow"><ion-icon name="ban-outline"></ion-icon><ul>
+        <li class="operate" id="opflow"><ion-icon name="add-circle-outline"></ion-icon><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle-outline"></ion-icon><!--constStr@Create--></a></li>
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock-closed-outline"></ion-icon><!--constStr@Encrypt--></a></li>
@@ -300,7 +300,9 @@
                             var prePath = strFullPath.substring(0, pos);
                             var width = window.innerWidth;
                             // var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-                            document.getElementById("url").value= prePath + "<!--FileEncodeUrl-->";
+                            let url = location.href;
+                            url = url.substr(0, url.length-8);
+                            document.getElementById("url").value= url;
                             // document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
                             if(width < 495) { 
                                 if(document.getElementById("office-a")) { 
@@ -603,7 +605,7 @@
 <!--MdRequireStart--><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
 <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked@2.0.0/lib/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.1/spark-md5.min.js"></script><!--GuestUploadEnd-->
-<!--AliyundriveUploadJsStart--><script src="https://cdn.jsdelivr.net/npm/sha1@1.1.1/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
+<!--AliyundriveUploadJsStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -642,11 +644,6 @@
 <!--LoginEnd-->
 <!--ListStart-->
 <!--IsFileStart-->
-    var $url = document.getElementById('url').value;
-    if ($url) {
-        $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
-        $url.style.height = $url.scrollHeight + 'px';
-    }
 <!--IsofficeFileStart-->
     var $officearea=document.getElementById('office-a');
     if ($officearea) {
@@ -1807,6 +1804,6 @@ function size_format(num) {
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<!--LoginStart--><script src="https://cdn.jsdelivr.net/npm/sha1@1.1.1/sha1.min.js"></script><!--LoginEnd-->
+<!--LoginStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--LoginEnd-->
 <!--customScript-->
 </html>
