@@ -202,13 +202,11 @@ function install()
             $title = 'Error';
             return message($html, $title, 201);
         }*/
-        $html .= '<button id="checkrewritebtn" onclick="checkrewrite();">'.getconstStr('MakesuerRewriteOn').'</button>
-<div id="formdiv" style="display: none">
+        $html .= '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"><br>
-        <input id="submitbtn" type="submit" value="'.getconstStr('Submit').'" disabled>
+        <input id="submitbtn" type="submit" value="'.getconstStr('Submit').'">
     </form>
-</div>
     <script>
         var nowtime= new Date();
         var timezone = 0-nowtime.getTimezoneOffset()/60;
@@ -223,29 +221,6 @@ function install()
                 return false;
             }
             return true;
-        }
-        function checkrewrite()
-        {
-            url=location.protocol + "//" + location.host;
-            //if (location.port!="") url += ":" + location.port;
-            url += location.pathname;
-            if (url.substr(-1)!="/") url += "/";
-            url += "app.json";
-            url += "?" + Date.now();
-            var xhr4 = new XMLHttpRequest();
-            xhr4.open("GET", url);
-            xhr4.setRequestHeader("x-requested-with","XMLHttpRequest");
-            xhr4.send(null);
-            xhr4.onload = function(e){
-                console.log(xhr4.responseText+","+xhr4.status);
-                if (xhr4.status==201) {
-                    document.getElementById("checkrewritebtn").style.display = "none";
-                    document.getElementById("submitbtn").disabled = false;
-                    document.getElementById("formdiv").style.display = "";
-                } else {
-                    alert("' . getconstStr('MakesuerRewriteOn') . '?\nfalse\n\nUrl: " + url + "\nExpect http code 201, but received " + xhr4.status);
-                }
-            }
         }
     </script>';
         $title = getconstStr('SetAdminPassword');
