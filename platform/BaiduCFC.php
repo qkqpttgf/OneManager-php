@@ -1,4 +1,6 @@
 <?php
+        // https://cloud.baidu.com/doc/CFC/s/jjwvz45ex
+        // https://cloud.baidu.com/doc/CFC/s/2jwvz44ns
 
 function printInput($event, $context)
 {
@@ -164,16 +166,16 @@ function install()
     }
     if ($_GET['install1']) {
         $tmp['timezone'] = $_COOKIE['timezone'];
-        $SecretId = getConfig('SecretId');
-        if ($SecretId=='') {
+        //$SecretId = getConfig('SecretId');
+        //if ($SecretId=='') {
             $SecretId = $_POST['SecretId'];
             $tmp['SecretId'] = $SecretId;
-        }
-        $SecretKey = getConfig('SecretKey');
-        if ($SecretKey=='') {
+        //}
+        //$SecretKey = getConfig('SecretKey');
+        //if ($SecretKey=='') {
             $SecretKey = $_POST['SecretKey'];
             $tmp['SecretKey'] = $SecretKey;
-        }
+        //}
         $response = setConfigResponse(SetbaseConfig($tmp, $SecretId, $SecretKey));
         if (api_error($response)) {
             $html = api_error_msg($response);
@@ -207,12 +209,13 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
-        <a href="https://console.bce.baidu.com/iam/#/iam/accesslist" target="_blank">'.getconstStr('Create').' Access Key & Secret Key</a><br>
-        <label>Access Key:<input name="SecretId" type="text" placeholder="" size=""></label><br>
-        <label>Secret Key:<input name="SecretKey" type="text" placeholder="" size=""></label><br>';
+        //if (getConfig('SecretId')==''||getConfig('SecretKey')=='') 
         $html .= '
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <a href="https://console.bce.baidu.com/iam/#/iam/accesslist" target="_blank">' . getconstStr('Create') . ' Access Key & Secret Key</a><br>
+        <label>Access Key:<input name="SecretId" type="text" placeholder="" size=""></label><br>
+        <label>Secret Key:<input name="SecretKey" type="password" placeholder="" size=""></label><br>';
+        $html .= '
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         var nowtime= new Date();
@@ -231,7 +234,8 @@ language:<br>';
         }
         function notnull(t)
         {';
-        if (getConfig('SecretId')==''||getConfig('SecretKey')=='') $html .= '
+        //if (getConfig('SecretId')==''||getConfig('SecretKey')=='') 
+        $html .= '
             if (t.SecretId.value==\'\') {
                 alert(\'input Access Key\');
                 return false;
@@ -374,29 +378,24 @@ function setConfigResponse($response)
     return json_decode( $response, true );
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
     $source = '/tmp/code.zip';
     $outPath = '/tmp/';
 
-    // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        // 从github下载对应tar.gz，并解压
+        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return json_encode(['FunctionBrn'=>$_SERVER['functionBrn'], 'code'=>'Git Source input Error!']);
     $tarfile = '/tmp/github.tar.gz';
     file_put_contents($tarfile, file_get_contents($url));
     $phar = new PharData($tarfile);
     $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
 
-    // 获取包中目录名
-    $tmp = scandir('phar://'.$tarfile);
-    $name = $auth.'-'.$project;
-    foreach ($tmp as $f) {
-        if ( substr($f, 0, strlen($name)) == $name) {
-            $outPath .= $f;
-            break;
-        }
-    }
-    // 放入配置文件
-    //file_put_contents($outPath . '/config.php', file_get_contents(__DIR__.'/../config.php'));
+    // 获取解压出的目录名
+    $outPath = findIndexPath($outPath);
 
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();
@@ -428,9 +427,60 @@ function addFileToZip($zip, $rootpath, $path = '')
             }
         }
     }
-    @closedir($path);
+    @closedir($handler);
 }
 
 function WaitFunction() {
     return true;
+}
+
+function changeAuthKey() {
+    if ($_POST['SecretId']!=''&&$_POST['SecretKey']!='') {
+        $SecretId = $_POST['SecretId'];
+        $tmp['SecretId'] = $SecretId;
+        $SecretKey = $_POST['SecretKey'];
+        $tmp['SecretKey'] = $SecretKey;
+        $response = setConfigResponse(SetbaseConfig($tmp, $SecretId, $SecretKey));
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+        <a href="https://console.bce.baidu.com/iam/#/iam/accesslist" target="_blank">' . getconstStr('Create') . ' Access Key & Secret Key</a><br>
+        <label>Access Key:<input name="SecretId" type="text" placeholder="" size=""></label><br>
+        <label>Secret Key:<input name="SecretKey" type="password" placeholder="" size=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.SecretId.value==\'\') {
+                alert(\'input Access Key\');
+                return false;
+            }
+            if (t.SecretKey.value==\'\') {
+                alert(\'input Secret Key\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }

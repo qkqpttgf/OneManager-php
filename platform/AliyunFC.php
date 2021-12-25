@@ -185,16 +185,16 @@ function install()
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $AccessKeyID = getConfig('AccessKeyID');
-            if ($AccessKeyID=='') {
+            //$AccessKeyID = getConfig('AccessKeyID');
+            //if ($AccessKeyID=='') {
                 $AccessKeyID = $_POST['AccessKeyID'];
                 $tmp['AccessKeyID'] = $AccessKeyID;
-            }
-            $AccessKeySecret = getConfig('AccessKeySecret');
-            if ($AccessKeySecret=='') {
+            //}
+            //$AccessKeySecret = getConfig('AccessKeySecret');
+            //if ($AccessKeySecret=='') {
                 $AccessKeySecret = $_POST['AccessKeySecret'];
                 $tmp['AccessKeySecret'] = $AccessKeySecret;
-            }
+            //}
             $response = setConfigResponse( SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $AccessKeyID, $AccessKeySecret) );
             if (api_error($response)) {
                 $html = api_error_msg($response);
@@ -229,12 +229,13 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') $html .= '
-        <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">'.getconstStr('Create').' AccessKeyID & AccessKeySecret</a><br>
-        <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
-        <label>AccessKeySecret:<input name="AccessKeySecret" type="text" placeholder="" size=""></label><br>';
+        //if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') 
         $html .= '
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">' . getconstStr('Create') . ' AccessKeyID & AccessKeySecret</a><br>
+        <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
+        <label>AccessKeySecret:<input name="AccessKeySecret" type="password" placeholder="" size=""></label><br>';
+        $html .= '
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         var nowtime= new Date();
@@ -253,7 +254,8 @@ language:<br>';
         }
         function notnull(t)
         {';
-        if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') $html .= '
+        //if (getConfig('AccessKeyID')==''||getConfig('AccessKeySecret')=='') 
+        $html .= '
             if (t.AccessKeyID.value==\'\') {
                 alert(\'input AccessKeyID\');
                 return false;
@@ -269,7 +271,7 @@ language:<br>';
         $title = getconstStr('SelectLanguage');
         return message($html, $title, 201);
     }
-    $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
+    $html .= '<a href="?install0">' . getconstStr('ClickInstall').'</a>, ' . getconstStr('LogintoBind');
     $title = 'Install';
     return message($html, $title, 201);
 }
@@ -419,42 +421,27 @@ function setConfigResponse($response)
     return json_decode($response, true);
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
     $source = '/tmp/code.zip';
     $outPath = '/tmp/';
 
-    // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        // 从github下载对应tar.gz，并解压
+        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return json_encode(['ErrorMessage'=>'Git Source input Error!']);
     $tarfile = '/tmp/github.tar.gz';
     file_put_contents($tarfile, file_get_contents($url));
     $phar = new PharData($tarfile);
     $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
 
     // 获取解压出的目录名
-/*
-    @ob_start();
-    passthru('ls /tmp | grep '.$auth.'-'.$project.'',$stat);
-            $html.='状态：' . $stat . '
-    结果：
-    ';
-    $archivefolder = ob_get_clean();
-    if (substr($archivefolder,-1)==PHP_EOL) $archivefolder = substr($archivefolder, 0, -1);
-    $outPath .= $archivefolder;
-    $html.=htmlspecialchars($archivefolder);
-    //return $html;
-*/
-    $tmp = scandir($outPath);
-    $name = $auth.'-'.$project;
-    foreach ($tmp as $f) {
-        if ( substr($f, 0, strlen($name)) == $name) {
-            $outPath .= $f;
-            break;
-        }
-    }
+    $outPath = findIndexPath($outPath);
 
     // 将目录中文件打包成zip
-    $zip=new ZipArchive();
+    $zip = new ZipArchive();
     if($zip->open($source, ZipArchive::CREATE)){
         addFileToZip($zip, $outPath); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
         $zip->close(); //关闭处理的zip文件
@@ -481,7 +468,7 @@ function addFileToZip($zip, $rootpath, $path = '')
             }
         }
     }
-    @closedir($path);
+    @closedir($handler);
 }
 
 function myErrorHandler($errno, $errstr, $errfile, $errline) {
@@ -508,4 +495,53 @@ function myErrorHandler($errno, $errstr, $errfile, $errline) {
 
 function WaitFunction() {
     return true;
+}
+
+function changeAuthKey() {
+    if ($_POST['AccessKeyID']!=''&&$_POST['AccessKeySecret']!='') {
+        $tmp['AccessKeyID'] = $_POST['AccessKeyID'];
+        $tmp['AccessKeySecret'] = $_POST['AccessKeySecret'];
+        $response = setConfigResponse( SetbaseConfig($tmp, $_SERVER['accountId'], $_SERVER['region'], $_SERVER['service_name'], $_SERVER['function_name'], $tmp['AccessKeyID'], $tmp['AccessKeySecret']) );
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+    <a href="https://usercenter.console.aliyun.com/?#/manage/ak" target="_blank">' . getconstStr('Create') . ' AccessKeyID & AccessKeySecret</a><br>
+    <label>AccessKeyID:<input name="AccessKeyID" type="text" placeholder="" size=""></label><br>
+    <label>AccessKeySecret:<input name="AccessKeySecret" type="password" placeholder="" size=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.AccessKeyID.value==\'\') {
+                alert(\'input AccessKeyID\');
+                return false;
+            }
+            if (t.AccessKeySecret.value==\'\') {
+                alert(\'input SecretKey\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }

@@ -1,7 +1,31 @@
+20211220-1100.42
+Add new platform Replit. Add a git source for update. sha1.js use jsdelivr cdn. fix some bugs.
+新增Replit平台。新增国内git源，以后国内可以选择从HIT源更新。sha1.js换成jsdelivr CDN。修复bug。
+
+20211201-1602.41
+add a latent function, you can edit platform token(or API key) via '?setup=auth' when the token invalid, not need edit it in Environment(or Config Var) manually, (even in Vercel, config saved in file, and can't modiy it manually).
+新增隐藏功能，在平台操作代码的token或API key失效时，可以在 '?setup=auth' 修改它，不用去环境变量修改了（特别地，Vercel保存在代码中时都改不到）。
+20211129
+check if there is another deployment building when start deploy.
+Vercel部署时检测是否有另一个部署。
+20211104
+check if exist php-curl or not in php host and VPS.
+在VPS中检测是否有php-curl。
+20211021
+specialchars, fix: list folder, encrypt folder, preview files, rename, show in title, error on back link after login at specialchars folder, etc.
+针对特殊字符，解决目录的列表，目录的加密，文件的预览，目录与文件重命名，在网页标题的显示，在特殊字符处登录后跳转出错等问题。
+20211006
+oprate files by fileID, write a localStorage when login to anti CSRF.
+管理时对文件id操作，管理登录时写入一个localStorage预防CSRF。
+20210908
+add fileConduitSize&fileConduitCacheTime, little files can stream from program, better to show html/js as local file.
+增加fileConduitSize，fileConduitCacheTime，小文件可以从服务器中转，以对html/js本地化更好的支持。
+20210903
+add a latent function, you can run some command by '?setup=cmd', be care, please dont try "top", and set times by "ping -c 4".
+新增隐藏功能，你可以通过'?setup=cmd'来跑一些命令，注意不要试图跑top，另外ping请-c设置次数。
 20210820-1810.40
 because Vercel must redeploy after change Environment Variables, and it must <4k, so decide that, save config in code file. <font color=red>in Vercel, after update, please install again. if you want continue use Environment, please add a ( name: "ONEMANAGER_CONFIG_SAVE", value: "env" ) in Environment Variables in Project Settings before update.</font>
 因为Vercel修改环境变量也必须重新部署才生效，而且环境变量只能小于4k，所以决定将配置保存在代码文件中。<font color=red>升级更新后，用Vercel的请重新安装。如果还想继续使用环境变量，请在更新前，在Project Settings的Environment Variables中，新增一个( name: "ONEMANAGER_CONFIG_SAVE", value: "env" )的环境变量。</font>
-
 20210817-2030.39
 fix bugs in Vercel. add wait function in operating. change update method in SCF. add payme in readme.
 修复一些Vercel上的bug。在操作完后添加等待功能，确认平台已经准备好。SCF的更新方式改变。在readme中添加讨饭链接。

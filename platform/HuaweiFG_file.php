@@ -1,4 +1,7 @@
 <?php
+// https://support.huaweicloud.com/api-functiongraph/functiongraph_06_0110.html
+// https://support.huaweicloud.com/api-functiongraph/functiongraph_06_0111.html
+
 global $contextUserData;
 
 function printInput($event, $context)
@@ -77,10 +80,8 @@ function GetPathSetting($event, $context)
 
 function getConfig($str, $disktag = '')
 {
-
-    global $slash;
-    $projectPath = splitlast(__DIR__, $slash)[0];
-    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $projectPath = splitlast(__DIR__, '/')[0];
+    $configPath = $projectPath . '/.data/config.php';
     $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') {
@@ -105,9 +106,8 @@ function setConfig($arr, $disktag = '')
 {
 
     if ($disktag=='') $disktag = $_SERVER['disktag'];
-    global $slash;
-    $projectPath = splitlast(__DIR__, $slash)[0];
-    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $projectPath = splitlast(__DIR__, '/')[0];
+    $configPath = $projectPath . '/.data/config.php';
     $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $envs = json_decode($configs, true);
@@ -204,18 +204,9 @@ function install()
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $tmp['HW_urn'] = getConfig('HW_urn');
-            if ($tmp['HW_urn']=='') {
-                $tmp['HW_urn'] = $_POST['HW_urn'];
-            }
-            $tmp['HW_key'] = getConfig('HW_key');
-            if ($tmp['HW_key']=='') {
-                $tmp['HW_key'] = $_POST['HW_key'];
-            }
-            $tmp['HW_secret'] = getConfig('HW_secret');
-            if ($tmp['HW_secret']=='') {
-                $tmp['HW_secret'] = $_POST['HW_secret'];
-            }
+            $tmp['HW_urn'] = $_POST['HW_urn'];
+            $tmp['HW_key'] = $_POST['HW_key'];
+            $tmp['HW_secret'] = $_POST['HW_secret'];
             $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
             //return message($html, $title, 201);
             $response = setConfigResponse( SetbaseConfig($tmp, $tmp['HW_urn'], $tmp['HW_key'], $tmp['HW_secret']) );
@@ -257,13 +248,14 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('HW_urn')==''||getConfig('HW_key')==''||getConfig('HW_secret')=='') $html .= '
+        //if (getConfig('HW_urn')==''||getConfig('HW_key')==''||getConfig('HW_secret')=='') 
+        $html .= '
         在函数代码操作页上方找到URN，鼠标放上去后显示URN，复制填入：<br>
         <label>URN:<input name="HW_urn" type="text" placeholder="urn:fss:ap-XXXXXXXX:XXXXXXXXXXXXXXXXXXXXc01a1e9caXXX:function:default:XXXXX:latest" size=""></label><br>
         <a href="https://console.huaweicloud.com/iam/#/mine/accessKey" target="_blank">点击链接</a>，新增访问密钥，
         在下载的credentials.csv文件中找到对应信息，填入：<br>
         <label>Access Key Id:<input name="HW_key" type="text" placeholder="" size=""></label><br>
-        <label>Secret Access Key:<input name="HW_secret" type="text" placeholder="" size=""></label><br>';
+        <label>Secret Access Key:<input name="HW_secret" type="password" placeholder="" size=""></label><br>';
         $html .= '
         <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
         <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
@@ -287,17 +279,18 @@ language:<br>';
         }
         function notnull(t)
         {';
-        if (getConfig('HW_urn')==''||getConfig('HW_key')==''||getConfig('HW_secret')=='') $html .= '
+        //if (getConfig('HW_urn')==''||getConfig('HW_key')==''||getConfig('HW_secret')=='') 
+        $html .= '
             if (t.HW_urn.value==\'\') {
                 alert(\'input URN\');
                 return false;
             }
             if (t.HW_key.value==\'\') {
-                alert(\'input name\');
+                alert(\'input Access Key Id\');
                 return false;
             }
             if (t.HW_secret.value==\'\') {
-                alert(\'input pwd\');
+                alert(\'input Secret Access Key\');
                 return false;
             }';
         $html .= '
@@ -426,7 +419,6 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
 
 function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
 {
-    global $slash;
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
     if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
     else {
@@ -469,8 +461,8 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
         return $response;
     }
 
-    $projectPath = splitlast(__DIR__, $slash)[0];
-    $configPath = $projectPath . $slash . '.data' . $slash . 'config.php';
+    $projectPath = splitlast(__DIR__, '/')[0];
+    $configPath = $projectPath . '/.data/config.php';
     $s = file_get_contents($configPath);
     $configs = '{' . splitlast(splitfirst($s, '{')[1], '}')[0] . '}';
     if ($configs!='') $tmp_env = json_decode($configs, true);
@@ -525,39 +517,24 @@ function setConfigResponse($response)
     return json_decode( $response, true );
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
     $source = '/tmp/code.zip';
     $outPath = '/tmp/';
 
-    // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        // 从github下载对应tar.gz，并解压
+        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return json_encode(['error_code'=>'Error', 'error_msg'=>'Git Source input Error!']);
     $tarfile = '/tmp/github.tar.gz';
     file_put_contents($tarfile, file_get_contents($url));
     $phar = new PharData($tarfile);
     $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
 
     // 获取解压出的目录名
-/*
-    @ob_start();
-    passthru('ls /tmp | grep '.$auth.'-'.$project.'',$stat);
-            $html.='状态：' . $stat . '
-    结果：
-    ';
-    $archivefolder = ob_get_clean();
-    if (substr($archivefolder,-1)==PHP_EOL) $archivefolder = substr($archivefolder, 0, -1);
-    $outPath .= $archivefolder;
-    $html.=htmlspecialchars($archivefolder);
-    //return $html;
-*/
-    $tmp = scandir($outPath);
-    $name = $auth.'-'.$project;
-    foreach ($tmp as $f) {
-        if ( substr($f, 0, strlen($name)) == $name) {
-            $outPath .= $f;
-            break;
-        }
-    }
+    $outPath = findIndexPath($outPath);
 
     // 放入配置文件
     file_put_contents($outPath . '/.data/config.php', file_get_contents(__DIR__ . '/../.data/config.php'));
@@ -592,8 +569,9 @@ function addFileToZip($zip, $rootpath, $path = '')
             }
         }
     }
-    @closedir($path);
+    @closedir($handler);
 }
+
 
 
 
@@ -871,4 +849,55 @@ class Signer
 
 function WaitFunction() {
     return true;
+}
+
+function changeAuthKey() {
+    if ($_POST['HW_key']!=''&&$_POST['HW_secret']!='') {
+        $tmp['HW_key'] = $_POST['HW_key'];
+        $tmp['HW_secret'] = $_POST['HW_secret'];
+        $response = setConfigResponse( SetbaseConfig($tmp, getConfig('HW_urn'), $tmp['HW_key'], $tmp['HW_secret']) );
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var status = "' . $response['DplStatus'] . '";
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+        <a href="https://console.huaweicloud.com/iam/#/mine/accessKey" target="_blank">点击链接</a>，新增访问密钥，
+        在下载的credentials.csv文件中找到对应信息，填入：<br>
+        <label>Access Key Id:<input name="HW_key" type="text" placeholder="" size=""></label><br>
+        <label>Secret Access Key:<input name="HW_secret" type="password" placeholder="" size=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.HW_key.value==\'\') {
+                alert(\'input Access Key Id\');
+                return false;
+            }
+            if (t.HW_secret.value==\'\') {
+                alert(\'input Secret Access Key\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }

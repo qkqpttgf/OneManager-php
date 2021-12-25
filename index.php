@@ -47,6 +47,22 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     http_response_code($re['statusCode']);
     if ($re['isBase64Encoded']) echo base64_decode($re['body']);
     else echo $re['body'];
+} elseif (isset($_SERVER['DOCUMENT_ROOT'])&&substr($_SERVER['DOCUMENT_ROOT'], 0, 13)==='/home/runner/') {
+    include 'platform/Replit.php';
+
+    $path = getpath();
+    //echo 'path:'. $path;
+    $_GET = getGET();
+    //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
+
+    $re = main($path);
+    $sendHeaders = array();
+    foreach ($re['headers'] as $headerName => $headerVal) {
+        header($headerName . ': ' . $headerVal, true);
+    }
+    http_response_code($re['statusCode']);
+    if ($re['isBase64Encoded']) echo base64_decode($re['body']);
+    else echo $re['body'];
 } else {
     include 'platform/Normal.php';
     if (!function_exists('curl_init')) {
@@ -56,7 +72,6 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     //echo 'path:'. $path;
     $_GET = getGET();
     //echo '<pre>'. json_encode($_GET, JSON_PRETTY_PRINT).'</pre>';
-
     $re = main($path);
     $sendHeaders = array();
     foreach ($re['headers'] as $headerName => $headerVal) {

@@ -479,7 +479,10 @@
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
-        $url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
+        //$url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
+        let url = location.href;
+        url = url.substr(0, url.length-8);
+        $url.innerHTML = url.replace(/&amp;/g, '&amp;amp;');
         $url.style.height = $url.scrollHeight + 'px';
     }
 <!--IsofficeFileStart-->
