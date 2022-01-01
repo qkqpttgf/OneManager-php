@@ -187,9 +187,10 @@
                         <img src="<!--FileEncodeUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';if (this.offsetHeight>document.documentElement.clientHeight) this.style.height=document.documentElement.clientHeight + 'px';" />
 <!--IsimgFileEnd-->
 <!--IsvideoFileStart-->
-                        <div id="video-a0" class="artplayerdiv" style="width: 100%; height: 100%;"></div>
+                        <div id="video-a0" class="artplayerdiv"></div>
                         <!--<script src="https://artplayer.org/uncompiled/artplayer.js"></script>-->
-                        <script src="https://cdn.jsdelivr.net/npm/artplayer@4.0.9/dist/artplayer.min.js"></script>
+                        <script src="https://cdn.jsdelivr.net/npm/artplayer@4.1.0/dist/artplayer.min.js"></script>
+                        <!--<script src="https://unpkg.com/artplayer@4.1.0/dist/artplayer.js"></script>-->
 <!--IsvideoFileEnd-->
 <!--IsmusicFileStart-->
                         <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
@@ -550,7 +551,7 @@
     }
 <!--IstxtFileEnd-->
 <!--IsvideoFileStart-->
-    document.getElementById('video-a0').style.height = window.innerHeight + 'px';
+    //document.getElementById('video-a0').style.height = window.innerHeight + 'px';
     var fileurl = "<!--FileEncodeUrl-->";
     var filename1 = fileurl.substr(0, fileurl.lastIndexOf('.'));
     var art = new Artplayer({
@@ -558,7 +559,8 @@
         container: '.artplayerdiv',
         url: fileurl,
         title: fileurl,
-        autoplay: true,
+        autoHeight: true,
+        //autoplay: true,
         pip: true,
         autoSize: true,
         autoMini: true,
@@ -673,6 +675,12 @@
             state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
         },*/
     });
+    art.on('ready', (...agrs) => {
+        console.log(document.getElementById('video-a0').style.height);
+        //if (document.getElementById('video-a0').style.height == window.innerHeight+'px') document.getElementById('video-a0').style.height = (art.rect.height+3) + 'px';
+        //console.log(document.getElementById('video-a0').style.height);
+        //art.play();
+    })
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
