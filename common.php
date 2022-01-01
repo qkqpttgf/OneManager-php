@@ -352,7 +352,7 @@ function main($path)
         $files = json_decode('{"type":"folder"}', true);
     } elseif ($_SERVER['ishidden']==4) {
         if (!getConfig('downloadencrypt', $_SERVER['disktag'])) {
-            $files = json_decode('{"type":"folder"}', true);
+            $files = json_decode('{"type":"file"}', true);
         } else {
             $files = $drive->list_files($path1);
             if ($files['type']=='folder') $files = json_decode('{"type":"folder"}', true);
