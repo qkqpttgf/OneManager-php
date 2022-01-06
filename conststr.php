@@ -1126,9 +1126,9 @@ $constStr = [
         'ar-sa' => 'اختيار اللغة',
     ],
     'RefreshCache' => [
-        'en-us' => 'RefreshCache',
-        'zh-cn' => '刷新缓存',
-        'zh-tw' => '重新整理快取',
+        'en-us' => 'Refresh Cache of Current Folder',
+        'zh-cn' => '刷新当前目录的缓存',
+        'zh-tw' => '重新整理当前資料夾快取',
         'ja' => 'キャッシュを再構築',
         'ko-kr' => '캐시 플러시',
         'fa' => 'رفرش cache',
