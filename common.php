@@ -2225,7 +2225,18 @@ function render_list($path = '', $files = [])
             while (strpos($html, '<!--GuestEnd-->')) $html = str_replace('<!--GuestEnd-->', '', $html);
         }
 
-        if ($_SERVER['ishidden']==4) {
+        if ($_SERVER['ishidden']<4 || ($files['type']=='file'&&getConfig('downloadencrypt', $_SERVER['disktag']))) {
+            while (strpos($html, '<!--EncryptedStart-->')) {
+                $tmp = splitfirst($html, '<!--EncryptedStart-->');
+                $html = $tmp[0];
+                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
+                $html .= $tmp[1];
+            }
+            while (strpos($html, '<!--IsNotHiddenStart-->')) {
+                $html = str_replace('<!--IsNotHiddenStart-->', '', $html);
+                $html = str_replace('<!--IsNotHiddenEnd-->', '', $html);
+            }
+        } else {
             // 加密状态
             if (getConfig('useBasicAuth')) {
                 // use Basic Auth
@@ -2299,17 +2310,6 @@ function render_list($path = '', $files = [])
                 $html = $tmp[0];
                 $tmp = splitfirst($tmp[1], '<!--FootomfEnd-->');
                 $html .= $tmp[1];
-            }
-        } else {
-            while (strpos($html, '<!--EncryptedStart-->')) {
-                $tmp = splitfirst($html, '<!--EncryptedStart-->');
-                $html = $tmp[0];
-                $tmp = splitfirst($tmp[1], '<!--EncryptedEnd-->');
-                $html .= $tmp[1];
-            }
-            while (strpos($html, '<!--IsNotHiddenStart-->')) {
-                $html = str_replace('<!--IsNotHiddenStart-->', '', $html);
-                $html = str_replace('<!--IsNotHiddenEnd-->', '', $html);
             }
         }
         while (strpos($html, '<!--constStr@Download-->')) $html = str_replace('<!--constStr@Download-->', getconstStr('Download'), $html);
