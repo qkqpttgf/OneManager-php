@@ -88,6 +88,9 @@ function main_handler($event, $context)
     $event = json_decode(json_encode($event), true);
     $context = json_decode(json_encode($context), true);
     printInput($event, $context);
+    if ( $event['requestContext']['serviceId'] === substr($event['headers']['host'], 0, strlen($event['requestContext']['serviceId'])) ) {
+        if ($event['path']==='/' . $context['function_name']) return output('add / at last.', 308, ['Location'=>'/'.$event['requestContext']['stage'].'/'.$context['function_name'].'/']);
+    }
     unset($_POST);
     unset($_GET);
     unset($_COOKIE);
