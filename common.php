@@ -137,6 +137,7 @@ function main($path)
     $_SERVER['php_starttime'] = microtime(true);
     $path = path_format($path);
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
+    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
     if (getConfig('forceHttps')&&$_SERVER['REQUEST_SCHEME']=='http') {
         if ($_GET) {
             $tmp = '';
@@ -166,6 +167,8 @@ function main($path)
     $_SERVER['timezone'] = getConfig('timezone');
     if (isset($_COOKIE['timezone'])&&$_COOKIE['timezone']!='') $_SERVER['timezone'] = $_COOKIE['timezone'];
     if ($_SERVER['timezone']=='') $_SERVER['timezone'] = 0;
+    $_SERVER['sitename'] = getConfig('sitename');
+    if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
 
     if (isset($_GET['WaitFunction'])) {
         $response = WaitFunction($_GET['WaitFunction']);
@@ -212,9 +215,35 @@ function main($path)
             return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
         }
 
-    $_SERVER['sitename'] = getConfig('sitename');
-    if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
-    $_SERVER['base_disk_path'] = $_SERVER['base_path'];
+    // Add disk
+    if (isset($_GET['AddDisk'])) {
+        if ($_GET['AddDisk']===true) {
+            $tmp = path_format($_SERVER['base_path'] . '/' . $path);
+            return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 301, [ 'Location' => $tmp ]);
+        }
+        if ($_SERVER['admin']) {
+            if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
+                $drive = new $_GET['AddDisk']($_GET['disktag']);
+                return $drive->AddDisk();
+        } else {
+            $url = $_SERVER['PHP_SELF'];
+            /*if ($_GET) {
+                $tmp = null;
+                $tmp = '';
+                foreach ($_GET as $k => $v) {
+                    if ($k!='setup') {
+                        if ($v===true) $tmp .= '&' . $k;
+                        else $tmp .= '&' . $k . '=' . $v;
+                    }
+                }
+                $tmp = substr($tmp, 1);
+                if ($tmp!='') $url .= '?' . $tmp;
+            }*/
+            // not need GET adddisk, remove it
+            return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
+        }
+    }
+
     $disktags = explode("|", getConfig('disktag'));
     //    echo 'count$disk:'.count($disktags);
     if (count($disktags)>1) {
@@ -262,35 +291,6 @@ function main($path)
     $_SERVER['is_guestup_path'] = is_guestup_path($path);
     $_SERVER['ajax']=0;
     if (isset($_SERVER['HTTP_X_REQUESTED_WITH'])) if ($_SERVER['HTTP_X_REQUESTED_WITH']=='XMLHttpRequest') $_SERVER['ajax']=1;
-
-    // Add disk
-    if (isset($_GET['AddDisk'])) {
-        if ($_GET['AddDisk']===true) {
-            $tmp = path_format($_SERVER['base_path'] . '/' . $path);
-            return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 301, [ 'Location' => $tmp ]);
-        }
-        if ($_SERVER['admin']) {
-            if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
-                $drive = new $_GET['AddDisk']($_GET['disktag']);
-                return $drive->AddDisk();
-        } else {
-            $url = $_SERVER['PHP_SELF'];
-            /*if ($_GET) {
-                $tmp = null;
-                $tmp = '';
-                foreach ($_GET as $k => $v) {
-                    if ($k!='setup') {
-                        if ($v===true) $tmp .= '&' . $k;
-                        else $tmp .= '&' . $k . '=' . $v;
-                    }
-                }
-                $tmp = substr($tmp, 1);
-                if ($tmp!='') $url .= '?' . $tmp;
-            }*/
-            // not need GET adddisk, remove it
-            return output('<script>alert(\''.getconstStr('SetSecretsFirst').'\');</script>', 302, [ 'Location' => $url ]);
-        }
-    }
 
     if (!isreferhost()) return message('Must visit from designated host', 'NOT_ALLOWED', 403);
 
@@ -630,6 +630,23 @@ function filecache($disktag)
     // error_log1('DIR:' . $dir . ' TAG: ' . $tag);
     $cache = new \Doctrine\Common\Cache\FilesystemCache($dir, $tag);
     return $cache;
+}
+
+function calcDownKey($filename, $key = '') {
+    if ($key) {
+        // check key
+        $tmp = splitfirst($key, '.');
+        if ($tmp[1]!='') {
+            $timestamp = $tmp[0];
+            if (time() > $timestamp) return false;
+            if (md5($timestamp . sha1($filename . getConfig('admin'))) == $tmp[1]) return true;
+            else return false;
+        } else return false;
+    } else {
+        // calc key
+        $timestamp = time() + 1*24*60*60;
+        return $timestamp . '.' . md5($timestamp . sha1($filename . getConfig('admin')));
+    }
 }
 
 function findIndexPath($rootpath, $path = '')
