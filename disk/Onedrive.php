@@ -446,7 +446,7 @@ class Onedrive {
 
         $envs = '';
         foreach ($EnvConfigs as $env => $v) if (isCommonEnv($env)) $envs .= '\'' . $env . '\', ';
-        $url = path_format($_SERVER['base_path'] . '/');
+        $url = $_SERVER['PHP_SELF'];
         //$this->api_url = splitfirst($_SERVER['api_url'], '/v1.0')[0] . '/v1.0';
 
         if (isset($_GET['Finish'])) {
