@@ -533,7 +533,7 @@
         //alert(document.URL+'\n'+document.location+'\n'+self.location.href+'\n'+window.location.href);
         var urlStr = String(document.location);
         var api_key = "your_api_key_for_reurl_cc";
-        if(api_key == "")
+        if(api_key == "" || api_key == "your_api_key_for_reurl_cc")
         {
             alert("网站并没有启用短链接生成功能.");
             return;
