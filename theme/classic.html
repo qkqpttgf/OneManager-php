@@ -7,7 +7,7 @@
     "txt":"clipboard",
     "zip":"file-tray-full",
     "iso":"disc",
-    "apk":"logo-android",
+    "apk":"logo-android",v
     "exe":"logo-windows",
     "default":"document"
 }
@@ -24,6 +24,28 @@
     <link rel="icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
     <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
     <style type="text/css">
+#button {
+  display: inline-block;
+  padding: 9px 15px;
+  font-size: 15px;
+  cursor: pointer;
+  text-align: center;   
+  text-decoration: none;
+  outline: none;
+  color: #fff;
+  background-color: #4CAF50;
+  border: none;
+  border-radius: 18px;
+  box-shadow: 0 5px #999;
+}
+
+#button:hover {background-color: #3e8e41}
+
+#button:active {
+  background-color: #3e8e41;
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
         body{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-size:14px;line-height:1em;color:#000;background-color:#f7f7f9;<!--BackgroundStart-->background-repeat:no-repeat;background-size:cover;background-attachment:fixed;background-image:url("<!--BackgroundUrl-->");<!--BackgroundEnd-->}
         a{color:#24292e;cursor:pointer;text-decoration:none}
         ion-icon{font-size:15px;vertical-align:bottom}
@@ -150,7 +172,7 @@
     <div class="list-wrapper" id="list-div">
         <div class="list-container">
             <div class="list-header-container">
-                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd-->&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Download');">生成短链</button>&nbsp;&nbsp;&nbsp;&nbsp;<button onclick="getShortUrl('Preview');">生成预览短链</button></h3>
+                <h3 class="table-header"><a href="<!--base_path-->"><!--constStr@Home--></a><!--DiskPathArrayStart--> / <a href="<!--PathArrayLink-->"><!--PathArrayName--></a><!--DiskPathArrayEnd-->&nbsp;&nbsp;&nbsp;&nbsp;<button id="button" onclick="getShortUrl('Download');">生成短链</button>&nbsp;&nbsp;&nbsp;&nbsp;<button id="button" onclick="getShortUrl('Preview');">生成预览短链</button></h3>
             </div>
             <div class="list-body-container">
 <!--EncryptedStart-->
@@ -187,7 +209,9 @@
                         <img src="<!--FileEncodeUrl-->" alt="<!--FileName-->" onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';if (this.offsetHeight>document.documentElement.clientHeight) this.style.height='100%';" />
 <!--IsimgFileEnd-->
 <!--IsvideoFileStart-->
-                        <div id="video-a0"></div>
+                        <div id="video-a0" class="artplayerdiv" style="width: 100%; height: 100%;"></div>
+                        <!--<script src="https://artplayer.org/uncompiled/artplayer.js"></script>-->
+                        <script src="https://cdn.jsdelivr.net/npm/artplayer@4.0.9/dist/artplayer.min.js"></script>
 <!--IsvideoFileEnd-->
 <!--IsmusicFileStart-->
                         <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
@@ -481,6 +505,7 @@
     </div>
 <!--LoginEnd-->
     <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
+    
 </body>
 
 <!--ListStart-->
@@ -507,6 +532,12 @@
         //alert(typeof(urlStr));
         //alert(document.URL+'\n'+document.location+'\n'+self.location.href+'\n'+window.location.href);
         var urlStr = String(document.location);
+        var api_key = "your_api_key_for_reurl_cc";
+        if(api_key == "")
+        {
+            alert("网站并没有启用短链接生成功能.");
+            return;
+        }
         if (str == 'Preview' && urlStr.indexOf("?preview") == -1)
         {
             urlStr = urlStr + "?preview";
@@ -518,7 +549,7 @@
         var httpRequest = new XMLHttpRequest();
         httpRequest.open('POST', 'https://api.reurl.cc/shorten', true);
         httpRequest.setRequestHeader("Content-type","application/json");
-        httpRequest.setRequestHeader("reurl-api-key","your_api_key");
+        httpRequest.setRequestHeader("reurl-api-key", api_key);
         httpRequest.send('{ "url" : "'+urlStr+'" }');
         httpRequest.onreadystatechange = function ()
         {
@@ -593,70 +624,193 @@
     }
 <!--IstxtFileEnd-->
 <!--IsvideoFileStart-->
-    function loadResources(type, src, callback) {
-        let script = document.createElement(type);
-        let loaded = false;
-        if (typeof callback === 'function') {
-            script.onload = script.onreadystatechange = () => {
-                if (!loaded && (!script.readyState || /loaded|complete/.test(script.readyState))) {
-                    script.onload = script.onreadystatechange = null;
-                    loaded = true;
-                    callback();
-                }
-            }
-        }
-        if (type === 'link') {
-            script.href = src;
-            script.rel = 'stylesheet';
-        } else {
-            script.src = src;
-        }
-        document.getElementsByTagName('head')[0].appendChild(script);
-    }
-    function addVideos(videos) {
-        let host = 'https://s0.pstatp.com/cdn/expire-1-M';
-        let unloadedResourceCount = 4;
-        let callback = (() => {
-            return () => {
-                if (!--unloadedResourceCount) {
-                    createDplayers(videos);
-                }
-            };
-        })(unloadedResourceCount, videos);
-        loadResources(
-            'link',
-            host + '/dplayer/1.25.0/DPlayer.min.css',
-            callback
-        );
-        loadResources(
-            'script',
-            host + '/dplayer/1.25.0/DPlayer.min.js',
-            callback
-        );
-        loadResources(
-            'script',
-            host + '/hls.js/0.12.4/hls.light.min.js',
-            callback
-        );
-        loadResources(
-            'script',
-            host + '/flv.js/1.5.0/flv.min.js',
-            callback
-        );
-    }
-    function createDplayers(videos) {
-        for (i = 0; i < videos.length; i++) {
-            console.log(videos[i]);
-            new DPlayer({
-                container: document.getElementById('video-a' + i),
-                screenshot: true,
-                video: {
-                    url: videos[i]
-                }
-            });
-        }
-    }
-    addVideos(["<!--FileEncodeUrl-->"]);
+    document.getElementById('video-a0').style.height = window.innerHeight + 'px';
+    var fileurl = "<!--FileEncodeUrl-->";
+    var filename1 = fileurl.substr(0, fileurl.lastIndexOf('.'));
+    var art = new Artplayer({
+        //container: '#video-a0',
+        container: '.artplayerdiv',
+        url: fileurl,
+        title: fileurl,
+        autoplay: true,
+        pip: true,
+        autoSize: true,
+        autoMini: true,
+        //loop: true,
+        fullscreen: true,
+        fullscreenWeb: true,
+        subtitleOffset: true,
+        miniProgressBar: true,
+        //localVideo: true,
+        //localSubtitle: true,
+        mutex: true,
+        //backdrop: true,
+        theme: '#23ade5',
+        lang: navigator.language.toLowerCase(),
+        /*moreVideoAttr: {
+            crossOrigin: 'anonymous',
+        },
+        settings: [
+            {
+                index: 1,
+                html: 'Custom setting',
+                click: function (setting) {
+                    console.info('You clicked on the custom setting');
+                    setting.show = false;
+                },
+            },
+        ],
+        contextmenu: [
+            {
+                html: 'Custom menu',
+                click: function (contextmenu) {
+                    console.info('You clicked on the custom menu');
+                    contextmenu.show = false;
+                },
+            },
+        ],
+        layers: [
+            {
+                html: '<img style="width: 100px" src="/assets/sample/layer.png">',
+                click: function () {
+                    console.info('You clicked on the custom layer');
+                },
+                style: {
+                    position: 'absolute',
+                    top: '20px',
+                    right: '20px',
+                    opacity: '.9',
+                },
+            },
+        ],
+        quality: [
+            {
+                default: true,
+                html: 'SD 480P',
+                url: '/assets/sample/video.mp4',
+            },
+            {
+                html: 'HD 720P',
+                url: '/assets/sample/video.mp4',
+            },
+        ],
+        thumbnails: {
+            url: '/assets/sample/thumbnails.png',
+            number: 100,
+            width: 160,
+            height: 90,
+            column: 10,
+        },*/
+        subtitle: {
+            url: filename1+'.srt',
+            type: 'srt',
+            style: {
+                color: '#03A9F4',
+            },
+            encoding: 'utf-8',
+            bilingual: true,
+        },/*
+        highlight: [
+            {
+                time: 60,
+                text: 'One more chance',
+            },
+            {
+                time: 120,
+                text: '谁でもいいはずなのに',
+            },
+            {
+                time: 180,
+                text: '夏の想い出がまわる',
+            },
+            {
+                time: 240,
+                text: 'こんなとこにあるはずもないのに',
+            },
+            {
+                time: 300,
+                text: '终わり',
+            },
+        ],
+        controls: [
+            {
+                position: 'right',
+                html: 'localsubtitle',
+                mounted: ($preview) => {
+                    art.plugins.localSubtitle.attach($preview);
+                },
+            },
+        ],
+        icons: {
+            indicator: '<img width="16" heigth="16" src="/assets/img/indicator.svg">',
+            loading: '<img src="/assets/img/ploading.gif">',
+            state: '<img width="150" heigth="150" src="/assets/img/state.svg">',
+        },*/
+    });
+    // function loadResources(type, src, callback) {
+    //     let script = document.createElement(type);
+    //     let loaded = false;
+    //     if (typeof callback === 'function') {
+    //         script.onload = script.onreadystatechange = () => {
+    //             if (!loaded && (!script.readyState || /loaded|complete/.test(script.readyState))) {
+    //                 script.onload = script.onreadystatechange = null;
+    //                 loaded = true;
+    //                 callback();
+    //             }
+    //         }
+    //     }
+    //     if (type === 'link') {
+    //         script.href = src;
+    //         script.rel = 'stylesheet';
+    //     } else {
+    //         script.src = src;
+    //     }
+    //     document.getElementsByTagName('head')[0].appendChild(script);
+    // }
+    // function addVideos(videos) {
+    //     let host = 'https://s0.pstatp.com/cdn/expire-1-M';
+    //     let unloadedResourceCount = 4;
+    //     let callback = (() => {
+    //         return () => {
+    //             if (!--unloadedResourceCount) {
+    //                 createDplayers(videos);
+    //             }
+    //         };
+    //     })(unloadedResourceCount, videos);
+    //     loadResources(
+    //         'link',
+    //         host + '/dplayer/1.25.0/DPlayer.min.css',
+    //         callback
+    //     );
+    //     loadResources(
+    //         'script',
+    //         host + '/dplayer/1.25.0/DPlayer.min.js',
+    //         callback
+    //     );
+    //     loadResources(
+    //         'script',
+    //         host + '/hls.js/0.12.4/hls.light.min.js',
+    //         callback
+    //     );
+    //     loadResources(
+    //         'script',
+    //         host + '/flv.js/1.5.0/flv.min.js',
+    //         callback
+    //     );
+    // }
+    // function createDplayers(videos) {
+    //     for (i = 0; i < videos.length; i++) {
+    //         console.log(videos[i]);
+    //         new DPlayer({
+    //             container: document.getElementById('video-a' + i),
+    //             screenshot: true,
+    //             video: {
+    //                 url: videos[i]
+    //             }
+    //         });
+    //     }
+    // }
+    // addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
     pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
@@ -675,6 +829,7 @@
             canvasNew.id = 'pdf-c'+i;
             pdfContainer.appendChild(canvasNew);
             renderpage(pdf,i);
+            
         }
     });
     function renderpage(pdf,i)
@@ -684,18 +839,24 @@
             var viewport = page.getViewport({ scale: scale, });
             var canvas = document.getElementById('pdf-c'+i);
             var context = canvas.getContext("2d");
-            canvas.height = viewport.height;
-            canvas.width = viewport.width;
+            var scale_var = document.getElementById("pdf-d").offsetWidth / viewport.width;
+            canvas.width = viewport.width * scale_var;
+            canvas.height = viewport.height * scale_var;
             var renderContext = {
+                transform: [scale_var,0,0,scale_var,0,0],
                 canvasContext: context,
                 viewport: viewport,
             };
+            //page.render(renderContext);
             page.render(renderContext);
+
         });
+    }
+    function enlargePage(){
+        
     }
 <!--IspdfFileEnd-->
 <!--IsFileEnd-->
-<!--IsFolderStart-->
 <!--HeadmdStart-->
     var $head = document.getElementById('head');
     if ($head) {
@@ -703,6 +864,8 @@
         $head.innerHTML = marked(document.getElementById('head-md').innerText);
     }
 <!--HeadmdEnd-->
+<!--IsFolderStart-->
+
 <!--ReadmemdStart-->
     var $readme = document.getElementById('readme');
     if ($readme) {
@@ -1700,4 +1863,5 @@
 <script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <!--LoginStart--><script src="https://cdn.bootcss.com/js-sha1/0.6.0/sha1.min.js"></script><!--LoginEnd-->
 <!--customScript-->
+<a href="https://icp.gov.moe/?keyword=20220244" target="_blank">萌ICP备20220244号</a>
 </html>
