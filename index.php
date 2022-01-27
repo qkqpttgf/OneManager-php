@@ -5,6 +5,7 @@ include 'vendor/autoload.php';
 include 'conststr.php';
 include 'common.php';
 
+date_default_timezone_set('UTC');
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_ENV, JSON_PRETTY_PRINT).'</pre>';
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
