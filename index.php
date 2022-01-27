@@ -11,13 +11,13 @@ date_default_timezone_set('UTC');
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/TencentSCF_file.php';
     else include 'platform/TencentSCF_env.php';
-} elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+} elseif (isset($_SERVER['FC_RUNTIME_API'])) {
     include 'platform/AliyunFC.php';
-} elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
+} elseif (isset($_SERVER['_APP_SHARE_DIR']) && $_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
     //if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/HuaweiFG_file.php';
     //else include 'platform/HuaweiFG_env.php';
     echo 'FG' . PHP_EOL;
-} elseif ($_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
+} elseif (isset($_SERVER['BCE_CFC_RUNTIME_NAME']) && $_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
     include 'platform/BaiduCFC.php';
 } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
     include 'platform/Heroku.php';
@@ -106,7 +106,7 @@ function main_handler($event, $context)
 // Aliyun FC & Huawei FG & Baidu CFC
 function handler($event, $context)
 {
-    if (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+    if (isset($_SERVER['FC_RUNTIME_API'])) {
         // Aliyun FC
         set_error_handler("myErrorHandler");
         $tmp = array(
@@ -120,6 +120,7 @@ function handler($event, $context)
         );
         $event = $tmp;
         $context = json_decode(json_encode($context), true);
+        $context['FC_RUNTIME_API'] = $_SERVER['FC_RUNTIME_API'];
         printInput($event, $context);
         unset($_POST);
         unset($_GET);
@@ -130,7 +131,7 @@ function handler($event, $context)
 
         $re = main($path);
 
-        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], $re['isBase64Encoded']?base64_decode($re['body']):$re['body']);
+        return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], ($re['isBase64Encoded']?base64_decode($re['body']):$re['body']));
 
     } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
         // Huawei FG
