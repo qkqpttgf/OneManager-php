@@ -226,9 +226,10 @@ function main($path)
             return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 301, [ 'Location' => $tmp ]);
         }
         if ($_SERVER['admin']) {
+            if (!$_SERVER['disktag']) $_SERVER['disktag'] = '';
             if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
-                $drive = new $_GET['AddDisk']($_GET['disktag']);
-                return $drive->AddDisk();
+            $drive = new $_GET['AddDisk']($_GET['disktag']);
+            return $drive->AddDisk();
         } else {
             $url = $_SERVER['PHP_SELF'];
             /*if ($_GET) {
