@@ -42,7 +42,7 @@
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.7); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:40px}
-        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
+        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7) !important;color:white;}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
@@ -107,6 +107,7 @@
     <h1 class="title" id="title">
         <a href="<!--base_path-->"><!--Sitename--></a>
     </h1>
+<!--
 <!--MultiDiskAreaStart-->
     <div class="list-wrapper" id="more-disk-div">
         <div class="list-container">
@@ -120,6 +121,7 @@
         </div>
     </div>
 <!--MultiDiskAreaEnd-->
+-->
 <!--HeadomfStart-->
     <div class="list-wrapper" id="head-om-div">
         <div class="list-container">
@@ -471,7 +473,7 @@
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
             <center>
-                <form action="<!--IsPreview?-->admin" method="post" onsubmit="return sha1loginpass(this);">
+                <form action="<!--IsPreview?-->login=admin" method="post" onsubmit="return sha1loginpass(this);">
                     <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
                     <input name="timestamp" type="hidden" value="">
                     <input type="submit" value="<!--constStr@Login-->">
