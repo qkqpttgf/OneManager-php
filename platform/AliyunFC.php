@@ -67,8 +67,8 @@ function GetPathSetting($event, $context)
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $event['headers']['Referer'][0])[2];
     $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['If-Modified-Since'][0];
+    $_SERVER['FC_FUNC_CODE_PATH'] = getenv('FC_FUNC_CODE_PATH');
     $_SERVER['REQUEST_METHOD'] = $event['method'];
-    $_SERVER['FC_SERVER_PATH'] = '/var/fc/runtime/php7.2';
     return $path;
     //return spurlencode($path, '/');
 }

@@ -1758,7 +1758,7 @@ output:
             $canOneKeyUpate = 1;
         } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
             $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['FC_SERVER_PATH'])&&$_SERVER['FC_SERVER_PATH']==='/var/fc/runtime/php7.2') {
+        } elseif (isset($_SERVER['FC_FUNC_CODE_PATH'])) {
             $canOneKeyUpate = 1;
         } elseif (isset($_SERVER['BCE_CFC_RUNTIME_NAME'])&&$_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
             $canOneKeyUpate = 1;

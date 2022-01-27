@@ -11,7 +11,7 @@ date_default_timezone_set('UTC');
 if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/TencentSCF_file.php';
     else include 'platform/TencentSCF_env.php';
-} elseif (isset($_SERVER['FC_RUNTIME_API'])) {
+} elseif (isset($_SERVER['FC_FUNC_CODE_PATH'])) {
     include 'platform/AliyunFC.php';
 } elseif (isset($_SERVER['_APP_SHARE_DIR']) && $_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
     //if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/HuaweiFG_file.php';
@@ -106,7 +106,7 @@ function main_handler($event, $context)
 // Aliyun FC & Huawei FG & Baidu CFC
 function handler($event, $context)
 {
-    if (isset($_SERVER['FC_RUNTIME_API'])) {
+    if (isset($_SERVER['FC_FUNC_CODE_PATH'])) {
         // Aliyun FC
         set_error_handler("myErrorHandler");
         $tmp = array(
@@ -120,7 +120,6 @@ function handler($event, $context)
         );
         $event = $tmp;
         $context = json_decode(json_encode($context), true);
-        $context['FC_RUNTIME_API'] = $_SERVER['FC_RUNTIME_API'];
         printInput($event, $context);
         unset($_POST);
         unset($_GET);
