@@ -163,9 +163,6 @@ function install()
             //$tmp['language'] = $_POST['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
             $APIKey = $_POST['APIKey'];
-            //if ($APIKey=='') {
-            //    $APIKey = getConfig('APIKey');
-            //}
             $tmp['APIKey'] = $APIKey;
 
             $token = $APIKey;
@@ -184,16 +181,24 @@ function install()
                 $title = 'Error';
                 return message($html, $title, 400);
             } else {
-                /*$html = '<script>
+                $html = getconstStr('Success') . '
+    <script>
         var status = "' . $response['DplStatus'] . '";
+        var i = 0;
         var expd = new Date();
         expd.setTime(expd.getTime()+1000);
         var expires = "expires="+expd.toGMTString();
         document.cookie=\'language=; path=/; \'+expires;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
     </script>';
-                return message($html, $title, 201, 1);*/
-                $data["dplId"] = $response['DplStatus'];
-                return output(json_encode($data), 201);
+                return message($html, $title, 201, 1);
             }
         }
     }
@@ -205,10 +210,9 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        //if (getConfig('APIKey')=='') 
         $html .= '<br>
         <a href="https://vercel.com/account/tokens" target="_blank">' . getconstStr('Create') . ' token</a><br>
-        <label>Token:<input name="APIKey" type="password" placeholder="" value="' . getConfig('APIKey') . '"></label><br>';
+        <label>Token:<input name="APIKey" type="password" placeholder="" value=""></label><br>';
         $html .= '<br>
         <label>Set admin password:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
         $html .= '
@@ -241,52 +245,7 @@ language:<br>';
                 alert(\'input Token\');
                 return false;
             }
-            t.style.display = "none";
-            errordiv.innerHTML = "' . getconstStr('Wait') . '";
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", t.action);
-            xhr.onload = function(e) {
-                if (xhr.status==201) {
-                    var res = JSON.parse(xhr.responseText);
-                    getStatus(res.dplId, t.APIKey.value);
-                } else {
-                    t.style.display = "";
-                    errordiv.innerHTML = xhr.status + "<br>" + xhr.responseText;
-                }
-            }
-            xhr.send("admin=" + t.admin.value + "&APIKey=" + t.APIKey.value);
-
-            var x = "";
-            var min = 0;
-            function getStatus(id, VercelToken) {
-                x += ".";
-                min++;
-                var xhr = new XMLHttpRequest();
-                var url = "https://api.vercel.com/v11/now/deployments/" + id;
-                xhr.open("GET", url);
-                xhr.setRequestHeader("Authorization", "Bearer " + VercelToken);
-                xhr.onload = function(e) {
-                    if (xhr.status==200) {
-                        var deployStat = JSON.parse(xhr.responseText).readyState;
-                        if (deployStat=="READY") {
-                            x = "";
-                            min = 0;
-                            errordiv.innerHTML = "Deploy done.";
-                            location.href = "/";
-                        } else {
-                            errordiv.innerHTML = deployStat + ", " + min + ".<br>' . getconstStr('Wait') . ' " + x;
-                            if (deployStat!=="ERROR") setTimeout(function() { getStatus(id, VercelToken) }, 1000);
-                        }
-                    } else {
-                        t.style.display = "";
-                        console.log(xhr.status);
-                        console.log(xhr.responseText);
-                    }
-                }
-                xhr.send(null);
-            }
-
-            return false;
+            return true;
         }
     </script>';
         $title = getconstStr('SelectLanguage');
@@ -335,7 +294,8 @@ function setVercelConfig($envs, $appId, $token)
 
 function VercelUpdate($appId, $token, $sourcePath = "")
 {
-    $url = "https://api.vercel.com/v12/now/deployments";
+    if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
+    $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
     $data["name"] = "OneManager";
@@ -355,6 +315,23 @@ function VercelUpdate($appId, $token, $sourcePath = "")
     $result = json_decode($response["body"], true);
     $result['DplStatus'] = $result['id'];
     return json_encode($result);
+}
+
+function checkBuilding($projectId, $token)
+{
+    $r = 0;
+    $url = "https://api.vercel.com/v6/deployments/?projectId=" . $projectId;
+    $header["Authorization"] = "Bearer " . $token;
+    $header["Content-Type"] = "application/json";
+    $response = curl("GET", $url, '', $header);
+    //echo json_encode($response, JSON_PRETTY_PRINT) . " ,res<br>";
+    $result = json_decode($response["body"], true);
+    foreach ( $result['deployments'] as $deployment ) {
+        if ($deployment['state']!=="READY") $r++;
+    }
+    return $r;
+    //if ($r===0) return true;
+    //else return false;
 }
 
 function getEachFiles(&$file, $base, $path = "")
@@ -398,34 +375,33 @@ function setConfigResponse($response)
     return json_decode($response, true);
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
     $tmppath = '/tmp';
 
-    // 从github下载对应tar.gz，并解压
-    $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        // 从github下载对应tar.gz，并解压
+        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return json_encode(['error'=>['code'=>'Git Source input Error!']]);
+
     $tarfile = $tmppath . '/github.tar.gz';
-    $githubfile = file_get_contents($url);
-    if (!$githubfile) return '{"error":{"message":"fail to download from github"}}';
-    file_put_contents($tarfile, $githubfile);
-        $phar = new PharData($tarfile); // need php5.3, 7, 8
-        $phar->extractTo($tmppath, null, true);//路径 要解压的文件 是否覆盖
+    file_put_contents($tarfile, file_get_contents($url));
+    $phar = new PharData($tarfile);
+    $html = $phar->extractTo($tmppath, null, true);//路径 要解压的文件 是否覆盖
     unlink($tarfile);
 
-    $outPath = '';
-    $tmp = scandir($tmppath);
-    $name = $auth . '-' . $project;
-    mkdir($tmppath . "/" . $name, 0777);
-    foreach ($tmp as $f) {
-        if ( substr($f, 0, strlen($name)) == $name) {
-            rename($tmppath . '/' . $f, $tmppath . "/" . $name . '/api');
-            $outPath = $tmppath . "/" . $name;
-            break;
-        }
-    }
+    // 获取解压出的目录名
+    $outPath = findIndexPath($tmppath);
+
+    if ($outPath=='') return '{"error":{"message":"no outpath"}}';
+    $name = $project . 'CODE';
+    mkdir($tmppath . "/" . $name, 0777, 1);
+    rename($outPath, $tmppath . "/" . $name . '/api');
+    $outPath = $tmppath . "/" . $name;
     //echo $outPath . "<br>";
     //error_log1($outPath);
-    if ($outPath=='') return '{"error":{"message":"no outpath"}}';
 
     return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
 }
@@ -438,7 +414,7 @@ function WaitFunction($deployid) {
     }
     $header["Authorization"] = "Bearer " . getConfig('APIKey');
     $header["Content-Type"] = "application/json";
-    $url = "https://api.vercel.com/v11/now/deployments/" . $deployid;
+    $url = "https://api.vercel.com/v11/deployments/" . $deployid;
     $response = curl("GET", $url, "", $header);
     if ($response['stat']==200) {
         $result = json_decode($response['body'], true);
@@ -449,4 +425,49 @@ function WaitFunction($deployid) {
         $response['body'] .= $url;
         return $response;
     }
+}
+
+function changeAuthKey() {
+    if ($_POST['APIKey']!='') {
+        $APIKey = $_POST['APIKey'];
+        $tmp['APIKey'] = $APIKey;
+        $response = json_decode(setVercelConfig($tmp, getConfig('HerokuappId'), $APIKey), true);
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var status = "' . $response['DplStatus'] . '";
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+        <a href="https://vercel.com/account/tokens" target="_blank">' . getconstStr('Create') . ' token</a><br>
+        <label>Token:<input name="APIKey" type="password" placeholder="" value=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.APIKey.value==\'\') {
+                alert(\'Input Token\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }

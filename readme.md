@@ -8,40 +8,6 @@
 
 ---
 
-# Deploy to Heroku  
-
-### Official
-
-  https://heroku.com  
-
-### Demo
-
-  https://herooneindex.herokuapp.com/  
-
-### How to Install
-
-> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
->
-> Star this project, then Fork, create a app in Heroku, then turn to the Deploy tab, "Deployment method" via "Connect GitHub", select your github fork.   
-
----
-
-# Deploy to Glitch  
-
-### Official
-
-  https://glitch.com/  
-
-### Demo
-
-  https://onemanager.glitch.me/  
-
-### How to Install
-
-  [New Project] -> [Import form Github] -> paste "https://github.com/qkqpttgf/OneManager-php" , after done, [Show] -> [In a New Window].  
-
----
-
 # Deploy to Vercel  
 
 ### Official
@@ -60,7 +26,64 @@
 
 ### How to Install
 
-  https://scfonedrive.github.io/Vercel/Deploy.html .  
+> https://scfonedrive.github.io/Vercel/Deploy.html .  
+
+---
+
+# Deploy to Replit  
+
+### Official
+
+  https://repl.it/  
+  https://replit.com/  
+
+### Demo
+
+  https://onemanager.qkqpttgf.repl.co/  
+
+### Notice
+
+> `Import from Github` useing the `.replit` file in code files will cause an empty web page, may someone help me?  
+
+### How to Install
+
+> 1. Click the "+" or "Create Repl", find template "PHP Web Server" (via input "php"), input a name for your project in "Title" or left it default, Click the "+ Create Repl".  
+> 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -b OneManager-php/* ./ && mv -b OneManager-php/.[^.]* ./ && rm -rf *~ && rm -rf OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
+> 3. Click the green button "Run", it will show the web page on the right, you can open it in a new tab or window.  
+
+---
+
+# Deploy to Heroku  
+
+### Official
+
+  https://heroku.com  
+
+### Demo
+
+  https://herooneindex.herokuapp.com/  
+
+### How to Install
+
+> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
+>
+> Star this project, then Fork, create an app in Heroku, then turn to the Deploy tab, "Deployment method" via "Connect GitHub", select your github fork.   
+
+---
+
+# Deploy to Glitch  
+
+### Official
+
+  https://glitch.com/  
+
+### Demo
+
+  https://onemanager.glitch.me/  
+
+### How to Install
+
+  [New Project] -> [Import form Github] -> paste "https://github.com/qkqpttgf/OneManager-php" , after done, [Show] -> [In a New Window].  
 
 ---
 
