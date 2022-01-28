@@ -170,11 +170,8 @@ function install()
             $tmp['admin'] = $_POST['admin'];
             //$tmp['language'] = $_POST['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $APIKey = getConfig('APIKey');
-            if ($APIKey=='') {
-                $APIKey = $_POST['APIKey'];
-                $tmp['APIKey'] = $APIKey;
-            }
+            $APIKey = $_POST['APIKey'];
+            $tmp['APIKey'] = $APIKey;
             $HerokuappId = getConfig('HerokuappId');
             if ($HerokuappId=='') {
                 $function_name = getConfig('function_name');
@@ -197,17 +194,27 @@ function install()
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
+                return message($html, $title, 400);
             } else {
-                return output('Jump
+                $html = getconstStr('Success') . '
     <script>
         var expd = new Date();
         expd.setTime(expd.getTime()+1000);
         var expires = "expires="+expd.toGMTString();
         document.cookie=\'language=; path=/; \'+expires;
-    </script>
-    <meta http-equiv="refresh" content="3;URL=' . path_format($_SERVER['base_path'] . '/') . '">', 302);
+        var status = "' . $response['DplStatus'] . '";
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
             }
-            return message($html, $title, 201);
+        }, 1000);
+    </script>';
+                return message($html, $title, 201, 1);
+            }
         }
     }
     if ($_GET['install0']) {
@@ -218,9 +225,9 @@ language:<br>';
             $html .= '
         <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
         }
-        if (getConfig('APIKey')=='') $html .= '
-        <a href="https://dashboard.heroku.com/account" target="_blank">'.getconstStr('Create').' API Key</a><br>
-        <label>API Key:<input name="APIKey" type="text" placeholder="" size=""></label><br>';
+        $html .= '
+        <a href="https://dashboard.heroku.com/account" target="_blank">' . getconstStr('Create') . ' API Key</a><br>
+        <label>API Key:<input name="APIKey" type="password" placeholder="" size=""></label><br>';
         $html .= '
         <label>Set admin password:<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>';
         $html .= '
@@ -247,7 +254,7 @@ language:<br>';
                 alert(\'input admin\');
                 return false;
             }';
-        if (getConfig('APIKey')=='') $html .= '
+        $html .= '
             if (t.APIKey.value==\'\') {
                 alert(\'input API Key\');
                 return false;
@@ -333,10 +340,15 @@ function_name:' . $_SERVER['function_name'] . '<br>
 <button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
 }
 
-function OnekeyUpate($auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
 {
-    //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
-    $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    if ($GitSource=='Github') {
+        //'https://github.com/qkqpttgf/OneManager-php/tarball/master/';
+        $source = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+    } elseif ($GitSource=='HITGitlab') {
+        $source = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
+    } else return ['stat'=>403, 'body'=>json_encode(['id'=>'Error', 'message'=>'Git Source input Error!'])];
+
     return updateHerokuapp(getConfig('HerokuappId'), getConfig('APIKey'), $source);
 }
 
@@ -357,4 +369,49 @@ function WaitFunction($buildId = '') {
         $response['body'] .= $url;
         return $response;
     }
+}
+
+function changeAuthKey() {
+    if ($_POST['APIKey']!='') {
+        $APIKey = $_POST['APIKey'];
+        $tmp['APIKey'] = $APIKey;
+        $response = setConfigResponse( setHerokuConfig($tmp, getConfig('HerokuappId'), $APIKey) );
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 400);
+        } else {
+            $html = getconstStr('Success') . '
+    <script>
+        var status = "' . $response['DplStatus'] . '";
+        var i = 0;
+        var uploadList = setInterval(function(){
+            if (document.getElementById("dis").style.display=="none") {
+                console.log(i++);
+            } else {
+                clearInterval(uploadList);
+                location.href = "' . path_format($_SERVER['base_path'] . '/') . '";
+            }
+        }, 1000);
+    </script>';
+            return message($html, $title, 201, 1);
+        }
+    }
+    $html = '
+    <form action="" method="post" onsubmit="return notnull(this);">
+        <a href="https://dashboard.heroku.com/account" target="_blank">'.getconstStr('Create').' API Key</a><br>
+        <label>API Key:<input name="APIKey" type="password" placeholder="" size=""></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
+    </form>
+    <script>
+        function notnull(t)
+        {
+            if (t.APIKey.value==\'\') {
+                alert(\'input API Key\');
+                return false;
+            }
+            return true;
+        }
+    </script>';
+    return message($html, 'Change platform Auth token or key', 200);
 }

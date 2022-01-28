@@ -320,6 +320,7 @@ class Aliyundrive {
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
     public function Copy($file) {
+        return output('NO copy', 415);
         if (!$file['id']) {
             $oldfile = $this->list_path($file['path'] . '/' . $file['name']);
             //error_log1('res:' . json_encode($res));
