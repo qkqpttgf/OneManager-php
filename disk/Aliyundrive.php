@@ -800,7 +800,7 @@ class Aliyundrive {
                 alert("Do not input ' . $envs . '");
                 return false;
             }
-            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
+            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,})$/;
             if (!reg.test(t.disktag_add.value)) {
                 alert(\'' . getconstStr('TagFormatAlert') . '\');
                 return false;

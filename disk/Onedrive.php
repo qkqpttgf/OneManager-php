@@ -810,7 +810,7 @@ class Onedrive {
                 alert("Do not input \"" + t.disktag_add.value + "\" in ' . getconstStr('DiskTag') . '");
                 return false;
             }
-            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
+            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,})$/;
             if (!reg.test(t.disktag_add.value)) {
                 alert(\'' . getconstStr('TagFormatAlert') . '\');
                 return false;
