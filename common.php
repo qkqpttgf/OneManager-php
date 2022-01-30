@@ -190,22 +190,24 @@ function main($path)
     } else {
         $adminloginpage = getConfig('adminloginpage');
     }
-    if (isset($_GET['login'])&&$_GET['login']==$adminloginpage) {
-        /*if (isset($_GET['preview'])) {
-            $url = $_SERVER['PHP_SELF'] . '?preview';
-        } else {
-            $url = path_format($_SERVER['PHP_SELF'] . '/');
-        }*/
-        if (isset($_POST['password1'])) {
-            $compareresult = compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'));
-            if ($compareresult=='') {
-                $timestamp = time()+7*24*60*60;
-                $randnum = rand(10, 99999);
-                $admincookie = adminpass2cookie('admin', getConfig('admin'), $timestamp, $randnum);
-                $adminlocalstorage = adminpass2storage('admin', getConfig('admin'), $timestamp, $randnum);
-                return adminform('admin', $admincookie, $adminlocalstorage);
-            } else return adminform($compareresult);
-        } else return adminform();
+    if (isset($_GET['login'])) {
+        if ($_GET['login']===$adminloginpage) {
+            /*if (isset($_GET['preview'])) {
+                $url = $_SERVER['PHP_SELF'] . '?preview';
+            } else {
+                $url = path_format($_SERVER['PHP_SELF'] . '/');
+            }*/
+            if (isset($_POST['password1'])) {
+                $compareresult = compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'));
+                if ($compareresult=='') {
+                    $timestamp = time()+7*24*60*60;
+                    $randnum = rand(10, 99999);
+                    $admincookie = adminpass2cookie('admin', getConfig('admin'), $timestamp, $randnum);
+                    $adminlocalstorage = adminpass2storage('admin', getConfig('admin'), $timestamp, $randnum);
+                    return adminform('admin', $admincookie, $adminlocalstorage);
+                } else return adminform($compareresult);
+            } else return adminform();
+        }
     }
     if ( isset($_COOKIE['admin'])&&compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin']) ) {
         $_SERVER['admin']=1;
