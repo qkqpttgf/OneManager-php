@@ -1,7 +1,10 @@
+20220127-1234.43
+<font color="red">change login page, default not '?admin' but '?login=admin' now! and if set adminloginpage, it will be '?login=[value]'.</font> rm JumpFirstDisk, 403 in operating root, change sorting disk, remake disktags tab, add global md config. Allow Preview when enable downloadencrypt. some change in adding Onedrive disk. show upload progress in table background. fix some bugs.
+<font color="red">更改登录地址，默认不再是'?admin'而是'?login=admin'，如果设置了adminloginpage，那登录地址会是'?login=值'。</font>移除 JumpFirstDisk，在root操作时返回403，更改盘排序，重做盘符排列，添加全局md配置。在开启downloadencrypt后可以网页预览了。添加onedrive盘时稍做修改。上传时以背景做进度条。修复其它bug。
+
 20211220-1100.42
 Add new platform Replit. Add a git source for update. sha1.js use jsdelivr cdn. fix some bugs.
 新增Replit平台。新增国内git源，以后国内可以选择从HIT源更新。sha1.js换成jsdelivr CDN。修复bug。
-
 20211201-1602.41
 add a latent function, you can edit platform token(or API key) via '?setup=auth' when the token invalid, not need edit it in Environment(or Config Var) manually, (even in Vercel, config saved in file, and can't modiy it manually).
 新增隐藏功能，在平台操作代码的token或API key失效时，可以在 '?setup=auth' 修改它，不用去环境变量修改了（特别地，Vercel保存在代码中时都改不到）。

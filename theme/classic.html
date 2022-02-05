@@ -42,7 +42,7 @@
         .more-disk a:hover, .more-disk a[now]{ background-color: rgba(85,85,85,0.7); color: white; }
         .list-table{width:100%;padding:0 20px 20px 20px;border-spacing:0}
         .list-table tr{height:40px}
-        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7);color:white;}
+        .list-table tr[data-to]:hover{background:rgba(85,85,85,0.7) !important;color:white;}
         .list-table tr[data-to]:hover a{color:white}
         .list-table tr:first-child{background:rgba(245,245,245,0)}
         .list-table td,.list-table th{padding:0 10px;text-align:left}
@@ -107,6 +107,7 @@
     <h1 class="title" id="title">
         <a href="<!--base_path-->"><!--Sitename--></a>
     </h1>
+<!--
 <!--MultiDiskAreaStart-->
     <div class="list-wrapper" id="more-disk-div">
         <div class="list-container">
@@ -120,6 +121,7 @@
         </div>
     </div>
 <!--MultiDiskAreaEnd-->
+-->
 <!--HeadomfStart-->
     <div class="list-wrapper" id="head-om-div">
         <div class="list-container">
@@ -471,7 +473,7 @@
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
             <center>
-                <form action="<!--IsPreview?-->admin" method="post" onsubmit="return sha1loginpass(this);">
+                <form action="<!--IsPreview?-->login=admin" method="post" onsubmit="return sha1loginpass(this);">
                     <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
                     <input name="timestamp" type="hidden" value="">
                     <input type="submit" value="<!--constStr@Login-->">
@@ -1057,7 +1059,9 @@
                                 let tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 lastCurrentSpeed = tmpspeed;
                                 let remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
+                                let percent = ((asize+e.loaded)*100/totalsize).toFixed(2);
+                                label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                                label.innerHTML = StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + percent + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                             }
                         }
                         var C_starttime = new Date();
@@ -1086,7 +1090,7 @@
                                 while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
                                 document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
-                                label.style.color='green';
+                                label.parentNode.style.background = 'rgba(0,80,0,25%)';
                                 
                                 // uploadbuttonshow();
 <!--AdminStart-->
@@ -1329,7 +1333,7 @@
                             }
                             document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                             label.innerHTML=StartStr+MiddleStr;
-                            label.style.color='green';
+                            label.parentNode.style.background = 'rgba(0,80,0,25%)';
                         } else {
                             label.innerHTML= '<font color="red">' + xhr1.status + ',' + xhr1.responseText + '</font>';
                             localStorage.removeItem(filesha1);
@@ -1349,7 +1353,9 @@
                             var tmptime = new Date();
                             var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                             var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
+                            let percent = ((asize+e.loaded)*100/totalsize).toFixed(2);
+                            label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + percent + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                         }
                     }
                     var C_starttime = new Date();
@@ -1400,7 +1406,7 @@
                                         }
                                         document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                         label.innerHTML=StartStr+MiddleStr;
-                                        label.style.color='green';
+                                        label.parentNode.style.background = 'rgba(0,80,0,25%)';
                                     } else {
                                         label.innerHTML= '<font color="red">' + xhr1.status + ',' + xhr1.responseText + '</font>';
                                         localStorage.removeItem(filesha1);

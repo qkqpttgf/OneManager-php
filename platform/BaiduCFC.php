@@ -51,6 +51,7 @@ function GetPathSetting($event, $context)
     $_SERVER['referhost'] = explode('/', $event['headers']['Referer'])[2];
     $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
     $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['If-Modified-Since'];
+    $_SERVER['REQUEST_METHOD'] = $event['httpMethod'];
     $_SERVER['BCE_CFC_RUNTIME_NAME'] = 'php7';
     return $path;
 }

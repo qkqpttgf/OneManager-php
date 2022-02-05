@@ -320,6 +320,7 @@ class Aliyundrive {
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
     public function Copy($file) {
+        return output('NO copy', 415);
         if (!$file['id']) {
             $oldfile = $this->list_path($file['path'] . '/' . $file['name']);
             //error_log1('res:' . json_encode($res));
@@ -799,7 +800,7 @@ class Aliyundrive {
                 alert("Do not input ' . $envs . '");
                 return false;
             }
-            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,20})$/;
+            var reg = /^[a-zA-Z]([_a-zA-Z0-9]{1,})$/;
             if (!reg.test(t.disktag_add.value)) {
                 alert(\'' . getconstStr('TagFormatAlert') . '\');
                 return false;
