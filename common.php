@@ -21,7 +21,7 @@ $EnvConfigs = [
 
     'admin'             => 0b000,
     'adminloginpage'    => 0b010,
-    //'autoJumpFirstDisk' => 0b010,
+    'autoJumpFirstDisk' => 0b010,
     'background'        => 0b011,
     'backgroundm'       => 0b011,
     'disableShowThumb'  => 0b010,
@@ -270,7 +270,7 @@ function main($path)
                 // return a json
                 return output(json_encode($files), 200, ['Content-Type' => 'application/json']);
             }
-            //if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
+            if (getConfig('autoJumpFirstDisk')) return output('', 302, [ 'Location' => path_format($_SERVER['base_path'].'/'.$disktags[0].'/') ]);
         } else {
             $_SERVER['disktag'] = splitfirst( substr(path_format($path), 1), '/' )[0];
             //$pos = strpos($path, '/');
