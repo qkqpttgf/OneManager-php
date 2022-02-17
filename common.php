@@ -174,6 +174,16 @@ function main($path)
     $_SERVER['sitename'] = getConfig('sitename');
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
 
+    if (isset($_GET['jsFile'])) {
+        if (substr($_GET['jsFile'], -3)!='.js') return output('', 403);
+        if (!($path==''||$path=='/')) return output('', 308, [ 'Location' => path_format($_SERVER['base_path'] . '/?jsFile=' . $_GET['jsFile']) ]);
+        $jsFile = file_get_contents('js/' . $_GET['jsFile']);
+        if (!!$jsFile) {
+            return output( base64_encode($jsFile), 200, [ 'Content-Type' => 'text/javascript; charset=utf-8', 'Cache-Control' => 'max-age=' . 3*24*60*60 ], true );
+        } else {
+            return output('', 404);
+        }
+    }
     if (isset($_GET['WaitFunction'])) {
         $response = WaitFunction($_GET['WaitFunction']);
         //var_dump($response);
@@ -1146,9 +1156,25 @@ function adminform($name = '', $pass = '', $storage = '', $path = '')
             f.password1.value = sha1(timestamp + "" + f.password1.value);
             return true;
         } catch {
-            alert("sha1.js not loaded.");
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
+    }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function(e) {
+            if (xhr.status==200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
     }
 </script>
 <script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script>';
@@ -1950,7 +1976,7 @@ output:
         try {
             sha1(1);
         } catch {
-            alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
         var timestamp = new Date().getTime();
@@ -1993,7 +2019,7 @@ output:
         try {
             sha1(1);
         } catch {
-            alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
         var timestamp = new Date().getTime();
@@ -2030,13 +2056,28 @@ output:
         try {
             sha1(1);
         } catch {
-            alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
         var timestamp = new Date().getTime();
         f.timestamp.value = timestamp;
         f.oldPass.value = sha1(f.oldPass.value + "" + timestamp);
         return true;
+    }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function(e) {
+            if (xhr.status==200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
     }
 </script>';
     }
@@ -2406,12 +2447,21 @@ function render_list($path = '', $files = [])
             }
         }
         if ($_SERVER['is_guestup_path']||( $_SERVER['admin']&&$files['type']=='folder'&&$_SERVER['ishidden']<4 )) {
-            while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
-            while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
             $now_driver = baseclassofdrive();
-            unset($Driver_arr[$now_driver]);
-            while (strpos($html, '<!--' . $now_driver . 'UploadJsStart-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsStart-->', '', $html);
-            while (strpos($html, '<!--' . $now_driver . 'UploadJsEnd-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsEnd-->', '', $html);
+            if ($now_driver) {
+                while (strpos($html, '<!--UploadJsStart-->')) $html = str_replace('<!--UploadJsStart-->', '', $html);
+                while (strpos($html, '<!--UploadJsEnd-->')) $html = str_replace('<!--UploadJsEnd-->', '', $html);
+                unset($Driver_arr[$now_driver]);
+                while (strpos($html, '<!--' . $now_driver . 'UploadJsStart-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsStart-->', '', $html);
+                while (strpos($html, '<!--' . $now_driver . 'UploadJsEnd-->')) $html = str_replace('<!--' . $now_driver . 'UploadJsEnd-->', '', $html);
+            } else {
+                while (strpos($html, '<!--UploadJsStart-->')) {
+                    $tmp = splitfirst($html, '<!--UploadJsStart-->');
+                    $html = $tmp[0];
+                    $tmp = splitfirst($tmp[1], '<!--UploadJsEnd-->');
+                    $html .= $tmp[1];
+                }
+            }
             foreach ($Driver_arr as $driver) {
                 while (strpos($html, '<!--' . $driver . 'UploadJsStart-->')) {
                     $tmp = splitfirst($html, '<!--' . $driver . 'UploadJsStart-->');
@@ -2840,7 +2890,7 @@ function render_list($path = '', $files = [])
         $imgextstr = '';
         foreach ($exts['img'] as $imgext) $imgextstr .= '\''.$imgext.'\', '; 
         $html = str_replace('<!--ImgExts-->', $imgextstr, $html);
-        
+
 
         $html = str_replace('<!--Sitename-->', $_SERVER['sitename'], $html);
 
@@ -2870,7 +2920,7 @@ function render_list($path = '', $files = [])
         if ($diskname=='') $diskname = $_SERVER['disktag'];
         //if (strlen($diskname)>15) $diskname = substr($diskname, 0, 12).'...';
         while (strpos($html, '<!--DiskNameNow-->')) $html = str_replace('<!--DiskNameNow-->', $diskname, $html);
-        
+
         $tmp = splitfirst($html, '<!--HeadomfStart-->');
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadomfEnd-->');
@@ -2887,7 +2937,7 @@ function render_list($path = '', $files = [])
             $headomf = str_replace('<!--HeadomfContent-->', $headomfcontent, $tmp[0]);
         }
         $html .= $headomf . $tmp[1];
-        
+
         $tmp = splitfirst($html, '<!--HeadmdStart-->');
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--HeadmdEnd-->');
@@ -2989,7 +3039,6 @@ function render_list($path = '', $files = [])
         }
         $html .= $Footomf . $tmp[1];
 
-        
         $tmp = splitfirst($html, '<!--MdRequireStart-->');
         $html = $tmp[0];
         $tmp = splitfirst($tmp[1], '<!--MdRequireEnd-->');
