@@ -519,11 +519,39 @@
             f.password1.value = sha1(timestamp + "" + f.password1.value);
             return true;
         } catch {
-            alert("sha1.js not loaded.");
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
     }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function(e) {
+            if (xhr.status==200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
 <!--LoginEnd-->
+<!--WriteTimezoneStart-->
+    var nowtime= new Date();
+    var timezone = 0-nowtime.getTimezoneOffset()/60;
+    var expd = new Date();
+    expd.setTime(expd.getTime()+(2*60*60*1000));
+    var expires = "expires="+expd.toGMTString();
+    document.cookie="timezone="+timezone+"; path=/; "+expires;
+    if (timezone!=<!--timezone-->) {
+        //alert('Your timezone is '+timezone+', reload local timezone.');
+        location.href=location.href;
+    }
+<!--WriteTimezoneEnd-->
 <!--HeadmdStart-->
     var $head = document.getElementById('head');
     if ($head) {
@@ -792,19 +820,6 @@
         return num;
     }
 <!--IsNotHiddenEnd-->
-<!--IsFolderEnd-->
-<!--WriteTimezoneStart-->
-    var nowtime= new Date();
-    var timezone = 0-nowtime.getTimezoneOffset()/60;
-    var expd = new Date();
-    expd.setTime(expd.getTime()+(2*60*60*1000));
-    var expires = "expires="+expd.toGMTString();
-    document.cookie="timezone="+timezone+"; path=/; "+expires;
-    if (timezone!=<!--timezone-->) {
-        alert('Your timezone is '+timezone+', reload local timezone.');
-        location.href=location.href;
-    }
-<!--WriteTimezoneEnd-->
     function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
@@ -817,6 +832,7 @@
         document.execCommand("copy");
         alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
     }
+<!--IsFolderEnd-->
 <!--UploadJsStart-->
     function size_format(num) {
         if (num>1024) {
