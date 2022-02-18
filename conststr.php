@@ -6,7 +6,7 @@ global $constStr;
 $exts['img'] = ['ico', 'bmp', 'gif', 'jpg', 'jpeg', 'jpe', 'jfif', 'tif', 'tiff', 'png', 'heic', 'webp'];
 $exts['music'] = ['mp3', 'wma', 'flac', 'ape', 'wav', 'ogg', 'm4a'];
 $exts['office'] = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'];
-$exts['txt'] = ['txt', 'bat', 'sh', 'php', 'asp', 'js', 'css', 'json', 'html', 'c', 'cpp', 'md', 'py', 'omf'];
+$exts['txt'] = ['txt', 'log', 'bat', 'sh', 'php', 'asp', 'js', 'css', 'json', 'html', 'c', 'cpp', 'md', 'py', 'omf'];
 $exts['video'] = ['mp4', 'webm', 'mkv', 'mov', 'flv', 'blv', 'avi', 'wmv', 'm3u8', 'rm', '3gp', 'rmvb'];
 $exts['zip'] = ['zip', 'rar', '7z', 'gz', 'tar'];
 
