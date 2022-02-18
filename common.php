@@ -727,6 +727,19 @@ function sortConfig(&$arr)
     return $arr;
 }
 
+function chkTxtCode($str) {
+    $code = array(
+        'ASCII',
+        'GBK',
+        'UTF-8',
+        'UTF-16',
+    );
+    foreach ($code as $c) {
+        if ($str === iconv('UTF-8', $c, iconv($c, 'UTF-8', $str))) return $c;
+    }
+    return false;
+}
+
 function getconstStr($str)
 {
     global $constStr;
@@ -2555,8 +2568,9 @@ function render_list($path = '', $files = [])
             if (strpos($html, '<!--TxtContent-->')) {
                 //$tmp_content = get_content(spurlencode(path_format(urldecode($path)), '/'))['content']['body'];
                 $tmp_content = $files['content']['body'];
-                if (strlen($tmp_content)==$files['size']) $html = str_replace('<!--TxtContent-->', htmlspecialchars($tmp_content), $html);
-                else $html = str_replace('<!--TxtContent-->', $files['size']<1024*1024?htmlspecialchars(curl('GET', $files['url'], '', [], 0, 1)['body']):"File too large: " . $files['size'] . " B.", $html);
+                //if (strlen($tmp_content)==$files['size'])
+                $html = str_replace('<!--TxtContent-->', htmlspecialchars($tmp_content), $html);
+                //else $html = str_replace('<!--TxtContent-->', $files['size']<1024*1024?htmlspecialchars(curl('GET', $files['url'], '', [], 0, 1)['body']):"File too large: " . $files['size'] . " B.", $html);
             }
             $html = str_replace('<!--constStr@FileNotSupport-->', getconstStr('FileNotSupport'), $html);
 
