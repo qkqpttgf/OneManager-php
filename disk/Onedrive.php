@@ -60,9 +60,9 @@ class Onedrive {
                             //$content1 = curl('GET', $parentfiles['children'][$filename][$this->DownurlStrName]);
                             //$parentfiles['children'][$filename]['content'] = $content1;
                             //savecache('path_' . $parentpath, $parentfiles, $this->disktag);
-                            if ($$parentfiles['children'][$filename]['size']<1024*1024) {
-                                if (!(isset($$parentfiles['children'][$filename]['content'])&&$$parentfiles['children'][$filename]['content']['stat']==200)) {
-                                    $content1 = curl('GET', $$parentfiles['children'][$filename][$this->DownurlStrName]);
+                            if ($parentfiles['children'][$filename]['size']<1024*1024) {
+                                if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
+                                    $content1 = curl('GET', $parentfiles['children'][$filename][$this->DownurlStrName]);
                                     $tmp = null;
                                     $tmp = json_decode(json_encode($content1), true);
                                     if ($tmp['body']===null) {
@@ -71,12 +71,12 @@ class Onedrive {
                                         $tmp = json_decode(json_encode($tmp), true);
                                         if ($tmp['body']) $content1['body'] = $tmp['body'];
                                     }
-                                    $$parentfiles['children'][$filename]['content'] = $content1;
-                                    savecache('path_' . $path, $$parentfiles['children'][$filename], $this->disktag);
+                                    $parentfiles['children'][$filename]['content'] = $content1;
+                                    savecache('path_' . $path, $parentfiles['children'][$filename], $this->disktag);
                                 }
                             } else {
-                                $$parentfiles['children'][$filename]['content']['stat'] = 202;
-                                $$parentfiles['children'][$filename]['content']['body'] = 'File too large.';
+                                $parentfiles['children'][$filename]['content']['stat'] = 202;
+                                $parentfiles['children'][$filename]['content']['body'] = 'File too large.';
                             }
                         }
                     }
