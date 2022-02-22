@@ -1716,7 +1716,7 @@ output:
     } else {
         if (count($disktags)>1) {
             $frame .= '
-<script src="https://sortablejs.github.io/Sortable/Sortable.js"></script>
+<script src="https://www.unpkg.com/sortablejs@1.14.0/Sortable.min.js"></script>
 <style>
     .sortable-ghost {
         opacity: 0.4;
