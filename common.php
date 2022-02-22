@@ -732,6 +732,7 @@ function chkTxtCode($str) {
     $code = array(
         'ASCII',
         'GBK',
+        'GB18030',
         'UTF-8',
         'UTF-16',
     );
@@ -1191,7 +1192,7 @@ function adminform($name = '', $pass = '', $storage = '', $path = '')
         xhr.send(null);
     }
 </script>
-<script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script>';
+<script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script>';
     $html .= '</html>';
     return output($html, $statusCode);
 }
@@ -1949,7 +1950,7 @@ output:
             $frame .= getconstStr('NotNeedUpdate');
         }*/
         $frame .= '<br><br>
-<script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script>
+<script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script>
 <table>
     <form id="change_pass" name="change_pass" action="" method="POST" onsubmit="return changePassword(this);">
         <input name="_admin" type="hidden" value="">
