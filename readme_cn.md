@@ -1,4 +1,5 @@
 [Readme EN](readme.md)  
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://dashboard.heroku.com/new?template=https://github.com/LiuXiaoYin123/v2ray-heroku-undone)
 
 # 注意：
 
