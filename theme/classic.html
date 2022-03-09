@@ -1160,7 +1160,37 @@
                 }// else console.log(Object.keys(uploading).length);
             } else clearInterval(uploadList);
         }, 1000);
-        //getuplink(i);
+        function CalcProof(file) {
+            return new Promise(function(resolve, reject){
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", '?action=upbigfile');
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                xhr.onload = function(e){
+                    var html;
+                    if (xhr.status==200) {
+                        //console.log(xhr.responseText);
+                        var reader1 = new FileReader();
+                        var start = Number(xhr.responseText);
+                        var end = start + 8;
+                        if (file.size<end) end = file.size;
+                        console.log(start + " ~ " + end);
+                        //reader1.readAsArrayBuffer(file.slice(start,end));
+                        //reader1.readAsBinaryString(file.slice(start,end));
+                        reader1.readAsDataURL(file.slice(start,end));
+                        reader1.onload = function(e) {
+                            var proof = this.result;
+                            proof = proof.substr(proof.indexOf('base64,')+7);
+                            resolve(proof);
+                        }
+                    } else {
+                        //console.log(xhr.status+'calc proof code\n'+xhr.responseText);
+                        reject(xhr.status+"\ncalc proof code\n"+xhr.responseText);
+                    }
+                }
+                xhr.send('CalcProof=1&filesize=' + file.size);
+            });
+        }
         function getuplink(i, r=0) {
             var file=files[i];
             var td1;
@@ -1188,6 +1218,7 @@
                 uploadbuttonshow();
                 return;
             }*/
+            
             var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
             uploading[upbigfilename] = [i];
             var spark = sha1.create();
@@ -1199,7 +1230,14 @@
                 var blob = file.slice(start,end);
                 reader.readAsArrayBuffer(blob);
             }
-            readblob(asize);
+            var proof_code = '';
+            CalcProof(file).then(a => {
+                proof_code = a;
+                console.log('proof: ' + proof_code);
+                readblob(asize);
+            }, e => {
+                td2.innerHTML = e;
+            });
 
             reader.onload = function(e){
                 td2.innerHTML='<!--constStr@Calculate--> SHA1: '+(asize*100/file.size).toFixed(2)+'%';
@@ -1267,7 +1305,7 @@
                                 getuplink(i);
                             }*/
                         }
-                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
+                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&proof_code=' + proof_code + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
                     }
                 }
             }
