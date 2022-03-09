@@ -820,6 +820,7 @@
         return num;
     }
 <!--IsNotHiddenEnd-->
+<!--IsFolderEnd-->
     function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
@@ -832,7 +833,6 @@
         document.execCommand("copy");
         alert(tmptextarea.innerHTML+"<!--constStr@Success-->");
     }
-<!--IsFolderEnd-->
 <!--UploadJsStart-->
     function size_format(num) {
         if (num>1024) {
