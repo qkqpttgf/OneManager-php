@@ -620,6 +620,14 @@ function proxy_replace_domain($url, $domainforproxy, &$header)
     return $aim . '/' . $uri . $sp . 'Origindomain=' . $domain;
 }
 
+function bchexdec($hex) {
+    $len = strlen($hex);
+    for ($i = 1; $i <= $len; $i++)
+        $dec = bcadd($dec, bcmul(strval(hexdec($hex[$i - 1])), bcpow('16', strval($len - $i))));
+
+    return $dec;
+}
+
 function isHideFile($name)
 {
     $FunctionalityFile = [
@@ -1010,7 +1018,7 @@ function message($message, $title = 'Message', $statusCode = 200, $wainstat = 0)
                             //setTimeout(function() { getStatus() }, 1000);
                         }
                     } else if (xhr.status==206) {
-                        errordiv.innerHTML = "' . getconstStr('Wait') . '" + x + "<br>" + min;
+                        errordiv.innerHTML = "' . getconstStr('Wait') . ' " + min + "<br>" + x;
                         setTimeout(function() { getStatus() }, 1000);
                     } else {
                         errordiv.innerHTML = "ERROR<br>" + xhr.status + "<br>" + xhr.responseText;
