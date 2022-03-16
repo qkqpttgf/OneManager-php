@@ -571,9 +571,10 @@ class Aliyundrive {
             $result = $this->fileComplete($_POST['fileid'], $_POST['uploadid'], json_decode($_POST['etag'], true));
             return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         } else {
-            if (isset($_POST['CalcProof'])&&is_numeric($_POST['filesize'])) {
+            if (isset($_POST['CalcProof'])) {
+                return output(substr(md5($this->access_token), 0, 16), 200);
                 // Calc proof code
-                if (!function_exists('bcadd')) {
+                /*if (!function_exists('bcadd')) {
                     // no php-bcmath
                     return output(0, 200);
                 } else {
@@ -583,7 +584,7 @@ class Aliyundrive {
                     $o = bcmod($r, $i);
                     //return output(hexdec( substr(md5($this->access_token), 0, 16) ) . ' , ' . $r . ' / ' . $i . ' = ' . $o, 200);
                     return output($o, 200);
-                }
+                }*/
             }
             if ($_POST['upbigfilename']=='') return output('error: no file name', 400);
             if (!is_numeric($_POST['filesize'])) return output('error: no file size', 400);
@@ -614,11 +615,11 @@ class Aliyundrive {
                 //error_log1($res['body']);
                 $parent_file_id = json_decode($res['body'], true)['file_id'];
             }
-            if (!function_exists('bcadd')) {
-                $response = $this->fileCreate($parent_file_id, $filename, $_POST['filesha1'], $fileinfo['size'], ceil($fileinfo['size']/$_POST['chunksize']));
-            } else {
+            //if (!function_exists('bcadd')) {
+            //    $response = $this->fileCreate($parent_file_id, $filename, $_POST['filesha1'], $fileinfo['size'], ceil($fileinfo['size']/$_POST['chunksize']));
+            //} else {
                 $response = $this->fileCreate1($parent_file_id, $filename, $_POST['filesha1'], $_POST['proof_code'], $fileinfo['size'], ceil($fileinfo['size']/$_POST['chunksize']));
-            }
+            //}
             $res = json_decode($response['body'], true);
             if (isset($res['exist'])) {
                 // 已经有
