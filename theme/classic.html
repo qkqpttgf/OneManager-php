@@ -483,11 +483,12 @@
     <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
 </body>
 
-<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
-<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
+<!--MdRequireStart--><link rel="stylesheet" href="https://unpkg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="https://unpkg.com/marked@0.6.2/lib/marked.js"></script><!--MdRequireEnd-->
 <!--ListStart-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
-<!--AliyundriveUploadJsStart--><script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--AliyundriveUploadJsEnd-->
+<!--AliyundriveUploadJsStart--><script src="https://unpkg.com/bignumber.js@9.0.2/bignumber.js"></script>
+<script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -1170,12 +1171,14 @@
                     var html;
                     if (xhr.status==200) {
                         //console.log(xhr.responseText);
+                        var r = new BigNumber("0x".concat(xhr.responseText));
+                        var i = new BigNumber(file.size);
+                        var o = i ? r.mod(i) : 0;
                         var reader1 = new FileReader();
-                        var start = Number(xhr.responseText);
+                        var start = o.toNumber();
                         var end = start + 8;
-                        if (file.size<end) end = file.size;
+                        //if (file.size<end) end = file.size;
                         console.log(start + " ~ " + end);
-                        //reader1.readAsArrayBuffer(file.slice(start,end));
                         //reader1.readAsBinaryString(file.slice(start,end));
                         reader1.readAsDataURL(file.slice(start,end));
                         reader1.onload = function(e) {
@@ -1188,7 +1191,7 @@
                         reject(xhr.status+"\ncalc proof code\n"+xhr.responseText);
                     }
                 }
-                xhr.send('CalcProof=1&filesize=' + file.size);
+                xhr.send('CalcProof=1');
             });
         }
         function getuplink(i, r=0) {
