@@ -489,7 +489,7 @@
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
 <!--AliyundriveUploadJsStart--><script src="https://unpkg.com/bignumber.js@9.0.2/bignumber.js"></script>
 <script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--AliyundriveUploadJsEnd-->
-<!--IsFileStart--><!--IspdfFileStart--><script src="https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
+<!--IsFileStart--><!--IspdfFileStart--><script src="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
     function changelanguage(str)
@@ -655,61 +655,48 @@
     addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
-    //cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js
-    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.13.216/build/pdf.worker.min.js';
+    //cdn.bootcss.com/pdf.js/2.4.456/pdf.worker.min.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
     var loadingTask = pdfjsLib.getDocument({
         url: "<!--FileDownUrl-->",
-        cMapUrl: "https://unpkg.com/pdfjs-dist@2.13.216/cmaps/",
+        cMapUrl: "https://unpkg.com/pdfjs-dist@2.4.456/cmaps/",
         cMapPacked: true,
         disableStream: true,
         disableAutoFetch: true,
-        rangeChunkSize: 65535*16
+        rangeChunkSize: 65535
     });
     loadingTask.promise.then(function(pdf) {
         var pagenum =  pdf.numPages;
         var pdfContainer = document.getElementById('pdf-d');
         pdfContainer.innerHTML = '';
-        if (pagenum>5) {
-            var pagepos = 0;
-            for (var i=1;i<=5;i++) {
-                var canvasNew = document.createElement('canvas');
-                canvasNew.id = 'pdf-c'+i;
-                pdfContainer.appendChild(canvasNew);
-                renderpage(pdf,i);
-            }
-            pagepos = i;
-            var pdfnextpagebutton = document.createElement('button');
-            pdfnextpagebutton.id = 'pdfnextpagebutton';
-            pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+4<pagenum?pagepos+4:pagenum) + ' (' + pagenum + ')';
-            pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
-            pdfContainer.appendChild(pdfnextpagebutton);
-            var pdfWaitNextPage = setInterval(function(){
-                //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
-                if (pdfnextpagebutton.style.display=='none') {
-                    for (var i=pagepos;i<(pagepos+5<pagenum?pagepos+5:pagenum);i++) {
-                        var canvasNew = document.createElement('canvas');
-                        canvasNew.id = 'pdf-c'+i;
-                        pdfContainer.appendChild(canvasNew);
-                        renderpage(pdf,i);
-                    }
-                    pagepos = i;
-                    if (pagepos<pagenum) {
-                        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+5<pagenum?pagepos+5:pagenum) + ' (' + pagenum + ')';
-                        pdfnextpagebutton.style.display ='';
-                        pdfContainer.appendChild(pdfnextpagebutton);
-                    } else {
-                        clearInterval(pdfWaitNextPage);
-                    }
+        var pagepos = 1;
+        var pdfnextpagebutton = document.createElement('button');
+        pdfnextpagebutton.id = 'pdfnextpagebutton';
+        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+4<pagenum?pagepos+4:pagenum) + ' (' + pagenum + ')';
+        pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
+        pdfnextpagebutton.style.display = 'none';
+        pdfContainer.appendChild(pdfnextpagebutton);
+        var pdfWaitNextPage = setInterval(function(){
+            //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
+            console.log("next page: " + pagepos + " / " + pagenum);
+            if (pdfnextpagebutton.style.display=='none') {
+                for (var i=pagepos;i<=(pagepos+4<pagenum?pagepos+4:pagenum);i++) {
+                    var canvasNew = document.createElement('canvas');
+                    canvasNew.id = 'pdf-c'+i;
+                    pdfContainer.appendChild(canvasNew);
+                    renderpage(pdf,i);
                 }
-            }, 1000);
-        } else {
-            for (var i=1;i<=pagenum;i++) {
-                var canvasNew = document.createElement('canvas');
-                canvasNew.id = 'pdf-c'+i;
-                pdfContainer.appendChild(canvasNew);
-                renderpage(pdf,i);
+                pagepos = i;
+                if (pagepos<pagenum) {
+                    pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+4<pagenum?pagepos+4:pagenum) + ' (' + pagenum + ')';
+                    pdfnextpagebutton.style.display ='';
+                    pdfContainer.appendChild(pdfnextpagebutton);
+                } else {
+                    console.log("end of pdf");
+                    clearInterval(pdfWaitNextPage);
+                }
             }
-        }
+        }, 1000);
     });
     function renderpage(pdf,i) {
         pdf.getPage(i).then(function(page) { 
