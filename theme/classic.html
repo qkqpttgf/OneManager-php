@@ -483,12 +483,13 @@
     <div style="color: rgba(247,247,249,0);"><!--FootStr--></div>
 </body>
 
+<!--MdRequireStart--><link rel="stylesheet" href="https://unpkg.com/github-markdown-css@3.0.1/github-markdown.css">
+<script type="text/javascript" src="https://unpkg.com/marked@0.6.2/lib/marked.js"></script><!--MdRequireEnd-->
 <!--ListStart-->
-<!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
-<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
-<!--AliyundriveUploadJsStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
-<!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
+<!--AliyundriveUploadJsStart--><script src="https://unpkg.com/bignumber.js@9.0.2/bignumber.js"></script>
+<script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--AliyundriveUploadJsEnd-->
+<!--IsFileStart--><!--IspdfFileStart--><script src="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
     function changelanguage(str)
@@ -519,13 +520,53 @@
             f.password1.value = sha1(timestamp + "" + f.password1.value);
             return true;
         } catch {
-            alert("sha1.js not loaded.");
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
     }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function(e) {
+            if (xhr.status==200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
 <!--LoginEnd-->
+<!--WriteTimezoneStart-->
+    var nowtime= new Date();
+    var timezone = 0-nowtime.getTimezoneOffset()/60;
+    var expd = new Date();
+    expd.setTime(expd.getTime()+(2*60*60*1000));
+    var expires = "expires="+expd.toGMTString();
+    document.cookie="timezone="+timezone+"; path=/; "+expires;
+    if (timezone!=<!--timezone-->) {
+        //alert('Your timezone is '+timezone+', reload local timezone.');
+        location.href=location.href;
+    }
+<!--WriteTimezoneEnd-->
+<!--HeadmdStart-->
+    var $head = document.getElementById('head');
+    if ($head) {
+        //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
+        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+    }
+<!--HeadmdEnd-->
+<!--ReadmemdStart-->
+    var $readme = document.getElementById('readme');
+    if ($readme) {
+        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+    }
+<!--ReadmemdEnd-->
 <!--ListStart-->
-
 <!--IsFileStart-->
     var $url = document.getElementById('url');
     if ($url) {
@@ -614,26 +655,50 @@
     addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
-    pdfjsLib.GlobalWorkerOptions.workerSrc = '//cdn.bootcss.com/pdf.js/2.3.200/pdf.worker.min.js';
+    //cdn.bootcss.com/pdf.js/2.4.456/pdf.worker.min.js
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
     var loadingTask = pdfjsLib.getDocument({
         url: "<!--FileDownUrl-->",
-        cMapUrl: "//cdn.jsdelivr.net/npm/pdfjs-dist@2.2.228/cmaps/",
+        cMapUrl: "https://unpkg.com/pdfjs-dist@2.4.456/cmaps/",
         cMapPacked: true,
+        disableStream: true,
+        disableAutoFetch: true,
         rangeChunkSize: 65535
     });
     loadingTask.promise.then(function(pdf) {
         var pagenum =  pdf.numPages;
         var pdfContainer = document.getElementById('pdf-d');
         pdfContainer.innerHTML = '';
-        for (var i=1;i<=pagenum;i++) {
-            var canvasNew = document.createElement('canvas');
-            canvasNew.id = 'pdf-c'+i;
-            pdfContainer.appendChild(canvasNew);
-            renderpage(pdf,i);
-        }
+        var pagepos = 1;
+        var pdfnextpagebutton = document.createElement('button');
+        pdfnextpagebutton.id = 'pdfnextpagebutton';
+        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+4<pagenum?pagepos+4:pagenum) + ' (' + pagenum + ')';
+        pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
+        pdfnextpagebutton.style.display = 'none';
+        pdfContainer.appendChild(pdfnextpagebutton);
+        var pdfWaitNextPage = setInterval(function(){
+            //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
+            console.log("next page: " + pagepos + " / " + pagenum);
+            if (pdfnextpagebutton.style.display=='none') {
+                for (var i=pagepos;i<=(pagepos+4<pagenum?pagepos+4:pagenum);i++) {
+                    var canvasNew = document.createElement('canvas');
+                    canvasNew.id = 'pdf-c'+i;
+                    pdfContainer.appendChild(canvasNew);
+                    renderpage(pdf,i);
+                }
+                pagepos = i;
+                if (pagepos<pagenum) {
+                    pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos+4<pagenum?pagepos+4:pagenum) + ' (' + pagenum + ')';
+                    pdfnextpagebutton.style.display ='';
+                    pdfContainer.appendChild(pdfnextpagebutton);
+                } else {
+                    console.log("end of pdf");
+                    clearInterval(pdfWaitNextPage);
+                }
+            }
+        }, 1000);
     });
-    function renderpage(pdf,i)
-    {
+    function renderpage(pdf,i) {
         pdf.getPage(i).then(function(page) { 
             var scale = 1.5;
             var viewport = page.getViewport({ scale: scale, });
@@ -650,19 +715,6 @@
     }
 <!--IspdfFileEnd-->
 <!--IsFileEnd-->
-<!--HeadmdStart-->
-    var $head = document.getElementById('head');
-    if ($head) {
-        //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
-        $head.innerHTML = marked(document.getElementById('head-md').innerText);
-    }
-<!--HeadmdEnd-->
-<!--ReadmemdStart-->
-    var $readme = document.getElementById('readme');
-    if ($readme) {
-        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
-    }
-<!--ReadmemdEnd-->
 <!--IsFolderStart-->
 <!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
@@ -794,18 +846,6 @@
     }
 <!--IsNotHiddenEnd-->
 <!--IsFolderEnd-->
-<!--WriteTimezoneStart-->
-    var nowtime= new Date();
-    var timezone = 0-nowtime.getTimezoneOffset()/60;
-    var expd = new Date();
-    expd.setTime(expd.getTime()+(2*60*60*1000));
-    var expires = "expires="+expd.toGMTString();
-    document.cookie="timezone="+timezone+"; path=/; "+expires;
-    if (timezone!=<!--timezone-->) {
-        alert('Your timezone is '+timezone+', reload local timezone.');
-        location.href=location.href;
-    }
-<!--WriteTimezoneEnd-->
     function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
@@ -1145,7 +1185,39 @@
                 }// else console.log(Object.keys(uploading).length);
             } else clearInterval(uploadList);
         }, 1000);
-        //getuplink(i);
+        function CalcProof(file) {
+            return new Promise(function(resolve, reject){
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", '?action=upbigfile');
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                xhr.onload = function(e){
+                    var html;
+                    if (xhr.status==200) {
+                        //console.log(xhr.responseText);
+                        var r = new BigNumber("0x".concat(xhr.responseText));
+                        var i = new BigNumber(file.size);
+                        var o = i ? r.mod(i) : 0;
+                        var reader1 = new FileReader();
+                        var start = o.toNumber();
+                        var end = start + 8;
+                        //if (file.size<end) end = file.size;
+                        console.log(start + " ~ " + end);
+                        //reader1.readAsBinaryString(file.slice(start,end));
+                        reader1.readAsDataURL(file.slice(start,end));
+                        reader1.onload = function(e) {
+                            var proof = this.result;
+                            proof = proof.substr(proof.indexOf('base64,')+7);
+                            resolve(proof);
+                        }
+                    } else {
+                        //console.log(xhr.status+'calc proof code\n'+xhr.responseText);
+                        reject(xhr.status+"\ncalc proof code\n"+xhr.responseText);
+                    }
+                }
+                xhr.send('CalcProof=1');
+            });
+        }
         function getuplink(i, r=0) {
             var file=files[i];
             var td1;
@@ -1173,6 +1245,7 @@
                 uploadbuttonshow();
                 return;
             }*/
+            
             var upbigfilename = encodeURIComponent((file.webkitRelativePath||file.name));
             uploading[upbigfilename] = [i];
             var spark = sha1.create();
@@ -1184,7 +1257,14 @@
                 var blob = file.slice(start,end);
                 reader.readAsArrayBuffer(blob);
             }
-            readblob(asize);
+            var proof_code = '';
+            CalcProof(file).then(a => {
+                proof_code = a;
+                console.log('proof: ' + proof_code);
+                readblob(asize);
+            }, e => {
+                td2.innerHTML = e;
+            });
 
             reader.onload = function(e){
                 td2.innerHTML='<!--constStr@Calculate--> SHA1: '+(asize*100/file.size).toFixed(2)+'%';
@@ -1252,7 +1332,7 @@
                                 getuplink(i);
                             }*/
                         }
-                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
+                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&proof_code=' + proof_code + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
                     }
                 }
             }
@@ -1650,7 +1730,7 @@
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
-<!--LoginStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--LoginEnd-->
+<script src="https://www.unpkg.com/ionicons@6.0.1/dist/ionicons.js"></script>
+<!--LoginStart--><script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--LoginEnd-->
 <!--customScript-->
 </html>
