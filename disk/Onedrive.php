@@ -973,6 +973,20 @@ class Onedrive {
         return $thumb_url;
     }
 
+    public function smallfileupload($path, $tmpfile) {
+        if (!$_SERVER['admin']) {
+            $tmp1 = splitlast($tmpfile['name'], '.');
+            if ($tmp1[0]==''||$tmp1[1]=='') $filename = md5_file($tmpfile['tmp_name']);
+            else $filename = md5_file($tmpfile['tmp_name']) . '.' . $tmp1[1];
+        } else {
+            $filename = $tmpfile['name'];
+        }
+        $content = file_get_contents($tmpfile['tmp_name']);
+        $result = $this->MSAPI('PUT', path_format($_SERVER['list_path'] . '/' . $path . '/' . $filename), $content);
+        $res = $this->files_format(json_decode($result['body'], true));
+        if (isset($res['url'])) $res['url'] = $_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . $filename);
+        return output(json_encode($res, JSON_UNESCAPED_SLASHES), $result['stat']);
+    }
     public function bigfileupload($path)
     {
         if ($_POST['upbigfilename']=='') return output('error: no file name', 400);
