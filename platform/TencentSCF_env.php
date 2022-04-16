@@ -662,3 +662,7 @@ function changeAuthKey() {
     </script>';
     return message($html, 'Change platform Auth token or key', 200);
 }
+
+function smallfileupload($drive, $path) {
+    return output('Can not upload through SCF.', 400);
+}
