@@ -11,7 +11,7 @@ example:
         "$0" -i
         "$0" -u
         "$0" -b master
-        "$0" -r -b master
+        "$0" -u -b master
         "$0" -ib test
 "
 #  exit
@@ -62,11 +62,10 @@ OneManagerPath=`cd $(dirname $0);pwd -P`
 cd ${OneManagerPath}
 
 git clone ${branch} ${gitsource}
-[ g"$install" == g"1" ] || \mv -b config.php OneManager-php/
+[ g"$install" == g"1" ] || \mv -b .data/config.php OneManager-php/.data/
 \mv -b OneManager-php/* ./
 \mv -b OneManager-php/.[^.]* ./
 rm -rf *~
-rm -rf .[^.]*~
+#rm -rf .[^.]*~
 rm -rf OneManager-php
-chmod 666 config.php
-
+chmod 666 .data/config.php
