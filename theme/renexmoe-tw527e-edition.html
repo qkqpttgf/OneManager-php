@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <link rel="preconnect" href="https://cdn.jsdelivr.net" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500&family=Noto+Sans+HK:wght@500&family=Noto+Sans+SC:wght@500&display=swap" rel="stylesheet">
+
+  <meta charset="utf-8" />
+  <meta http-equiv="" content="IE=edge,chrome=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0, user-scalable=no" />
+  <!--BackgroundMStart-->
+  <link rel="icon" href="<!--BackgroundMUrl-->" type="image/x-icon">
+  <!--BackgroundMEnd-->
+
+  <title><!--Title--></title>
+  <meta name="description" content="A Cloud Drive built by OneManager with the theme renexmoe-tw527e-edition" />
+
+  <meta name="theme-color" content="#fff" />
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fira-code@4.2.2/400.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/noto-sans-sc@12.0.0/noto_sans_sc_regular/css.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/styles/github.min.css">
+
+  <link class="dplayer-css" rel="stylesheet" href="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/dplayer/dist/DPlayer.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/gh/aadsm/jsmediatags@master/dist/jsmediatags.min.js"></script>
+
+  <script>
+    window.disableddarkmode = true;
+  </script>
+  
+  <style>
+    html {
+      background-color: #222222;
+      <!--BackgroundStart-->
+      background: url("<!--BackgroundUrl-->"), #222222;
+      <!--BackgroundEnd-->
+      margin: 0;
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    body {
+      background: inherit;
+      margin: 0;
+      background-attachment: fixed;
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+
+    .mdui-theme-layout-dark {
+      background-color: #222222 !important;
+    }
+
+    *{
+      color: #ffd2b3;
+      font-family: 'Noto Sans TC','Noto Sans SC','Noto Sans HK',sans-serif;
+    }
+
+    #footer {
+      color: #fff;
+    }
+
+    .mdui-typo code,.mdui-typo kbd {
+      color: #7787ff;
+      background-color: #dfdfdf;
+      border-radius: 6px
+    }
+
+    .mdui-theme-layout-dark .mdui-list-item-active {
+      --color-active: #ff4081 !important;
+    }
+
+    .mdui-icon {
+      color: #fff8f3;
+    }
+    
+    .mdui-menu {
+      background-color: rgb(22 22 22 / 43%);
+    }
+
+    .mdui-dialog {
+      background-color: rgb(38 38 38);
+    }
+
+    .mdui-chip .mdui-chip-title {
+      color: #fff;
+      font-weight: 600;
+    }
+
+    div#file {
+      background-color: rgb(22 22 22 / 43%);
+    }
+
+    .mdui-typo p {
+      margin: 0 0 0 0;
+    }
+
+    .markdown p {
+      margin: 0 0 1.2em 0;
+    }
+
+    .mdui-typo {
+      line-height: 1.8;
+    }
+
+    .markdown code, .mdui-typo code {
+      color: #e3adff !important;
+      background-color: #464646 !important;
+    }
+
+    .markdown a *, .mdui-typo a * {
+      color: #ff4d7e !important;
+    }
+
+    .mdui-theme-layout-dark .mdui-list-item {
+      color: #ffd2b3;
+    }
+
+    .mdui-list-item:hover {
+      background-color: #ffffff29;
+    }
+
+    div#aplayer * {
+      color: #666;
+    }
+
+    input#url-input {
+    color: rgb(103 95 217);
+    }
+
+    label.mdui-textfield-label {
+    color: #e91e63 !important;
+    }
+    
+    div#clp {
+      line-height: 36px !important;
+      display: flex !important;
+      justify-content: center !important;
+      flex-direction: column !important;
+      align-items: center !important;
+    }
+
+    @media (min-width: 600px) {
+      div#clpp{
+        line-height: 36px !important;
+        display: flex !important;
+        justify-content: center !important;
+        flex-direction: row !important;
+        align-items: center !important;
+      }
+    }
+
+    @media (max-width: 599px) {
+      div#clpp{
+        line-height: 36px !important;
+        display: flex !important;
+        justify-content: center !important;
+        flex-direction: column !important;
+        align-items: center !important;
+      }
+    }
+  </style>
+  
+  <!--customCss-->
+</head>
+
+<body class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-drawer-body-left mdui-theme-accent-pink">
+  <header class="mdui-appbar mdui-appbar-fixed">
+    <div class="mdui-toolbar">
+      <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
+        onclick='mdui.$("body").toggleClass("mdui-drawer-body-left");' id="toggle-drawer"><i
+          class="mdui-icon material-icons">menu</i></span>
+      <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" onclick="window.history.back()">
+        <i class="mdui-icon material-icons">arrow_back</i>
+      </a>
+      <a href="<!--base_path-->" class="mdui-typo-headline">
+        <!--Sitename-->
+      </a>
+      <!--DiskPathArrayStart-->
+      <i class="mdui-icon material-icons mdui-hidden-xs" style="margin: 0">chevron_right</i><a
+        href="<!--PathArrayLink-->" class="mdui-typo-subheading mdui-hidden-xs">
+        <!--PathArrayName-->
+      </a>
+      <!--DiskPathArrayEnd-->
+      <div class="mdui-toolbar-spacer"></div>
+    </div>
+  </header>
+  <div class="mdui-drawer" id="main-drawer">
+    <div class="mdui-list" mdui-collapse="{accordion: true}">
+      <!--LoginStart-->
+      <li class="mdui-list-item mdui-ripple" mdui-dialog='{target: "#login_input"}'>
+        <a class="mdui-list-item-icon mdui-icon material-icons">account_circle</a><a
+          class="mdui-list-item-content">登錄</a>
+      </li>
+      <!--LoginEnd-->
+      <li class="mdui-list-item mdui-ripple" onclick="renexmoe.toggle_theme();">
+        <a class="mdui-list-item-icon mdui-icon material-icons">brightness_4</a><a
+          class="mdui-list-item-content">深色背景模式</a>
+      </li>
+      <li class="mdui-list-item mdui-ripple">
+        <a href="<!--base_path-->" class="mdui-list-item-icon mdui-icon material-icons">home</a><a
+          href="<!--base_path-->" class="mdui-list-item-content" id="home">
+          <!--constStr@Home-->
+        </a>
+      </li>
+      <!--MultiDiskAreaStart-->
+      <div class="mdui-divider"></div>
+      <!--MultiDisksStart-->
+      <li class="mdui-list-item mdui-ripple">
+        <a href="<!--MultiDisksUrl-->" class="mdui-list-item-icon mdui-icon material-icons">cloud</a>
+        <a href="<!--MultiDisksUrl-->" class="mdui-list-item-content mdui-text-truncate disk_name">
+          <!--MultiDisksName-->
+        </a>
+      </li>
+      <!--MultiDisksEnd-->
+      <div class="mdui-divider"></div>
+      <!--MultiDiskAreaEnd-->
+      <a target="_blank" href="https://github.com/qkqpttgf/OneManager-php" class="mdui-list-item mdui-ripple"><i
+          class="mdui-list-item-icon mdui-icon material-icons">code</i>
+        <div class="mdui-list-item-content">Github</div>
+      </a>
+      <li class="mdui-list-item mdui-ripple" id="about_theme">
+        <i class="mdui-list-item-icon mdui-icon material-icons">info</i>
+        <div class="mdui-list-item-content">關於主題</div>
+      </li>
+    </div>
+  </div>
+  <div class="mdui-container">
+    <ul class="mdui-menu" id="admin-menu">
+      <li class="mdui-menu-item">
+        <a href="javascript:;" class="mdui-ripple back"><i
+            class="mdui-menu-item-icon mdui-icon material-icons">arrow_back</i>返回上一頁</a>
+      </li>
+    </ul>
+    <i id="mouseplace" style="position: absolute"></i>
+
+    <div class="mdui-dialog" id="login_input">
+      <div class="mdui-dialog-title">登錄</div>
+      <div class="mdui-dialog-content" style="height: 108px">
+        <form action="<!--IsPreview?-->admin" method="post" onsubmit="return sha1loginpass(this);">
+          <div class="mdui-textfield mdui-textfield-floating-label">
+            <i class="mdui-icon material-icons">lock</i><label class="mdui-textfield-label">密碼</label>
+            <input class="mdui-textfield-input" id="login_input" name="password1" type="password">
+            <input name="timestamp" type="hidden" value="">
+          </div>
+      </div>
+      <div class="mdui-dialog-actions">
+        <button class="mdui-btn mdui-ripple" mdui-dialog-close="" id="login_close">取消</button>
+        <button id="login_btn_bak" class="mdui-btn mdui-ripple" type="submit" value="<!--constStr@Login-->">
+          登錄
+        </button>
+        </form>
+      </div>
+    </div>
+    <!--EncryptedStart-->
+    <div class="mdui-center" style="margin: 20px auto;max-width: 600px;">
+      <br />
+      <center>
+        <div class="mdui-typo-title">
+          這是一個受保護的資料夾，您需要提供訪問密碼才能檢視。
+        </div>
+      </center>
+      <form action="" method="post">
+        <div class="mdui-textfield mdui-textfield-floating-label">
+          <i class="mdui-icon material-icons">https</i>
+          <label class="mdui-textfield-label">
+            <!--constStr@InputPassword-->
+          </label>
+          <input name="password1" class="mdui-textfield-input" type="password" />
+        </div>
+        <br />
+        <button type="submit" class="mdui-center mdui-btn mdui-btn-raised mdui-ripple mdui-color-theme">
+          <i class="mdui-icon material-icons">fingerprint</i>
+          <!--constStr@Submit-->
+        </button>
+      </form>
+    </div>
+    <!--EncryptedEnd-->
+    <!--IsFolderStart-->
+    <!--HeadomfStart-->
+    <div class="mdui-typo mdui-shadow-3" style="padding: 20px; margin: 20px 0">
+      <!--HeadomfContent-->
+    </div>
+    <!--HeadomfEnd-->
+    <!--HeadmdStart-->
+    <div class="mdui-chip mdui-ripple mdui-hidden-xs" style="margin-top: 20px;">
+      <span class="mdui-chip-icon">
+        <i class="mdui-icon material-icons">face</i>
+      </span>
+      <span class="mdui-chip-title">HEAD.md</span>
+    </div>
+    <div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px; margin: 20px 0; overflow-x: scroll; border-radius: 8px; background-color: rgb(22 22 22 / 43%);" id="head">
+      <textarea id="head-md"><!--HeadmdContent--></textarea>
+    </div>
+    <!--HeadmdEnd-->
+    <div class="mdui-row mdui-shadow-3" style="margin: 20px 0; border-radius: 8px; background-color: rgb(22 22 22 / 43%);">
+      <ul class="mdui-list" id="file-list">
+        <li class="mdui-list-item mdui-ripple">
+          <div class="mdui-row mdui-col-xs-12">
+            <div class="mdui-col-xs-12 mdui-col-sm-7">
+              <!--constStr@File--><i class="mdui-icon material-icons icon-sort" data-sort="name"
+                data-order="less">expand_less</i>
+            </div>
+            <div class="mdui-col-sm-3 mdui-text-right">
+              <!--constStr@EditTime--><i class="mdui-icon material-icons icon-sort" data-sort="date"
+                data-order="less">expand_less</i>
+            </div>
+            <div class="mdui-col-sm-2 mdui-text-right">
+              <!--constStr@Size--><i class="mdui-icon material-icons icon-sort" data-sort="size"
+                data-order="less">expand_less</i>
+            </div>
+          </div>
+        </li>
+        <!--BackArrowStart-->
+        <li class="mdui-list-item mdui-ripple back-page">
+          <a href="<!--BackArrowUrl-->">
+            <div class="mdui-row mdui-col-sm-12">
+              <div class="mdui-col-xs-7">
+                <i class="mdui-icon material-icons">arrow_upward</i>
+              </div>
+              <div class="mdui-col-xs-3 mdui-text-right"></div>
+              <div class="mdui-col-xs-2 mdui-text-right"></div>
+            </div>
+          </a>
+        </li>
+        <!--BackArrowEnd-->
+        <!--FolderListStart-->
+        <li class="mdui-list-item mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->"
+          data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->" style="padding-right: 36px">
+          <a href="<!--FileEncodeReplaceUrl-->/">
+            <div class="mdui-row mdui-col-sm-12">
+              <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+                <i class="mdui-icon material-icons">folder_open</i><span>
+                  <!--FileEncodeReplaceName-->
+                </span>
+              </div>
+              <div class="mdui-col-sm-3 mdui-text-right">
+                <!--lastModifiedDateTime-->
+              </div>
+              <div class="mdui-col-sm-2 mdui-text-right">
+                <!--size-->
+              </div>
+            </div>
+          </a>
+        </li>
+        <!--FolderListEnd-->
+        <!--FileListStart-->
+        <li class="mdui-list-item file mdui-ripple" data-sort data-sort-name="<!--FileEncodeReplaceName-->"
+          data-sort-date="<!--lastModifiedDateTime-->" data-sort-size="<!--size-->" data-readypreview="<!--FileExt-->">
+          <a class="<!--FileExtType-->" data-name="<!--FileEncodeReplaceName-->"
+            href="<!--FileEncodeReplaceUrl-->?preview" aria-label="File">
+            <div class="mdui-row mdui-col-sm-12">
+              <div class="mdui-col-xs-12 mdui-col-sm-7 mdui-text-truncate">
+
+                <i class="mdui-icon material-icons">
+                  <!--IconValue-->
+                </i>
+                <span>
+                  <!--FileEncodeReplaceName-->
+                </span>
+
+              </div>
+              <div class="mdui-col-sm-3 mdui-text-right">
+                <!--lastModifiedDateTime-->
+              </div>
+              <div class="mdui-col-sm-2 mdui-text-right">
+                <!--size-->
+              </div>
+            </div>
+          </a>
+          <div class="forcedownload mdui-text-right">
+            <a title="<!--constStr@Download-->" aria-label="Download" href="<!--FileEncodeReplaceUrl-->"
+              target="_blank"><button class="mdui-btn mdui-ripple mdui-btn-icon">
+                <i class="mdui-icon material-icons">file_download</i>
+              </button></a>
+          </div>
+        </li>
+        <!--FileListEnd-->
+      </ul>
+    </div>
+    <!--ReadmemdStart-->
+    <div class="mdui-chip mdui-ripple mdui-hidden-xs">
+      <span class="mdui-chip-icon"><i class="mdui-icon material-icons">face</i></span><span
+        class="mdui-chip-title">README.md</span>
+    </div>
+    <div class="mdui-typo mdui-shadow-3 markdown" style="padding: 20px; margin: 20px 0; overflow-x: scroll; background-color: rgb(22 22 22 / 43%);" id="readme">
+      <textarea id="readme-md"><!--ReadmemdContent--></textarea>
+    </div>
+    <!--ReadmemdEnd-->
+    <!--FootomfStart-->
+    <div class="mdui-typo mdui-shadow-3" style="padding: 20px; margin: 20px 0">
+      <!--FootomfContent-->
+    </div>
+    <!--FootomfEnd-->
+    <script>
+      document.querySelector("#admin-menu").innerHTML +=
+        '<li class="mdui-menu-item"><a class="mdui-ripple getalllink"><i class="mdui-menu-item-icon mdui-icon material-icons">link</i>批量鏈接</a></li>';
+    </script>
+    <script>
+      window.MorePage = undefined;
+    </script>
+    <!--MorePageStart-->
+    <script>
+      window.MorePage = [
+      <!--MorePageListNowStart-->
+        <!--PageNum-->,
+      <!--MorePageListNowEnd-->
+      <!--MorePageListStart-->
+        <!--PageNum-->,
+      <!--MorePageListEnd-->
+      ];
+    </script>
+    <!--MorePageEnd-->
+
+    <!--IsFolderEnd-->
+    <!--IsFileStart-->
+    <div id="file" class="mdui-shadow-3" style="margin: 20px 0px; padding: 20px; border-radius: 8px">
+      <!--IsimgFileStart-->
+      <img class="mdui-img-fluid mdui-center" src="<!--FileDownUrl-->" />
+      <!--IsimgFileEnd-->
+      <!--IsmusicFileStart-->
+      <div id="aplayer" class="mdui-text-center">音樂載入中...</div>
+      <div class="mdui-row">
+        <hr />
+      </div>
+      <br />
+      <div class="mdui-row mdui-text-center">
+        <div class="mdui-typo-subheading" style="margin-bottom: 15px;">呼叫本地播放器</div>
+      </div>
+      <div class="mdui-row" id="clpp">
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openmxfree" href="" type="button" class="mdui-btn mdui-ripple">MxPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openmxpro" href="" type="button" class="mdui-btn mdui-ripple">MxPlayerPro</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="opennp" href="" type="button" class="mdui-btn mdui-ripple">nPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openpot" href="" type="button" class="mdui-btn mdui-ripple">PotPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openvlc" href="" type="button" class="mdui-btn mdui-ripple">VLC</a>
+        </div>
+      </div>
+      <script>
+        path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+
+        document.getElementById("openmxpro").href = "intent:" + window.location.origin + path + "/" + "<!--FileDownUrl-->" + "#Intent;package=com.mxtech.videoplayer.pro;end";
+        document.getElementById("openmxfree").href = "intent:" + window.location.origin + path + "/" + "<!--FileDownUrl-->" + "#Intent;package=com.mxtech.videoplayer.ad;end";
+        document.getElementById("opennp").href = "nplayer-" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+        document.getElementById("openpot").href = "potplayer://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+        document.getElementById("openvlc").href = "vlc://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+
+        ap = new APlayer({
+          container: document.getElementById('aplayer'),
+          theme: 'rgb(242, 200, 171)',
+          autoplay: false,
+          loop: 'none',
+          audio: [
+            {
+            name: "<!--FileDownUrl-->".substring(0, "<!--FileDownUrl-->".lastIndexOf('.')),
+            artist: "　",
+            url: '<!--FileDownUrl-->',
+            cover: "　"
+            }
+          ]
+        });
+
+        document.querySelector('.aplayer-author').innerHTML = "";
+
+        isRecover = false;
+
+        function AudioTime(){
+          if(!isRecover){
+            if(ap.audio.duration > 0){
+              if(localStorage.getItem(path + "/" + "<!--FileDownUrl-->") != null && localStorage.getItem(path + "/" + "<!--FileDownUrl-->") != 'null'){
+                ap.seek(localStorage.getItem(path + "/" + "<!--FileDownUrl-->") - 5);
+                mdui.snackbar('已恢復至上次播放位置');
+                isRecover = true;
+              }else{
+                isRecover = true;
+              }
+            }
+          }else{
+            if(ap.audio.currentTime >= 16 && ap.audio.currentTime <= ap.audio.duration - 16){
+              localStorage.setItem(path + "/" + "<!--FileDownUrl-->", ap.audio.currentTime);
+            }else{
+              localStorage.setItem(path + "/" + "<!--FileDownUrl-->", null);
+            }
+          }
+        }
+
+        function AudioPause(){
+          if(window.location.href != oldURL){
+            if(ap != undefined){
+              ap.pause();
+            }
+            oldURL = window.location.href;
+          }
+        }
+
+        var oldURL = window.location.href;
+        setInterval(AudioPause, 1000);
+        setInterval(AudioTime, 1000);
+
+        window.jsmediatags.read(window.location.origin + path + "/" + "<!--FileDownUrl-->", {
+          onSuccess: function(tag) { 
+            if(tag.tags.picture != undefined){
+              const data = tag.tags.picture.data;
+              const format = tag.tags.picture.format;
+              let base64String = "";
+              for (let i = 0; i < data.length; i++) {
+                base64String += String.fromCharCode(data[i]);
+              }
+              ap.options.audio[0].cover = `data:${format};base64,${window.btoa(base64String)}`;
+              document.querySelector('.aplayer-pic').style.backgroundImage = `url("data:${format};base64,${window.btoa(base64String)}")`;
+            }
+
+            if(tag.tags.title != undefined){
+              ap.options.audio[0].name = tag.tags.title;
+              document.querySelector('.aplayer-title').innerHTML = tag.tags.title;
+            }
+
+            if(tag.tags.artist != undefined){
+              ap.options.audio[0].artist = tag.tags.artist;
+              document.querySelector('.aplayer-author').innerHTML = " - " + tag.tags.artist;
+            }
+
+          },
+          onError: function(error) {
+            p = document.getElementById('aplayer');
+            parent = p.parentNode;
+            audio = document.createElement('audio');
+            audio.className = 'mdui-center';
+            audio.src = "<!--FileDownUrl-->";
+            audio.controls = true;
+            audio.autoplay = true;
+            audio.style = 'width: 100%';
+            parent.replaceChild(audio, p);
+          }
+        });
+      </script>
+      <!--IsmusicFileEnd-->
+      <!--IsvideoFileStart-->
+      <div id="dplayer"></div>
+      <div class="mdui-row">
+        <hr />
+      </div>
+      <br />
+      <div class="mdui-row mdui-text-center">
+        <div class="mdui-typo-subheading" style="margin-bottom: 15px;">呼叫本地播放器</div>
+      </div>
+      <div class="mdui-row" id="clpp">
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openmxfree" href="" type="button" class="mdui-btn mdui-ripple">MxPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openmxpro" href="" type="button" class="mdui-btn mdui-ripple">MxPlayerPro</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="opennp" href="" type="button" class="mdui-btn mdui-ripple">nPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openpot" href="" type="button" class="mdui-btn mdui-ripple">PotPlayer</a>
+        </div>
+        <div class="mdui-col-xs-12 mdui-col-sm-2" id="clp">
+          <a id="openvlc" href="" type="button" class="mdui-btn mdui-ripple">VLC</a>
+        </div>
+      </div>
+      <script>
+        path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+        
+        document.getElementById("openpot").href = "potplayer://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+        document.getElementById("openvlc").href = "vlc://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+        document.getElementById("openmxpro").href = "intent:" + window.location.origin + path + "/" + "<!--FileDownUrl-->" + "#Intent;package=com.mxtech.videoplayer.pro;end";
+        document.getElementById("openmxfree").href = "intent:" + window.location.origin + path + "/" + "<!--FileDownUrl-->" + "#Intent;package=com.mxtech.videoplayer.ad;end";
+        document.getElementById("opennp").href = "nplayer-" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
+
+        dp = new DPlayer({
+        container: document.getElementById('dplayer'),
+        lang:'zh-tw',
+        screenshot: true,
+        airplay: true,
+        preload: 'auto',
+        volume: 0.7,
+        video: {
+          url: '<!--FileDownUrl-->',
+          type: 'auto'
+        }});
+
+        isRecover = false;
+
+        function VideoTime(){
+          if(!isRecover){
+            if(dp.video.duration > 0 && dp.video.duration != NaN){
+              if(localStorage.getItem(path + "/" + "<!--FileDownUrl-->") != null && localStorage.getItem(path + "/" + "<!--FileDownUrl-->") != 'null'){
+                dp.seek(localStorage.getItem(path + "/" + "<!--FileDownUrl-->") - 5);
+                mdui.snackbar('已恢復至上次播放位置');
+                isRecover = true;
+              }else{
+                isRecover = true;
+              }
+            }
+          }else{
+            if(dp.video.currentTime >= 31 && dp.video.currentTime <= dp.video.duration - 31){
+              localStorage.setItem(path + "/" + "<!--FileDownUrl-->", dp.video.currentTime);
+            }else{
+              localStorage.setItem(path + "/" + "<!--FileDownUrl-->", null);
+            }
+          }
+        }
+
+        setInterval(VideoTime, 1000);
+      </script>
+      <!--IsvideoFileEnd-->
+      <!--IsofficeFileStart-->
+      <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->"
+        style="width: 100%" frameborder="0"></iframe>
+      <script>
+        window.onload = function () {
+          if (document.getElementById("office-a")) {
+            var ifm = document.getElementById("office-a");
+            var containerHeight = document.documentElement.clientHeight - 150;
+            ifm.height = containerHeight;
+          }
+        }
+        window.onresize = function () {
+          if (document.getElementById("office-a")) {
+            var ifm = document.getElementById("office-a");
+            var containerHeight = document.documentElement.clientHeight - 150;
+            ifm.height = containerHeight;
+          }
+        }
+      </script>
+      <!--IsofficeFileEnd-->
+      <!--IspdfFileStart-->
+      <div id="pdf-d" style="text-align:center;margin:0 auto;width: calc(100%);">Loading PDF</div>
+      <script>
+        function renderpage(pdf, i) {
+          pdf.getPage(i).then(function (page) {
+            var scale = 1.5;
+            var viewport = page.getViewport({
+              scale: scale,
+            });
+            var canvas = document.getElementById("pdf-c" + i);
+            var context = canvas.getContext("2d");
+            canvas.height = viewport.height;
+            canvas.width = viewport.width;
+            canvas.style.width = "inherit";
+            var renderContext = {
+              canvasContext: context,
+              viewport: viewport,
+            };
+            page.render(renderContext);
+          });
+        }
+
+        function loadpdf() {
+          pdfjsLib.GlobalWorkerOptions.workerSrc =
+            "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/es5/build/pdf.worker.js";
+          var loadingTask = pdfjsLib.getDocument({
+            url: "<!--FileDownUrl-->",
+            cMapUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/cmaps/",
+            cMapPacked: true,
+            rangeChunkSize: 65535
+          });
+          loadingTask.promise.then(function (pdf) {
+            var pagenum = pdf.numPages;
+            var pdfContainer = document.getElementById("pdf-d");
+            pdfContainer.innerHTML = "";
+            for (var i = 1; i <= pagenum; i++) {
+              var canvasNew = document.createElement("canvas");
+              canvasNew.id = "pdf-c" + i;
+              pdfContainer.appendChild(canvasNew);
+              renderpage(pdf, i);
+            }
+          });
+        }
+        window.onload = function () {
+          if (document.getElementById("pdf-d")) {
+            loadpdf();
+          }
+        }
+      </script>
+      <!--IspdfFileEnd-->
+      <!--IstxtFileStart-->
+      <pre id="editor" style="
+    white-space: pre-wrap;
+    font-family: JetBrains Mono, Fira Code, Sarasa Mono SC, Cascadia Code, Menlo,
+      Consolas, monaco, Noto Sans SC;
+  "><code id="code"><!--TxtContent--></code></pre>
+      <script>
+        document.querySelector("#admin-menu").innerHTML +=
+          '<li class="mdui-menu-item"><a class="mdui-ripple highlight"><i class="mdui-menu-item-icon mdui-icon material-icons">style</i>markdown解析</a></li>';
+        document.querySelector(
+          ".mdui-toolbar"
+        ).innerHTML +=
+          '<a class="mdui-btn mdui-btn-icon mdui-ripple mdui-hidden-sm-up highlight"><i class="mdui-icon material-icons">style</i></a>';
+      </script>
+
+      <!--IstxtFileEnd-->
+      <!--IsOtherFileStart-->
+      <!--constStr@FileNotSupport-->
+      <!--IsOtherFileEnd-->
+    </div>
+    <a href="<!--FileEncodeReplaceUrl-->" target="_blank"
+      class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i
+        class="mdui-icon material-icons">file_download</i></a>
+    <script>
+      document.querySelector("#admin-menu").innerHTML +=
+        '<li class="mdui-menu-item"><a class="mdui-ripple downloadurl"><i class="mdui-menu-item-icon mdui-icon material-icons">cloud_download</i>下載鏈接</a></li>';
+      document.querySelector(
+        ".mdui-toolbar"
+      ).innerHTML +=
+        '<a class="mdui-btn mdui-btn-icon mdui-ripple downloadurl"><i class="mdui-icon material-icons">cloud_download</i></a>';
+    </script>
+    <!--IsFileEnd-->
+  </div>
+  <div class="mdui-text-center mdui-typo" id="footer"></div>
+</body>
+<!--IconValuesStart-->
+{ "music":"audiotrack", "video":"ondemand_video", "img":"image",
+"pdf":"picture_as_pdf", "default":"insert_drive_file"}
+<!--IconValuesEnd-->
+
+<script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/es5/build/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sha-1@1.0.0/dist/sha1.umd.min.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/extra.js"></script>
+
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
+
+<script>
+  window.renexmoe.toggle_theme();
+</script>
+
+<!--customScript-->
+</html>
