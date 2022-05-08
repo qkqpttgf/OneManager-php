@@ -19,8 +19,8 @@
 
   <meta name="theme-color" content="#fff" />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fira-code@4.2.2/400.css">
@@ -41,12 +41,10 @@
     html {
       background-color: #222222;
       <!--BackgroundStart-->
-      background: url("<!--BackgroundUrl-->"), #222222;
+      background: url("<!--BackgroundUrl-->") fixed no-repeat, #222222;
       <!--BackgroundEnd-->
       margin: 0;
-      background-attachment: fixed;
       background-size: cover;
-      background-repeat: no-repeat;
     }
 
     body {
@@ -169,16 +167,29 @@
         align-items: center !important;
       }
     }
+
+    .blur{
+      z-index: 0;
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      left: 0;
+      filter: blur(0px);
+    }
   </style>
   
   <!--customCss-->
 </head>
 
+<body>
+  <div class="blur"></div>
+</body>
+
 <body class="mdui-appbar-with-toolbar mdui-theme-layout-auto mdui-drawer-body-left mdui-theme-accent-pink">
   <header class="mdui-appbar mdui-appbar-fixed">
     <div class="mdui-toolbar">
       <span class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white"
-        onclick='mdui.$("body").toggleClass("mdui-drawer-body-left");' id="toggle-drawer"><i
+        onclick='mdui.$(".mdui-appbar-with-toolbar").toggleClass("mdui-drawer-body-left");' id="toggle-drawer"><i
           class="mdui-icon material-icons">menu</i></span>
       <a class="mdui-btn mdui-btn-icon mdui-ripple mdui-ripple-white" onclick="window.history.back()">
         <i class="mdui-icon material-icons">arrow_back</i>
@@ -235,7 +246,7 @@
       </li>
     </div>
   </div>
-  <div class="mdui-container">
+  <div class="mdui-container" style="position: relative;">
     <ul class="mdui-menu" id="admin-menu">
       <li class="mdui-menu-item">
         <a href="javascript:;" class="mdui-ripple back"><i
@@ -728,7 +739,7 @@
     </script>
     <!--IsFileEnd-->
   </div>
-  <div class="mdui-text-center mdui-typo" id="footer"></div>
+  <div class="mdui-text-center mdui-typo" id="footer"  style="position: relative;"></div>
 </body>
 <!--IconValuesStart-->
 { "music":"audiotrack", "video":"ondemand_video", "img":"image",
@@ -740,15 +751,15 @@
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sha-1@1.0.0/dist/sha1.umd.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/extra.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/extra.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.19/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
 
 <script>
   window.renexmoe.toggle_theme();
