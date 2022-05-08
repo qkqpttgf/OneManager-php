@@ -19,8 +19,8 @@
 
   <meta name="theme-color" content="#fff" />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fira-code@4.2.2/400.css">
@@ -175,6 +175,15 @@
       height: 100%;
       left: 0;
       filter: blur(0px);
+    }
+
+    ul.mdui-menu {
+    position: fixed !important;
+    }
+
+    .aplayer, .aplayer-pic {
+      padding: inherit;
+      border-radius: 10px;
     }
   </style>
   
@@ -478,12 +487,12 @@
           container: document.getElementById('aplayer'),
           theme: 'rgb(242, 200, 171)',
           autoplay: false,
-          loop: 'none',
+          loop: 'all',
           audio: [
             {
             name: "<!--FileDownUrl-->".substring(0, "<!--FileDownUrl-->".lastIndexOf('.')),
             artist: "　",
-            url: '<!--FileDownUrl-->',
+            url: "<!--FileDownUrl-->",
             cover: "　"
             }
           ]
@@ -592,7 +601,7 @@
       </div>
       <script>
         path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
-        
+
         document.getElementById("openpot").href = "potplayer://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
         document.getElementById("openvlc").href = "vlc://" + window.location.origin + path + "/" + "<!--FileDownUrl-->";
         document.getElementById("openmxpro").href = "intent:" + window.location.origin + path + "/" + "<!--FileDownUrl-->" + "#Intent;package=com.mxtech.videoplayer.pro;end";
@@ -607,7 +616,7 @@
         preload: 'auto',
         volume: 0.7,
         video: {
-          url: '<!--FileDownUrl-->',
+          url: "<!--FileDownUrl-->",
           type: 'auto'
         }});
 
@@ -730,6 +739,24 @@
       class="mdui-fab mdui-fab-fixed mdui-ripple mdui-color-theme-accent"><i
         class="mdui-icon material-icons">file_download</i></a>
     <script>
+      path = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/'));
+
+      function copyURL() {
+        copyText = document.createElement("input");
+        copyText.id = "copyText";
+        copyText.value = window.location.origin + path + "/" + "<!--FileDownUrl-->";
+        p = document.querySelector('body');
+        parent = p.parentNode;
+        parent.appendChild(copyText);
+        copyText.focus();
+        copyText.select();
+        document.execCommand("copy");
+        document.getElementById("copyText").remove();
+        mdui.snackbar("已複製到剪貼簿");
+      }
+
+      document.querySelector("#admin-menu").innerHTML += '<li class="mdui-menu-item"><a class="mdui-ripple" onclick="copyURL()"><i class="mdui-menu-item-icon mdui-icon material-icons">link</i>複製直鏈</a></li>';
+
       document.querySelector("#admin-menu").innerHTML +=
         '<li class="mdui-menu-item"><a class="mdui-ripple downloadurl"><i class="mdui-menu-item-icon mdui-icon material-icons">cloud_download</i>下載鏈接</a></li>';
       document.querySelector(
@@ -746,20 +773,21 @@
 "pdf":"picture_as_pdf", "default":"insert_drive_file"}
 <!--IconValuesEnd-->
 
+
 <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.5.207/es5/build/pdf.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sha-1@1.0.0/dist/sha1.umd.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/extra.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/extra.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.20/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
 
 <script>
   window.renexmoe.toggle_theme();
