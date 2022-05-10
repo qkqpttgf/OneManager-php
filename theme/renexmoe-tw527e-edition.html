@@ -19,8 +19,8 @@
 
   <meta name="theme-color" content="#fff" />
 
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/css/app1@uw34ru4ehdn4pywddmebm79dnnb2jyei.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/css/app2@eqge353pwpgivauvcvzejwrki4mdissj.css">
 
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fontsource/fira-code@4.2.2/400.css">
@@ -218,9 +218,9 @@
   <div class="mdui-drawer" id="main-drawer">
     <div class="mdui-list" mdui-collapse="{accordion: true}">
       <!--LoginStart-->
-      <li class="mdui-list-item mdui-ripple" mdui-dialog='{target: "#login_input"}'>
-        <a class="mdui-list-item-icon mdui-icon material-icons">account_circle</a><a
-          class="mdui-list-item-content">登錄</a>
+      <li class="mdui-list-item mdui-ripple" mdui-dialog="{target: '#login_input'}" >
+        <a class="mdui-list-item-icon mdui-icon material-icons">account_circle</a>
+        <a class="mdui-list-item-content" mdui-dialog="{target: '#login_input'}">登入</a>
       </li>
       <!--LoginEnd-->
       <li class="mdui-list-item mdui-ripple" onclick="renexmoe.toggle_theme();">
@@ -264,10 +264,11 @@
     </ul>
     <i id="mouseplace" style="position: absolute"></i>
 
+    <!--LoginStart-->
     <div class="mdui-dialog" id="login_input">
-      <div class="mdui-dialog-title">登錄</div>
+      <div class="mdui-dialog-title">登入</div>
       <div class="mdui-dialog-content" style="height: 108px">
-        <form action="<!--IsPreview?-->admin" method="post" onsubmit="return sha1loginpass(this);">
+        <form action="<!--IsPreview?-->login=admin" method="post" onsubmit="return sha1loginpass(this);">
           <div class="mdui-textfield mdui-textfield-floating-label">
             <i class="mdui-icon material-icons">lock</i><label class="mdui-textfield-label">密碼</label>
             <input class="mdui-textfield-input" id="login_input" name="password1" type="password">
@@ -277,11 +278,12 @@
       <div class="mdui-dialog-actions">
         <button class="mdui-btn mdui-ripple" mdui-dialog-close="" id="login_close">取消</button>
         <button id="login_btn_bak" class="mdui-btn mdui-ripple" type="submit" value="<!--constStr@Login-->">
-          登錄
+          登入
         </button>
         </form>
       </div>
     </div>
+    <!--LoginEnd-->
     <!--EncryptedStart-->
     <div class="mdui-center" style="margin: 20px auto;max-width: 600px;">
       <br />
@@ -779,15 +781,15 @@
 <script src="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release@10.7.2/build/highlight.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sha-1@1.0.0/dist/sha1.umd.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/extra.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/extra.js"></script>
 
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.23/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@qm97ssij9cnii7x8fnbkpq4hcgq35dyr.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@59467336fgwnpx8qbfvtmpyeefv35e5i.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@a7r8jgn2qe3eyfrkahwdnqcjf7uba95k.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@keaxctnyw29nuzpsh66g7ki4h5wzy8zn.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@pe2nahunr9aihucdgc2ssjbgnaccr5rz.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/app@tsjmiafbhksy5pyb5tchy765wshmwwnd.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/TW527E/renexmoe-tw527e-edition@v1.0.24/js/webpack-runtime@cx4vgpbaggjuhg8rh6m3yarhkkxy4dm3.js"></script>
 
 <script>
   window.renexmoe.toggle_theme();
