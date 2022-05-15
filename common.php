@@ -1552,7 +1552,7 @@ function EnvOpt($needUpdate = 0)
         $html .= '
 OneManager DIR: ' . __DIR__ . '
 <form name="form1" method="POST" action="">
-    <input id="inputarea" name="cmd" style="width:100%" value="' . $_POST['cmd'] . '" placeholder="ls, pwd, cat"><br>
+    <input id="inputarea" name="cmd" style="width:100%" value="' . htmlspecialchars($_POST['cmd']) . '" placeholder="ls, pwd, cat"><br>
     <input type="submit" value="post">
 </form>';
         if ($_POST['cmd']!='') {
