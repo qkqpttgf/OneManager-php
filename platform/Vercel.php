@@ -316,7 +316,7 @@ function VercelUpdate($appId, $token, $sourcePath = "")
     $data["target"] = "production";
     $data["routes"][0]["src"] = "/(.*)";
     $data["routes"][0]["dest"] = "/api/index.php";
-    $data["functions"]["api/index.php"]["runtime"] = "vercel-php@0.4.0";
+    $data["functions"]["api/index.php"]["runtime"] = "vercel-php@0.5.1";
     if ($sourcePath=="") $sourcePath = splitlast(splitlast(__DIR__, "/")[0], "/")[0];
     //echo $sourcePath . "<br>";
     getEachFiles($file, $sourcePath);
@@ -432,7 +432,7 @@ function WaitFunction($deployid = '') {
     }
     $header["Authorization"] = "Bearer " . getConfig('APIKey');
     $header["Content-Type"] = "application/json";
-    $url = "https://api.vercel.com/v11/deployments/" . $deployid;
+    $url = "https://api.vercel.com/v13/deployments/" . $deployid;
     $response = curl("GET", $url, "", $header);
     if ($response['stat']==200) {
         $result = json_decode($response['body'], true);
