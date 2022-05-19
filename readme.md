@@ -89,6 +89,8 @@
 
 # Deploy to Tencent Serverless Cloud Function (SCF)  
 
+> Notice! From June 1, 2022, Tencent Serverless Cloud Functions will cancel the free quota.
+
 ### Official
 
   https://cloud.tencent.com/product/scf  
