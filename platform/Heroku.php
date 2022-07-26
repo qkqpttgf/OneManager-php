@@ -415,3 +415,9 @@ function changeAuthKey() {
     </script>';
     return message($html, 'Change platform Auth token or key', 200);
 }
+
+function smallfileupload($drive, $path) {
+    if ($_FILES['file1']['error']) return output($_FILES['file1']['error'], 400);
+    if ($_FILES['file1']['size']>4*1024*1024) return output('File too large', 400);
+    return $drive->smallfileupload($path, $_FILES['file1']);
+}
