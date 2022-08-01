@@ -677,7 +677,7 @@ return false;
 
 <!--ListStart-->
 <!--MdRequireStart--><link rel="stylesheet" href="//unpkg.zhimg.com/github-markdown-css@3.0.1/github-markdown.css">
-<script type="text/javascript" src="//unpkg.zhimg.com/marked@0.6.2/marked.min.js"></script><!--MdRequireEnd-->
+<script type="text/javascript" src="//cdn.bootcdn.net/ajax/libs/marked/4.0.18/marked.min.js"></script><!--MdRequireEnd-->
 <!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
 <!--AliyundriveUploadJsStart--><script src="//cdn.bootcdn.net/ajax/libs/js-sha1/0.6.0/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="//cdn.bootcss.com/pdf.js/2.3.200/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
@@ -843,13 +843,13 @@ return false;
     var $head = document.getElementById('head');
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
-        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+        $head.innerHTML = marked.parse(document.getElementById('head-md').innerText);
     }
 <!--HeadmdEnd-->
 <!--ReadmemdStart-->
     var $readme = document.getElementById('readme');
     if ($readme) {
-        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+        $readme.innerHTML = marked.parse(document.getElementById('readme-md').innerText);
     }
 <!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
