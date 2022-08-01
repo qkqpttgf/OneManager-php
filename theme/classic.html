@@ -557,13 +557,13 @@
     var $head = document.getElementById('head');
     if ($head) {
         //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
-        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+        $head.innerHTML = marked.parse(document.getElementById('head-md').innerText);
     }
 <!--HeadmdEnd-->
 <!--ReadmemdStart-->
     var $readme = document.getElementById('readme');
     if ($readme) {
-        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+        $readme.innerHTML = marked.parse(document.getElementById('readme-md').innerText);
     }
 <!--ReadmemdEnd-->
 <!--ListStart-->
