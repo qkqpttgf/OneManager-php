@@ -55,7 +55,9 @@
 
 ---
 
-# 部署到 Heroku  
+# ~~部署到 Heroku~~  
+
+## Dyno套餐不再免费  
 
 ### 官网
 
@@ -87,7 +89,9 @@
 
 ---
 
-# 部署到腾讯无服务器云函数 Serverless Cloud Function (SCF)  
+# ~~部署到腾讯无服务器云函数 Serverless Cloud Function (SCF)~~  
+
+## SCF要收套餐费用了  
 
 ### 官网
 
