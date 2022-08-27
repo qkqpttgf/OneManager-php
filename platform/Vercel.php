@@ -176,8 +176,14 @@ function install()
             $header["Content-Type"] = "application/json";
             $aliases = json_decode(curl("GET", "https://api.vercel.com/v3/now/aliases", "", $header)['body'], true);
             $host = splitfirst($_SERVER["host"], "//")[1];
+            $aliases1 = [];
             foreach ($aliases["aliases"] as $key => $aliase) {
+                $aliases1[] = $aliase["alias"];
                 if ($host==$aliase["alias"]) $projectId = $aliase["projectId"];
+            }
+            if (!$projectId) {
+                $html = 'Please visit from: ' . json_encode($aliases1);
+                return message($html, 'Error', 400);
             }
             $tmp['HerokuappId'] = $projectId;
 
@@ -258,12 +264,12 @@ language:<br>';
         return message($html, $title, 201);
     }
 
-    if (substr($_SERVER["host"], -10)=="vercel.app") {
+    //if (substr($_SERVER["host"], -10)=="vercel.app") {
         $html .= '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
         $html .= "<br>Remember: you MUST wait 30-60s after each operate / do some change, that make sure Vercel has done the building<br>" ;
-    } else {
-        $html.= "Please visit form *.vercel.app";
-    }
+    //} else {
+    //    $html.= "Please visit form *.vercel.app";
+    //}
     $title = 'Install';
     return message($html, $title, 201);
 }
@@ -340,7 +346,7 @@ function checkBuilding($projectId, $token)
     //echo json_encode($response, JSON_PRETTY_PRINT) . " ,res<br>";
     $result = json_decode($response["body"], true);
     foreach ( $result['deployments'] as $deployment ) {
-        if ($deployment['state']!=="READY") $r++;
+        if ($deployment['state']!=="READY" && $deployment['state']!=="ERROR") $r++;
     }
     return $r;
     //if ($r===0) return true;
