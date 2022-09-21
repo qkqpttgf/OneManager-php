@@ -1,4 +1,4 @@
-#!bash
+#!/usr/bin/env bash
 
 if [ $# -eq 0 ]; then
   echo "
@@ -69,3 +69,4 @@ rm -rf *~
 #rm -rf .[^.]*~
 rm -rf OneManager-php
 chmod 666 .data/config.php
+chmod 777 update.sh
