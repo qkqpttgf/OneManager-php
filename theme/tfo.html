@@ -98,7 +98,6 @@
         #upload_div table tr{border-radius:6px !important;}
         #upload_div{margin:10px}
         #pdf-d canvas{width:100%;}
-        #jinrishici{padding:12px !important;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #curpath{font-size:16px;transition-duration:0.3s;box-shadow:0 1px 8px rgba(27,31,35,0.8);}
         #create_input{width:94%;}
         .login{position: fixed;bottom: 8px;left: 8px;z-index:5}
@@ -168,8 +167,9 @@
         }
     </style>
     <!--customCss-->
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/ionicons@5.0.0/dist/ionicons/ionicons.js"></script>
+    <script src="https://test1.jsdelivr.net/npm/sweetalert@2.1.2/dist/sweetalert.min.js"></script>
+    <script src="https://test1.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+    <script src="https://test1.jsdelivr.net/npm/@waline/client/dist/Waline.min.js"></script>
 </head>
 <body>
     <script language="javascript">window.onload=function(){var colorList=["linear-gradient(to right,rgba(169,221,204,0.9),rgba(169,221,204,0.3))","linear-gradient(to right,rgba(255,104,103,0.9),rgba(255,104,103,0.3))","linear-gradient(to right,rgba(128,155,156,0.9),rgba(128,155,156,0.3))","linear-gradient(to right,rgba(0,204,203,0.9),rgba(0,204,203,0.3))","linear-gradient(to right,rgba(246,197,0,0.9),rgba(246,197,0,0.3))","linear-gradient(to right,rgba(76,218,100,0.9),rgba(76,218,100,0.3))","linear-gradient(to right,rgba(244,67,54,0.9),rgba(244,67,54,0.3))","linear-gradient(to right,rgba(233,30,99,0.9),rgba(233,30,99,0.3))","linear-gradient(to right,rgba(156,39,176,0.9),rgba(156,39,176,0.3))","linear-gradient(to right,rgba(103,58,183,0.9),rgba(103,58,183,0.3))","linear-gradient(to right,rgba(63,81,181,0.9),rgba(63,81,181,0.3))","linear-gradient(to right,rgba(33,150,243,0.9),rgba(33,150,243,0.3))","linear-gradient(to right,rgba(3,169,244,0.9),rgba(3,169,244,0.3))","linear-gradient(to right,rgba(0,188,212,0.9),rgba(0,188,212,0.3))","linear-gradient(to right,rgba(0,150,136,0.9),rgba(0,150,136,0.3))","linear-gradient(to right,rgba(76,175,80,0.9),rgba(76,175,80,0.3))","linear-gradient(to right,rgba(139,52,171,0.9),rgba(139,52,171,0.3))","linear-gradient(to right,rgba(205,220,57,0.9),rgba(205,220,57,0.3))","linear-gradient(to right,rgba(197,183,60,0.9),rgba(197,183,60,0.3))","linear-gradient(to right,rgba(228,173,8,0.9),rgba(228,173,8,0.3))","linear-gradient(to right,rgba(255,87,34,0.9),rgba(255,87,34,0.3))","linear-gradient(to right,rgba(121,85,72,0.9),rgba(121,85,72,0.3))","linear-gradient(to right,rgba(96,125,139,0.9),rgba(96,125,139,0.3))"];var div=document.getElementsByClassName("list-header-container");for(var i=0;i<div.length;i++){var bgColor=getColorByRandom(colorList);div[i].style.background=bgColor}function getColorByRandom(colorList){var colorIndex=Math.floor(Math.random()*colorList.length);var color=colorList[colorIndex];colorList.splice(colorIndex,1);return color}}</script>
@@ -186,11 +186,12 @@
   <animate attributeName="stroke-dashoffset" repeatCount="indefinite" dur="2.0408163265306123s" keyTimes="0;1" values="0;256.58892822265625"></animate>
 </path></svg></div>
     <div style="padding:1px" id="top-div">
+<!--TfoButton-->
 <!--LoginStart-->
-        <a class="login" href="?login=admin"><ion-icon name="add-circle-outline"></ion-icon></a><!--onclick="login();"-->
+        <a class="login" href="<!--IsPreview?-->login=admin"><ion-icon name="ellipse-outline"></ion-icon></a><!--onclick="login();"-->
 <!--LoginEnd-->
 <!--AdminStart-->
-        <li class="operate" id="opflow"><ion-icon name="add-circle-outline"></ion-icon><ul>
+        <li class="operate" id="opflow"><ion-icon name="ellipse-outline"></ion-icon><ul>
 <!--IsFolderStart-->
             <li><a onclick="showdiv(event,'create','');"><ion-icon name="add-circle-outline"></ion-icon><!--constStr@Create--></a></li>
             <li><a onclick="showdiv(event,'encrypt','');"><ion-icon name="lock-closed-outline"></ion-icon><!--constStr@Encrypt--></a></li>
@@ -210,12 +211,12 @@
         </ul></li>
 <!--AdminEnd-->
         &nbsp;
-        <select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
+        <!--<select class="changelanguage" name="language" onchange="changelanguage(this.options[this.options.selectedIndex].value)">
             <option value="">Language</option>
 <!--SelectLanguageStart-->
                 <option value="<!--SelectLanguageKey-->" <!--SelectLanguageSelected-->><!--SelectLanguageValue--></option>
 <!--SelectLanguageEnd-->
-        </select>
+        </select>-->
     </div>
 <!--NeedUpdateStart-->
     <div style='position:absolute;top:8px'><font color='red'><!--constStr@NeedUpdate--></font></div>
@@ -224,7 +225,7 @@
         <a href="<!--base_path-->"><!--Sitename--></a>
     </h1>
 <!--MultiDiskAreaStart-->
-    <div class="list-wrapper" >
+    <div class="list-wrapper">
         <div class="list-header-container" style="box-shadow:0 1px 8px rgba(27,31,35,0.8);">
                 <div class="more-disk">
 <!--MultiDisksStart-->
@@ -232,11 +233,6 @@
 <!--MultiDisksEnd-->
                 </div>
             </div>
-            <div class="list-body-container">
-                <div id="jinrishici">
-                    <center><img src="https://v2.jinrishici.com/one.svg?font-size=26&spacing=7" style="max-width:100%;"></center>
-                </div>
-             </div>
         </div>
 <!--MultiDiskAreaEnd-->
 <!--HeadomfStart-->
@@ -289,7 +285,6 @@
                 </div>
                 </div>
 <!--GuestUploadEnd-->
-
 <!--IsFileStart-->
                 <div style="margin: 12px 4px 4px; text-align: center">
                     <div style="margin: 24px">
@@ -300,9 +295,7 @@
                             var prePath = strFullPath.substring(0, pos);
                             var width = window.innerWidth;
                             // var postPath = strPath.substring(0, strPath.substr(1).indexOf('/') + 1);
-                            let url = location.href;
-                            url = url.substr(0, url.length-8);
-                            document.getElementById("url").value= url;
+                            document.getElementById("url").value= prePath + "<!--FileEncodeUrl-->";
                             // document.getElementById("url").value= prePath + postPath + "<!--FileEncodeUrl-->";
                             if(width < 495) { 
                                 if(document.getElementById("office-a")) { 
@@ -336,6 +329,12 @@
 <textarea id="txt-a" name="editfile" readonly style="width:calc(100% - 16px);margin-top: 2px;overflow-y:hidden" <!--AdminStart-->onchange="document.getElementById('txt-save').onclick=function(){document.getElementById('txt-form').submit();}"<!--AdminEnd--> ><!--TxtContent--></textarea>
 <!--AdminStart-->
                             </form>
+                            <script>
+                                var inputAdminStorage = document.getElementsByName("_admin");
+                                for (i = 0; i < inputAdminStorage.length; i++) {
+                                    inputAdminStorage[i].value = localStorage.getItem("admin");
+                                }
+                            </script>
 <!--AdminEnd-->
                         </div>
 <!--IstxtFileEnd-->
@@ -349,7 +348,7 @@
                 <table class="list-table" id="list-table">
                     <tr id="tr0">
                         <th class="file">
-                            <a id="s_name" onclick="sortby('a');document.getElementById('s_time').innerHTML='Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_size').innerHTML='Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_name').innerHTML='Name ▲';">Name ▲</a>
+                            <a id="file_a0" fileid="<!--FolderId-->" onclick="sortby('a');document.getElementById('s_time').innerHTML='Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_size').innerHTML='Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('file_a0').innerHTML='Name ▲';">Name ▲</a>
 <!--ShowThumbnailsStart-->
                             &nbsp;&nbsp;
                             <label><input type="checkbox" id="originalpic"><!--constStr@OriginalPic--></label>
@@ -358,8 +357,8 @@
                             &nbsp;&nbsp;
                             <a onclick="CopyAllDownloadUrl('.download');"><ion-icon style="font-size:24px;" name="code-download-outline"></ion-icon></a>
                         </th>
-                        <th class="updated_at"><a id="s_time" onclick="sortby('time');document.getElementById('s_name').innerHTML='Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_size').innerHTML='Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';">Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></th>
-                        <th class="size"><a id="s_size" onclick="sortby('size');document.getElementById('s_name').innerHTML='Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_time').innerHTML='Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';">Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></th>
+                        <th class="updated_at"><a id="s_time" onclick="sortby('time');document.getElementById('file_a0').innerHTML='Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_size').innerHTML='Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';">Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></th>
+                        <th class="size"><a id="s_size" onclick="sortby('size');document.getElementById('file_a0').innerHTML='Name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';document.getElementById('s_time').innerHTML='Time&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;';">Size&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a></th>
                     </tr>
                     <!-- Dirs -->
 <!--FolderListStart-->
@@ -597,16 +596,17 @@
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:20px">Theme by<a style="color:rgb(3,102,214)" href="https://git.io/JZ4ri">Tfo</a> for <a style="color:rgb(3,102,214)" href="https://git.io/JZ46f">OneManager-php</a></div>
     <div style="color: rgba(247,247,249,0);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,0);font-weight:bold;margin-top:6px"><!--FootStr--></div>
     <div style="color: rgba(247,247,249,1);text-align:center;text-shadow:0 1px 15px rgba(27,31,35,1);font-weight:bold;margin-top:6px;display:none" id="tminf">
-        Current Version: 20210711 &nbsp;<br>Update Tips: 1.Upgrade with the program. (Best Choice!) 2.Copy the CustomTheme link and paste it in the Platform Config form of program setting page. 3.Update manually. &nbsp;<br>
-        Tfo’s CustomTheme Address: https://git.io/JZ4XI &nbsp;<br>https://git.io/JZ4XE&nbsp;<br>Tfo's Theme UpdateCheck Address: https://git.io/JZ4iU &nbsp;<br>https://git.io/JZ4Pv &nbsp;<br>Tfo’s HomePage on GitHub: https://git.io/JZ4ri &nbsp;<br>Tfo’s Example Website: https://tfo.herokuapp.com/
+        Current Version: 20221017 &nbsp;<br>Update Tips: 1.Upgrade with the program. (Best Choice!) 2.Copy the CustomTheme link and paste it in the Platform Config form of program setting page. 3.Update manually. &nbsp;<br>
+        Tfo’s CustomTheme Address: <a herf="https://git.io/JZ4XI">https://git.io/JZ4XI</a> &nbsp;<br><a herf="https://git.io/JZ4XE">https://git.io/JZ4XE</a>&nbsp;<br>Tfo's Theme UpdateCheck Address: <a herf="https://git.io/JZ4iU">https://git.io/JZ4iU</a> &nbsp;<br><a herf="https://git.io/JZ4Pv">https://git.io/JZ4Pv</a> &nbsp;<br>Tfo’s HomePage on GitHub: <a herf="https://git.io/JZ4ri">https://git.io/JZ4ri</a>
     </div>
 </body>
+<!--MdRequireStart--><link rel="stylesheet" type="text/css" href="https://test1.jsdelivr.net/npm/github-markdown-css@5.1.0/github-markdown.min.css">
+<script type="text/javascript" src="https://test1.jsdelivr.net/npm/marked@4.1.1/marked.min.js"></script><!--MdRequireEnd-->
 <!--ListStart-->
-<!--MdRequireStart--><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/github-markdown-css@4.0.0/github-markdown.min.css">
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/marked@2.0.0/lib/marked.min.js"></script><!--MdRequireEnd-->
-<!--GuestUploadStart--><script type="text/javascript" src="https://cdn.jsdelivr.net/npm/spark-md5@3.0.1/spark-md5.min.js"></script><!--GuestUploadEnd-->
-<!--AliyundriveUploadJsStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
-<!--IsFileStart--><!--IspdfFileStart--><script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
+<!--GuestUploadStart--><script type="text/javascript" src="https://test1.jsdelivr.net/npm/spark-md5@3.0.2/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--AliyundriveUploadJsStart--><script src="https://test1.jsdelivr.net/npm/bignumber.js@9.1.0/bignumber.min.js"></script>
+<script src="?jsFile=sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
+<!--IsFileStart--><!--IspdfFileStart--><script src="https://test1.jsdelivr.net/npm/pdfjs-dist@2.16.105/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
     function changelanguage(str)
@@ -637,13 +637,62 @@
             f.password1.value = sha1(timestamp + "" + f.password1.value);
             return true;
         } catch {
-            alert("sha1.js not loaded.");
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
             return false;
         }
     }
+        function loadjs(url) {
+            var xhr = new XMLHttpRequest;
+            xhr.open("GET", url);
+            xhr.onload = function (e) {
+                if (xhr.status == 200) {
+                    var script = document.createElement("script");
+                    script.type = "text/javascript";
+                    script.text = xhr.responseText;
+                    document.body.appendChild(script);
+                } else {
+                    console.log(xhr.response);
+                }
+            }
+            xhr.send(null);
+        }
 <!--LoginEnd-->
+< !--WriteTimezoneStart-->
+    var nowtime = new Date();
+    var timezone = 0 - nowtime.getTimezoneOffset() / 60;
+    var expd = new Date();
+    expd.setTime(expd.getTime() + (2 * 60 * 60 * 1000));
+    var expires = "expires=" + expd.toGMTString();
+    document.cookie = "timezone=" + timezone + "; path=/; " + expires;
+    if (timezone !=< !--timezone-->) {
+        //alert('Your timezone is '+timezone+', reload local timezone.');
+        location.href = location.href;
+    }
+< !--WriteTimezoneEnd-->
+< !--HeadmdStart-->
+    var $head = document.getElementById('head');
+    if ($head) {
+        //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
+        $head.innerHTML = marked(document.getElementById('head-md').innerText);
+    }
+< !--HeadmdEnd-->
+< !--ReadmemdStart-->
+    var $readme = document.getElementById('readme');
+    if ($readme) {
+        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+    }
+< !--ReadmemdEnd-->
 <!--ListStart-->
 <!--IsFileStart-->
+    var $url = document.getElementById('url').value;
+    if ($url) {
+        //$url.innerHTML = location.protocol + '//' + location.host + $url.innerHTML;
+        let url = location.href;
+        url = url.substr(0, url.length - 8);
+        $url.innerHTML = url.replace(/&amp;/g, '&amp;amp;');
+        $url.style.height = $url.scrollHeight + 'px';
+    }
 <!--IsofficeFileStart-->
     var $officearea=document.getElementById('office-a');
     if ($officearea) {
@@ -713,6 +762,7 @@
             console.log(videos[i]);
             new DPlayer({
                 container: document.getElementById('video-a' + i),
+                //screenshot: true,
                 theme: '#0366D6',
                 volume: 0.5,
                 video: {
@@ -722,21 +772,34 @@
             });
         }
     }
-    addVideos(['<!--FileEncodeUrl-->']);
+    addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
-//    var $pdfarea=document.getElementById('pdf-a');
-//    if ($pdfarea) {
-//        $pdfarea.style.height = window.innerHeight + 'px';
-//    }
-pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/build/pdf.worker.js';
+   pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://test1.jsdelivr.net/npm/pdfjs-dist@2.16.105/lib/pdf.worker.js';
     var loadingTask = pdfjsLib.getDocument({
         url: '<!--FileDownUrl-->',
-        cMapUrl: "https://cdn.jsdelivr.net/npm/pdfjs-dist@2.8.335/cmaps/",
+        cMapUrl: "https://test1.jsdelivr.net/npm/pdfjs-dist@2.16.105/cmaps/",
         cMapPacked: true,
+        disableStream: true,
+        disableAutoFetch: true,
         rangeChunkSize: 65535
     });
-    loadingTask.promise.then(function(pdf) {
+        /*loadingTask.onProgress = (e) => {
+            //console.log(e);
+            var p = document.getElementById('p');
+            if (p==null) {
+                p = document.createElement('div');
+                p.id = 'p';
+                p.setAttribute('onclick', "this.style.display = 'none';");
+                p.style = 'left: 10px; top: 30%; position: fixed;';
+                document.body.appendChild(p);
+            }
+            p.innerHTML = 'Loaded: ' + ((e.loaded/e.total)*100).toFixed(2) + '%<br>(' + size_format(e.loaded) + ' / ' + size_format(e.total) + ')';
+            p.style.display = '';
+            if (e.loaded==e.total) p.style.display = 'none';
+            
+        }*/
+    /*loadingTask.promise.then(function(pdf) {
         var pagenum =  pdf.numPages;
         var pdfContainer = document.getElementById('pdf-d');
         pdfContainer.innerHTML = '';
@@ -745,10 +808,41 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
             canvasNew.id = 'pdf-c'+i;
             pdfContainer.appendChild(canvasNew);
             renderpage(pdf,i);
+       } */
+        loadingTask.promise.then(function (pdf) {
+            var pagenum = pdf.numPages;
+            var pdfContainer = document.getElementById('pdf-d');
+            pdfContainer.innerHTML = '';
+            var pagepos = 1;
+            var pdfnextpagebutton = document.createElement('button');
+            pdfnextpagebutton.id = 'pdfnextpagebutton';
+            pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+            pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
+            pdfnextpagebutton.style.display = 'none';
+            pdfContainer.appendChild(pdfnextpagebutton);
+            var pdfWaitNextPage = setInterval(function () {
+                //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
+                if (pdfnextpagebutton.style.display == 'none') {
+                    for (var i = pagepos; i <= (pagepos + 4 < pagenum ? pagepos + 4 : pagenum); i++) {
+                        var canvasNew = document.createElement('canvas');
+                        canvasNew.id = 'pdf-c' + i;
+                        pdfContainer.appendChild(canvasNew);
+                        renderpage(pdf, i);
+                    }
+                    pagepos = i;
+                    if (pagepos < pagenum) {
+                        console.log("next page: " + pagepos + " / " + pagenum);
+                        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+                        pdfnextpagebutton.style.display = '';
+                        pdfContainer.appendChild(pdfnextpagebutton);
+                    } else {
+                        console.log("end of pdf");
+                        clearInterval(pdfWaitNextPage);
+                    }
         }
+    }, 1000);
     });
-    function renderpage(pdf,i)
-    {
+        function renderpage(pdf, i) {
         pdf.getPage(i).then(function(page) { 
             var scale = 1.5;
             var viewport = page.getViewport({ scale: scale, });
@@ -763,22 +857,27 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
             page.render(renderContext);
         });
     }
+    function size_format(num) {
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' B';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' KB';
+        }
+        if (num>1024) {
+            num=num/1024;
+        } else {
+            return num.toFixed(2) + ' MB';
+        }
+        return num.toFixed(2) + ' GB';
+    }
 <!--IspdfFileEnd-->
 <!--IsFileEnd-->
 <!--IsFolderStart-->
-<!--HeadmdStart-->
-    var $head = document.getElementById('head');
-    if ($head) {
-        //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
-        $head.innerHTML = marked(document.getElementById('head-md').innerText);
-    }
-<!--HeadmdEnd-->
-<!--ReadmemdStart-->
-    var $readme = document.getElementById('readme');
-    if ($readme) {
-        $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
-    }
-<!--ReadmemdEnd-->
 <!--ShowThumbnailsStart-->
     function showthumbnails(obj) {
         swal("Wait", "Loading Thumbnails...", {
@@ -905,6 +1004,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
     }
     function size_reformat(str) {
         if (str.substr(-1)==' ') str=str.substr(0,str.length-1);
+        if (str.substr(-2) == 'TB') num = str.substr(0, str.length - 3) * 1024 * 1024 * 1024 * 1024;
         if (str.substr(-2)=='GB') num=str.substr(0,str.length-3)*1024*1024*1024;
         if (str.substr(-2)=='MB') num=str.substr(0,str.length-3)*1024*1024;
         if (str.substr(-2)=='KB') num=str.substr(0,str.length-3)*1024;
@@ -913,18 +1013,6 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dis
     }
 <!--IsNotHiddenEnd-->
 <!--IsFolderEnd-->
-<!--WriteTimezoneStart-->
-    var nowtime= new Date();
-    var timezone = 0-nowtime.getTimezoneOffset()/60;
-    var expd = new Date();
-    expd.setTime(expd.getTime()+(2*60*60*1000));
-    var expires = "expires="+expd.toGMTString();
-    document.cookie="timezone="+timezone+"; path=/; "+expires;
-    if (timezone!=<!--timezone-->) {
-        swal('TimeZone', 'Your timezone is '+timezone+', reload local timezone.', {buttons: false,timer: 1000,closeOnEsc: false,});
-        location.href=location.href;
-    }
-<!--WriteTimezoneEnd-->
     function CopyAllDownloadUrl(str) {
         var tmptextarea=document.createElement('textarea');
         document.body.appendChild(tmptextarea);
@@ -1136,7 +1224,7 @@ function size_format(num) {
                     delete uploading[upbigfilename];
                 }
             }
-            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5);
+            xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified +'&filemd5='+ filemd5 + '&_admin=' + localStorage.getItem("admin"));
 <!--GuestStart-->
             }
         }
@@ -1194,7 +1282,9 @@ function size_format(num) {
                                 let tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                                 lastCurrentSpeed = tmpspeed;
                                 let remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                                label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '%<br><!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
+                                let percent = ((asize + e.loaded) * 100 / totalsize).toFixed(2);
+                                label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                                label.innerHTML = StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + percent + '%<br><!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                             }
                         }
                         var C_starttime = new Date();
@@ -1223,7 +1313,8 @@ function size_format(num) {
                                 while (filename.indexOf('%2F')>0) filename = filename.replace('%2F', '/');
                                 document.getElementById('upfile_td1_'+tdnum).innerHTML='<div><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                 label.innerHTML=StartStr+MiddleStr;
-                                label.style.color='black';
+                                label.parentNode.style.background = 'rgba(0,80,0,25%)';
+                                label.style.color = 'black';
                                 // uploadbuttonshow();
 <!--AdminStart-->
                                 response.name=file.webkitRelativePath||response.name;
@@ -1238,7 +1329,8 @@ function size_format(num) {
                                     asize=Number( a.slice(0,a.indexOf("-")) );
                                     chunksize = 10*1024*1024;
                                     if (lastCurrentSpeed>5*1024*1024) chunksize = 20*1024*1024;
-                                    if (lastCurrentSpeed>10*1024*1024) chunksize = 50*1024*1024;                                    readblob(asize);
+                                    if (lastCurrentSpeed>10*1024*1024) chunksize = 50*1024*1024;
+                                    readblob(asize);
                                 }
                             } } else readblob(asize);
                         }
@@ -1278,7 +1370,39 @@ function size_format(num) {
                 }// else console.log(Object.keys(uploading).length);
             } else clearInterval(uploadList);
         }, 1000);
-        //getuplink(i);
+        function CalcProof(file) {
+            return new Promise(function(resolve, reject){
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", '?action=upbigfile');
+                xhr.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                xhr.onload = function(e){
+                    var html;
+                    if (xhr.status==200) {
+                        //console.log(xhr.responseText);
+                        var r = new BigNumber("0x".concat(xhr.responseText));
+                        var i = new BigNumber(file.size);
+                        var o = i ? r.mod(i) : 0;
+                        var reader1 = new FileReader();
+                        var start = o.toNumber();
+                        var end = start + 8;
+                        //if (file.size<end) end = file.size;
+                        console.log(start + " ~ " + end);
+                        //reader1.readAsBinaryString(file.slice(start,end));
+                        reader1.readAsDataURL(file.slice(start,end));
+                        reader1.onload = function(e) {
+                            var proof = this.result;
+                            proof = proof.substr(proof.indexOf('base64,')+7);
+                            resolve(proof);
+                        }
+                    } else {
+                        //console.log(xhr.status+'calc proof code\n'+xhr.responseText);
+                        reject(xhr.status+"\ncalc proof code\n"+xhr.responseText);
+                    }
+                }
+                xhr.send('CalcProof=1');
+            });
+        }
         function getuplink(i, r=0) {
             var file=files[i];
             var td1;
@@ -1317,7 +1441,14 @@ function size_format(num) {
                 var blob = file.slice(start,end);
                 reader.readAsArrayBuffer(blob);
             }
+            var proof_code = '';
+            CalcProof(file).then(a => {
+                proof_code = a;
+                console.log('proof: ' + proof_code);
             readblob(asize);
+            }, e => {
+                td2.innerHTML = e;
+            });
 
             reader.onload = function(e){
                 td2.innerHTML='<!--constStr@Calculate--> SHA1: '+(asize*100/file.size).toFixed(2)+'%';
@@ -1368,10 +1499,7 @@ function size_format(num) {
                                         else td2.innerHTML='<font>'+xhr1.responseText+'</font><br>';
                                         td1.innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+td1.innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+upbigfilename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                     } else {
-                                    td2.innerHTML='<!--constStr@UploadStart--> ...';
-                                    //console.log(html);
-                                    localStorage.setItem(filesha1, JSON.stringify(html));
-                                    binupfile(file, html, timea+'_'+i, upbigfilename, filesha1, chunksize);
+                                        td2.innerHTML='<font>'+xhr1.responseText+'</font>';
                                     }
                                     delete uploading[upbigfilename];
                             } else {
@@ -1388,7 +1516,7 @@ function size_format(num) {
                             getuplink(i);
                         }*/
                     }
-                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&filesha1=' + filesha1 + '&chunksize=' + chunksize);
+                        xhr1.send('upbigfilename='+ upbigfilename +'&filesize='+ file.size +'&filelastModified='+ file.lastModified + '&proof_code=' + proof_code + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
                     }
                 }
             }
@@ -1468,13 +1596,14 @@ function size_format(num) {
                             document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                             label.innerHTML=StartStr+MiddleStr;
                             label.style.color='green';
+                            label.parentNode.style.background = 'rgba(0,80,0,25%)';
                         } else {
                             label.innerHTML= '<font color="red">' + xhr1.status + ',' + xhr1.responseText + '</font>';
                             localStorage.removeItem(filesha1);
                         }
                         delete uploading[filename];
                     }
-                    xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']));
+                    xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
                 } else {
                     var binary = this.result;
                     var xhr = new XMLHttpRequest();
@@ -1487,7 +1616,9 @@ function size_format(num) {
                             var tmptime = new Date();
                             var tmpspeed = e.loaded*1000/(tmptime.getTime()-C_starttime.getTime());
                             var remaintime = (totalsize-asize-e.loaded)/tmpspeed;
-                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + ((asize+e.loaded)*100/totalsize).toFixed(2) + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
+                            let percent = ((asize+e.loaded)*100/totalsize).toFixed(2);
+                            label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                            label.innerHTML=StartStr+'<!--constStr@Upload--> ' +size_format(asize+e.loaded)+ ' / '+size_format(totalsize) + ' = ' + percent + '% <!--constStr@AverageSpeed-->:'+size_format((asize+e.loaded-newstartsize)*1000/(tmptime.getTime()-StartTime.getTime()))+'/s<br><!--constStr@CurrentSpeed--> '+size_format(tmpspeed)+'/s <!--constStr@Expect--> '+seconds2hour(remaintime.toFixed(1));
                         }
                     }
                     var C_starttime = new Date();
@@ -1539,13 +1670,14 @@ function size_format(num) {
                                         document.getElementById('upfile_td1_'+tdnum).innerHTML='<div style="color:green"><a href="<!--base_disk_path--><!--Path-->'+filename+'?preview" id="upfile_a_'+tdnum+'" target="_blank">'+document.getElementById('upfile_td1_'+tdnum).innerHTML+'</a><br><a href="<!--base_disk_path--><!--Path-->'+filename+'" id="upfile_a1_'+tdnum+'"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_'+tdnum+'\');" id="upfile_cpbt_'+tdnum+'" <!--AdminStart--> style="display:none"<!--AdminEnd--> ><!--constStr@CopyUrl--></button></div>';
                                         label.innerHTML=StartStr+MiddleStr;
                                         label.style.color='green';
+                                        label.parentNode.style.background = 'rgba(0,80,0,25%)';
                                     } else {
                                         label.innerHTML= '<font>' + xhr1.status + ',' + xhr1.responseText + '</font>';
                                         localStorage.removeItem(filesha1);
                                     }
                                     delete uploading[filename];
                                 }
-                                xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']));
+                                xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
                                 // uploadbuttonshow();
                             } else {
                                 readblob(asize);
@@ -1607,6 +1739,7 @@ function size_format(num) {
             e[i].addEventListener("mouseout", menu_click);
         }
     })();
+    //TfoInfo
     function tminf() {
         var tminftxt=document.getElementById("tminf").innerText;
         swal({
@@ -1637,17 +1770,18 @@ function size_format(num) {
         document.getElementById('mask').style.display='';
         //document.getElementById('mask').style.width=document.documentElement.scrollWidth+'px';
         document.getElementById('mask').style.height=document.documentElement.scrollHeight<window.innerHeight?window.innerHeight:document.documentElement.scrollHeight+'px';
+        var str;
         if (num=='') {
-            var str='';
-            var fileid='';
+            str = '';
+            num = 0;
         } else {
-            var str=decodeURIComponent(document.getElementById('file_a'+num).href);
+            str = decodeURIComponent(document.getElementById('file_a'+num).href);
             if (str.substr(-1)==' ') str=str.substr(0, str.length-1);
             if (str.substr(-1)=='/') str=str.substr(0, str.length-1);
             if (str.substr(-8)=='?preview') str=str.substr(0, str.length-8);
             if (str.lastIndexOf('/')>-1) str=str.substr(str.lastIndexOf('/')+1);
-            var fileid=document.getElementById('file_a'+num).attributes['fileid'].nodeValue;
         }
+        var fileid = document.getElementById('file_a'+num).attributes['fileid'].nodeValue;
         document.getElementById(action + '_div').style.display='';
         document.getElementById(action + '_label').innerText=str;//.replace(/&/,'&amp;');
         document.getElementById(action + '_sid').value=num;
@@ -1703,7 +1837,7 @@ function size_format(num) {
             document.getElementById(str+'_div').style.display='none';
             document.getElementById('mask').style.display='none';
         }
-        xhr.send(serializeForm(str+'_form'));
+        xhr.send(serializeForm(str+'_form') + '&_admin=' + localStorage.getItem("admin"));
         return false;
     }
     function addelement(html) {
@@ -1804,6 +1938,7 @@ function size_format(num) {
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
-<!--LoginStart--><script src="https://cdn.jsdelivr.net/npm/js-sha1@0.6.0/src/sha1.min.js"></script><!--LoginEnd-->
+<!--LoginStart--><script src="https://test1.jsdelivr.net/npm/sha1@1.1.1/sha1.min.js"></script></script>
+<!--LoginStart--><script src="?jsFile=sha1.min.js"></script><!--LoginEnd-->
 <!--customScript-->
 </html>
