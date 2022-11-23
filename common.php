@@ -672,6 +672,7 @@ function isHideFile($name)
         'foot.omf',
         'favicon.ico',
         'robots.txt',
+        'index.htm',
         'index.html',
     ];
 
@@ -2213,6 +2214,10 @@ function render_list($path = '', $files = [])
 
     if (isset($files['list']['index.html']) && !$_SERVER['admin']) {
         $htmlcontent = get_content(path_format($path . '/index.html'))['content'];
+        return output($htmlcontent['body'], $htmlcontent['stat']);
+    }
+    if (isset($files['list']['index.htm']) && !$_SERVER['admin']) {
+        $htmlcontent = get_content(path_format($path . '/index.htm'))['content'];
         return output($htmlcontent['body'], $htmlcontent['stat']);
     }
     //$path = str_replace('%20','%2520',$path);
