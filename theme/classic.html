@@ -484,11 +484,11 @@
 </body>
 
 <!--MdRequireStart--><link rel="stylesheet" href="https://unpkg.com/github-markdown-css@3.0.1/github-markdown.css">
-<script type="text/javascript" src="https://unpkg.com/marked@0.6.2/lib/marked.js"></script><!--MdRequireEnd-->
+<script type="text/javascript" src="?jsFile=marked.js"></script><!--MdRequireEnd-->
 <!--ListStart-->
-<!--GuestUploadStart--><script type="text/javascript" src="//cdn.bootcss.com/spark-md5/3.0.0/spark-md5.min.js"></script><!--GuestUploadEnd-->
+<!--GuestUploadStart--><script type="text/javascript" src="?jsFile=spark-md5.min.js"></script><!--GuestUploadEnd-->
 <!--AliyundriveUploadJsStart--><script src="https://unpkg.com/bignumber.js@9.0.2/bignumber.js"></script>
-<script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--AliyundriveUploadJsEnd-->
+<script src="?jsFile=sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
 <!--IsFileStart--><!--IspdfFileStart--><script src="https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.min.js"></script><!--IspdfFileEnd--><!--IsFileEnd-->
 <!--ListEnd-->
 <script type="text/javascript">
@@ -655,7 +655,6 @@
     addVideos(["<!--FileEncodeUrl-->"]);
 <!--IsvideoFileEnd-->
 <!--IspdfFileStart-->
-    //cdn.bootcss.com/pdf.js/2.4.456/pdf.worker.min.js
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
     var loadingTask = pdfjsLib.getDocument({
         url: "<!--FileDownUrl-->",
@@ -1764,6 +1763,6 @@
 <!--EncryptedEnd-->
 </script>
 <script src="https://www.unpkg.com/ionicons@6.0.1/dist/ionicons.js"></script>
-<!--LoginStart--><script src="https://www.unpkg.com/js-sha1@0.6.0/src/sha1.js"></script><!--LoginEnd-->
+<!--LoginStart--><script src="?jsFile=sha1.min.js"></script><!--LoginEnd-->
 <!--customScript-->
 </html>

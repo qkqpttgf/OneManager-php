@@ -188,7 +188,7 @@ function main($path)
         if (substr($_GET['jsFile'], -3)!='.js') return output('', 403);
         if (!($path==''||$path=='/')) return output('', 308, [ 'Location' => path_format($_SERVER['base_path'] . '/?jsFile=' . $_GET['jsFile']) ]);
         if (strpos($_GET['jsFile'], '/')>-1) $_GET['jsFile'] = splitlast($_GET['jsFile'], '/')[1];
-        $jsFile = file_get_contents('js/' . $_GET['jsFile']);
+        $jsFile = file_get_contents(__DIR__ . '/js/' . $_GET['jsFile']);
         if (!!$jsFile) {
             return output( base64_encode($jsFile), 200, [ 'Content-Type' => 'text/javascript; charset=utf-8', 'Cache-Control' => 'max-age=' . 3*24*60*60 ], true );
         } else {

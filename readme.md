@@ -53,7 +53,9 @@
 
 ---
 
-# Deploy to Heroku  
+# ~~Deploy to Heroku~~  
+
+## Dyno will no longer free  
 
 ### Official
 
@@ -87,7 +89,9 @@
 
 ---
 
-# Deploy to Tencent Serverless Cloud Function (SCF)  
+# ~~Deploy to Tencent Serverless Cloud Function (SCF)~~  
+
+## SCF no longer free
 
 ### Official
 

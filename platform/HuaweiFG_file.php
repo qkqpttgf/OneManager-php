@@ -51,13 +51,13 @@ function GetPathSetting($event, $context)
     $_SERVER['ProjectID'] = $context->getProjectID();
     $host_name = $event['headers']['host'];
     $_SERVER['HTTP_HOST'] = $host_name;
-    $path = path_format($event['pathParameters'][''].'/');
+    $path = path_format('/' . $event['pathParameters']['']);
     $path = str_replace('+', '%2B', $path);
-    $_SERVER['base_path'] = path_format($event['path'].'/');
+    $_SERVER['base_path'] = path_format($event['path']);
     if (  $_SERVER['base_path'] == $path ) {
         $_SERVER['base_path'] = '/';
     } else {
-        $_SERVER['base_path'] = substr($_SERVER['base_path'], 0, -strlen($path));
+        $_SERVER['base_path'] = substr($_SERVER['base_path'], 0, strlen($_SERVER['base_path'])-strlen($path));
         if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
     }
     //$_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
