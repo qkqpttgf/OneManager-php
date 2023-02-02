@@ -457,8 +457,9 @@
         <div style="margin:50px">
             <a onclick="operatediv_close('login')" class="operatediv_close"><!--constStr@Close--></a>
 	        <center>
-	            <form action="<!--IsPreview?-->login=admin" method="post">
+                <form action="<!--IsPreview?-->login=admin" method="post" onsubmit="return sha1loginpass(this);">
 		        <input id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+                <input name="timestamp" type="hidden" value="">
 		        <input type="submit" value="<!--constStr@Login-->">
 	            </form>
             </center>
@@ -1246,11 +1247,43 @@
         document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
         document.getElementById('login_input').focus();
     }
+    function sha1loginpass(f) {
+        if (f.password1.value == "") return false;
+        try {
+            timestamp = new Date().getTime() + "";
+            timestamp = timestamp.substr(0, timestamp.length - 3);
+            f.timestamp.value = timestamp;
+            f.password1.value = sha1(timestamp + "" + f.password1.value);
+            return true;
+        } catch {
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
+            return false;
+        }
+    }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function (e) {
+            if (xhr.status == 200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
+    }
 <!--LoginEnd-->
 <!--EncryptedStart-->
     document.getElementById('password1').focus();
 <!--EncryptedEnd-->
 </script>
+<!--LoginStart-->
+<script src="?jsFile=sha1.min.js"></script>
+<!--LoginEnd-->
 <script src="https://cdn.jsdelivr.net/npm/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 <!--customScript-->
 </html>
