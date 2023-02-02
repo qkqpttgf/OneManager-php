@@ -89,9 +89,10 @@
                                             <span aria-hidden="true">&times;</span>
                                         </button>
                                     </div>
-                                    <form action="?login=admin" method="post">
+                                    <form action="<!--IsPreview?-->login=admin" method="post" onsubmit="return sha1loginpass(this);">
                                         <div class="modal-body">
                                             <input class="form-control" id="login_input" name="password1" type="password" placeholder="<!--constStr@InputPassword-->">
+					    <input name="timestamp" type="hidden">
                                         </div>
                                         <div class="modal-footer">
                                                 <input class="btn btn-primary" type="submit" value="<!--constStr@Login-->"></button>
@@ -668,7 +669,7 @@ return false;
 <!--IsFolderEnd-->
 <!--AdminEnd-->
 <!--LoginStart-->
-
+<script src="?jsFile=sha1.min.js"></script>
 <!--LoginEnd-->
 <p class="text-center text-muted"><a href="https://github.com/qkqpttgf/OneManager-php" class="text-muted">OneManager</a> By 逸笙 Theme By Nchyn</p>
     <p class="text-center" style="color: rgba(247,247,249,0);"><!--FootStr--></p>
@@ -1744,6 +1745,35 @@ return false;
         document.getElementById('login_div').style.left=(document.body.clientWidth-document.getElementById('login_div').offsetWidth)/2 +'px';
         document.getElementById('login_div').style.top=(window.innerHeight-document.getElementById('login_div').offsetHeight)/2+document.body.scrollTop +'px';
         document.getElementById('login_input').focus();
+    }
+    function sha1loginpass(f) {
+        if (f.password1.value=="") return false;
+        try {
+            timestamp = new Date().getTime() + "";
+            timestamp = timestamp.substr(0, timestamp.length-3);
+            f.timestamp.value = timestamp;
+            f.password1.value = sha1(timestamp + "" + f.password1.value);
+            return true;
+        } catch {
+            //alert("sha1.js not loaded.");
+            if (confirm("sha1.js not loaded.\n\nLoad from program?")) loadjs("?jsFile=sha1.min.js");
+            return false;
+        }
+    }
+    function loadjs(url) {
+        var xhr = new XMLHttpRequest;
+        xhr.open("GET", url);
+        xhr.onload = function(e) {
+            if (xhr.status==200) {
+                var script = document.createElement("script");
+                script.type = "text/javascript";
+                script.text = xhr.responseText;
+                document.body.appendChild(script);
+            } else {
+                console.log(xhr.response);
+            }
+        }
+        xhr.send(null);
     }
 <!--LoginEnd-->
 <!--EncryptedStart-->
