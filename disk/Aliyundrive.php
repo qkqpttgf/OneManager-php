@@ -9,6 +9,7 @@ class Aliyundrive {
         //$this->auth_url = 'https://websv.aliyundrive.com/token/refresh';
         $this->auth_url = 'https://auth.aliyundrive.com/v2/account/token';
         $this->api_url = 'https://api.aliyundrive.com/v2';
+        $this->api_url_v3 = 'https://api.aliyundrive.com/adrive/v3';
         $this->driveId = getConfig('driveId', $tag);
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
@@ -182,7 +183,7 @@ class Aliyundrive {
     }
     protected function fileList($parent_file_id)
     {
-        $url = $this->api_url . '/file/list';
+        $url = $this->api_url_v3 . '/file/list';
 
         $header["content-type"] = "application/json; charset=utf-8";
         $header['authorization'] = 'Bearer ' . $this->access_token;
