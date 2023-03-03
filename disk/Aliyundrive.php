@@ -11,6 +11,8 @@ class Aliyundrive {
         $this->api_url = 'https://api.aliyundrive.com/v2';
         $this->api_url_v3 = 'https://api.aliyundrive.com/adrive/v3';
         $this->driveId = getConfig('driveId', $tag);
+        //$this->DownurlStrName = 'download_url';
+        $this->DownurlStrName = 'url';
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
     
@@ -51,7 +53,7 @@ class Aliyundrive {
             $tmp['time'] = $files['updated_at'];
             $tmp['size'] = $files['size'];
             $tmp['mime'] = $files['file']['mimeType'];
-            $tmp['url'] = $files['download_url'];
+            $tmp['url'] = $files[$this->DownurlStrName];
             $tmp['content'] = $files['content'];
             if (isset($files['exist'])) $tmp['exist'] = $files['exist'];
             if (isset($files['rapid_upload'])) $tmp['rapid_upload'] = $files['rapid_upload'];
@@ -67,7 +69,7 @@ class Aliyundrive {
                 $filename = strtolower($file['name']);
                 if ($file['type']=='file') {
                     $tmp['list'][$filename]['type'] = 'file';
-                    $tmp['list'][$filename]['url'] = $file['download_url'];
+                    $tmp['list'][$filename]['url'] = $file[$this->DownurlStrName];
                     $tmp['list'][$filename]['mime'] = $file['file']['content_type'];
                 } elseif ($file['type']=='folder') {
                     $tmp['list'][$filename]['type'] = 'folder';
@@ -123,7 +125,7 @@ class Aliyundrive {
                         if (!(isset($files['content'])&&$files['content']['stat']==200)) {
                             $header['Referer'] = 'https://www.aliyundrive.com/';
                             $header['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36';
-                            $content1 = curl('GET', $files['download_url'], '', $header);
+                            $content1 = curl('GET', $files[$this->DownurlStrName], '', $header);
                             $tmp = null;
                             $tmp = json_decode(json_encode($content1), true);
                             if ($tmp['body']===null) {
@@ -346,7 +348,7 @@ class Aliyundrive {
             $r = bchexdec( substr(md5($this->access_token), 0, 16) );
             $o = bcmod($r, $oldfile['size']);
         }
-        $res = curl('GET', $oldfile['download_url'], '', [
+        $res = curl('GET', $oldfile[$this->DownurlStrName], '', [
             'Referer' => ''
             , 'Range' => 'bytes=' . $o . '-' . ($o+7)
         ]);
@@ -627,7 +629,7 @@ class Aliyundrive {
             }
             $res = json_decode($result['body'], true);
             //if (isset($res['url'])) 
-            $res['download_url'] = $_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . $filename);
+            $res[$this->DownurlStrName] = $_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . $filename);
         }
         return output(json_encode($this->files_format($res), JSON_UNESCAPED_SLASHES), $result['stat']);
     }
