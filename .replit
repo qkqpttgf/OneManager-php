@@ -1,3 +1,5 @@
 language = "php74"
 run = "php -S 0.0.0.0:8000 index.php"
 entrypoint = "index.php"
+[nix]
+channel = "stable-22_11"
