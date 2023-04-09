@@ -66,8 +66,8 @@ $EnvConfigs = [
     'guestup_path'      => 0b0111,
     'domainforproxy'    => 0b0111,
     'public_path'       => 0b0111,
-    'fileConduitSize'   => 0b110,
-    'fileConduitCacheTime'   => 0b110,
+    'fileConduitSize'   => 0b0110,
+    'fileConduitCacheTime'   => 0b0110,
 ];
 
 $timezones = array( 
@@ -1425,7 +1425,7 @@ function EnvOpt($needUpdate = 0)
     if (isset($_POST['submit1'])) if (compareadminmd5('admin', getConfig('admin'), $_COOKIE['admin'], $_POST['_admin'])) {
         $_SERVER['disk_oprating'] = '';
         foreach ($_POST as $k => $v) {
-            if (isShowedEnv($k) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename' || $k=='disktag_copy') {
+            if (isShowedEnv($k) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename' || $k=='disktag_copy' || $k=='client_secret') {
                 $tmp[$k] = $v;
             }
             if ($k=='disktag_newname') {
@@ -1690,6 +1690,9 @@ output:
     </td>
 </tr>
 </table>
+<form name="' . $disktag . '" action="" method="post">
+    <input name="_admin" type="hidden" value="">
+    <input type="hidden" name="disk" value="' . $disktag . '">
 <table border=1 width=100%>
     <tr>
         <td>Driver</td>
@@ -1697,6 +1700,18 @@ output:
         if ($diskok) $frame .= ' <a href="?AddDisk=' . get_class($disk_tmp) . '&disktag=' . $disktag . '&SelectDrive">' . getconstStr('ChangeDrivetype') . '</a>';
         $frame .= '</td>
     </tr>';
+        if (getConfig('client_id', $disktag) && getConfig('client_secret', $disktag)) {
+            $frame .= '
+    <tr>
+        <td>client_id</td>
+        <td>' . getConfig('client_id', $disktag) . '</td>
+    </tr>';
+            $frame .= '
+    <tr>
+        <td>client_secret</td>
+        <td><input type="text" name="client_secret" value="' . getConfig('client_secret', $disktag) . '" placeholder="' . getconstStr('EnvironmentsDescription')['client_secret'] . '" style="width:100%"></td>
+    </tr>';
+        }
         if ($diskok) {
             $frame .= '
     <tr>
@@ -1710,10 +1725,6 @@ output:
     </tr>';
             }
 
-            $frame .= '
-<form name="' . $disktag . '" action="" method="post">
-    <input name="_admin" type="hidden" value="">
-    <input type="hidden" name="disk" value="' . $disktag . '">';
             foreach ($EnvConfigs as $key => $val) if (isInnerEnv($key) && isShowedEnv($key)) {
                 $frame .= '
     <tr>
@@ -1743,8 +1754,7 @@ output:
     </tr>';
             }
             $frame .= '
-    <tr><td></td><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>
-</form>';
+    <tr><td></td><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>';
         } else {
             $frame .= '
 <tr>
@@ -1753,6 +1763,7 @@ output:
         }
         $frame .= '
 </table>
+</form>
 
 <script>
     function deldiskconfirm(t) {
