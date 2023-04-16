@@ -6,7 +6,7 @@ global $contextUserData;
 
 function printInput($event, $context)
 {
-    $tmp['eventID'] = $context->geteventID();
+    $tmp['RequestID'] = $context->getRequestID();
     $tmp['RemainingTimeInMilliSeconds'] = $context->getRemainingTimeInMilliSeconds();
     $tmp['AccessKey'] = $context->getAccessKey();
     $tmp['SecretKey'] = $context->getSecretKey();
@@ -17,7 +17,7 @@ function printInput($event, $context)
     $tmp['MemorySize'] = $context->getMemorySize();
     $tmp['CPUNumber'] = $context->getCPUNumber();
     $tmp['ProjectID'] = $context->getProjectID();
-    $tmp['Package'] = $context->Package();
+    $tmp['Package'] = $context->getPackage();
     $tmp['Token'] = $context->getToken();
     $tmp['Logger'] = $context->getLogger();
 
@@ -75,7 +75,7 @@ function GetPathSetting($event, $context)
     $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
     $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['if-modified-since'];
     $_SERVER['REQUEST_METHOD'] = $event['httpMethod'];
-    $_SERVER['_APP_SHARE_DIR'] = '/var/share/CFF/processrouter';
+    $_SERVER['RUNTIME_LOG_PATH'] = '/home/snuser/log';
     return $path;
 }
 
