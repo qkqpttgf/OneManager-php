@@ -2313,7 +2313,7 @@ function render_list($path = '', $files = [])
                 $tmp = curl('GET', $file_path, '', [], 1);
                 if ($tmp['stat']==302) {
                     error_log1(json_encode($tmp));
-                    $tmp = curl('GET', $tmp["returnhead"]["Location"]);
+                    $tmp = curl('GET', $tmp["returnhead"]["location"]);
                 }
                 if (!!$tmp['body']) $html = $tmp['body'];
                 savecache('customTheme', $html, '', 9999);
