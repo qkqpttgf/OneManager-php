@@ -62,7 +62,7 @@ class Onedrive {
                             //savecache('path_' . $parentpath, $parentfiles, $this->disktag);
                             if ($parentfiles['children'][$filename]['size']<1024*1024) {
                                 if (!(isset($parentfiles['children'][$filename]['content'])&&$parentfiles['children'][$filename]['content']['stat']==200)) {
-                                    $content1 = curl('GET', $parentfiles['children'][$filename][$this->DownurlStrName]);
+                                    $content1 = curl('GET', $parentfiles['children'][$filename][$this->DownurlStrName], '', [], 0, 1);
                                     $tmp = null;
                                     $tmp = json_decode(json_encode($content1), true);
                                     if ($tmp['body']===null) {
@@ -121,10 +121,7 @@ class Onedrive {
                     if (in_array(strtolower(splitlast($files['name'],'.')[1]), $exts['txt'])) {
                         if ($files['size']<1024*1024) {
                             if (!(isset($files['content'])&&$files['content']['stat']==200)) {
-                                $content1 = curl('GET', $files[$this->DownurlStrName], '', [], 1);
-                                if ($content1['stat'] == 302) {
-                                    $content1 = curl('GET', $content1["returnhead"]["location"]);
-                                }
+                                $content1 = curl('GET', $files[$this->DownurlStrName], '', [], 0, 1);
                                 $tmp = null;
                                 $tmp = json_decode(json_encode($content1), true);
                                 if ($tmp['body']===null) {
