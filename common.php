@@ -2310,11 +2310,7 @@ function render_list($path = '', $files = [])
         } else {
             if (!($html = getcache('customTheme'))) {
                 $file_path = $theme;
-                $tmp = curl('GET', $file_path, '', [], 1);
-                if ($tmp['stat']==302) {
-                    error_log1(json_encode($tmp));
-                    $tmp = curl('GET', $tmp["returnhead"]["location"]);
-                }
+                $tmp = curl('GET', $file_path, '', [], 0, 1);
                 if (!!$tmp['body']) $html = $tmp['body'];
                 savecache('customTheme', $html, '', 9999);
             }
