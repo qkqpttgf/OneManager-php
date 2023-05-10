@@ -13,7 +13,7 @@ if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
     else include 'platform/TencentSCF_env.php';
 } elseif (isset($_SERVER['FC_FUNC_CODE_PATH'])) {
     include 'platform/AliyunFC.php';
-} elseif (isset($_SERVER['_APP_SHARE_DIR']) && $_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
+} elseif (isset($_SERVER['RUNTIME_LOG_PATH']) && $_SERVER['RUNTIME_LOG_PATH']=='/home/snuser/log') {
     //if (getenv('ONEMANAGER_CONFIG_SAVE')=='file') include 'platform/HuaweiFG_file.php';
     //else include 'platform/HuaweiFG_env.php';
     echo 'FG' . PHP_EOL;
@@ -134,7 +134,7 @@ function handler($event, $context)
 
         return new RingCentral\Psr7\Response($re['statusCode'], $re['headers'], ($re['isBase64Encoded']?base64_decode($re['body']):$re['body']));
 
-    } elseif ($_SERVER['_APP_SHARE_DIR']=='/var/share/CFF/processrouter') {
+    } elseif (isset($_SERVER['RUNTIME_LOG_PATH']) && $_SERVER['RUNTIME_LOG_PATH']=='/home/snuser/log') {
         // Huawei FG
         global $contextUserData;
         $contextUserData = $context;
