@@ -21,7 +21,6 @@ function getpath()
     if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
     $path = path_format( substr($path, strlen($_SERVER['base_path'])) );
-    $_SERVER['DOCUMENT_ROOT'] = '/var/task/user';
     return $path;
 }
 
