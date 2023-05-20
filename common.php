@@ -1403,6 +1403,7 @@ function EnvOpt($needUpdate = 0)
     global $timezones;
     global $slash;
     global $drive;
+    global $platform;
     ksort($EnvConfigs);
     $disktags = explode('|', getConfig('disktag'));
     $envs = '';

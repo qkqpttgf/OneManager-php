@@ -140,6 +140,7 @@ function main_handler($event, $context)
 // Aliyun FC & Huawei FG & Baidu CFC
 function handler($event, $context)
 {
+    global $platform;
     if ('FC'==$platform) {
         // Aliyun FC
         set_error_handler("myErrorHandler");
