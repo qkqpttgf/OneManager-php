@@ -1,5 +1,6 @@
 <?php
 
+global $platform;
 global $timezones;
 global $slash;
 global $drive;
@@ -1899,17 +1900,7 @@ output:
 </script>';
 
         $canOneKeyUpate = 0;
-        if (isset($_SERVER['USER'])&&$_SERVER['USER']==='qcloud') {
-            $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['HEROKU_APP_DIR'])&&$_SERVER['HEROKU_APP_DIR']==='/app') {
-            $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['FC_FUNC_CODE_PATH'])) {
-            $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['BCE_CFC_RUNTIME_NAME'])&&$_SERVER['BCE_CFC_RUNTIME_NAME']=='php7') {
-            $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['RUNTIME_LOG_PATH']) && $_SERVER['RUNTIME_LOG_PATH']=='/home/snuser/log') {
-            $canOneKeyUpate = 1;
-        } elseif (isset($_SERVER['DOCUMENT_ROOT'])&&$_SERVER['DOCUMENT_ROOT']==='/var/task/user') {
+        if ('Normal'!=$platform) {
             $canOneKeyUpate = 1;
         } else {
             $tmp = time();
@@ -1920,7 +1911,7 @@ output:
         }
         $frame .= '
         <a href="https://github.com/qkqpttgf/OneManager-php" target="_blank">Github</a>
-<a href="https://git.hit.edu.cn/ysun/OneManager-php" target="_blank">HIT Gitlab</a><br><br>
+        <a href="https://git.hit.edu.cn/ysun/OneManager-php" target="_blank">HIT Gitlab</a><br><br>
 ';
         if (!$canOneKeyUpate) {
             $frame .= '
