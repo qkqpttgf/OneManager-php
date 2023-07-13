@@ -427,6 +427,10 @@ $constStr = [
         'en-us' => 'Copy this Disk',
         'zh-cn' => '复制此盘',
     ],
+    'ResetDisk' => [
+        'en-us' => 'Reset this Disk',
+        'zh-cn' => '重置此盘',
+    ],
     'RenameDisk' => [
         'en-us' => 'Rename Disk Tag',
         'zh-cn' => '改变标签',
