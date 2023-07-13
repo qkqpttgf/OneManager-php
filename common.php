@@ -1430,6 +1430,23 @@ function EnvOpt($needUpdate = 0)
             if (isShowedEnv($k) || $k=='disktag_del' || $k=='disktag_add' || $k=='disktag_rename' || $k=='disktag_copy' || $k=='client_secret') {
                 $tmp[$k] = $v;
             }
+            if ($k=='disktag_reset') {
+                global $slash;
+                $disktype = getConfig('Driver', $_GET['disktag']);
+                if (!$disktype) return false;
+                if (!class_exists($disktype)) require 'disk' . $slash . $disktype . '.php';
+                $drive = new $disktype($_GET['disktag']);
+                return message('
+    <a href="" id="a1">' . getconstStr('JumptoOffice') . '</a>
+    <script>
+        url=location.protocol + "//" + location.host + "' . $url . '?install2&disktag=' . $_GET['disktag'] . '&AddDisk=' . get_class($drive) . '";
+        url="' . $drive->oauth_url . 'authorize?scope=' . $drive->scope . '&response_type=code&client_id=' . $drive->client_id . '&redirect_uri=' . $drive->redirect_uri . '&state=' . '"+encodeURIComponent(url);
+        document.getElementById(\'a1\').href=url;
+        //window.open(url,"_blank");
+        location.href = url;
+    </script>
+    ', getconstStr('Wait') . ' 1s', 201);
+            }
             if ($k=='disktag_newname') {
                 $v = preg_replace('/[^0-9a-zA-Z|_]/i', '', $v);
                 $f = substr($v, 0, 1);
@@ -1690,6 +1707,13 @@ output:
             <input type="submit" name="submit1" value="' . getconstStr('CopyDisk') . '">
         </form>
     </td>
+    <td>
+        <form action="" method="post" style="margin: 0" onsubmit="return rediskconfirm(this);">
+            <input type="hidden" name="disktag_reset" value="' . $disktag . '">
+            <input name="_admin" type="hidden" value="">
+            <input type="submit" name="submit1" value="' . getconstStr('ResetDisk') . '">
+        </form>
+    </td>
 </tr>
 </table>
 <form name="' . $disktag . '" action="" method="post">
@@ -1755,14 +1779,14 @@ output:
         </td>
     </tr>';
             }
-            $frame .= '
-    <tr><td></td><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>';
         } else {
             $frame .= '
 <tr>
     <td colspan="2">' . ($disk_tmp->error['body']?$disk_tmp->error['stat'] . '<br>' . $disk_tmp->error['body']:'Add this disk again.') . '</td>
 </tr>';
         }
+            $frame .= '
+    <tr><td></td><td><input type="submit" name="submit1" value="' . getconstStr('Setup') . '"></td></tr>';
         $frame .= '
 </table>
 </form>
@@ -1771,12 +1795,19 @@ output:
     function deldiskconfirm(t) {
         var msg="' . getconstStr('Delete') . ' ??";
         if (confirm(msg)==true) return true;
-        else return false;
+        //else
+        return false;
     }
     function cpdiskconfirm(t) {
         var msg="' . getconstStr('Copy') . ' ??";
         if (confirm(msg)==true) return true;
         //else 
+        return false;
+    }
+    function rediskconfirm(t) {
+        var msg="' . getconstStr('ResetDisk') . ' ??";
+        if (confirm(msg)==true) return true;
+        //else
         return false;
     }
     function renametag(t) {
