@@ -41,15 +41,16 @@
 
   https://onemanager.qkqpttgf.repl.co/  
 
-### Notice
-
-> `Import from Github` useing the `.replit` file in code files will cause an empty web page, may someone help me?  
-
 ### How to Install
+A:
+> 1. Click the "+" or "Create Repl", click the `Import from Github`;  
+> 2. Input `https://github.com/qkqpttgf/OneManager-php` in "GitHub URL", then it will auto show "Language" - "PHP Web Server", Click the "Import from Github";  
+> 3. After done, click the green button "Run", it will show the web page on the right, you MUST open it in a new tab or window.
 
+B:
 > 1. Click the "+" or "Create Repl", find template "PHP Web Server" (via input "php"), input a name for your project in "Title" or left it default, Click the "+ Create Repl".  
 > 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -b OneManager-php/* ./ && mv -b OneManager-php/.[^.]* ./ && rm -rf *~ && rm -rf OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
-> 3. Click the green button "Run", it will show the web page on the right, you can open it in a new tab or window.  
+> 3. Click the green button "Run", it will show the web page on the right, you MUST open it in a new tab or window.  
 
 ---
 
