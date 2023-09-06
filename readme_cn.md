@@ -43,10 +43,6 @@
 
   https://onemanager.qkqpttgf.repl.co/  
 
-### 注意
-
-> 直接通过`.replit`文件指定php时，网页会空白，有人帮忙解决吗？  
-
 ### 安装
 A:
 > 1. 点右上的 "+" 或左上的 "+ Create Repl"，点击`Import from Github`；
