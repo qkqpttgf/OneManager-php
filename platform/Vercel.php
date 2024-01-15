@@ -307,18 +307,22 @@ function setVercelConfig($envs, $appId, $token) {
 
 function VercelUpdate($appId, $token, $sourcePath = "") {
     if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
+    $vercelPHPversion = "0.6.0";
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
     $data["name"] = "OneManager";
     $data["project"] = $appId;
     $data["target"] = "production";
+    $data["functions"]["api/index.php"]["runtime"] = "vercel-php@" . $vercelPHPversion;
     $data["routes"][0]["src"] = "/(.*)";
     $data["routes"][0]["dest"] = "/api/index.php";
-    $data["functions"]["api/index.php"]["runtime"] = "vercel-php@0.6.0";
     if ($sourcePath == "") $sourcePath = splitlast(splitlast(__DIR__, "/")[0], "/")[0];
     //echo $sourcePath . "<br>";
     getEachFiles($file, $sourcePath);
+    $tmp['file'] = "vercel.json";
+    $tmp['data'] = '{ "functions": { "api/index.php": { "runtime": "vercel-php@' . $vercelPHPversion . '" } }, "routes": [ { "src": "/(.*)",  "dest": "/api/index.php" } ] }';
+    $file[] = $tmp;
     $data["files"] = $file;
 
     //echo json_encode($data, JSON_PRETTY_PRINT) . " ,data<br>";
