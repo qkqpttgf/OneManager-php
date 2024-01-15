@@ -361,7 +361,7 @@ function getEachFiles(&$file, $base, $path = "") {
                 $response = getEachFiles($file, $base, path_format($path . "/" . $filename));
                 if (api_error(setConfigResponse($response))) return $response;
             } else {
-                $tmp['file'] = path_format($path . "/" . $filename);
+                $tmp['file'] = substr(path_format($path . "/" . $filename), 1);
                 $tmp['data'] = file_get_contents($fromfile);
                 $file[] = $tmp;
             }
