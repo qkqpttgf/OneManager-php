@@ -3,7 +3,7 @@
 # # AllowOverride All
 RewriteEngine On
 # RewriteCond $1 !^(.well-known)
-RewriteRule ^(.*) index.php?/$1 [L]
+RewriteRule ^(.*) index.php [QSA,L]
 
 ###-----------------------------------
 ### nginx
