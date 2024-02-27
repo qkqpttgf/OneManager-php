@@ -80,6 +80,7 @@ OneManagerPath=$(
 cd ${OneManagerPath}
 
 if [ g"${gitSource}" = g"gitee" ]; then
+    echo " download from Gitee"
     #  $url = 'https://gitee.com/' . $auth . '/' . $project . '/repository/archive/' . urlencode($branch) . '.zip';
     wget -qc "https://gitee.com/qkqpttgf/OneManager-php/repository/archive/${branch}.zip"
     unzip -qo "${branch}.zip"
@@ -94,6 +95,7 @@ if [ g"${gitSource}" = g"gitee" ]; then
         exit
     fi
 else
+    echo " download from Github"
     #https://github.com/qkqpttgf/OneManager-php/archive/refs/heads/master.zip
     #wget -qc "https://github.com/qkqpttgf/OneManager-php/archive/refs/heads/${branch}.zip"
     #unzip "${branch}.zip"
@@ -113,7 +115,7 @@ else
 fi
 
 if [ g"${tmpFolder}" != g"" ]; then
-    [ g"$install" == g"1" ] || \mv -b ".data/config.php" "${tmpFolder}/.data/"
+    [ g"$install" == g"1" ] || \mv -f ".data/config.php" "${tmpFolder}/.data/"
     \mv -b "${tmpFolder}/"* ./
     \mv -b "${tmpFolder}/".[^.]* ./
     rm -rf *~
