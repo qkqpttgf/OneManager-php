@@ -47,7 +47,7 @@ for av in "$@"; do
     else
         if [ g"$isbranch" == g"1" -a g"$appointsource" == g"1" ]; then
             echo "source and branch should separate appoint, exit"
-            exit
+            exit 1
         fi
         if [ g"$appointsource" == g"1" ]; then
             gitSource="${av,,}"
@@ -62,11 +62,11 @@ done
 
 if [ g"$install" == g"1" -a g"$update" == g"1" ]; then
     echo "Both install & update, exit"
-    exit
+    exit 1
 fi
 if [ g"$install" != g"1" -a g"$update" != g"1" ]; then
     echo "Not install & Not update, exit"
-    exit
+    exit 1
 fi
 
 if [ g"${branch}" = g"" ]; then
@@ -92,7 +92,7 @@ if [ g"${gitSource}" = g"gitee" ]; then
         cd ../
     else
         echo " download code or unzip failed"
-        exit
+        exit 1
     fi
 else
     echo " download from Github"
@@ -109,8 +109,8 @@ else
         #echo "${tmpFolder}"
         cd ../
     else
-        echo " download code or unzip failed"
-        exit
+        echo " download code or untar failed"
+        exit 1
     fi
 fi
 
@@ -127,4 +127,5 @@ if [ g"${tmpFolder}" != g"" ]; then
     echo " Done success!"
 else
     echo " No new code folder"
+    exit 1
 fi
