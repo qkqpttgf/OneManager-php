@@ -1,5 +1,6 @@
 <?php
 // https://vercel.com/docs/api#endpoints/deployments/create-a-new-deployment
+// https://github.com/vercel-community/php
 
 function getpath() {
     $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($_SERVER['HTTP_ACCEPT_LANGUAGE'], ';')[0], ',')[0]);
@@ -303,7 +304,7 @@ function setVercelConfig($envs, $appId, $token) {
 
 function VercelUpdate($appId, $token, $sourcePath = "") {
     if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
-    $vercelPHPversion = "0.6.1";
+    $vercelPHPversion = "0.7.0";
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
