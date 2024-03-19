@@ -302,9 +302,25 @@ function setVercelConfig($envs, $appId, $token) {
     return VercelUpdate($appId, $token, $outPath);
 }
 
+function fetchVercelPHPVersion() {
+    $vercelPHPversion = "0.7.0";
+    if (!($vercelPHPversion = getcache("VercelPHPRuntime"))) {
+        $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
+        $response = curl("GET", $url);
+        if ($response['stat'] == 200) {
+            $res = json_decode($response['body'], true)['version'];
+            if ($res) {
+                savecache("VercelPHPRuntime", $res);
+                $vercelPHPversion = $res;
+            }
+        }
+    }
+    return $vercelPHPversion;
+}
+
 function VercelUpdate($appId, $token, $sourcePath = "") {
     if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
-    $vercelPHPversion = "0.7.0";
+    $vercelPHPversion = fetchVercelPHPVersion();
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
