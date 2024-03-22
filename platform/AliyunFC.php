@@ -417,17 +417,49 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
 
     if ($GitSource == 'Github') {
         // 从github下载对应tar.gz，并解压
-        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
-    } elseif ($GitSource == 'HITGitlab') {
+        //$url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
+        // 从github下载对应zip，并解压
+        $url = 'https://codeload.github.com/' . $auth . '/' . $project . '/zip/refs/heads/' . urlencode($branch);
+    } elseif ($GitSource == 'Gitee') {
+        $url = 'https://gitee.com/' . $auth . '/' . $project . '/repository/archive/' . urlencode($branch) . '.zip';
+    }/* elseif ($GitSource == 'HITGitlab') {
         $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
-    } else return json_encode(['ErrorMessage' => 'Git Source input Error!']);
-    $tarfile = '/tmp/github.tar.gz';
-    file_put_contents($tarfile, file_get_contents($url));
-    $phar = new PharData($tarfile);
-    $html = $phar->extractTo($outPath, null, true); //路径 要解压的文件 是否覆盖
+    }*/ else return json_encode(['ErrorMessage' => 'Git Source input Error!']);
+    $zipfile = '/tmp/github.zip';
+    $context_options = array(
+        'http' => array(
+            'header' => "User-Agent: curl/7.83.1",
+        )
+    );
+    $context = stream_context_create($context_options);
+    $githubfile = file_get_contents($url, false, $context);
+    if (!$githubfile) {
+        $tmp1['ErrorCode'] = "Failed";
+        $tmp1['ErrorMessage'] = "Download code failed";
+        return json_encode($tmp1);
+    }
+    file_put_contents($zipfile, $githubfile);
+    $zip = new ZipArchive();
+    if ($zip->open($zipfile)) {
+        if (!$zip->extractTo($outPath)) {
+            $tmp1['ErrorCode'] = "Failed";
+            $tmp1['ErrorMessage'] = "Extract failed";
+            return json_encode($tmp1);
+        }
+        $zip->close();
+    } else {
+        $tmp1['ErrorCode'] = "Failed";
+        $tmp1['ErrorMessage'] = "Open zip file failed";
+        return json_encode($tmp1);
+    }
 
     // 获取解压出的目录名
     $outPath = findIndexPath($outPath);
+    if ($outPath == '') {
+        $tmp1['ErrorCode'] = "Failed";
+        $tmp1['ErrorMessage'] = "No index.php in downloaded code";
+        return json_encode($tmp1);
+    }
 
     // 将目录中文件打包成zip
     $zip = new ZipArchive();
