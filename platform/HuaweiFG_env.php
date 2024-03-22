@@ -4,8 +4,7 @@
 
 global $contextUserData;
 
-function printInput($event, $context)
-{
+function printInput($event, $context) {
     $tmp['RequestID'] = $context->getRequestID();
     $tmp['RemainingTimeInMilliSeconds'] = $context->getRemainingTimeInMilliSeconds();
     $tmp['AccessKey'] = $context->getAccessKey();
@@ -21,7 +20,7 @@ function printInput($event, $context)
     $tmp['Token'] = $context->getToken();
     $tmp['Logger'] = $context->getLogger();
 
-    if (strlen(json_encode($event['body']))>500) $event['body']=substr($event['body'],0,strpos($event['body'],'base64')+30) . '...Too Long!...' . substr($event['body'],-50);
+    if (strlen(json_encode($event['body'])) > 500) $event['body'] = substr($event['body'], 0, strpos($event['body'], 'base64') + 30) . '...Too Long!...' . substr($event['body'], -50);
     echo urldecode(json_encode($event, JSON_PRETTY_PRINT)) . '
  
 ' . urldecode(json_encode($tmp, JSON_PRETTY_PRINT)) . '
@@ -29,24 +28,22 @@ function printInput($event, $context)
 ';
 }
 
-function GetGlobalVariable($event)
-{
+function GetGlobalVariable($event) {
     $_GET = $event['queryStringParameters'];
-    $postbody = explode("&",$event['body']);
+    $postbody = explode("&", $event['body']);
     foreach ($postbody as $postvalues) {
-        $pos = strpos($postvalues,"=");
-        $_POST[urldecode(substr($postvalues,0,$pos))]=urldecode(substr($postvalues,$pos+1));
+        $pos = strpos($postvalues, "=");
+        $_POST[urldecode(substr($postvalues, 0, $pos))] = urldecode(substr($postvalues, $pos + 1));
     }
-    $cookiebody = explode("; ",$event['headers']['cookie']);
+    $cookiebody = explode("; ", $event['headers']['cookie']);
     foreach ($cookiebody as $cookievalues) {
-        $pos = strpos($cookievalues,"=");
-        $_COOKIE[urldecode(substr($cookievalues,0,$pos))]=urldecode(substr($cookievalues,$pos+1));
+        $pos = strpos($cookievalues, "=");
+        $_COOKIE[urldecode(substr($cookievalues, 0, $pos))] = urldecode(substr($cookievalues, $pos + 1));
     }
 }
 
-function GetPathSetting($event, $context)
-{
-    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($event['headers']['accept-language'],';')[0],',')[0]);
+function GetPathSetting($event, $context) {
+    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($event['headers']['accept-language'], ';')[0], ',')[0]);
     $_SERVER['function_name'] = $context->getFunctionName();
     $_SERVER['ProjectID'] = $context->getProjectID();
     $host_name = $event['headers']['host'];
@@ -54,11 +51,11 @@ function GetPathSetting($event, $context)
     $path = path_format('/' . $event['pathParameters']['']);
     $path = str_replace('+', '%2B', $path);
     $_SERVER['base_path'] = path_format($event['path']);
-    if (  $_SERVER['base_path'] == $path ) {
+    if ($_SERVER['base_path'] == $path) {
         $_SERVER['base_path'] = '/';
     } else {
-        $_SERVER['base_path'] = substr($_SERVER['base_path'], 0, strlen($_SERVER['base_path'])-strlen($path));
-        if ($_SERVER['base_path']=='') $_SERVER['base_path'] = '/';
+        $_SERVER['base_path'] = substr($_SERVER['base_path'], 0, strlen($_SERVER['base_path']) - strlen($path));
+        if ($_SERVER['base_path'] == '') $_SERVER['base_path'] = '/';
     }
     //$_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
     $_SERVER['REMOTE_ADDR'] = $event['headers']['x-real-ip'];
@@ -72,17 +69,16 @@ function GetPathSetting($event, $context)
     $_SERVER['REQUEST_SCHEME'] = $event['headers']['x-forwarded-proto'];
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $event['headers']['referer'])[2];
-    $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate'];//'f'
+    $_SERVER['HTTP_TRANSLATE'] = $event['headers']['translate']; //'f'
     $_SERVER['HTTP_IF_MODIFIED_SINCE'] = $event['headers']['if-modified-since'];
     $_SERVER['REQUEST_METHOD'] = $event['httpMethod'];
     return $path;
 }
 
-function getConfig($str, $disktag = '')
-{
+function getConfig($str, $disktag = '') {
     global $contextUserData;
     if (isInnerEnv($str)) {
-        if ($disktag=='') $disktag = $_SERVER['disktag'];
+        if ($disktag == '') $disktag = $_SERVER['disktag'];
         $env = json_decode($contextUserData->getUserData($disktag), true);
         if (isset($env[$str])) {
             if (isBase64Env($str)) return base64y_decode($env[$str]);
@@ -95,11 +91,10 @@ function getConfig($str, $disktag = '')
     return '';
 }
 
-function setConfig($arr, $disktag = '')
-{
+function setConfig($arr, $disktag = '') {
     global $contextUserData;
-    if ($disktag=='') $disktag = $_SERVER['disktag'];
-    $disktags = explode("|",getConfig('disktag'));
+    if ($disktag == '') $disktag = $_SERVER['disktag'];
+    $disktags = explode("|", getConfig('disktag'));
     $diskconfig = json_decode($contextUserData->getUserData($disktag), true);
     $tmp = [];
     $indisk = 0;
@@ -112,20 +107,20 @@ function setConfig($arr, $disktag = '')
             if (isBase64Env($k)) $diskconfig[$k] = base64y_encode($v);
             else $diskconfig[$k] = $v;
             $indisk = 1;
-        } elseif ($k=='disktag_add') {
+        } elseif ($k == 'disktag_add') {
             array_push($disktags, $v);
             $operatedisk = 1;
-        } elseif ($k=='disktag_del') {
-            $disktags = array_diff($disktags, [ $v ]);
+        } elseif ($k == 'disktag_del') {
+            $disktags = array_diff($disktags, [$v]);
             $tmp[$v] = '';
             $operatedisk = 1;
-        } elseif ($k=='disktag_copy') {
+        } elseif ($k == 'disktag_copy') {
             $newtag = $v . '_' . date("Ymd_His");
             $tmp[$newtag] = getConfig($v);
             array_push($disktags, $newtag);
             $operatedisk = 1;
-        } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
-            if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
+        } elseif ($k == 'disktag_rename' || $k == 'disktag_newname') {
+            if ($arr['disktag_rename'] != $arr['disktag_newname']) $operatedisk = 1;
         } else {
             $tmp[$k] = json_encode($v);
         }
@@ -136,10 +131,10 @@ function setConfig($arr, $disktag = '')
         $tmp[$disktag] = json_encode($diskconfig);
     }
     if ($operatedisk) {
-        if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
+        if (isset($arr['disktag_newname']) && $arr['disktag_newname'] != '') {
             $tags = [];
             foreach ($disktags as $tag) {
-                if ($tag==$arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
+                if ($tag == $arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
                 else array_push($tags, $tag);
             }
             $tmp['disktag'] = implode('|', $tags);
@@ -147,24 +142,24 @@ function setConfig($arr, $disktag = '')
             $tmp[$arr['disktag_rename']] = '';
         } else {
             $disktags = array_unique($disktags);
-            foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-            if ($disktag_s!='') $tmp['disktag'] = substr($disktag_s, 0, -1);
+            $disktag_s = "";
+            foreach ($disktags as $disktag) if ($disktag != '') $disktag_s .= $disktag . '|';
+            if ($disktag_s != '') $tmp['disktag'] = substr($disktag_s, 0, -1);
             else $tmp['disktag'] = '';
         }
     }
-//    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
-//';
+    //    echo '正式设置：'.json_encode($tmp,JSON_PRETTY_PRINT).'
+    //';
     $response = updateEnvironment($tmp, getConfig('HW_urn'), getConfig('HW_key'), getConfig('HW_secret'));
     return $response;
 }
 
-function install()
-{
+function install() {
     global $constStr;
     global $contextUserData;
     if ($_GET['install2']) {
         $tmp['admin'] = $_POST['admin'];
-        $response = setConfigResponse( setConfig($tmp) );
+        $response = setConfigResponse(setConfig($tmp));
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
@@ -172,6 +167,7 @@ function install()
         }
         if (needUpdate()) {
             OnekeyUpate();
+            $url = "";
             return message('update to github version, reinstall.
         <script>
             var expd = new Date();
@@ -192,50 +188,50 @@ function install()
     }
     if ($_GET['install1']) {
         //if ($_POST['admin']!='') {
-            $tmp['timezone'] = $_COOKIE['timezone'];
-            $tmp['HW_urn'] = $_POST['HW_urn'];
-            $tmp['HW_key'] = $_POST['HW_key'];
-            $tmp['HW_secret'] = $_POST['HW_secret'];
-            $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
-            //$response = json_decode(SetbaseConfig($tmp, $HW_urn, $HW_name, $HW_pwd), true)['Response'];
-            $response = setConfigResponse( SetbaseConfig($tmp, $tmp['HW_urn'], $tmp['HW_key'], $tmp['HW_secret']) );
-            if (api_error($response)) {
-                $html = api_error_msg($response);
-                $title = 'Error';
+        $tmp['timezone'] = $_COOKIE['timezone'];
+        $tmp['HW_urn'] = $_POST['HW_urn'];
+        $tmp['HW_key'] = $_POST['HW_key'];
+        $tmp['HW_secret'] = $_POST['HW_secret'];
+        $tmp['ONEMANAGER_CONFIG_SAVE'] = $_POST['ONEMANAGER_CONFIG_SAVE'];
+        //$response = json_decode(SetbaseConfig($tmp, $HW_urn, $HW_name, $HW_pwd), true)['Response'];
+        $response = setConfigResponse(SetbaseConfig($tmp, $tmp['HW_urn'], $tmp['HW_key'], $tmp['HW_secret']));
+        if (api_error($response)) {
+            $html = api_error_msg($response);
+            $title = 'Error';
+            return message($html, $title, 201);
+        } else {
+            if ($tmp['ONEMANAGER_CONFIG_SAVE'] == 'file') {
+                $html = getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '<br><a href="' . $_SERVER['base_path'] . '">' . getconstStr('Home') . '</a>';
+                $title = 'Reinstall';
                 return message($html, $title, 201);
-            } else {
-                if ($tmp['ONEMANAGER_CONFIG_SAVE'] == 'file') {
-                    $html = getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '<br><a href="' . $_SERVER['base_path'] . '">' . getconstStr('Home') . '</a>';
-                    $title = 'Reinstall';
-                    return message($html, $title, 201);
-                }
-                $html .= '
+            }
+            $html = '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
-        <label>'.getconstStr('SetAdminPassword').':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <label>' . getconstStr('SetAdminPassword') . ':<input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"></label><br>
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         function notnull(t)
         {
             if (t.admin.value==\'\') {
-                alert(\''.getconstStr('SetAdminPassword').'\');
+                alert(\'' . getconstStr('SetAdminPassword') . '\');
                 return false;
             }
             return true;
         }
     </script>';
-                $title = getconstStr('SetAdminPassword');
-                return message($html, $title, 201);
-            }
+            $title = getconstStr('SetAdminPassword');
+            return message($html, $title, 201);
+        }
         //}
     }
     if ($_GET['install0']) {
-        $html .= '
+        $html = '
     <form action="?install1" method="post" onsubmit="return notnull(this);">
 language:<br>';
         foreach ($constStr['languages'] as $key1 => $value1) {
             $html .= '
-        <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
+        <label><input type="radio" name="language" value="' . $key1 . '" ' . ($key1 == $constStr['language'] ? 'checked' : '') . ' onclick="changelanguage(\'' . $key1 . '\')">' . $value1 . '</label><br>';
         }
         //if (getConfig('HW_urn')==''||getConfig('HW_key')==''||getConfig('HW_secret')=='') 
         $html .= '
@@ -246,10 +242,10 @@ language:<br>';
         <label>Access Key Id:<input name="HW_key" type="text" placeholder="" size=""></label><br>
         <label>Secret Access Key:<input name="HW_secret" type="password" placeholder="" size=""></label><br>';
         $html .= '
-        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'':'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
-        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file'==$contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE')?'checked':'') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="" ' . ('file' == $contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE') ? '' : 'checked') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_ENV') . '</label><br>
+        <label><input type="radio" name="ONEMANAGER_CONFIG_SAVE" value="file" ' . ('file' == $contextUserData->getUserData('ONEMANAGER_CONFIG_SAVE') ? 'checked' : '') . '>' . getconstStr('ONEMANAGER_CONFIG_SAVE_FILE') . '</label><br>';
         $html .= '
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         var nowtime= new Date();
@@ -289,14 +285,13 @@ language:<br>';
         $title = getconstStr('SelectLanguage');
         return message($html, $title, 201);
     }
-    $html .= '<a href="?install0">'.getconstStr('ClickInstall').'</a>, '.getconstStr('LogintoBind');
+    $html = '<a href="?install0">' . getconstStr('ClickInstall') . '</a>, ' . getconstStr('LogintoBind');
     $title = 'Install';
     return message($html, $title, 201);
 }
 
-function FGAPIV2($HW_urn, $HW_key, $HW_secret, $Method, $End, $data = '')
-{
-    if ($HW_urn==''||$HW_key==''||$HW_secret=='') {
+function FGAPIV2($HW_urn, $HW_key, $HW_secret, $Method, $End, $data = '') {
+    if ($HW_urn == '' || $HW_key == '' || $HW_secret == '') {
         $tmp['error_code'] = 'Config Error';
         $tmp['error_msg'] = 'HW urn or access key id or secret is empty.';
         return json_encode($tmp);
@@ -336,17 +331,18 @@ function FGAPIV2($HW_urn, $HW_key, $HW_secret, $Method, $End, $data = '')
 
     //return curl($Method, $url, $data, $header)['body']; // . $CanonicalRequest;
     $p = 0;
-    while ($response['stat']==0 && $p<3) {
+    $response = null;
+    while ($response['stat'] == 0 && $p < 3) {
         $response = curl($Method, $url, $data, $header);
         $p++;
     }
 
-    if ($response['stat']==0) {
+    if ($response['stat'] == 0) {
         $tmp['error_code'] = 'Network Error';
         $tmp['error_msg'] = 'Can not connect ' . $host;
         return json_encode($tmp);
     }
-    if ($response['stat']!=200) {
+    if ($response['stat'] != 200) {
         $tmp = json_decode($response['body'], true);
         $tmp['error_code'] .= '.';
         $tmp['error_msg'] .= '<br>' . $response['stat'] . '<br>' . $CanonicalRequest . '<br>' . json_encode($header) . PHP_EOL;
@@ -355,16 +351,14 @@ function FGAPIV2($HW_urn, $HW_key, $HW_secret, $Method, $End, $data = '')
     return $response['body'];
 }
 
-function getfunctioninfo($HW_urn, $HW_key, $HW_secret)
-{
+function getfunctioninfo($HW_urn, $HW_key, $HW_secret) {
     return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'GET', 'config');
 }
 
-function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
-{
+function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret) {
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
     global $contextUserData;
-    $tmp_env = json_decode(json_decode(getfunctioninfo($HW_urn, $HW_key, $HW_secret),true)['user_data'],true);
+    $tmp_env = json_decode(json_decode(getfunctioninfo($HW_urn, $HW_key, $HW_secret), true)['user_data'], true);
     foreach ($Envs as $key1 => $value1) {
         $tmp_env[$key1] = $value1;
     }
@@ -373,19 +367,18 @@ function updateEnvironment($Envs, $HW_urn, $HW_key, $HW_secret)
     sortConfig($tmp_env);
 
     $tmpdata['handler'] = 'index.handler';
-    $tmpdata['memory_size'] = $contextUserData->getMemorySize()+1-1;
+    $tmpdata['memory_size'] = $contextUserData->getMemorySize() + 1 - 1;
     $tmpdata['runtime'] = 'PHP7.3';
-    $tmpdata['timeout'] = $contextUserData->getRunningTimeInSeconds()+1-1;
+    $tmpdata['timeout'] = $contextUserData->getRunningTimeInSeconds() + 1 - 1;
     $tmpdata['user_data'] = json_encode($tmp_env);
 
     return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'config', json_encode($tmpdata));
 }
 
-function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
-{
+function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret) {
     //echo json_encode($Envs,JSON_PRETTY_PRINT);
-    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = Array( 'ONEMANAGER_CONFIG_SAVE' => 'file' );
-    $tmp_env = json_decode(json_decode(getfunctioninfo($HW_urn, $HW_key, $HW_secret),true)['user_data'],true);
+    if ($Envs['ONEMANAGER_CONFIG_SAVE'] == 'file') $Envs = array('ONEMANAGER_CONFIG_SAVE' => 'file');
+    $tmp_env = json_decode(json_decode(getfunctioninfo($HW_urn, $HW_key, $HW_secret), true)['user_data'], true);
     foreach ($Envs as $key1 => $value1) {
         $tmp_env[$key1] = $value1;
     }
@@ -402,77 +395,77 @@ function SetbaseConfig($Envs, $HW_urn, $HW_key, $HW_secret)
     return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'config', json_encode($tmpdata));
 }
 
-function updateProgram($HW_urn, $HW_key, $HW_secret, $source)
-{
+function updateProgram($HW_urn, $HW_key, $HW_secret, $source) {
     $tmpdata['code_type'] = 'zip';
-    $tmpdata['func_code']['file'] = base64_encode( file_get_contents($source) );
+    $tmpdata['func_code']['file'] = base64_encode(file_get_contents($source));
 
     return FGAPIV2($HW_urn, $HW_key, $HW_secret, 'PUT', 'code', json_encode($tmpdata));
 }
 
-function api_error($response)
-{
+function api_error($response) {
     return isset($response['error_msg']);
 }
 
-function api_error_msg($response)
-{
+function api_error_msg($response) {
     return $response['error_code'] . '<br>
 ' . $response['error_msg'] . '<br>
 request_id: ' . $response['request_id'] . '<br><br>
 function_name: ' . $_SERVER['function_name'] . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+<button onclick="location.href = location.href;">' . getconstStr('Refresh') . '</button>';
 }
 
-function setConfigResponse($response)
-{
-    return json_decode( $response, true );
+function setConfigResponse($response) {
+    return json_decode($response, true);
 }
 
-function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
-{
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master') {
     $source = '/tmp/code.zip';
     $outPath = '/tmp/';
 
-    if ($GitSource=='Github') {
-        // 从github下载对应tar.gz，并解压
-        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
-    } elseif ($GitSource=='HITGitlab') {
-        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
-    } else return json_encode(['error_code'=>'Error', 'error_msg'=>'Git Source input Error!']);
-    $tarfile = '/tmp/github.tar.gz';
-    file_put_contents($tarfile, file_get_contents($url));
+    if ($GitSource == 'Github') {
+        // 从github下载对应zip，并解压
+        $url = 'https://codeload.github.com/' . $auth . '/' . $project . '/zip/refs/heads/' . urlencode($branch);
+    } elseif ($GitSource == 'Gitee') {
+        $url = 'https://gitee.com/' . $auth . '/' . $project . '/repository/archive/' . urlencode($branch) . '.zip';
+    } else return json_encode(['error_code' => 'Error', 'error_msg' => 'Git Source input Error!']);
+    $tarfile = '/tmp/github.zip';
+    $context_options = array(
+        'http' => array(
+            'header' => "User-Agent: curl/7.83.1",
+        )
+    );
+    $context = stream_context_create($context_options);
+    file_put_contents($tarfile, file_get_contents($url, false, $context));
     $phar = new PharData($tarfile);
-    $html = $phar->extractTo($outPath, null, true);//路径 要解压的文件 是否覆盖
+    $html = $phar->extractTo($outPath, null, true); //路径 要解压的文件 是否覆盖
 
     // 获取解压出的目录名
     $outPath = findIndexPath($outPath);
 
     // 将目录中文件打包成zip
     //$zip=new ZipArchive();
-    $zip=new PharData($source);
+    $zip = new PharData($source);
     //if($zip->open($source, ZipArchive::CREATE)){
-        addFileToZip($zip, $outPath); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
+    addFileToZip($zip, $outPath); //调用方法，对要打包的根目录进行操作，并将ZipArchive的对象传递给方法
     //    $zip->close(); //关闭处理的zip文件
     //}
 
     return updateProgram(getConfig('HW_urn'), getConfig('HW_key'), getConfig('HW_secret'), $source);
 }
 
-function addFileToZip($zip, $rootpath, $path = '')
-{
-    if (substr($rootpath,-1)=='/') $rootpath = substr($rootpath, 0, -1);
-    if (substr($path,0,1)=='/') $path = substr($path, 1);
-    $handler=opendir(path_format($rootpath.'/'.$path)); //打开当前文件夹由$path指定。
-    while($filename=readdir($handler)){
-        if($filename != "." && $filename != ".."){//文件夹文件名字为'.'和‘..’，不要对他们进行操作
-            $nowname = path_format($rootpath.'/'.$path."/".$filename);
-            if(is_dir($nowname)){// 如果读取的某个对象是文件夹，则递归
-                $zip->addEmptyDir($path."/".$filename);
-                addFileToZip($zip, $rootpath, $path."/".$filename);
-            }else{ //将文件加入zip对象
-                $newname = $path."/".$filename;
-                if (substr($newname,0,1)=='/') $newname = substr($newname, 1);
+function addFileToZip($zip, $rootpath, $path = '') {
+    if (substr($rootpath, -1) == '/') $rootpath = substr($rootpath, 0, -1);
+    if (substr($path, 0, 1) == '/') $path = substr($path, 1);
+    $handler = opendir(path_format($rootpath . '/' . $path)); //打开当前文件夹由$path指定。
+    while ($filename = readdir($handler)) {
+        if ($filename != "." && $filename != "..") { //文件夹文件名字为'.'和‘..’，不要对他们进行操作
+            $nowname = path_format($rootpath . '/' . $path . "/" . $filename);
+            if (is_dir($nowname)) { // 如果读取的某个对象是文件夹，则递归
+                $zip->addEmptyDir($path . "/" . $filename);
+                addFileToZip($zip, $rootpath, $path . "/" . $filename);
+            } else { //将文件加入zip对象
+                $newname = $path . "/" . $filename;
+                if (substr($newname, 0, 1) == '/') $newname = substr($newname, 1);
                 $zip->addFile($nowname, $newname);
                 //$zip->renameName($nowname, $newname);
             }
@@ -486,15 +479,16 @@ function WaitFunction() {
 }
 
 function changeAuthKey() {
-    if ($_POST['HW_key']!=''&&$_POST['HW_secret']!='') {
+    if ($_POST['HW_key'] != '' && $_POST['HW_secret'] != '') {
         $tmp['HW_key'] = $_POST['HW_key'];
         $tmp['HW_secret'] = $_POST['HW_secret'];
-        $response = setConfigResponse( SetbaseConfig($tmp, getConfig('HW_urn'), $tmp['HW_key'], $tmp['HW_secret']) );
+        $response = setConfigResponse(SetbaseConfig($tmp, getConfig('HW_urn'), $tmp['HW_key'], $tmp['HW_secret']));
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
             return message($html, $title, 400);
         } else {
+            $title = "Success";
             $html = getconstStr('Success') . '
     <script>
         var status = "' . $response['DplStatus'] . '";

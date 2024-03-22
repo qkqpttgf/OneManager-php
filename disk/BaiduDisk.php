@@ -1,10 +1,20 @@
 <?php
-    // https://pan.baidu.com/union/doc/Vl19c4jnx
-    // http://developer.baidu.com/wiki/index.php?title=docs/oauth/redirect
+// https://pan.baidu.com/union/doc/Vl19c4jnx
+// http://developer.baidu.com/wiki/index.php?title=docs/oauth/redirect
 
 class BaiduDisk {
     protected $access_token;
     protected $disktag;
+    protected $redirect_uri;
+    protected $appName;
+    protected $client_id;
+    protected $client_secret;
+    protected $oauth_url;
+    protected $api_url;
+    protected $scope;
+    protected $DownurlStrName;
+    protected $ext_api_url;
+    public $error;
 
     function __construct($tag) {
         $this->disktag = $tag;
@@ -28,28 +38,24 @@ class BaiduDisk {
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
 
-    public function isfine()
-    {
+    public function isfine() {
         if (!$this->access_token) return false;
         else return true;
     }
-    public function show_base_class()
-    {
+    public function show_base_class() {
         return get_class();
         //$tmp[0] = get_class();
         //$tmp[1] = get_class($this);
         //return $tmp;
     }
 
-    public function ext_show_innerenv()
-    {
+    public function ext_show_innerenv() {
         return [];
     }
 
-    public function list_files($path = '/')
-    {
+    public function list_files($path = '/') {
         global $exts;
-        if ($path=='') $path = '/';
+        if ($path == '') $path = '/';
         //echo 'path: ' . $path . "<br>\n";
         if (!($files = getcache('path_' . $path, $this->disktag))) {
             /*$pos = splitlast($path, '/');
@@ -88,34 +94,35 @@ class BaiduDisk {
             }*/
 
             $url = $this->api_url . $this->ext_api_url;
-            
+
             //$url .= 'file?method=list&access_token=' . $this->access_token . '&dir=' . $path;
             $url .= 'multimedia?method=listall&access_token=' . $this->access_token . '&path=' . $path . '&web=1';
             $p = 0;
-            while ($p<3 && !$arr['stat']) {
+            $arr['stat'] = 0;
+            while ($p < 3 && !$arr['stat']) {
                 $arr = curl('GET', $url);
-                $p ++;
+                $p++;
             }
             //echo $url . '<br>外' . $arr['stat'] . '<pre>' . json_encode(json_decode($arr['body']), JSON_PRETTY_PRINT) . '</pre>';
             //echo $arr['body'];
-            if ($arr['stat']==200) {
+            if ($arr['stat'] == 200) {
                 $files = json_decode($arr['body'], true);
                 //echo '<pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
-                if ($files['errno']==-9) {
+                if ($files['errno'] == -9) {
                     $files['error']['stat'] = 404;
                     $files['error']['code'] = 'Not Found';
-                    $files['error']['message'] = 'NO such file or folder';//errmsg
-                } elseif ($files['errno']==-7) {
+                    $files['error']['message'] = 'NO such file or folder'; //errmsg
+                } elseif ($files['errno'] == -7) {
                     $files['error']['stat'] = 403;
                     $files['error']['code'] = 'Forbidden';
-                    $files['error']['message'] = '';//errmsg
-                } elseif ($files['errno']===0) {
+                    $files['error']['message'] = ''; //errmsg
+                } elseif ($files['errno'] === 0) {
                     //echo '<pre>正常：' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
                     if ($files['list']) { // have item, is folder
-                        if ($files['folder']['childCount']>200) {
+                        if ($files['folder']['childCount'] > 200) {
                             // files num > 200 , then get nextlink
-                            $page = $_POST['pagenum']==''?1:$_POST['pagenum'];
-                            if ($page>1)
+                            $page = $_POST['pagenum'] == '' ? 1 : $_POST['pagenum'];
+                            if ($page > 1)
                             //if (!($files = getcache('path_1' . $path . '_' . $page, $this->disktag)))
                             {
                                 $children = $this->fetch_files_children($path, $page);
@@ -126,9 +133,9 @@ class BaiduDisk {
                                 //savecache('path_' . $path . '_' . $page, $files, $this->disktag);
                             }
                         } else {
-                        // files num < 200 , then cache
+                            // files num < 200 , then cache
                             //if (isset($files['children'])) {
-                                //$files['list'] = children_name($files['list']);
+                            //$files['list'] = children_name($files['list']);
                             //}
                             savecache('path_' . $path, $files, $this->disktag);
                         }
@@ -136,13 +143,13 @@ class BaiduDisk {
                         $url = $this->api_url . $this->ext_api_url;
                         $fs = $this->list_files(splitlast($path, '/')[0])['list'][strtolower(urldecode(splitlast($path, '/')[1]))];
                         //var_dump($fs);
-                        if ($fs['type']=='folder') {
+                        if ($fs['type'] == 'folder') {
                             // is empty folder
                             //savecache('path_' . $path, $fs, $this->disktag);
                             $files = $fs;
                         } else {
                             // is file
-                            $fsid = $fs['id'];//var_dump($fsid);
+                            $fsid = $fs['id']; //var_dump($fsid);
                             //$fsid = $this->list_files(splitlast($path, '/')[0])['list'][splitlast($path, '/')[1]];
                             //echo 'ID: ' . $fsid . "<br>\n";
                             //echo 'path: ' . $path;
@@ -151,27 +158,27 @@ class BaiduDisk {
                             $url .= 'multimedia?method=filemetas&dlink=1&access_token=' . $this->access_token . '&fsids=[' . $fsid . ']';
                             $p = 0;
                             $arr = null;
-                            while ($p<3 && !$arr['stat']) {
+                            while ($p < 3 && !$arr['stat']) {
                                 $arr = curl('GET', $url);
-                                $p ++;
+                                $p++;
                             }
                             //echo $url . '<br>是文件' . $arr['stat'] . '<pre>' . json_encode(json_decode($arr['body']), 448) . '</pre>';
-                            if ($arr['stat']==200) {
+                            if ($arr['stat'] == 200) {
                                 $files = json_decode($arr['body'], true)['list'][0];
-                                $files['url'] = curl('GET', $files[$this->DownurlStrName] . '&access_token=' . $this->access_token, '', ['User-Agent'=>'pan.baidu.com'], 1)['returnhead']['Location'];
+                                $files['url'] = curl('GET', $files[$this->DownurlStrName] . '&access_token=' . $this->access_token, '', ['User-Agent' => 'pan.baidu.com'], 1)['returnhead']['Location'];
                                 $files['list'] = '';
                                 if (isset($fs['thumbs'])) $files['thumbs'] = $fs['thumbs'];
                                 //echo strtolower(splitlast($files['filename'],'.')[1]) . '进';
-                                if (in_array(strtolower(splitlast($files['filename'],'.')[1]), $exts['txt'])) {
-                                    if ($files['size']<1024*1024) {
+                                if (in_array(strtolower(splitlast($files['filename'], '.')[1]), $exts['txt'])) {
+                                    if ($files['size'] < 1024 * 1024) {
                                         //echo '进1';
-                                        if (!(isset($files['content'])&&$files['content']['stat']==200)) {
+                                        if (!(isset($files['content']) && $files['content']['stat'] == 200)) {
                                             $content1 = curl('GET', $files['url']);
                                             $tmp = null;
                                             $tmp = json_decode(json_encode($content1), true);
-                                            if ($tmp['body']===null) {
+                                            if ($tmp['body'] === null) {
                                                 $txtcode = chkTxtCode($content1['body']);
-                                                if ($txtcode!==false) $tmp['body'] = iconv($txtcode, 'UTF-8//TRANSLIT', $content1['body']);
+                                                if ($txtcode !== false) $tmp['body'] = iconv($txtcode, 'UTF-8//TRANSLIT', $content1['body']);
                                                 $tmp = json_decode(json_encode($tmp), true);
                                                 if ($tmp['body']) $content1['body'] = $tmp['body'];
                                             }
@@ -183,7 +190,7 @@ class BaiduDisk {
                                     }
                                 }
                                 if ($files['url']) savecache('path_' . $path, $files, $this->disktag);
-                            } elseif ($arr['stat']==0) {
+                            } elseif ($arr['stat'] == 0) {
                                 $files['error']['stat'] = 0;
                                 $files['error']['code'] = 'Network error';
                                 $files['error']['message'] = 'Can not connect to ' . substr($url, 0, strpos($url, '?'));
@@ -195,17 +202,17 @@ class BaiduDisk {
                     $files['error']['code'] = 'Other error';
                     $files['error']['message'] = $arr . "~<br>\n" . json_encode($arr) . "~";
                 }
-            } elseif ($arr['stat']==0) {
+            } elseif ($arr['stat'] == 0) {
                 $files['error']['stat'] = 0;
                 $files['error']['code'] = 'Network error';
                 $files['error']['message'] = 'Can not connect to ' . substr($url, 0, strpos($url, '?'));
             } else {
                 //error_log1($arr['body']);
                 $files = json_decode($arr['body'], true);
-                if ($files['errno']==31066) {
+                if ($files['errno'] == 31066) {
                     $files['error']['stat'] = 404;
                     $files['error']['code'] = 'Not Found';
-                    $files['error']['message'] = 'NO such file or folder';//errmsg
+                    $files['error']['message'] = 'NO such file or folder'; //errmsg
                 } else {
                     $files['error']['stat'] = 503;
                     $files['error']['code'] = 'unknown Error';
@@ -219,8 +226,7 @@ class BaiduDisk {
         return $this->files_format($files);
     }
 
-    protected function files_format($files)
-    {
+    protected function files_format($files) {
         if (isset($files['list'])) {
             if ($files['list']) {
                 $tmp['type'] = 'folder';
@@ -254,7 +260,7 @@ class BaiduDisk {
                 $tmp['time'] = date('Y-m-d H:i:s', $files['server_mtime']);
                 $tmp['size'] = $files['size'];
                 $tmp['mime'] = $files['file']['mimeType'];
-                $tmp['url'] = $files['url'];//$files[$this->DownurlStrName];
+                $tmp['url'] = $files['url']; //$files[$this->DownurlStrName];
                 if (isset($files['content'])) $tmp['content'] = $files['content'];
                 if (isset($files['thumbs'])) $tmp['thumbs'] = $files['thumbs'];
             }
@@ -273,10 +279,10 @@ class BaiduDisk {
             $url = $this->api_url . $this->ext_api_url;
             if ($path !== '/') {
                 $url .= ':' . $path;
-                if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                if (substr($url, -1) == '/') $url = substr($url, 0, -1);
                 $url .= ':';
             }
-            $url .= '/children?$top=' . ($page-1)*200 . '&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName;
+            $url .= '/children?$top=' . ($page - 1) * 200 . '&$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName;
             $children_tmp = json_decode($this->MSAPI('GET', $url)['body'], true);
             //echo $url . '<br><pre>' . json_encode($children_tmp, JSON_PRETTY_PRINT) . '</pre>';
             $p = 1;
@@ -285,7 +291,7 @@ class BaiduDisk {
                 $i++;
                 $value_name = 'child_' . $p;
                 ${$value_name}['value'][] = $child;
-                if ($i==200) {
+                if ($i == 200) {
                     savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
                     unset(${$value_name});
                     $i = 0;
@@ -302,19 +308,19 @@ class BaiduDisk {
                 $i++;
                 $value_name = 'child_' . $p;
                 ${$value_name}['value'][] = $child;
-                if ($i==200) {
+                if ($i == 200) {
                     savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
                     //unset(${$value_name});
                     $i = 0;
                     $p++;
                 }
             }
-            if ($i!=0) savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
+            if ($i != 0) savecache('files_' . $path . '_page_' . $p, ${$value_name}, $this->disktag);
             $value_name = 'child_' . $page;
             return ${$value_name};
         }
         return $children;
-        
+
         /*if ($getNextlink) {
             if (isset($children['@odata.nextLink'])) {
                 return $children;
@@ -327,43 +333,42 @@ class BaiduDisk {
             }
         }*/
     }
-    protected function fetch_files_children1($files, $path, $page)
-    {
-        $maxpage = ceil($files['folder']['childCount']/200);
+    protected function fetch_files_children1($files, $path, $page) {
+        $maxpage = ceil($files['folder']['childCount'] / 200);
         if (!($children = getcache('files_' . $path . '_page_' . $page, $this->disktag))) {
-            $pageinfochange=0;
-            for ($page1=$page;$page1>=1;$page1--) {
-                $page3=$page1-1;
+            $pageinfochange = 0;
+            for ($page1 = $page; $page1 >= 1; $page1--) {
+                $page3 = $page1 - 1;
                 $url = getcache('nextlink_' . $path . '_page_' . $page3, $this->disktag);
                 if ($url == '') {
-                    if ($page1==1) {
+                    if ($page1 == 1) {
                         $url = $this->api_url . $this->ext_api_url;
                         if ($path !== '/') {
                             $url .= ':' . $path;
-                            if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                            if (substr($url, -1) == '/') $url = substr($url, 0, -1);
                             $url .= ':';
                         }
-                        $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,'.$this->DownurlStrName;
+                        $url .= '/children?$select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName;
                         $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                         // echo $url . '<br><pre>' . json_encode($children, JSON_PRETTY_PRINT) . '</pre>';
                         savecache('files_' . $path . '_page_' . $page1, $children, $this->disktag);
-                        $nextlink=getcache('nextlink_' . $path . '_page_' . $page1, $this->disktag);
-                        if ($nextlink!=$children['@odata.nextLink']) {
+                        $nextlink = getcache('nextlink_' . $path . '_page_' . $page1, $this->disktag);
+                        if ($nextlink != $children['@odata.nextLink']) {
                             savecache('nextlink_' . $path . '_page_' . $page1, $children['@odata.nextLink'], $this->disktag);
                             $pageinfocache['nextlink_' . $path . '_page_' . $page1] = $children['@odata.nextLink'];
-                            $pageinfocache = clearbehindvalue($path,$page1,$maxpage,$pageinfocache);
+                            $pageinfocache = clearbehindvalue($path, $page1, $maxpage, $pageinfocache);
                             $pageinfochange = 1;
                         }
                         $url = $children['@odata.nextLink'];
-                        for ($page2=$page1+1;$page2<=$page;$page2++) {
+                        for ($page2 = $page1 + 1; $page2 <= $page; $page2++) {
                             sleep(1);
                             $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                             savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag);
-                            $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
-                            if ($nextlink!=$children['@odata.nextLink']) {
+                            $nextlink = getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
+                            if ($nextlink != $children['@odata.nextLink']) {
                                 savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], $this->disktag);
                                 $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
-                                $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
+                                $pageinfocache = clearbehindvalue($path, $page2, $maxpage, $pageinfocache);
                                 $pageinfochange = 1;
                             }
                             $url = $children['@odata.nextLink'];
@@ -381,15 +386,15 @@ class BaiduDisk {
                         return $files;*/
                     }
                 } else {
-                    for ($page2=$page3+1;$page2<=$page;$page2++) {
+                    for ($page2 = $page3 + 1; $page2 <= $page; $page2++) {
                         sleep(1);
                         $children = json_decode($this->MSAPI('GET', $url)['body'], true);
                         savecache('files_' . $path . '_page_' . $page2, $children, $this->disktag, 3300);
-                        $nextlink=getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
-                        if ($nextlink!=$children['@odata.nextLink']) {
+                        $nextlink = getcache('nextlink_' . $path . '_page_' . $page2, $this->disktag);
+                        if ($nextlink != $children['@odata.nextLink']) {
                             savecache('nextlink_' . $path . '_page_' . $page2, $children['@odata.nextLink'], $this->disktag, 3300);
                             $pageinfocache['nextlink_' . $path . '_page_' . $page2] = $children['@odata.nextLink'];
-                            $pageinfocache = clearbehindvalue($path,$page2,$maxpage,$pageinfocache);
+                            $pageinfocache = clearbehindvalue($path, $page2, $maxpage, $pageinfocache);
                             $pageinfochange = 1;
                         }
                         $url = $children['@odata.nextLink'];
@@ -429,7 +434,7 @@ class BaiduDisk {
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=rename';
         $result = curl('POST', $url, $data);
-        if (json_decode($result['body'], true)['errno']===0) return output('{"name":"' . $newname . '"}', 200);
+        if (json_decode($result['body'], true)['errno'] === 0) return output('{"name":"' . $newname . '"}', 200);
         else return output($result['body'], $result['stat']);
         //return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
     }
@@ -441,13 +446,13 @@ class BaiduDisk {
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=delete';
         $result = curl('POST', $url, $data);
-        if (json_decode($result['body'], true)['errno']===0) return output('', 204);
+        if (json_decode($result['body'], true)['errno'] === 0) return output('', 204);
         else return output($result['body'], $result['stat']);
     }
     public function Encrypt($folder, $passfilename, $pass) {
         $result = $this->Create($folder, 'file', $passfilename, $pass);
         $path1 = $folder['path'];
-        if ($path1!='/'&&substr($path1, -1)=='/') $path1 = substr($path1, 0, -1);
+        if ($path1 != '/' && substr($path1, -1) == '/') $path1 = substr($path1, 0, -1);
         savecache('path_' . $path1 . '/?password', '', $this->disktag, 1);
         return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         //return output($result['body'], $result['stat']);
@@ -463,9 +468,9 @@ class BaiduDisk {
         $result = curl('POST', $url, $data);
         if (!$result['stat']) $result['stat'] = 501;
         $path2 = spurlencode($folder['path'], '/');
-        if ($path2!='/'&&substr($path2, -1)=='/') $path2 = substr($path2, 0, -1);
+        if ($path2 != '/' && substr($path2, -1) == '/') $path2 = substr($path2, 0, -1);
         savecache('path_' . $path2, json_decode('{}', true), $this->disktag, 1);
-        if (json_decode($result['body'], true)['errno']===0) return ['stat'=>200, 'body'=>'{"errno":0,"name":"' . $file['name'] . '"}'];
+        if (json_decode($result['body'], true)['errno'] === 0) return ['stat' => 200, 'body' => '{"errno":0,"name":"' . $file['name'] . '"}'];
         else return output($result['body'], $result['stat']);
         //return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         return output($result['body'], $result['stat']);
@@ -477,7 +482,9 @@ class BaiduDisk {
         $data .= '&filelist=[{"path":"' . $filename . '","dest":"' . $file['path'] . '","newname":"' . $file['name'] . '","ondup":"newcopy"}]';
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=copy';
-        while ($p<3 && !$result['stat']) {
+        $p = 0;
+        $result['stat'] = 0;
+        while ($p < 3 && !$result['stat']) {
             $result = curl('POST', $url, $data);
             $p++;
         }
@@ -506,7 +513,7 @@ class BaiduDisk {
             $data = '{ "name": "' . $newname . '" }';
             $result = $this->MSAPI('copy', $filename, $data);
         }*/
-        if (json_decode($result['body'], true)['errno']===0) return output('{"name":"' . $file['name'] . '"}', 200);
+        if (json_decode($result['body'], true)['errno'] === 0) return output('{"name":"' . $file['name'] . '"}', 200);
         else return output($result['body'], $result['stat']);
         //return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         //return output($url . "\n" . $data . "\n" . $result['body'], $result['stat']);
@@ -520,42 +527,42 @@ class BaiduDisk {
         $result = $this->MSAPI('PUT', $file['path'], $content);
         //return output($result['body'], $result['stat']);
         //echo $result;
-        $resultarry = json_decode($result['body'],true);
-        if (isset($resultarry['error'])) return message($resultarry['error']['message']. '<hr><a href="javascript:history.back(-1)">'.getconstStr('Back').'</a>','Error', 403);
+        $resultarry = json_decode($result['body'], true);
+        if (isset($resultarry['error'])) return message($resultarry['error']['message'] . '<hr><a href="javascript:history.back(-1)">' . getconstStr('Back') . '</a>', 'Error', 403);
         else return output('success', 0);
     }
     public function Create($parent, $type, $name, $content = '') {
-        if ($type=='file') {
+        if ($type == 'file') {
             $file['path'] = $parent['path'];
             $file['name'] = $name;
             $file['size'] = strlen($content);
             $file['md5s'] = '["' . md5($content) . '"]';
             $result = $this->preCreate($file);
             //echo 'preCreate<pre>' . json_encode($result, 448) . '</pre>';
-            if ($result['stat']==200 && json_decode($result['body'],true)['errno']==0) {
+            if ($result['stat'] == 200 && json_decode($result['body'], true)['errno'] == 0) {
                 $res = json_decode($result['body'], true);
-                if ($res['return_type']==2) {
+                if ($res['return_type'] == 2) {
                     //已有，秒传？
                     error_log1('Rapid_upload');
                     $a = 1;
                 } else {
                     $result = $this->partUpload($res['path'], $res['uploadid'], 0, $content);
-                    if ($result['stat']==200 && json_decode($result['body'],true)['md5']) {
+                    if ($result['stat'] == 200 && json_decode($result['body'], true)['md5']) {
                         $md5 = json_decode($result['body'], true)['md5'];
                         $info['path'] = $res['path'];
                         $info['size'] = $file['size'];
                         $info['md5s'] = '["' . $md5 . '"]';
                         $info['uploadid'] = $res['uploadid'];
                         $result = $this->completeUpload($info);
-                        if ($result['stat']==200 && json_decode($result['body'],true)['errno']==0) {
+                        if ($result['stat'] == 200 && json_decode($result['body'], true)['errno'] == 0) {
                             $res = json_decode($result['body'], true);
-                            if (substr($res['path'], 0, strlen($res['path'])-strlen($res['server_filename']))!=$parent['path']) {
-                                $result = $this->Move(['name'=>$res['server_filename'],'path'=>spurlencode(substr($res['path'], 0, strlen($res['path'])-strlen($res['server_filename'])), '/')], ['path'=>$parent['path']], 'overwrite');
+                            if (substr($res['path'], 0, strlen($res['path']) - strlen($res['server_filename'])) != $parent['path']) {
+                                $result = $this->Move(['name' => $res['server_filename'], 'path' => spurlencode(substr($res['path'], 0, strlen($res['path']) - strlen($res['server_filename'])), '/')], ['path' => $parent['path']], 'overwrite');
                                 $res = json_decode($result['body'], true);
-                                if ($res['errno']===0) {
-                                    $name1 = splitfirst(splitfirst($parent['path'],'/')[1],'/')[0];
+                                if ($res['errno'] === 0) {
+                                    $name1 = splitfirst(splitfirst($parent['path'], '/')[1], '/')[0];
                                     //echo 'deleting ' . $name1;
-                                    $this->Delete(['name'=>$name1, 'path'=>'/apps/' . $this->appName . '/']);
+                                    $this->Delete(['name' => $name1, 'path' => '/apps/' . $this->appName . '/']);
                                 } else {
                                     $res = json_decode($result['body'], true);
                                     $res['OMmsg'] = 'err in Move.';
@@ -580,13 +587,13 @@ class BaiduDisk {
                 $result['body'] = json_encode($res);
             }
         }
-        if ($type=='folder') {
+        if ($type == 'folder') {
             $file['path'] = urldecode($parent['path']) . '/' . $name;
             $file['size'] = strlen($content);
             //$file['md5s'] = '["' . md5($content) . '"]';
             $result = $this->completeUpload($file, 1);
         }
-        if ($result['stat']===0) $result['stat'] = 501;
+        if ($result['stat'] === 0) $result['stat'] = 501;
         //savecache('path_' . $path1, json_decode('{}',true), $_SERVER['disktag'], 1);
         //return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
         return output($result['body'], $result['stat']);
@@ -595,7 +602,7 @@ class BaiduDisk {
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=precreate&access_token=' . $this->access_token;
         //error_log1('url: ' . $url);
-        if (substr($file['path'],0,17)==='/apps/' . $this->appName . '/') $path = $file['path'];
+        if (substr($file['path'], 0, 17) === '/apps/' . $this->appName . '/') $path = $file['path'];
         else $path = '/apps/' . $this->appName . '/' . $file['path'];
         $data['path'] = path_format($path . '/' . urlencode($file['name']));
         $data['size'] = $file['size'];
@@ -603,10 +610,13 @@ class BaiduDisk {
         $data['block_list'] = $file['md5s'];
         $data['autoinit'] = 1;
         $data['rtype'] = 3; // 0: fail, 1: rename, 2: rename when not same, 3: overlay
+        $formdata = "";
         foreach ($data as $key => $value) $formdata .= '&' . $key . '=' . $value;
         $formdata = substr($formdata, 1);
         error_log1('data: ' . $formdata);
-        while ($p<3 && !$result['stat']) {
+        $p = 0;
+        $result['stat'] = 0;
+        while ($p < 3 && !$result['stat']) {
             $result = curl('POST', $url, $formdata);
             $p++;
         }
@@ -618,8 +628,10 @@ class BaiduDisk {
         $file = sys_get_temp_dir() . '/' . $uploadid . '_' . $partnum;
         file_put_contents($file, $content);
         $data['file'] = '@' . $file;
-        while ($p<3 && !$result['stat']) {
-            $result = curl('POST', $url, $data, ['content-type'=>'multipart/form-data']);
+        $p = 0;
+        $result['stat'] = 0;
+        while ($p < 3 && !$result['stat']) {
+            $result = curl('POST', $url, $data, ['content-type' => 'multipart/form-data']);
             $p++;
         }
         error_log1('res_uping: ' . json_encode($result));
@@ -637,10 +649,13 @@ class BaiduDisk {
         $data['block_list'] = $info['md5s'];
         $data['uploadid'] = $info['uploadid'];
         $data['rtype'] = 3; // 0: fail, 1: rename, 2: rename when not same, 3: overlay
+        $formdata = "";
         foreach ($data as $key => $value) $formdata .= '&' . $key . '=' . $value;
         $formdata = substr($formdata, 1);
         error_log1('data: ' . $formdata);
-        while ($p<3 && !$result['stat']) {
+        $p = 0;
+        $result['stat'] = 0;
+        while ($p < 3 && !$result['stat']) {
             $result = curl('POST', $url, $formdata);
             $p++;
         }
@@ -671,7 +686,7 @@ class BaiduDisk {
 
             $tmp = null;
             $tmp['Driver'] = get_class($this);
-            if ($_POST['DriveType']=='Onedrive') {
+            if ($_POST['DriveType'] == 'Onedrive') {
                 /*$api = $this->api_url . '/me';
                 $arr = curl('GET', $api, '', [ 'Authorization' => 'Bearer ' . $this->access_token ], 1);
                 if ($arr['stat']==200) {
@@ -686,11 +701,11 @@ class BaiduDisk {
                 } else {
                     return message($arr['stat'] . $arr['body'], 'Get User ID', $arr['stat']);
                 }*/
-                if ($tmp['Driver']=='Sharepoint') $tmp['Driver'] = 'Onedrive';
-                elseif ($tmp['Driver']=='SharepointCN') $tmp['Driver'] = 'OnedriveCN';
+                if ($tmp['Driver'] == 'Sharepoint') $tmp['Driver'] = 'Onedrive';
+                elseif ($tmp['Driver'] == 'SharepointCN') $tmp['Driver'] = 'OnedriveCN';
                 $tmp['sharepointSite'] = '';
                 $tmp['siteid'] = '';
-            } elseif ($_POST['DriveType']=='Custom') {
+            }/* elseif ($_POST['DriveType'] == 'Custom') {
                 // sitename计算siteid
                 $tmp1 = $this->get_siteid($_POST['sharepointSite']);
                 if (isset($tmp1['stat'])) return message($arr['stat'] . $tmp1['body'], 'Get Sharepoint Site ID ' . $_POST['sharepointSite'], $tmp1['stat']);
@@ -700,17 +715,17 @@ class BaiduDisk {
                 //if ($arr['stat']!=200) return message($arr['stat'] . $arr['body'], 'Get Sharepoint Drive ID ' . $_POST['DriveType'], $arr['stat']);
                 $tmp['siteid'] = $siteid;
                 $tmp['sharepointSite'] = $_POST['sharepointSite'];
-                if ($tmp['Driver']=='Onedrive') $tmp['Driver'] = 'Sharepoint';
-                elseif ($tmp['Driver']=='OnedriveCN') $tmp['Driver'] = 'SharepointCN';
+                if ($tmp['Driver'] == 'Onedrive') $tmp['Driver'] = 'Sharepoint';
+                elseif ($tmp['Driver'] == 'OnedriveCN') $tmp['Driver'] = 'SharepointCN';
             } else {
                 // 直接是siteid
                 $tmp['siteid'] = $_POST['DriveType'];
                 $tmp['sharepointSite'] = $_POST['sharepointSiteUrl'];
-                if ($tmp['Driver']=='Onedrive') $tmp['Driver'] = 'Sharepoint';
-                elseif ($tmp['Driver']=='OnedriveCN') $tmp['Driver'] = 'SharepointCN';
+                if ($tmp['Driver'] == 'Onedrive') $tmp['Driver'] = 'Sharepoint';
+                elseif ($tmp['Driver'] == 'OnedriveCN') $tmp['Driver'] = 'SharepointCN';
             }
 
-            $response = setConfigResponse( setConfig($tmp, $this->disktag) );
+            $response = setConfigResponse(setConfig($tmp, $this->disktag));
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -733,7 +748,7 @@ class BaiduDisk {
                 }, 1000);
                 </script>';
                 return message($html, getconstStr('Wait'), 201, 1);
-            }
+            }*/
         }
 
         if (isset($_GET['SelectDrive'])) {
@@ -754,18 +769,19 @@ class BaiduDisk {
             $html .= '名 ' . $response['netdisk_name'] . "<br>\n";
             $html .= $response['errno'] . "<br>\n";
             $html .= $response['errmsg'] . "<br>\n";
-            
+
             $html .= '空间 ' . $this->getDiskSpace() . "<br>\n";
 
-            $html .= '程序还在测试，上面信息显示正常就请直接去首页。';
+            $html .= '程序还在测试，上面信息显示正常就可以直接去首页了，还没写好下一步。';
+            $title = "测试";
             return message($html, $title, 201);
-
+            /*
             $title = 'Select Driver';
             $html = '
 <div>
     <form name="form1" action="?Finish&disktag=' . $_GET['disktag'] . '&AddDisk=' . get_class($this) . '" method="post" onsubmit="return notnull(this);">
         <label><input type="radio" name="DriveType" value="Onedrive">' . 'Use Onedrive ' . getconstStr(' ') . '</label><br>';
-            if ($sites[0]!='') foreach ($sites as $k => $v) {
+            if ($sites[0] != '') foreach ($sites as $k => $v) {
                 $html .= '
         <label>
             <input type="radio" name="DriveType" value="' . $v['id'] . '" onclick="document.getElementById(\'sharepointSiteUrl\').value=\'' . $v['webUrl'] . '\';">' . 'Use Sharepoint: <br><div style="width:100%;margin:0px 35px">webUrl: ' . $v['webUrl'] . '<br>siteid: ' . $v['id'] . '</div>
@@ -822,12 +838,12 @@ class BaiduDisk {
     }
 </script>
 ';
-            return message($html, $title, 201);
+            return message($html, $title, 201);*/
         }
 
         if (isset($_GET['install2']) && isset($_GET['code'])) {
-            $tmp = curl('GET', $this->oauth_url . 'token?grant_type=authorization_code&code=' . $_GET['code'] . '&client_id=' . $this->client_id .'&client_secret=' . $this->client_secret . '&redirect_uri=' . $this->redirect_uri );
-            if ($tmp['stat']==200) $ret = json_decode($tmp['body'], true);
+            $tmp = curl('GET', $this->oauth_url . 'token?grant_type=authorization_code&code=' . $_GET['code'] . '&client_id=' . $this->client_id . '&client_secret=' . $this->client_secret . '&redirect_uri=' . $this->redirect_uri);
+            if ($tmp['stat'] == 200) $ret = json_decode($tmp['body'], true);
             if (isset($ret['refresh_token'])) {
                 $refresh_token = $ret['refresh_token'];
                 $str = '
@@ -843,15 +859,15 @@ class BaiduDisk {
         </script>';
                 $tmptoken['Driver'] = $_GET['AddDisk'];
                 $tmptoken['refresh_token'] = $refresh_token;
-                $tmptoken['token_expires'] = time()+7*24*60*60;
-                $response = setConfigResponse( setConfig($tmptoken, $this->disktag) );
+                $tmptoken['token_expires'] = time() + 7 * 24 * 60 * 60;
+                $response = setConfigResponse(setConfig($tmptoken, $this->disktag));
                 if (api_error($response)) {
                     $html = api_error_msg($response);
                     $title = 'Error';
                     return message($html, $title, 201);
                 } else {
                     savecache('access_token', $ret['access_token'], $this->disktag, $ret['expires_in'] - 60);
-                    $html .= '<script>
+                    $html = '<script>
                     var i = 0;
                     var status = "' . $response['DplStatus'] . '";
                 var uploadList = setInterval(function(){
@@ -872,7 +888,7 @@ class BaiduDisk {
 
         if (isset($_GET['install1'])) {
             //if (get_class($this)=='Onedrive' || get_class($this)=='OnedriveCN') {
-                return message('
+            return message('
     <a href="" id="a1">' . getconstStr('JumptoOffice') . '</a>
     <script>
         url=location.protocol + "//" + location.host + "' . $url . '?install2&disktag=' . $_GET['disktag'] . '&AddDisk=' . get_class($this) . '";
@@ -888,14 +904,14 @@ class BaiduDisk {
         }
 
         if (isset($_GET['install0'])) {
-            if ($_POST['disktag_add']!='') {
+            if ($_POST['disktag_add'] != '') {
                 $_POST['disktag_add'] = preg_replace('/[^0-9a-zA-Z|_]/i', '', $_POST['disktag_add']);
                 $f = substr($_POST['disktag_add'], 0, 1);
-                if (strlen($_POST['disktag_add'])==1) $_POST['disktag_add'] .= '_';
+                if (strlen($_POST['disktag_add']) == 1) $_POST['disktag_add'] .= '_';
                 if (isCommonEnv($_POST['disktag_add'])) {
-                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>', 'Error', 400);
-                } elseif (!(('a'<=$f && $f<='z') || ('A'<=$f && $f<='Z'))) {
-                    return message('Please start with letters<br><button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>
+                    return message('Do not input ' . $envs . '<br><button onclick="location.href = location.href;">' . getconstStr('Refresh') . '</button>', 'Error', 400);
+                } elseif (!(('a' <= $f && $f <= 'z') || ('A' <= $f && $f <= 'Z'))) {
+                    return message('Please start with letters<br><button onclick="location.href = location.href;">' . getconstStr('Refresh') . '</button>
                     <script>
                     var expd = new Date();
                     expd.setTime(expd.getTime()+1);
@@ -911,11 +927,11 @@ class BaiduDisk {
                 $tmp['disktag_add'] = $_POST['disktag_add'];
                 $tmp['diskname'] = $_POST['diskname'];
                 $tmp['Driver'] = $_GET['AddDisk'];
-                if ($_POST['custom_client']=='on') {
+                if ($_POST['custom_client'] == 'on') {
                     $tmp['client_id'] = $_POST['client_id'];
                     $tmp['client_secret'] = $_POST['client_secret'];
                 }
-                $response = setConfigResponse( setConfig($tmp, $this->disktag) );
+                $response = setConfigResponse(setConfig($tmp, $this->disktag));
                 if (api_error($response)) {
                     $html = api_error_msg($response);
                     $title = 'Error';
@@ -938,7 +954,6 @@ class BaiduDisk {
                 </script>';
                     return message($html, $title, 201, 1);
                 }
-                
             }
         }
 
@@ -959,8 +974,8 @@ class BaiduDisk {
         </div>
         <br>';
         $html .= '第三方程序只能在"/apps/程序名/"有上传权限，所以最好将public_path设置为"/apps/' . $this->appName . '/"。<br><br>';
-        if ($_SERVER['language']=='zh-cn') $html .= '你要理解 scfonedrive.github.io 是github上的静态网站，<br><font color="red">除非github真的挂掉</font>了，<br>不然，稍后你如果<font color="red">连不上</font>，请检查你的运营商或其它“你懂的”问题！<br>';
-        $html .='
+        if ($_SERVER['language'] == 'zh-cn') $html .= '你要理解 scfonedrive.github.io 是github上的静态网站，<br><font color="red">除非github真的挂掉</font>了，<br>不然，稍后你如果<font color="red">连不上</font>，请检查你的运营商或其它“你懂的”问题！<br>';
+        $html .= '
         <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
 </div>
@@ -1003,17 +1018,18 @@ class BaiduDisk {
             return false;
         }
         if (!($this->access_token = getcache('access_token', $this->disktag))) {
-            $p=0;
-            while ($response['stat']==0&&$p<3) {
-                $response = curl('GET', $this->oauth_url . 'token?grant_type=refresh_token&refresh_token=' . $refresh_token . '&client_id=' . $this->client_id . '&client_secret=' . $this->client_secret );
+            $p = 0;
+            $response['stat'] = 0;
+            while ($response['stat'] == 0 && $p < 3) {
+                $response = curl('GET', $this->oauth_url . 'token?grant_type=refresh_token&refresh_token=' . $refresh_token . '&client_id=' . $this->client_id . '&client_secret=' . $this->client_secret);
                 $p++;
             }
-            if ($response['stat']==200) $ret = json_decode($response['body'], true);
+            if ($response['stat'] == 200) $ret = json_decode($response['body'], true);
             if (!isset($ret['access_token'])) {
                 error_log1($this->oauth_url . 'token' . '?client_id=' . $this->client_id . '&client_secret=' . $this->client_secret . '&grant_type=refresh_token&requested_token_use=on_behalf_of&refresh_token=' . substr($refresh_token, 0, 20) . '******' . substr($refresh_token, -20));
                 error_log1('failed to get [' . $this->disktag . '] access_token. response: ' . $response['body']);
                 $response['body'] = json_encode(json_decode($response['body']), JSON_PRETTY_PRINT);
-                $response['body'] .= '\nfailed to get [' . $this->disktag . '] access_token.';
+                $response['body'] .= "\nfailed to get [" . $this->disktag . "] access_token.";
                 $this->error = $response;
                 return false;
                 //throw new Exception($response['stat'].', failed to get ['.$this->disktag.'] access_token.'.$response['body']);
@@ -1025,33 +1041,31 @@ class BaiduDisk {
             $this->access_token = $ret['access_token'];
             savecache('access_token', $this->access_token, $this->disktag, $ret['expires_in'] - 300);
             //if (time()>getConfig('token_expires', $this->disktag)) 
-            setConfig([ 'refresh_token' => $ret['refresh_token'], 'token_expires' => time()+7*24*60*60 ], $this->disktag);
+            setConfig(['refresh_token' => $ret['refresh_token'], 'token_expires' => time() + 7 * 24 * 60 * 60], $this->disktag);
             return true;
         }
         return true;
     }
 
-    public function del_upload_cache($path)
-    {
-        error_log1('del.tmp:GET,'.json_encode($_GET,JSON_PRETTY_PRINT));
+    public function del_upload_cache($path) {
+        error_log1('del.tmp:GET,' . json_encode($_GET, JSON_PRETTY_PRINT));
         $tmp = splitlast($_GET['filename'], '/');
-        if ($tmp[1]!='') {
+        if ($tmp[1] != '') {
             $filename = $tmp[0] . '/.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $tmp[1] . '.tmp';
         } else {
             $filename = '.' . $_GET['filelastModified'] . '_' . $_GET['filesize'] . '_' . $_GET['filename'] . '.tmp';
         }
-        $filename = path_format( path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($filename, '/') );
+        $filename = path_format(path_format($_SERVER['list_path'] . path_format($path)) . '/' . spurlencode($filename, '/'));
         $tmp = $this->MSAPI('DELETE', $filename, '');
         $path1 = path_format($_SERVER['list_path'] . path_format($path));
-        if ($path1!='/'&&substr($path1,-1)=='/') $path1=substr($path1,0,-1);
-        savecache('path_' . $path1, json_decode('{}',true), $this->disktag, 1);
-        return output($tmp['body'],$tmp['stat']);
+        if ($path1 != '/' && substr($path1, -1) == '/') $path1 = substr($path1, 0, -1);
+        savecache('path_' . $path1, json_decode('{}', true), $this->disktag, 1);
+        return output($tmp['body'], $tmp['stat']);
     }
 
-    public function get_thumbnails_url($path = '/')
-    {
-        $thumb_url = getcache('thumb_'.$path, $this->disktag);
-        if ($thumb_url=='') {
+    public function get_thumbnails_url($path = '/') {
+        $thumb_url = getcache('thumb_' . $path, $this->disktag);
+        if ($thumb_url == '') {
             $files = $this->list_files(splitlast($path, '/')[0])['list'][strtolower(urldecode(splitlast($path, '/')[1]))];
             if (isset($files['thumbs'])) {
                 savecache('thumb_' . $path, $files['thumbs']['url2'], $this->disktag);
@@ -1064,26 +1078,25 @@ class BaiduDisk {
     public function smallfileupload($path, $tmpfile) {
         if (!$_SERVER['admin']) {
             $tmp1 = splitlast($tmpfile['name'], '.');
-            if ($tmp1[0]==''||$tmp1[1]=='') $filename = md5_file($tmpfile['tmp_name']);
+            if ($tmp1[0] == '' || $tmp1[1] == '') $filename = md5_file($tmpfile['tmp_name']);
             else $filename = md5_file($tmpfile['tmp_name']) . '.' . $tmp1[1];
         } else {
             $filename = $tmpfile['name'];
         }
         $content = file_get_contents($tmpfile['tmp_name']);
-        $result = $this->Create(['path'=>path_format($_SERVER['list_path'] . '/' . $path . '/')], 'file', $filename, $content);
+        $result = $this->Create(['path' => path_format($_SERVER['list_path'] . '/' . $path . '/')], 'file', $filename, $content);
         //echo 'Small<pre>' . json_encode($result, 448) . '</pre>';
         $res = json_decode($result['body'], true);
-        if (isset($res['errno'])&&$res['errno']===0) $res['url'] = $_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . $filename);
+        if (isset($res['errno']) && $res['errno'] === 0) $res['url'] = $_SERVER['host'] . path_format($_SERVER['base_disk_path'] . '/' . $path . '/' . $filename);
         return output(json_encode($res, JSON_UNESCAPED_SLASHES), $result['stat']);
     }
-    public function bigfileupload($path)
-    {
-        if ($_POST['upbigfilename']=='') return output('error: no file name', 400);
+    public function bigfileupload($path) {
+        if ($_POST['upbigfilename'] == '') return output('error: no file name', 400);
         if (!is_numeric($_POST['filesize'])) return output('error: no file size', 400);
         if (!$_SERVER['admin']) if (!isset($_POST['filemd5'])) return output('error: no file md5', 400);
 
         $tmp = splitlast($_POST['upbigfilename'], '/');
-        if ($tmp[1]!='') {
+        if ($tmp[1] != '') {
             $fileinfo['name'] = $tmp[1];
             if ($_SERVER['admin']) $fileinfo['path'] = $tmp[0];
         } else {
@@ -1095,36 +1108,37 @@ class BaiduDisk {
             $filename = spurlencode($_POST['upbigfilename'], '/');
         } else {
             $tmp1 = splitlast($fileinfo['name'], '.');
-            if ($tmp1[0]==''||$tmp1[1]=='') $filename = $_POST['filemd5'];
+            if ($tmp1[0] == '' || $tmp1[1] == '') $filename = $_POST['filemd5'];
             else $filename = $_POST['filemd5'] . '.' . $tmp1[1];
         }
-        if ($fileinfo['size']>10*1024*1024) {
-            $cachefilename = spurlencode( $fileinfo['path'] . '/.' . $fileinfo['filelastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
+        if ($fileinfo['size'] > 10 * 1024 * 1024) {
+            $cachefilename = spurlencode($fileinfo['path'] . '/.' . $fileinfo['filelastModified'] . '_' . $fileinfo['size'] . '_' . $fileinfo['name'] . '.tmp', '/');
             $getoldupinfo = $this->list_files(path_format($path . '/' . $cachefilename));
             //error_log1(json_encode($getoldupinfo, JSON_PRETTY_PRINT));
-            if (isset($getoldupinfo['url'])&&$getoldupinfo['size']<5120) {
+            if (isset($getoldupinfo['url']) && $getoldupinfo['size'] < 5120) {
                 $getoldupinfo_j = curl('GET', $getoldupinfo['url']);
                 $getoldupinfo = json_decode($getoldupinfo_j['body'], true);
-                if ( json_decode( curl('GET', $getoldupinfo['uploadUrl'])['body'], true)['@odata.context']!='' ) return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
+                if (json_decode(curl('GET', $getoldupinfo['uploadUrl'])['body'], true)['@odata.context'] != '') return output($getoldupinfo_j['body'], $getoldupinfo_j['stat']);
             }
         }
         $response = $this->MSAPI('createUploadSession', path_format($path . '/' . $filename), '{"item": { "@microsoft.graph.conflictBehavior": "fail" }}');
-        if ($response['stat']<500) {
-            $responsearry = json_decode($response['body'],true);
+        if ($response['stat'] < 500) {
+            $responsearry = json_decode($response['body'], true);
             if (isset($responsearry['error'])) return output($response['body'], $response['stat']);
             $fileinfo['uploadUrl'] = $responsearry['uploadUrl'];
-            if ($fileinfo['size']>10*1024*1024) $this->MSAPI('PUT', path_format($path . '/' . $cachefilename), json_encode($fileinfo, JSON_PRETTY_PRINT));
+            if ($fileinfo['size'] > 10 * 1024 * 1024) $this->MSAPI('PUT', path_format($path . '/' . $cachefilename), json_encode($fileinfo, JSON_PRETTY_PRINT));
         }
         return output($response['body'], $response['stat']);
     }
     public function getDiskSpace() {
         if (!($diskSpace = getcache('diskSpace', $this->disktag))) {
             $url = 'https://pan.baidu.com/api/quota?access_token=' . $this->access_token;
-            $p=0;
-            while ($response['stat']==0&&$p<3) {
+            $p = 0;
+            $response['stat'] = 0;
+            while ($response['stat'] == 0 && $p < 3) {
                 $response = curl('GET', $url);
                 $p++;
-            }//return $response['body'];
+            } //return $response['body'];
             $res = json_decode($response['body'], true);
             $used = size_format($res['used']);
             $total = size_format($res['total']);
@@ -1135,9 +1149,9 @@ class BaiduDisk {
         return $diskSpace;
     }
     public function ConduitDown($url, $filetime, $fileConduitCacheTime) {
-        $res = curl('GET', $url . '&access_token=' . $this->access_token, '', ['User-Agent'=>'pan.baidu.com'], 0, 1);
+        $res = curl('GET', $url . '&access_token=' . $this->access_token, '', ['User-Agent' => 'pan.baidu.com'], 0, 1);
         //echo $res['returnhead']['Location'];
-        if ($res['stat']==200) {
+        if ($res['stat'] == 200) {
             return output(
                 base64_encode($res['body']),
                 200,
@@ -1145,11 +1159,11 @@ class BaiduDisk {
                     'Accept-Ranges' => 'bytes',
                     //'access-control-allow-origin' => '*',
                     //'access-control-expose-headers' => 'Content-Length, WWW-Authenticate, Location, Accept-Ranges',
-                    'Content-Type' => $files['mime'],
+                    ////    'Content-Type' => $files['mime'],
                     'Cache-Control' => 'max-age=' . $fileConduitCacheTime,
                     //'Cache-Control' => 'max-age=0',
                     'Last-Modified' => gmdate('D, d M Y H:i:s T', strtotime($filetime))
-                ], 
+                ],
                 true
             );
         } else {
@@ -1157,55 +1171,54 @@ class BaiduDisk {
         }
     }
 
-    protected function MSAPI($method, $path, $data = '', $headers = [])
-    {
+    protected function MSAPI($method, $path, $data = '', $headers = []) {
         $activeLimit = getConfig('activeLimit', $this->disktag);
-        if ($activeLimit!='') {
-            if ($activeLimit>time()) {
+        if ($activeLimit != '') {
+            if ($activeLimit > time()) {
                 $tmp['error']['code'] = 'Retry-After';
                 $tmp['error']['message'] = 'MS limit until ' . date('Y-m-d H:i:s', $activeLimit);
-                return [ 'stat' => 429, 'body' => json_encode($tmp) ];
+                return ['stat' => 429, 'body' => json_encode($tmp)];
             } else {
                 setConfig(['activeLimit' => ''], $this->disktag);
             }
         }
-        if (substr($path,0,7) == 'http://' or substr($path,0,8) == 'https://') {
+        if (substr($path, 0, 7) == 'http://' or substr($path, 0, 8) == 'https://') {
             $url = $path;
         } else {
             $url = $this->api_url . $this->ext_api_url;
-            if ($path=='' or $path=='/') {
+            if ($path == '' or $path == '/') {
                 $url .= '/';
-            } elseif (substr($path, 0, 6)=="/items") {
+            } elseif (substr($path, 0, 6) == "/items") {
                 $url = substr($url, 0, -5);
                 $url .= $path;
             } else {
                 $url .= ':' . $path;
-                if (substr($url,-1)=='/') $url=substr($url,0,-1);
+                if (substr($url, -1) == '/') $url = substr($url, 0, -1);
             }
-            if ($method=='GET') {
+            if ($method == 'GET') {
                 $method = 'GET'; // do nothing
-            } elseif ($method=='PUT') {
-                if ($path=='' or $path=='/') {
+            } elseif ($method == 'PUT') {
+                if ($path == '' or $path == '/') {
                     $url .= 'content';
                 } else {
                     $url .= ':/content';
                 }
                 $headers['Content-Type'] = 'text/plain';
-            } elseif ($method=='PATCH') {
+            } elseif ($method == 'PATCH') {
                 $headers['Content-Type'] = 'application/json';
-            } elseif ($method=='POST') {
+            } elseif ($method == 'POST') {
                 $headers['Content-Type'] = 'application/json';
-            } elseif ($method=='DELETE') {
+            } elseif ($method == 'DELETE') {
                 $headers['Content-Type'] = 'application/json';
             } else {
-                if ($path=='' or $path=='/') {
+                if ($path == '' or $path == '/') {
                     $url .= $method;
-                } elseif (substr($path, 0, 6)=="/items") {
+                } elseif (substr($path, 0, 6) == "/items") {
                     $url .= '/' . $method;
                 } else {
                     $url .= ':/' . $method;
                 }
-                $method='POST';
+                $method = 'POST';
                 $headers['Content-Type'] = 'application/json';
             }
         }
@@ -1230,17 +1243,17 @@ class BaiduDisk {
         curl_setopt($ch, CURLOPT_HTTPHEADER, $sendHeaders);
         $retry = 0;
         $response = [];
-        while ($retry<3&&!$response['stat']) {
+        while ($retry < 3 && !$response['stat']) {
             $response['body'] = curl_exec($ch);
             $response['stat'] = curl_getinfo($ch, CURLINFO_HTTP_CODE);
             $retry++;
         }
         //$response['Location'] = curl_getinfo($ch);
-        if ($response['stat']==429) {
+        if ($response['stat'] == 429) {
             $res = json_decode($response['body'], true);
             $retryAfter = $res['error']['retryAfterSeconds'];
             $retryAfter_n = (int)$retryAfter;
-            if ($retryAfter_n>0) {
+            if ($retryAfter_n > 0) {
                 $tmp1['activeLimit'] = $retryAfter_n + time();
                 setConfig($tmp1, $this->disktag);
             }
@@ -1252,5 +1265,4 @@ class BaiduDisk {
     ');*/
         return $response;
     }
-
 }

@@ -1,29 +1,27 @@
 <?php
 
-function getpath()
-{
-    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($_SERVER['HTTP_ACCEPT_LANGUAGE'],';')[0],',')[0]);
+function getpath() {
+    $_SERVER['firstacceptlanguage'] = strtolower(splitfirst(splitfirst($_SERVER['HTTP_ACCEPT_LANGUAGE'], ';')[0], ',')[0]);
     if (isset($_SERVER['HTTP_X_FORWARDED_FOR'])) $_SERVER['REMOTE_ADDR'] = $_SERVER['HTTP_X_FORWARDED_FOR'];
-    if ($_SERVER['REQUEST_SCHEME']!='http'&&$_SERVER['REQUEST_SCHEME']!='https') {
-        if ($_SERVER['HTTP_X_FORWARDED_PROTO']!='') {
+    if ($_SERVER['REQUEST_SCHEME'] != 'http' && $_SERVER['REQUEST_SCHEME'] != 'https') {
+        if ($_SERVER['HTTP_X_FORWARDED_PROTO'] != '') {
             $tmp = explode(',', $_SERVER['HTTP_X_FORWARDED_PROTO'])[0];
-            if ($tmp=='http'||$tmp=='https') $_SERVER['REQUEST_SCHEME'] = $tmp;
+            if ($tmp == 'http' || $tmp == 'https') $_SERVER['REQUEST_SCHEME'] = $tmp;
         }
-        if ($_SERVER['HTTP_FLY_FORWARDED_PROTO']!='') $_SERVER['REQUEST_SCHEME'] = $_SERVER['HTTP_FLY_FORWARDED_PROTO'];
+        if ($_SERVER['HTTP_FLY_FORWARDED_PROTO'] != '') $_SERVER['REQUEST_SCHEME'] = $_SERVER['HTTP_FLY_FORWARDED_PROTO'];
     }
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
     $_SERVER['referhost'] = explode('/', $_SERVER['HTTP_REFERER'])[2];
     $_SERVER['base_path'] = '/';
     if (isset($_SERVER['UNENCODED_URL'])) $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
-    $p = strpos($_SERVER['REQUEST_URI'],'?');
-    if ($p>0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
+    $p = strpos($_SERVER['REQUEST_URI'], '?');
+    if ($p > 0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
-    $path = path_format( substr($path, strlen($_SERVER['base_path'])) );
+    $path = path_format(substr($path, strlen($_SERVER['base_path'])));
     return $path;
 }
 
-function getGET()
-{
+function getGET() {
     if (!$_POST) {
         if (!!$HTTP_RAW_POST_DATA) {
             $tmpdata = $HTTP_RAW_POST_DATA;
@@ -33,25 +31,21 @@ function getGET()
         if (!!$tmpdata) {
             $postbody = explode("&", $tmpdata);
             foreach ($postbody as $postvalues) {
-                $pos = strpos($postvalues,"=");
-                $_POST[urldecode(substr($postvalues,0,$pos))]=urldecode(substr($postvalues,$pos+1));
+                $pos = strpos($postvalues, "=");
+                $_POST[urldecode(substr($postvalues, 0, $pos))] = urldecode(substr($postvalues, $pos + 1));
             }
         }
     }
     if (isset($_SERVER['UNENCODED_URL'])) $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
-    $p = strpos($_SERVER['REQUEST_URI'],'?');
-    if ($p>0) {
-        $getstr = substr($_SERVER['REQUEST_URI'], $p+1);
-        $getstrarr = explode("&",$getstr);
+    $p = strpos($_SERVER['REQUEST_URI'], '?');
+    if ($p > 0) {
+        $getstr = substr($_SERVER['REQUEST_URI'], $p + 1);
+        $getstrarr = explode("&", $getstr);
         foreach ($getstrarr as $getvalues) {
             if ($getvalues != '') {
-                $pos = strpos($getvalues, "=");
-            //echo $pos;
-                if ($pos > 0) {
-                    $getarry[urldecode(substr($getvalues, 0, $pos))] = urldecode(substr($getvalues, $pos + 1));
-                } else {
-                    $getarry[urldecode($getvalues)] = true;
-                }
+                $keyvalue = splitfirst($getvalues, "=");
+                if ($keyvalue[1] != "") $getarry[$keyvalue[0]] = $keyvalue[1];
+                else $getarry[$keyvalue[0]] = true;
             }
         }
     }
@@ -71,21 +65,20 @@ function ReplitAPI($op, $key, $value = '') {
             $config = json_decode(curl('GET', $apiurl . '/REPLIT_CONFIG')['body'], true);
             savecache('REPLIT_CONFIG', $config);
         }
-        return ['stat'=>200, 'body'=>(is_array($config[$key])?json_encode($config[$key]):$config[$key])];
+        return ['stat' => 200, 'body' => (is_array($config[$key]) ? json_encode($config[$key]) : $config[$key])];
     } elseif ($op === 'w') {
-        return curl('POST', $apiurl, 'REPLIT_CONFIG=' . $value, ["Content-Type"=>"application/x-www-form-urlencoded"]);
+        return curl('POST', $apiurl, 'REPLIT_CONFIG=' . $value, ["Content-Type" => "application/x-www-form-urlencoded"]);
     } elseif ($op === 'd') {
         // not use
         return curl('DELETE', $apiurl . '/' . $key);
     } else {
-        return ['stat'=>500, 'body'=>'error option input to function ReplitAPI().'];
+        return ['stat' => 500, 'body' => 'error option input to function ReplitAPI().'];
     }
 }
 
-function getConfig($str, $disktag = '')
-{
+function getConfig($str, $disktag = '') {
     if (isInnerEnv($str)) {
-        if ($disktag=='') $disktag = $_SERVER['disktag'];
+        if ($disktag == '') $disktag = $_SERVER['disktag'];
         $env = json_decode(ReplitAPI('r', $disktag)['body'], true);
         if (isset($env[$str])) {
             if (isBase64Env($str)) return base64y_decode($env[$str]);
@@ -98,13 +91,12 @@ function getConfig($str, $disktag = '')
     return '';
 }
 
-function setConfig($arr, $disktag = '')
-{
+function setConfig($arr, $disktag = '') {
     if (!($envs = getcache('REPLIT_CONFIG'))) {
         $envs = json_decode(curl('GET', getenv('REPLIT_DB_URL') . '/REPLIT_CONFIG')['body'], true);
         savecache('REPLIT_CONFIG', $envs);
     }
-    if ($disktag=='') $disktag = $_SERVER['disktag'];
+    if ($disktag == '') $disktag = $_SERVER['disktag'];
     $disktags = explode("|", getConfig('disktag'));
     $indisk = 0;
     $operatedisk = 0;
@@ -116,20 +108,20 @@ function setConfig($arr, $disktag = '')
             if (isBase64Env($k)) $envs[$disktag][$k] = base64y_encode($v);
             else $envs[$disktag][$k] = $v;
             $indisk = 1;
-        } elseif ($k=='disktag_add') {
+        } elseif ($k == 'disktag_add') {
             array_push($disktags, $v);
             $operatedisk = 1;
-        } elseif ($k=='disktag_del') {
-            $disktags = array_diff($disktags, [ $v ]);
+        } elseif ($k == 'disktag_del') {
+            $disktags = array_diff($disktags, [$v]);
             $envs[$v] = '';
             $operatedisk = 1;
-        } elseif ($k=='disktag_copy') {
+        } elseif ($k == 'disktag_copy') {
             $newtag = $v . '_' . date("Ymd_His");
             $envs[$newtag] = $envs[$v];
             array_push($disktags, $newtag);
             $operatedisk = 1;
-        } elseif ($k=='disktag_rename' || $k=='disktag_newname') {
-            if ($arr['disktag_rename']!=$arr['disktag_newname']) $operatedisk = 1;
+        } elseif ($k == 'disktag_rename' || $k == 'disktag_newname') {
+            if ($arr['disktag_rename'] != $arr['disktag_newname']) $operatedisk = 1;
         } else {
             $envs[$k] = $v;
         }
@@ -141,10 +133,10 @@ function setConfig($arr, $disktag = '')
         $envs[$disktag] = $diskconfig;
     }
     if ($operatedisk) {
-        if (isset($arr['disktag_newname']) && $arr['disktag_newname']!='') {
+        if (isset($arr['disktag_newname']) && $arr['disktag_newname'] != '') {
             $tags = [];
             foreach ($disktags as $tag) {
-                if ($tag==$arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
+                if ($tag == $arr['disktag_rename']) array_push($tags, $arr['disktag_newname']);
                 else array_push($tags, $tag);
             }
             $envs['disktag'] = implode('|', $tags);
@@ -152,8 +144,9 @@ function setConfig($arr, $disktag = '')
             unset($envs[$arr['disktag_rename']]);
         } else {
             $disktags = array_unique($disktags);
-            foreach ($disktags as $disktag) if ($disktag!='') $disktag_s .= $disktag . '|';
-            if ($disktag_s!='') $envs['disktag'] = substr($disktag_s, 0, -1);
+            $disktag_s = "";
+            foreach ($disktags as $disktag) if ($disktag != '') $disktag_s .= $disktag . '|';
+            if ($disktag_s != '') $envs['disktag'] = substr($disktag_s, 0, -1);
             else $envs['disktag'] = '';
         }
     }
@@ -162,19 +155,18 @@ function setConfig($arr, $disktag = '')
     $response = ReplitAPI('w', 'REPLIT_CONFIG', json_encode($envs));
     //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT));
     savecache('REPLIT_CONFIG', null, '', 0);
-    if (api_error($response)) return ['stat'=>$response['stat'], 'body'=>$response['body'] . "<br>\nError in writting " . $key . "=" . $val];
+    if (api_error($response)) return ['stat' => $response['stat'], 'body' => $response['body'] . "<br>\nError in writting " . json_encode($envs)];
     return $response;
 }
 
-function install()
-{
+function install() {
     global $constStr;
     if ($_GET['install2']) {
-        if ($_POST['admin']!='') {
+        if ($_POST['admin'] != '') {
             $tmp['admin'] = $_POST['admin'];
             //$tmp['language'] = $_COOKIE['language'];
             $tmp['timezone'] = $_COOKIE['timezone'];
-            $response = setConfigResponse( setConfig($tmp) );
+            $response = setConfigResponse(setConfig($tmp));
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -202,10 +194,10 @@ function install()
             $title = 'Error';
             return message($html, $title, 201);
         }*/
-        $html .= '
+        $html = '
     <form action="?install2" method="post" onsubmit="return notnull(this);">
         <input name="admin" type="password" placeholder="' . getconstStr('EnvironmentsDescription')['admin'] . '" size="' . strlen(getconstStr('EnvironmentsDescription')['admin']) . '"><br>
-        <input id="submitbtn" type="submit" value="'.getconstStr('Submit').'">
+        <input id="submitbtn" type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         var nowtime= new Date();
@@ -217,7 +209,7 @@ function install()
         function notnull(t)
         {
             if (t.admin.value==\'\') {
-                alert(\''.getconstStr('SetAdminPassword').'\');
+                alert(\'' . getconstStr('SetAdminPassword') . '\');
                 return false;
             }
             return true;
@@ -227,15 +219,15 @@ function install()
         return message($html, $title, 201);
     }
     if ($_GET['install0']) {
-        $html .= '
+        $html = '
     <form action="?install1" method="post">
 language:<br>';
         foreach ($constStr['languages'] as $key1 => $value1) {
             $html .= '
-        <label><input type="radio" name="language" value="'.$key1.'" '.($key1==$constStr['language']?'checked':'').' onclick="changelanguage(\''.$key1.'\')">'.$value1.'</label><br>';
+        <label><input type="radio" name="language" value="' . $key1 . '" ' . ($key1 == $constStr['language'] ? 'checked' : '') . ' onclick="changelanguage(\'' . $key1 . '\')">' . $value1 . '</label><br>';
         }
         $html .= '
-        <input type="submit" value="'.getconstStr('Submit').'">
+        <input type="submit" value="' . getconstStr('Submit') . '">
     </form>
     <script>
         function changelanguage(str)
@@ -256,53 +248,54 @@ language:<br>';
     return message($html, $title, 201);
 }
 
-function ConfigWriteable()
-{
-    $t = md5( md5(time()).rand(1000,9999) );
-    $r = setConfig([ 'tmp' => $t ]);
+function ConfigWriteable() {
+    $t = md5(md5(time()) . rand(1000, 9999));
+    $r = setConfig(['tmp' => $t]);
     $tmp = getConfig('tmp');
-    setConfig([ 'tmp' => '' ]);
+    setConfig(['tmp' => '']);
     if ($tmp == $t) return true;
     if ($r) return true;
     return false;
 }
 
-function api_error($response)
-{
-    return !($response['stat']==200||$response['stat']==204||$response['stat']==404);
+function api_error($response) {
+    return !($response['stat'] == 200 || $response['stat'] == 204 || $response['stat'] == 404);
     //return isset($response['message']);
 }
 
-function api_error_msg($response)
-{
-    return '<pre>'. json_encode($response, JSON_PRETTY_PRINT).'</pre>' . '<br>
-<button onclick="location.href = location.href;">'.getconstStr('Refresh').'</button>';
+function api_error_msg($response) {
+    return '<pre>' . json_encode($response, JSON_PRETTY_PRINT) . '</pre>' . '<br>
+<button onclick="location.href = location.href;">' . getconstStr('Refresh') . '</button>';
 }
 
-function setConfigResponse($response)
-{
+function setConfigResponse($response) {
     return $response;
     //return json_decode($response, true);
 }
 
-function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master')
-{
+function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneManager-php', $branch = 'master') {
     // __DIR__ is xxx/platform
     $projectPath = splitlast(__DIR__, '/')[0];
 
-    if ($GitSource=='Github') {
-        // 从github下载对应tar.gz，并解压
-        $url = 'https://github.com/' . $auth . '/' . $project . '/tarball/' . urlencode($branch) . '/';
-    } elseif ($GitSource=='HITGitlab') {
-        $url = 'https://git.hit.edu.cn/' . $auth . '/' . $project . '/-/archive/' . urlencode($branch) . '/' . $project . '-' . urlencode($branch) . '.tar.gz';
-    } else return ['stat'=>500, 'body'=>'Git Source input Error!'];
-    $tarfile = $projectPath . '/github.tar.gz';
-    $githubfile = file_get_contents($url);
-    if (!$githubfile) return ['stat'=>500, 'body'=>'download error from github.'];
+    if ($GitSource == 'Github') {
+        // 从github下载对应zip，并解压
+        $url = 'https://codeload.github.com/' . $auth . '/' . $project . '/zip/refs/heads/' . urlencode($branch);
+    } elseif ($GitSource == 'Gitee') {
+        $url = 'https://gitee.com/' . $auth . '/' . $project . '/repository/archive/' . urlencode($branch) . '.zip';
+    } else return ['stat' => 500, 'body' => 'Git Source input Error!'];
+    $tarfile = $projectPath . '/github.zip';
+    $context_options = array(
+        'http' => array(
+            'header' => "User-Agent: curl/7.83.1",
+        )
+    );
+    $context = stream_context_create($context_options);
+    $githubfile = file_get_contents($url, false, $context);
+    if (!$githubfile) return ['stat' => 500, 'body' => 'download error from github.'];
     file_put_contents($tarfile, $githubfile);
     if (splitfirst(PHP_VERSION, '.')[0] > '5') {
         $phar = new PharData($tarfile); // need php5.3, 7, 8
-        $phar->extractTo($projectPath, null, true);//路径 要解压的文件 是否覆盖
+        $phar->extractTo($projectPath, null, true); //路径 要解压的文件 是否覆盖
     } else {
         ob_start();
         passthru('tar -xzvf ' . $tarfile, $stat);
@@ -313,31 +306,30 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     $outPath = '';
     $outPath = findIndexPath($projectPath);
     //error_log1($outPath);
-    if ($outPath=='') return ['stat'=>500, 'body'=>'can\'t find folder after download from github.'];
+    if ($outPath == '') return ['stat' => 500, 'body' => 'can\'t find folder after download from github.'];
 
     return moveFolder($outPath, $projectPath);
 }
 
-function moveFolder($from, $to)
-{
-    if (substr($from, -1)=='/') $from = substr($from, 0, -1);
-    if (substr($to, -1)=='/') $to = substr($to, 0, -1);
+function moveFolder($from, $to) {
+    if (substr($from, -1) == '/') $from = substr($from, 0, -1);
+    if (substr($to, -1) == '/') $to = substr($to, 0, -1);
     if (!file_exists($to)) mkdir($to, 0777);
-    $handler=opendir($from);
-    while($filename=readdir($handler)) {
-        if($filename != '.' && $filename != '..'){
+    $handler = opendir($from);
+    while ($filename = readdir($handler)) {
+        if ($filename != '.' && $filename != '..') {
             $fromfile = $from . '/' . $filename;
             $tofile = $to . '/' . $filename;
-            if(is_dir($fromfile)){// 如果读取的某个对象是文件夹，则递归
+            if (is_dir($fromfile)) { // 如果读取的某个对象是文件夹，则递归
                 $response = moveFolder($fromfile, $tofile);
                 if (api_error(setConfigResponse($response))) return $response;
-            }else{
+            } else {
                 if (file_exists($tofile)) unlink($tofile);
                 $response = rename($fromfile, $tofile);
                 if (!$response) {
                     $tmp['code'] = "Move Failed";
                     $tmp['message'] = "Can not move " . $fromfile . " to " . $tofile;
-                    return ['stat'=>500, 'body'=>json_encode($tmp)];
+                    return ['stat' => 500, 'body' => json_encode($tmp)];
                 }
                 if (file_exists($fromfile)) unlink($fromfile);
             }
@@ -345,7 +337,7 @@ function moveFolder($from, $to)
     }
     closedir($handler);
     rmdir($from);
-    return ['stat'=>200, 'body'=>'success.'];
+    return ['stat' => 200, 'body' => 'success.'];
 }
 
 function WaitFunction() {
@@ -358,6 +350,6 @@ function changeAuthKey() {
 
 function smallfileupload($drive, $path) {
     if ($_FILES['file1']['error']) return output($_FILES['file1']['error'], 400);
-    if ($_FILES['file1']['size']>4*1024*1024) return output('File too large', 400);
+    if ($_FILES['file1']['size'] > 4 * 1024 * 1024) return output('File too large', 400);
     return $drive->smallfileupload($path, $_FILES['file1']);
 }
