@@ -433,7 +433,8 @@ class BaiduDisk {
         $data .= '&filelist=[{"path":"' . $oldname . '","newname":"' . $newname . '"}]';
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=rename';
-        $result = curl('POST', $url, $data);
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
+        $result = curl('POST', $url, $data, $head);
         if (json_decode($result['body'], true)['errno'] === 0) return output('{"name":"' . $newname . '"}', 200);
         else return output($result['body'], $result['stat']);
         //return output(json_encode($this->files_format(json_decode($result['body'], true))), $result['stat']);
@@ -445,7 +446,8 @@ class BaiduDisk {
         $data .= '&filelist=["' . $filename . '"]';
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=delete';
-        $result = curl('POST', $url, $data);
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
+        $result = curl('POST', $url, $data, $head);
         if (json_decode($result['body'], true)['errno'] === 0) return output('', 204);
         else return output($result['body'], $result['stat']);
     }
@@ -465,7 +467,8 @@ class BaiduDisk {
         error_log1('data in MOVE: ' . $data);
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=move';
-        $result = curl('POST', $url, $data);
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
+        $result = curl('POST', $url, $data, $head);
         if (!$result['stat']) $result['stat'] = 501;
         $path2 = spurlencode($folder['path'], '/');
         if ($path2 != '/' && substr($path2, -1) == '/') $path2 = substr($path2, 0, -1);
@@ -482,10 +485,11 @@ class BaiduDisk {
         $data .= '&filelist=[{"path":"' . $filename . '","dest":"' . $file['path'] . '","newname":"' . $file['name'] . '","ondup":"newcopy"}]';
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=filemanager&access_token=' . $this->access_token . '&opera=copy';
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
         $p = 0;
         $result['stat'] = 0;
         while ($p < 3 && !$result['stat']) {
-            $result = curl('POST', $url, $data);
+            $result = curl('POST', $url, $data, $head);
             $p++;
         }
 
@@ -519,44 +523,41 @@ class BaiduDisk {
         //return output($url . "\n" . $data . "\n" . $result['body'], $result['stat']);
     }
     public function Edit($file, $content) {
-        /*TXT一般不会超过4M，不用二段上传
-        $filename = $path1 . ':/createUploadSession';
-        $response=MSAPI('POST',$filename,'{"item": { "@microsoft.graph.conflictBehavior": "replace"  }}',$_SERVER['access_token']);
-        $uploadurl=json_decode($response,true)['uploadUrl'];
-        echo MSAPI('PUT',$uploadurl,$data,$_SERVER['access_token']);*/
-        $result = $this->MSAPI('PUT', $file['path'], $content);
-        //return output($result['body'], $result['stat']);
-        //echo $result;
+        $path = splitlast($file['path'], "/");
+        error_log1("Edit: path: " . $path[0] . ", name: " . $path[1]);
+        $result = $this->Create(["path" => $path[0]], 'file', $path[1], $content);
         $resultarry = json_decode($result['body'], true);
         if (isset($resultarry['error'])) return message($resultarry['error']['message'] . '<hr><a href="javascript:history.back(-1)">' . getconstStr('Back') . '</a>', 'Error', 403);
         else return output('success', 0);
     }
     public function Create($parent, $type, $name, $content = '') {
         if ($type == 'file') {
-            $file['path'] = $parent['path'];
+            $file['path'] = path_format($parent['path'] . "/");
             $file['name'] = $name;
             $file['size'] = strlen($content);
             $file['md5s'] = '["' . md5($content) . '"]';
-            $result = $this->preCreate($file);
+            $result_pre = $this->preCreate($file);
             //echo 'preCreate<pre>' . json_encode($result, 448) . '</pre>';
-            if ($result['stat'] == 200 && json_decode($result['body'], true)['errno'] == 0) {
-                $res = json_decode($result['body'], true);
+            if ($result_pre['stat'] == 200 && json_decode($result_pre['body'], true)['errno'] == 0) {
+                $res = json_decode($result_pre['body'], true);
                 if ($res['return_type'] == 2) {
                     //已有，秒传？
                     error_log1('Rapid_upload');
                     $a = 1;
                 } else {
-                    $result = $this->partUpload($res['path'], $res['uploadid'], 0, $content);
-                    if ($result['stat'] == 200 && json_decode($result['body'], true)['md5']) {
-                        $md5 = json_decode($result['body'], true)['md5'];
+                    $result_part = $this->partUpload($res['path'], $res['uploadid'], 0, $content);
+                    if ($result_part['stat'] == 200 && json_decode($result_part['body'], true)['md5']) {
+                        $md5 = json_decode($result_part['body'], true)['md5'];
+                        //$info['path'] = $res['path'];
                         $info['path'] = $res['path'];
                         $info['size'] = $file['size'];
-                        $info['md5s'] = '["' . $md5 . '"]';
+                        $arr[0] = $md5;
+                        $info['md5s'] = json_encode($arr);
                         $info['uploadid'] = $res['uploadid'];
-                        $result = $this->completeUpload($info);
-                        if ($result['stat'] == 200 && json_decode($result['body'], true)['errno'] == 0) {
-                            $res = json_decode($result['body'], true);
-                            if (substr($res['path'], 0, strlen($res['path']) - strlen($res['server_filename'])) != $parent['path']) {
+                        $result_complete = $this->completeUpload($info);
+                        if ($result_complete['stat'] == 200 && json_decode($result_complete['body'], true)['errno'] == 0) {
+                            $res = json_decode($result_complete['body'], true);
+                            if (substr($res['path'], 0, strlen($res['path']) - strlen($res['server_filename'])) != path_format($parent['path'] . "/")) {
                                 $result = $this->Move(['name' => $res['server_filename'], 'path' => spurlencode(substr($res['path'], 0, strlen($res['path']) - strlen($res['server_filename'])), '/')], ['path' => $parent['path']], 'overwrite');
                                 $res = json_decode($result['body'], true);
                                 if ($res['errno'] === 0) {
@@ -568,29 +569,34 @@ class BaiduDisk {
                                     $res['OMmsg'] = 'err in Move.';
                                     $result['body'] = json_encode($res);
                                 }
+                            } else {
+                                $result = $result_complete;
                             }
                         } else {
-                            $res1 = json_decode($result['body'], true);
+                            $res1 = json_decode($result_complete['body'], true);
                             $res1['OMmsg'] = 'err in completeUpload.';
-                            $res1['preCreate_result'] = $res;
+                            $res1['preCreate_result'] = json_decode($result_pre['body']);
+                            $res1['partUpload_result'] = json_decode($result_part['body']);
                             $result['body'] = json_encode($res1);
+                            $result['stat'] = $result_complete['stat'];
                         }
                     } else {
-                        $res = json_decode($result['body'], true);
+                        $res = json_decode($result_part['body'], true);
                         $res['OMmsg'] = 'err in partUpload.';
                         $result['body'] = json_encode($res);
+                        $result['stat'] = $result_part['stat'];
                     }
                 }
             } else {
-                $res = json_decode($result['body'], true);
+                $res = json_decode($result_pre['body'], true);
                 $res['OMmsg'] = 'err in preCreate.';
                 $result['body'] = json_encode($res);
+                $result['stat'] = $result_pre['stat'];
             }
         }
         if ($type == 'folder') {
             $file['path'] = urldecode($parent['path']) . '/' . $name;
-            $file['size'] = strlen($content);
-            //$file['md5s'] = '["' . md5($content) . '"]';
+            //$file['size'] = strlen($content);
             $result = $this->completeUpload($file, 1);
         }
         if ($result['stat'] === 0) $result['stat'] = 501;
@@ -602,8 +608,9 @@ class BaiduDisk {
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=precreate&access_token=' . $this->access_token;
         //error_log1('url: ' . $url);
-        if (substr($file['path'], 0, 17) === '/apps/' . $this->appName . '/') $path = $file['path'];
-        else $path = '/apps/' . $this->appName . '/' . $file['path'];
+        $appPath = '/apps/' . $this->appName . '/';
+        if (substr($file['path'], 0, strlen($appPath)) === $appPath) $path = $file['path'];
+        else $path = $appPath . $file['path'];
         $data['path'] = path_format($path . '/' . urlencode($file['name']));
         $data['size'] = $file['size'];
         $data['isdir'] = $isdir;
@@ -613,11 +620,12 @@ class BaiduDisk {
         $formdata = "";
         foreach ($data as $key => $value) $formdata .= '&' . $key . '=' . $value;
         $formdata = substr($formdata, 1);
-        error_log1('data: ' . $formdata);
+        error_log1('preCreate data: ' . $formdata);
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
         $p = 0;
         $result['stat'] = 0;
         while ($p < 3 && !$result['stat']) {
-            $result = curl('POST', $url, $formdata);
+            $result = curl('POST', $url, $formdata, $head);
             $p++;
         }
         error_log1('res_pre: ' . json_encode($result));
@@ -642,21 +650,31 @@ class BaiduDisk {
         $url = $this->api_url . $this->ext_api_url;
         $url .= 'file?method=create&access_token=' . $this->access_token;
         //error_log1('url: ' . $url);
-        $data['path'] = urlencode($info['path']);
+        $arr = explode("/", $info['path']);
+        $path = "";
+        foreach ($arr as $tmp) if ($tmp) $path .= "/" . urlencode($tmp);
+        //$data['path'] = urlencode($info['path']);
         //$data['path'] = $info['path'];
-        $data['size'] = $info['size'];
+        $data['path'] = $path;
         $data['isdir'] = $isdir;
-        $data['block_list'] = $info['md5s'];
-        $data['uploadid'] = $info['uploadid'];
         $data['rtype'] = 3; // 0: fail, 1: rename, 2: rename when not same, 3: overlay
+        if (!$isdir) {
+            $data['size'] = $info['size'];
+            $data['uploadid'] = $info['uploadid'];
+            $data['block_list'] = $info['md5s'];
+        }
         $formdata = "";
         foreach ($data as $key => $value) $formdata .= '&' . $key . '=' . $value;
         $formdata = substr($formdata, 1);
         error_log1('data: ' . $formdata);
+        $head['Host'] = "pan.baidu.com";
+        $head['User-Agent'] = "pan.baidu.com";
+        $head['Content-Type'] = "application/x-www-form-urlencoded;charset=UTF-8";
         $p = 0;
         $result['stat'] = 0;
         while ($p < 3 && !$result['stat']) {
-            $result = curl('POST', $url, $formdata);
+            $result = curl('POST', $url, $formdata, $head);
+            //$result = curl('POST', $url, json_encode($data), $head);
             $p++;
         }
         error_log1('res_comp: ' . json_encode($result));
