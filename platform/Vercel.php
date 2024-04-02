@@ -14,13 +14,14 @@ function getpath() {
         if (isset($_SERVER['HTTP_FLY_FORWARDED_PROTO'])) $_SERVER['REQUEST_SCHEME'] = $_SERVER['HTTP_FLY_FORWARDED_PROTO'];
     }
     $_SERVER['host'] = $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'];
-    $_SERVER['referhost'] = explode('/', $_SERVER['HTTP_REFERER'])[2];
+    if (isset($_SERVER['HTTP_REFERER'])) $_SERVER['referhost'] = explode('/', $_SERVER['HTTP_REFERER'])[2];
     $_SERVER['base_path'] = "/";
     if (isset($_SERVER['UNENCODED_URL'])) $_SERVER['REQUEST_URI'] = $_SERVER['UNENCODED_URL'];
     $p = strpos($_SERVER['REQUEST_URI'], '?');
     if ($p > 0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
     $path = path_format(substr($path, strlen($_SERVER['base_path'])));
+    fetchVercelPHPVersion(getConfig('HerokuappId'), getConfig("APIKey"));
     return $path;
 }
 
@@ -302,26 +303,59 @@ function setVercelConfig($envs, $appId, $token) {
     return VercelUpdate($appId, $token, $outPath);
 }
 
-function fetchVercelPHPVersion() {
-    $runtime = json_decode(file_get_contents("../../vercel.json"), true)['functions']['api/index.php']['runtime'];
-    $vercelPHPversion = splitlast($runtime, '@')[1];
-    if (!($vercelPHPversion = getcache("VercelPHPRuntime"))) {
+function fetchVercelPHPVersion($appId, $token) {
+    if (!($vercelPHPversion = getcache("PHPRuntime")) || !($nodeVersion = getcache("NodeRuntime"))) {
         $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
         $response = curl("GET", $url);
         if ($response['stat'] == 200) {
-            $res = json_decode($response['body'], true)['version'];
+            $res = json_decode($response['body'], true);
             if ($res) {
-                savecache("VercelPHPRuntime", $res);
-                $vercelPHPversion = $res;
+                $phpVersion = $res['version'];
+                $nodeVersion = $res['devDependencies']['@types/node'];
+                $nodeVersion = splitfirst($nodeVersion, ".")[0] . ".x";
+                savecache("PHPRuntime", $phpVersion);
+                savecache("NodeRuntime", $nodeVersion);
+                $vercelPHPversion = $phpVersion;
             }
+        }
+    }
+    if ($token) {
+        if (!($vercelNodeVersion = getcache("VercelNodeRuntime"))) {
+            $vercelNodeVersion = fetchVercelNodeVersion($appId, $token);
+            if ($vercelNodeVersion != "") savecache("VercelNodeRuntime", $vercelNodeVersion);
+        }
+        //echo "<br>phpNode:" . $nodeVersion . ", vercelNode:" . $vercelNodeVersion;
+        if ($nodeVersion != "" && $nodeVersion != $vercelNodeVersion) {
+            setNodeVersion($nodeVersion, $appId, $token);
         }
     }
     return $vercelPHPversion;
 }
+function fetchVercelNodeVersion($appId, $token) {
+    $url = "https://api.vercel.com/v8/projects/" . $appId;
+    $header["Authorization"] = "Bearer " . $token;
+    $response = curl("GET", $url, "", $header);
+    //echo $url . "<br>\n";
+    //var_dump($response);
+    if ($response['stat'] == 200) {
+        $result = json_decode($response['body'], true);
+        return $result['nodeVersion'];
+    } else {
+        return "";
+    }
+}
+function setNodeVersion($ver, $appId, $token) {
+    $url = "https://api.vercel.com/v9/projects/" . $appId;
+    $header["Authorization"] = "Bearer " . $token;
+    $header["Content-Type"] = "application/json";
+    $data["nodeVersion"] = $ver;
+    //echo "<br>Set node " . $ver;
+    $response = curl("PATCH", $url, json_encode($data), $header);
+}
 
 function VercelUpdate($appId, $token, $sourcePath = "") {
     if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
-    $vercelPHPversion = fetchVercelPHPVersion();
+    $vercelPHPversion = fetchVercelPHPVersion($appId, $token);
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
@@ -332,6 +366,10 @@ function VercelUpdate($appId, $token, $sourcePath = "") {
     $data["name"] = "OneManager";
     $data["project"] = $appId;
     $data["target"] = "production";
+    if (getcache("NodeRuntime")) {
+        $data["projectSettings"]["nodeVersion"] = getcache("NodeRuntime");
+        $data["projectSettings"]["framework"] = null;
+    }
     if ($sourcePath == "") $sourcePath = splitlast(splitlast(__DIR__, "/")[0], "/")[0];
     //echo $sourcePath . "<br>";
     getEachFiles($file, $sourcePath);
