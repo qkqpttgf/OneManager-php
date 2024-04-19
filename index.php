@@ -22,7 +22,7 @@ function checkPlatform() {
         return 'CFC';
     if (isset($_SERVER['HEROKU_APP_DIR']) && $_SERVER['HEROKU_APP_DIR'] === '/app')
         return 'Heroku';
-    if (isset($_SERVER['DOCUMENT_ROOT']) && $_SERVER['DOCUMENT_ROOT'] === '/var/task/user')
+    if (isset($_ENV["VERCEL_ENV"]))
         return 'Vercel';
     if (isset($_SERVER['DOCUMENT_ROOT']) && substr($_SERVER['DOCUMENT_ROOT'], 0, 13) === '/home/runner/')
         return 'Replit';
@@ -34,7 +34,7 @@ function writebackPlatform($p) {
     if ('FG' == $p) $_SERVER['RUNTIME_LOG_PATH'] = '/home/snuser/log';
     if ('CFC' == $p) $_SERVER['BCE_CFC_RUNTIME_NAME'] = 'php7';
     //if ('Heroku'==$p) $_SERVER['HEROKU_APP_DIR']='/app';
-    if ('Vercel' == $p) $_SERVER['DOCUMENT_ROOT'] = '/var/task/user';
+    //if ('Vercel' == $p) $_SERVER['DOCUMENT_ROOT'] = '/var/task/user';
     //if ('Replit'==$p) $_SERVER['DOCUMENT_ROOT']='/home/runner/';
 }
 if ('SCF' == $platform) {
@@ -66,7 +66,7 @@ if ('SCF' == $platform) {
     if (getenv('ONEMANAGER_CONFIG_SAVE') == 'env') include 'platform/Vercel_env.php';
     else include 'platform/Vercel.php';
 
-    writebackPlatform('Vercel');
+    //writebackPlatform('Vercel');
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();
