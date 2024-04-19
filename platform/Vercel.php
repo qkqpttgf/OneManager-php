@@ -1,5 +1,6 @@
 <?php
-// https://vercel.com/docs/api#endpoints/deployments/create-a-new-deployment
+// https://vercel.com/docs/rest-api/endpoints
+// https://vercel.com/docs/rest-api/endpoints/deployments#create-a-new-deployment
 // https://github.com/vercel-community/php
 
 function getpath() {
@@ -21,7 +22,7 @@ function getpath() {
     if ($p > 0) $path = substr($_SERVER['REQUEST_URI'], 0, $p);
     else $path = $_SERVER['REQUEST_URI'];
     $path = path_format(substr($path, strlen($_SERVER['base_path'])));
-    fetchVercelPHPVersion(getConfig('HerokuappId'), getConfig("APIKey"));
+    fetchVercelPHPVersion(getConfig("APIKey"));
     return $path;
 }
 
@@ -148,7 +149,7 @@ function setConfig($arr, $disktag = '') {
     //sortConfig($envs);
     //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT));
     //echo json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT);
-    return setVercelConfig($envs, getConfig('HerokuappId'), getConfig('APIKey'));
+    return setVercelConfig($envs,  getConfig('APIKey'));
 }
 
 function install() {
@@ -164,23 +165,7 @@ function install() {
             //}
             $tmp['APIKey'] = $APIKey;
 
-            $token = $APIKey;
-            $header["Authorization"] = "Bearer " . $token;
-            $header["Content-Type"] = "application/json";
-            $aliases = json_decode(curl("GET", "https://api.vercel.com/v3/now/aliases", "", $header)['body'], true);
-            $host = splitfirst($_SERVER["host"], "//")[1];
-            $aliases1 = [];
-            foreach ($aliases["aliases"] as $key => $aliase) {
-                $aliases1[] = $aliase["alias"];
-                if ($host == $aliase["alias"]) $projectId = $aliase["projectId"];
-            }
-            if (!$projectId) {
-                $html = 'Please visit from one of: ' . json_encode($aliases1, JSON_PRETTY_PRINT);
-                return message($html, 'Error', 400);
-            }
-            $tmp['HerokuappId'] = $projectId;
-
-            $response = json_decode(setVercelConfig($tmp, $projectId, $APIKey), true);
+            $response = json_decode(setVercelConfig($tmp,  $APIKey), true);
             if (api_error($response)) {
                 $html = api_error_msg($response);
                 $title = 'Error';
@@ -288,7 +273,7 @@ function copyFolder($from, $to) {
     return 1;
 }
 
-function setVercelConfig($envs, $appId, $token) {
+function setVercelConfig($envs, $token) {
     sortConfig($envs);
     $outPath = '/tmp/code/';
     $outPath_Api = $outPath . 'api/';
@@ -300,10 +285,10 @@ function setVercelConfig($envs, $appId, $token) {
     $aftstr = PHP_EOL . '\';';
     file_put_contents($outPath_Api . '.data/config.php', $prestr . json_encode($envs, JSON_PRETTY_PRINT) . $aftstr);
 
-    return VercelUpdate($appId, $token, $outPath);
+    return VercelUpdate($token, $outPath);
 }
 
-function fetchVercelPHPVersion($appId, $token) {
+function fetchVercelPHPVersion($token) {
     if (!($vercelPHPversion = getcache("PHPRuntime")) || !($nodeVersion = getcache("NodeRuntime"))) {
         $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
         $response = curl("GET", $url);
@@ -320,13 +305,16 @@ function fetchVercelPHPVersion($appId, $token) {
         }
     }
     if ($token) {
-        if (!($vercelNodeVersion = getcache("VercelNodeRuntime"))) {
-            $vercelNodeVersion = fetchVercelNodeVersion($appId, $token);
-            if ($vercelNodeVersion != "") savecache("VercelNodeRuntime", $vercelNodeVersion);
-        }
-        //echo "<br>phpNode:" . $nodeVersion . ", vercelNode:" . $vercelNodeVersion;
-        if ($nodeVersion != "" && $nodeVersion != $vercelNodeVersion) {
-            setNodeVersion($nodeVersion, $appId, $token);
+        $appId = getProjectIDfromENV($token);
+        if ($appId) {
+            if (!($vercelNodeVersion = getcache("VercelNodeRuntime"))) {
+                $vercelNodeVersion = fetchVercelNodeVersion($appId, $token);
+                if ($vercelNodeVersion != "") savecache("VercelNodeRuntime", $vercelNodeVersion);
+            }
+            //echo "<br>phpNode:" . $nodeVersion . ", vercelNode:" . $vercelNodeVersion;
+            if ($nodeVersion != "" && $nodeVersion != $vercelNodeVersion) {
+                setNodeVersion($nodeVersion, $appId, $token);
+            }
         }
     }
     return $vercelPHPversion;
@@ -353,9 +341,11 @@ function setNodeVersion($ver, $appId, $token) {
     $response = curl("PATCH", $url, json_encode($data), $header);
 }
 
-function VercelUpdate($appId, $token, $sourcePath = "") {
+function VercelUpdate($token, $sourcePath = "") {
+    $appId = getProjectIDfromENV($token);
+    if (!$appId) return '{"error":{"message":"Error in get projectID."}}';
     if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
-    $vercelPHPversion = fetchVercelPHPVersion($appId, $token);
+    $vercelPHPversion = fetchVercelPHPVersion($token);
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
@@ -477,9 +467,25 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     $coderoot = splitlast($coderoot, '/')[0] . '/';
     copy($coderoot . '.data/config.php', $outPath . '/api/.data/config.php');
 
-    return VercelUpdate(getConfig('HerokuappId'), getConfig('APIKey'), $outPath);
+    return VercelUpdate(getConfig('APIKey'), $outPath);
 }
 
+function getProjectIDfromENV($token) {
+    if ($token == '') {
+        error_log1("Not provide token when get projectID");
+        return "";
+    }
+    $header["Authorization"] = "Bearer " . $token;
+    $header["Content-Type"] = "application/json";
+    $url = "https://api.vercel.com/v13/deployments/" . $_ENV["VERCEL_DEPLOYMENT_ID"];
+    $response = curl("GET", $url, "", $header);
+    if ($response['stat'] == 200) {
+        $result = json_decode($response['body'], true);
+        return $result['projectId'];
+    }
+    error_log1($response['body']);
+    return "";
+}
 function WaitFunction($deployid = '') {
     if ($deployid == '1') {
         $tmp['stat'] = 400;
@@ -510,7 +516,7 @@ function changeAuthKey() {
     if ($_POST['APIKey'] != '') {
         $APIKey = $_POST['APIKey'];
         $tmp['APIKey'] = $APIKey;
-        $response = setConfigResponse(setVercelConfig($tmp, getConfig('HerokuappId'), $APIKey));
+        $response = setConfigResponse(setVercelConfig($tmp,  $APIKey));
         if (api_error($response)) {
             $html = api_error_msg($response);
             $title = 'Error';
