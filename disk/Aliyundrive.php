@@ -928,8 +928,8 @@ class Aliyundrive {
                 alert(\'' . getconstStr('TagFormatAlert') . '\');
                 return false;
             }
-            
-            document.getElementById("form1").action="?install0&disktag=" + t.disktag_add.value + "&AddDisk=Aliyundrive";
+
+            document.getElementById("form1").action="?install0&disktag=" + t.disktag_add.value + "&AddDisk=' . get_class($this) . '";
             //var expd = new Date();
             //expd.setTime(expd.getTime()+(2*60*60*1000));
             //var expires = "expires="+expd.toGMTString();
@@ -937,7 +937,7 @@ class Aliyundrive {
             return true;
         }
     </script>';
-        $title = '已禁用，请使用Open方式';
+        $title = '已禁用，请改为<a href="?AddDisk=AliyundriveOpen">添加AliyundriveOpen</a>';
         return message($html, $title, 201);
     }
     protected function get_access_token($refresh_token) {
