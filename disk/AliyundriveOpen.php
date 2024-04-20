@@ -24,6 +24,98 @@ class AliyundriveOpen extends Aliyundrive {
         $res = $this->get_access_token(getConfig('refresh_token', $tag));
     }
 
+    protected function list_path($path = '/') {
+        global $exts;
+        while (substr($path, -1) == '/') $path = substr($path, 0, -1);
+        if ($path == '') $path = '/';
+        if (!($files = getcache('path_' . $path, $this->disktag))) {
+            if ($path == '/' || $path == '') {
+                $files = $this->fileList('root');
+                //error_log1('root_id' . $files['file_id']);
+                $files['file_id'] = 'root';
+                $files['type'] = 'folder';
+                //error_log1(json_encode($files, JSON_PRETTY_PRINT));
+            } else {
+                $tmp = splitlast($path, '/');
+                $parent_path = $tmp[0];
+                $filename = urldecode($tmp[1]);
+                $parent_folder = $this->list_path($parent_path);
+                foreach ($parent_folder['items'] as $item) {
+                    if ($item['name'] == $filename) {
+                        if ($item['type'] == 'folder') {
+                            $files = $this->fileList($item['file_id']);
+                            $files['type'] = 'folder';
+                            $files['file_id'] = $item['file_id'];
+                            $files['name'] = $item['name'];
+                            $files['time'] = $item['updated_at'];
+                            $files['size'] = $item['size'];
+                        } else {
+                            $item[$this->DownurlStrName] = $this->getDownloadUrl($item['file_id']);
+                            $files = $item;
+                        }
+                    }
+                }
+                //echo $files['name'];
+            }
+            if ($files['type'] == 'file') {
+                if (in_array(strtolower(splitlast($files['name'], '.')[1]), $exts['txt'])) {
+                    if ($files['size'] < 1024 * 1024) {
+                        if (!(isset($files['content']) && $files['content']['stat'] == 200)) {
+                            $header['Referer'] = 'https://www.aliyundrive.com/';
+                            $header['User-Agent'] = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/89.0.4389.90 Safari/537.36';
+                            $content1 = curl('GET', $files[$this->DownurlStrName], '', $header);
+                            $tmp = null;
+                            $tmp = json_decode(json_encode($content1), true);
+                            if ($tmp['body'] === null) {
+                                $tmp['body'] = iconv("GBK", 'UTF-8//TRANSLIT', $content1['body']);
+                                $tmp = json_decode(json_encode($tmp), true);
+                                if ($tmp['body'] !== null) $content1['body'] = $tmp['body'];
+                            }
+                            //error_log1('body : ' . $content1['body'] . PHP_EOL);
+                            $files['content'] = $content1;
+                            savecache('path_' . $path, $files, $this->disktag);
+                        }
+                    } else {
+                        $files['content']['stat'] = 202;
+                        $files['content']['body'] = 'File too large.';
+                    }
+                    //error_log1($files['name'] . ' : ' . json_encode($files['content']) . PHP_EOL);
+                }
+            } else {
+                // clear txt cache in this folder
+                foreach ($files['items'] as $item) {
+                    $filename = path_format($path . "/" . $item['name']);
+                    //error_log1($filename);
+                    if ($tmpcache = getcache('path_' . $filename, $this->disktag)) {
+                        //error_log1("Clear content.");
+                        savecache('path_' . $filename, "", $this->disktag);
+                    }
+                }
+            }
+            if (!$files) {
+                $files['error']['code'] = 'Not Found';
+                $files['error']['message'] = $path . ' Not Found';
+                $files['error']['stat'] = 404;
+            } elseif (isset($files['stat'])) {
+                $files['error']['stat'] = $files['stat'];
+                $files['error']['code'] = 'Error';
+                $files['error']['message'] = $files['body'];
+                unset($files['file_id']);
+                unset($files['type']);
+            } elseif (isset($files['code'])) {
+                $files['error']['stat'] = 500;
+                $files['error']['code'] = $files['code'];
+                $files['error']['message'] = $files['message'];
+                unset($files['file_id']);
+                unset($files['type']);
+            } else {
+                savecache('path_' . $path, $files, $this->disktag, 600);
+            }
+        }
+        //error_log1('path:' . $path . ', files:' . substr(json_encode($files), 0, 150));
+        //error_log1('path:' . $path . ', files:' . json_encode($files));
+        return $files;
+    }
     protected function fileGet($file_id) {
         $url = $this->api_url . 'openFile/get';
 
@@ -68,6 +160,24 @@ class AliyundriveOpen extends Aliyundrive {
             }
             return $body;
             //return json_decode($res['body'], true);
+        } else return $res;
+    }
+    // 2024/01/20号起，该字段不再返回超过5MB的文件url
+    protected function getDownloadUrl($file_id) {
+        $url = $this->api_url . 'openFile/getDownloadUrl';
+
+        $header["content-type"] = "application/json; charset=utf-8";
+        $header['authorization'] = 'Bearer ' . $this->access_token;
+
+        $data['drive_id'] = $this->driveId;
+        $data['file_id'] = $file_id;
+
+        $res = curl('POST', $url, json_encode($data), $header);
+        //error_log1($res['stat'] . $res['body']);
+        if ($res['stat'] == 200) {
+            error_log1($res['body']);
+            $body = json_decode($res['body'], true);
+            return $body['url'];
         } else return $res;
     }
 
@@ -507,7 +617,7 @@ class AliyundriveOpen extends Aliyundrive {
                     $tmp = curl('POST', $this->my_oauth_url . 'access_token',  json_encode($data), ["Content-type" => "application/json"]);
                 } else {
                     $title = getconstStr('Wait');
-                    $html = '部署在Vercel上的授权服务器可能还在启动，请稍等几秒后点击' . getconstStr('Refresh') . '按钮<br><button onclick="this.style.disabled = 1; location.href = location.href;">' . getconstStr('Refresh') . '</button>';
+                    $html = '程序连接到授权服务器超时。<br>它是部署在Vercel上的，请确认你服务器与vercel的连接是否正常，<br>另外它可能还在冷启动中，请稍等几秒后点击' . getconstStr('Refresh') . '按钮重试。<br><button onclick="this.style.disabled = 1; location.href = location.href;">' . getconstStr('Refresh') . '</button>';
                     return message($html, $title, 400);
                 }
             }
@@ -705,7 +815,7 @@ class AliyundriveOpen extends Aliyundrive {
                 $tmp = no_return_curl('GET', $url . "test");
                 if ($tmp['stat'] == 0) {
                     $tmp['stat'] = 429;
-                    $tmp['body']="连接到部署在Vercel上的授权服务器时失败，它可能还在启动中，请稍后几秒再试";
+                    $tmp['body'] = "程序连接到授权服务器超时。<br>它是部署在Vercel上的，请确认你服务器与vercel的连接是否正常，<br>另外它可能还在冷启动中，请稍后几秒再试。";
                     $this->error = $tmp;
                     return false;
                 }
