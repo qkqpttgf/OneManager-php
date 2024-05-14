@@ -167,13 +167,15 @@ B:
 
 1. Start web service on your server (httpd or other), make sure you can visit it.  
 
-2. Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
+2. Install (or Enable) rewrite_module (or RewriteEngine, or URL_rewrite).  
 
 3. Upload code.  
 
-4. Change the file .data/config.php can be read&write (666 is suggested).  
+4. Make the rewrite works, the rule is in .htaccess file (IIS rule in web.config file), make sure any query redirect to index.php.  
 
-5. View the website in chrome or other.  
+5. Change the file .data/config.php can be read&write (666 is suggested).  
+
+6. View the website in chrome or other.  
 
 ----
 
