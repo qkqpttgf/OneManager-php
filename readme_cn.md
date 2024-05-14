@@ -203,13 +203,15 @@ B:
 
 1. 启动web服务器，确保你能访问到。  
 
-2. 开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
+2. 安装 rewrite_module （或称 RewriteEngine，或 URL_Rewrite）。  
 
 3. 上传好代码。  
 
-4. 使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
+4. 开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，IIS规则在web.config文件中，我们的目的是不管访问什么都让index.php来处理。  
 
-5. 在浏览器中访问。  
+5. 使web身份可读写代码中的.data/config.php文件，推荐chmod 666 .data/config.php。  
+
+6. 在浏览器中访问。  
 
 ----
 
