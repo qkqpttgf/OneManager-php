@@ -143,6 +143,7 @@ function main($path) {
 
     $slash = '/';
     if (strpos(__DIR__, ':')) $slash = '\\';
+    $drive = null;
     $_SERVER['php_starttime'] = microtime(true);
     $path = path_format($path);
     $_SERVER['PHP_SELF'] = path_format($_SERVER['base_path'] . $path);
