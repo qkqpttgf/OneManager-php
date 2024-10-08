@@ -290,7 +290,7 @@ function setVercelConfig($envs, $token) {
 
 function fetchVercelPHPVersion($token) {
     if (!($vercelPHPversion = getcache("PHPRuntime")) || !($nodeVersion = getcache("NodeRuntime"))) {
-        $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
+        $url = "https://raw.githubusercontent.com/vercel-community/php/refs/heads/0.6.x/package.json";
         $response = curl("GET", $url);
         if ($response['stat'] == 200) {
             $res = json_decode($response['body'], true);

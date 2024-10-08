@@ -287,7 +287,7 @@ function fetchVercelPHPVersion() {
     $runtime = json_decode(file_get_contents("../../vercel.json"), true)['functions']['api/index.php']['runtime'];
     $vercelPHPversion = splitlast($runtime, '@')[1];
     if (!($vercelPHPversion = getcache("VercelPHPRuntime"))) {
-        $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
+        $url = "https://raw.githubusercontent.com/vercel-community/php/refs/heads/0.6.x/package.json";
         $response = curl("GET", $url);
         if ($response['stat'] == 200) {
             $res = json_decode($response['body'], true)['version'];
