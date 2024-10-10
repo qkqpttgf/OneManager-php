@@ -9,6 +9,11 @@ include 'common.php';
 date_default_timezone_set('UTC');
 //echo '<pre>'. json_encode($_SERVER, JSON_PRETTY_PRINT).'</pre>';
 //echo '<pre>'. json_encode($_ENV, JSON_PRETTY_PRINT).'</pre>';
+if (!function_exists('curl_init')) {
+    http_response_code(500);
+    echo '<font color="red">Need curl</font>, please install php-curl.';
+    exit(1);
+}
 global $platform;
 $platform = checkPlatform();
 function checkPlatform() {
@@ -97,11 +102,7 @@ if ('SCF' == $platform) {
     else echo $re['body'];
 } else {
     include 'platform/Normal.php';
-    if (!function_exists('curl_init')) {
-        http_response_code(500);
-        echo '<font color="red">Need curl</font>, please install php-curl.';
-        exit(1);
-    }
+
     $path = getpath();
     //echo 'path:'. $path;
     $_GET = getGET();
