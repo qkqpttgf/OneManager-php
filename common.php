@@ -499,6 +499,7 @@ function main($path) {
                             //'access-control-allow-origin' => '*',
                             //'access-control-expose-headers' => 'Content-Length, WWW-Authenticate, Location, Accept-Ranges',
                             'Content-Type' => $files['mime'],
+                            'Content-Disposition' => 'attachment; filename="' . $files['name'] . '"',
                             'Cache-Control' => 'max-age=' . $fileConduitCacheTime,
                             //'Cache-Control' => 'max-age=0',
                             'Last-Modified' => gmdate('D, d M Y H:i:s T', strtotime($files['time']))
@@ -506,15 +507,16 @@ function main($path) {
                         true
                     );
                     //if ($files['size']<$fileConduitSize) return $drive->ConduitDown($files['url'], $files['time'], $fileConduitCacheTime);
+                } else {
+                    if ($_SERVER['HTTP_RANGE'] != '') $header['Range'] = $_SERVER['HTTP_RANGE'];
+                    $header['Location'] = $url;
+                    $domainforproxy = '';
+                    $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
+                    if ($domainforproxy != '') {
+                        $header['Location'] = proxy_replace_domain($url, $domainforproxy);
+                    }
+                    return output('', 302, $header);
                 }
-                if ($_SERVER['HTTP_RANGE'] != '') $header['Range'] = $_SERVER['HTTP_RANGE'];
-                $header['Location'] = $url;
-                $domainforproxy = '';
-                $domainforproxy = getConfig('domainforproxy', $_SERVER['disktag']);
-                if ($domainforproxy != '') {
-                    $header['Location'] = proxy_replace_domain($url, $domainforproxy);
-                }
-                return output('', 302, $header);
             }
         }
     }
@@ -1082,7 +1084,7 @@ function output($body, $statusCode = 200, $headers = ['Content-Type' => 'text/ht
     if (baseclassofdrive() == 'Aliyundrive' || baseclassofdrive() == 'BaiduDisk') $headers['Referrer-Policy'] = 'no-referrer';
     //$headers['Referrer-Policy'] = 'same-origin';
     //$headers['X-Frame-Options'] = 'sameorigin';
-    if (!isset($_SERVER['Content-Type'])) $headers['Content-Type'] = 'text/html';
+    if (!isset($headers['Content-Type'])) $headers['Content-Type'] = 'text/html';
     return [
         'isBase64Encoded' => $isBase64Encoded,
         'statusCode' => $statusCode,
@@ -2457,6 +2459,7 @@ function render_list($path = '', $files = []) {
         }
         $DriverFile = scandir(__DIR__ . $slash . 'disk');
         $Driver_arr = null;
+        $Driver_arr = [];
         foreach ($DriverFile as $v1) {
             if ($v1 != '.' && $v1 != '..') {
                 $v1 = splitlast($v1, '.php')[0];
