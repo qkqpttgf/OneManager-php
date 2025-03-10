@@ -333,19 +333,29 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     }
     file_put_contents($zipfile, $githubfile);
 
-    $zip = new ZipArchive();
-    if ($zip->open($zipfile)) {
-        if (!$zip->extractTo($projectPath)) {
+    $zip = null;
+    $zip_method = false;
+    if (class_exists("PharData")) {
+        $zip = new PharData($zipfile);
+    } else if (class_exists("ZipArchive")) {
+        $zip = new ZipArchive();
+        if ($zip->open($zipfile)) {
             $tmp1['code'] = "Failed";
-            $tmp1['message'] = "Extract failed";
+            $tmp1['message'] = "Open zip file failed";
             return json_encode($tmp1);
         }
-        $zip->close(); //关闭处理的zip文件
+        $zip_method = true;
     } else {
         $tmp1['code'] = "Failed";
-        $tmp1['message'] = "Open zip file failed";
+        $tmp1['message'] = "Please install php-phar or php-zip";
         return json_encode($tmp1);
     }
+    if (!$zip->extractTo($projectPath)) {
+        $tmp1['code'] = "Failed";
+        $tmp1['message'] = "Extract failed";
+        return json_encode($tmp1);
+    }
+    if ($zip_method) $zip->close();
     unlink($zipfile);
 
     $outPath = '';
