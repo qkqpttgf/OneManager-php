@@ -141,6 +141,8 @@ function main($path) {
     global $slash;
     global $drive;
 
+    if (!function_exists('curl_init')) return output('<font color="red">Need curl</font>, please install php-curl.', 500);
+
     $slash = '/';
     if (strpos(__DIR__, ':')) $slash = '\\';
     $drive = null;
