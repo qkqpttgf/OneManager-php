@@ -436,7 +436,7 @@
                         <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
                         <!--IsmusicFileEnd-->
                         <!--IspdfFileStart-->
-                        <div id="pdf-d">Loading PDF</div>
+                        <div id="pdf-d">Loading PDF.js</div>
                         <!--IspdfFileEnd-->
                         <!--IsofficeFileStart-->
                         <iframe id="office-a" src="https://view.officeapps.live.com/op/view.aspx?src=<!--FileEncodeDownUrl-->" style="width: 100%;height: 800px" frameborder="0"></iframe>
@@ -909,48 +909,40 @@
         cMapPacked: true,
         disableStream: true,
         disableAutoFetch: true,
-        rangeChunkSize: 65535
+        rangeChunkSize: 1024 * 1024
     });
-    console.log(loadingTask);
-    /*loadingTask.onProgress = (e) => {
-        //console.log(e);
-        var p = document.getElementById('p');
-        if (p==null) {
-            p = document.createElement('div');
-            p.id = 'p';
-            p.setAttribute('onclick', "this.style.display = 'none';");
-            p.style = 'left: 10px; top: 30%; position: fixed;';
-            document.body.appendChild(p);
-        }
-        p.innerHTML = 'Loaded: ' + ((e.loaded/e.total)*100).toFixed(2) + '%<br>(' + size_format(e.loaded) + ' / ' + size_format(e.total) + ')';
-        p.style.display = '';
-        if (e.loaded==e.total) p.style.display = 'none';
-    }*/
+    /*console.log(loadingTask);
+    loadingTask.onProgress = (e) => {
+        console.log(e);
+    };*/
     loadingTask.promise.then(function (pdf) {
-        console.log(pdf);
-        var pagenum = pdf.numPages;
-        var pdfContainer = document.getElementById('pdf-d');
+        //console.log(pdf);
+        let pagenum = pdf.numPages;
+        let pdfContainer = document.getElementById('pdf-d');
         pdfContainer.innerHTML = '';
-        var pagepos = 1;
-        var pdfnextpagebutton = document.createElement('button');
+        let pagepos = 1;
+        let pdfnextpagebutton = document.createElement('button');
         pdfnextpagebutton.id = 'pdfnextpagebutton';
-        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '~' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' /' + pagenum;
         pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
         pdfnextpagebutton.style.display = 'none';
         pdfContainer.appendChild(pdfnextpagebutton);
-        var pdfWaitNextPage = setInterval(function () {
-            //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
+        let pdfWaitNextPage = setInterval(function () {
             if (pdfnextpagebutton.style.display == 'none') {
-                for (var i = pagepos; i <= (pagepos + 4 < pagenum ? pagepos + 4 : pagenum); i++) {
-                    var canvasNew = document.createElement('canvas');
+                let pos = 0;
+                for (let i = pagepos; i <= (pagepos + 4 < pagenum ? pagepos + 4 : pagenum); i++) {
+                    let canvasNew = document.createElement('canvas');
                     canvasNew.id = 'pdf-c' + i;
                     pdfContainer.appendChild(canvasNew);
+                    pdfContainer.appendChild(document.createElement("br"));
                     renderpage(pdf, i);
+                    pos = i;
                 }
-                pagepos = i;
+                pos++;
+                pagepos = pos;
                 if (pagepos < pagenum) {
                     console.log("next page: " + pagepos + " / " + pagenum);
-                    pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+                    pdfnextpagebutton.innerText = 'Load page ' + pagepos + '~' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' /' + pagenum;
                     pdfnextpagebutton.style.display = '';
                     pdfContainer.appendChild(pdfnextpagebutton);
                 } else {
@@ -961,14 +953,20 @@
         }, 1000);
     });
     function renderpage(pdf, i) {
+        let scale = 1.5;
+        let canvas = document.getElementById('pdf-c' + i);
+        let context = canvas.getContext("2d");
+        context.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+        context.font = "15px sans-serif";
+        context.fillText("Page " + i + ", waitting.", 10, canvas.height / 2);
         pdf.getPage(i).then(function (page) {
-            var scale = 1.5;
-            var viewport = page.getViewport({ scale: scale, });
-            var canvas = document.getElementById('pdf-c' + i);
-            var context = canvas.getContext("2d");
+            let viewport = page.getViewport({ scale: scale, });
             canvas.height = viewport.height;
             canvas.width = viewport.width;
-            var renderContext = {
+            context.strokeRect(1, 1, canvas.width - 2, canvas.height - 2);
+            context.font = "20px sans-serif";
+            context.fillText("Downloading page " + i + "...", 10, 40);
+            let renderContext = {
                 canvasContext: context,
                 viewport: viewport,
             };
