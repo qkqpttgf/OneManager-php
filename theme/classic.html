@@ -940,14 +940,14 @@
                 }
                 pos++;
                 pagepos = pos;
-                if (pagepos < pagenum) {
+                if (pagepos > pagenum) {
+                    console.log("end of pdf");
+                    clearInterval(pdfWaitNextPage);
+                } else {
                     console.log("next page: " + pagepos + " / " + pagenum);
                     pdfnextpagebutton.innerText = 'Load page ' + pagepos + '~' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' /' + pagenum;
                     pdfnextpagebutton.style.display = '';
                     pdfContainer.appendChild(pdfnextpagebutton);
-                } else {
-                    console.log("end of pdf");
-                    clearInterval(pdfWaitNextPage);
                 }
             }
         }, 1000);
