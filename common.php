@@ -466,8 +466,11 @@ function main($path) {
     if ($files['type'] == 'file' && !isset($_GET['preview'])) {
         if ($_SERVER['ishidden'] < 4 || (!!getConfig('downloadencrypt', $_SERVER['disktag']) && $files['name'] != getConfig('passfile'))) {
             $url = $files['url'];
-            if (strtolower(splitlast($files['name'], '.')[1]) == 'html') return output($files['content']['body'], $files['content']['stat']);
-            else {
+            $exp = strtolower(splitlast($files['name'], '.')[1]);
+            if ($exp == 'htm' || $exp == 'html') {
+                // HTML file display
+                return output($files['content']['body'], $files['content']['stat']);
+            } else {
                 if (isset($_SERVER['HTTP_IF_MODIFIED_SINCE']) && strtotime($files['time']) == strtotime($_SERVER['HTTP_IF_MODIFIED_SINCE'])) return output('', 304);
                 $fileConduitSize = getConfig('fileConduitSize', $_SERVER['disktag']);
                 $fileConduitCacheTime = getConfig('fileConduitCacheTime', $_SERVER['disktag']);
@@ -765,7 +768,7 @@ function chkTxtCode($str) {
 
 function getconstStr($str) {
     global $constStr;
-    if ($constStr[$str][$constStr['language']] != '') return $constStr[$str][$constStr['language']];
+    if (isset($constStr[$str][$constStr['language']]) && $constStr[$str][$constStr['language']] != '') return $constStr[$str][$constStr['language']];
     return $constStr[$str]['en-us'];
 }
 
@@ -1384,7 +1387,7 @@ function EnvOpt($needUpdate = 0) {
             return message($html, $title, 400);
         } else {
             //WaitSCFStat();
-            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . $response['DplStatus'] . '";</script>';
+            $html .= getconstStr('UpdateSuccess') . '<br><a href="">' . getconstStr('Back') . '</a><script>var status = "' . (isset($response['DplStatus']) ? $response['DplStatus'] : "") . '";</script>';
             $title = getconstStr('Setup');
             return message($html, $title, 202, 1);
         }
