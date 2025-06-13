@@ -247,13 +247,18 @@ function main($path) {
     if (isset($_GET['AddDisk'])) {
         if ($_GET['AddDisk'] === true) {
             $tmp = path_format($_SERVER['base_path'] . '/' . $path);
-            return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 301, ['Location' => $tmp]);
+            return output('Please visit <a href="' . $tmp . '">' . $tmp . '</a>.', 302, ['Location' => $tmp]);
         }
         if ($_SERVER['admin']) {
             if (!$_SERVER['disktag']) $_SERVER['disktag'] = '';
-            if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
-            $drive = new $_GET['AddDisk']($_GET['disktag']);
-            return $drive->AddDisk();
+            if (file_exists('disk' . $slash . $_GET['AddDisk'] . '.php')) {
+                if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
+                $drive = new $_GET['AddDisk']($_GET['disktag']);
+                return $drive->AddDisk();
+            } else {
+                $tmp = path_format($_SERVER['base_path'] . '/' . $path);
+                return output('<meta http-equiv="refresh" content="3;URL=' . $tmp . '">No drive named "' . $_GET['AddDisk'] . '".', 400);
+            }
         } else {
             $url = $_SERVER['PHP_SELF'];
             /*if ($_GET) {
