@@ -251,7 +251,7 @@ function main($path) {
         }
         if ($_SERVER['admin']) {
             if (!$_SERVER['disktag']) $_SERVER['disktag'] = '';
-            if (file_exists('disk' . $slash . $_GET['AddDisk'] . '.php')) {
+            if (file_exists(__DIR__ . $slash . 'disk' . $slash . $_GET['AddDisk'] . '.php')) {
                 if (!class_exists($_GET['AddDisk'])) require 'disk' . $slash . $_GET['AddDisk'] . '.php';
                 $drive = new $_GET['AddDisk']($_GET['disktag']);
                 return $drive->AddDisk();
@@ -1090,7 +1090,7 @@ function needUpdate() {
     return 0;
 }
 
-function output($body, $statusCode = 200, $headers = ['Content-Type' => 'text/html'], $isBase64Encoded = false) {
+function output($body, $statusCode = 200, $headers = [], $isBase64Encoded = false) {
     if (isset($_SERVER['Set-Cookie'])) $headers['Set-Cookie'] = $_SERVER['Set-Cookie'];
     if (baseclassofdrive() == 'Aliyundrive' || baseclassofdrive() == 'BaiduDisk') $headers['Referrer-Policy'] = 'no-referrer';
     //$headers['Referrer-Policy'] = 'same-origin';
