@@ -149,7 +149,11 @@ function setConfig($arr, $disktag = '') {
     //sortConfig($envs);
     //error_log1(json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT));
     //echo json_encode($arr, JSON_PRETTY_PRINT) . ' => tmp：' . json_encode($envs, JSON_PRETTY_PRINT);
-    return setVercelConfig($envs,  getConfig('APIKey'));
+    $token = getConfig('APIKey');
+    if (!$token) {
+        return json_encode(["error" => ["message" => 'Error, No Vercel token to operate.<br>Please <a href="?setup=auth">set Vercel token</a>!']], JSON_UNESCAPED_SLASHES);
+    }
+    return setVercelConfig($envs, $token);
 }
 
 function install() {
@@ -305,7 +309,7 @@ function fetchVercelPHPVersion($token) {
         }
     }
     if ($token) {
-        $appId = getProjectIDfromENV($token);
+        $appId = getProjectInfofromDeployIDInENV($token)['projectId'];
         if ($appId) {
             if (!($vercelNodeVersion = getcache("VercelNodeRuntime"))) {
                 $vercelNodeVersion = fetchVercelNodeVersion($appId, $token);
@@ -342,9 +346,11 @@ function setNodeVersion($ver, $appId, $token) {
 }
 
 function VercelUpdate($token, $sourcePath = "") {
-    $appId = getProjectIDfromENV($token);
-    if (!$appId) return '{"error":{"message":"Error in get projectID."}}';
-    if (checkBuilding($appId, $token)) return '{"error":{"message":"Another building is in progress."}}';
+    $project = getProjectInfofromDeployIDInENV($token);
+    $appId = $project['projectId'];
+    $name = $project['name'];
+    if (!$appId) return json_encode(["error" => ["message" => 'Error in get projectID.']], JSON_UNESCAPED_SLASHES);
+    if (checkBuilding($appId, $token)) return json_encode(["error" => ["message" => 'Another building is in progress.']], JSON_UNESCAPED_SLASHES);
     $vercelPHPversion = fetchVercelPHPVersion($token);
     $url = "https://api.vercel.com/v13/deployments";
     $header["Authorization"] = "Bearer " . $token;
@@ -353,7 +359,7 @@ function VercelUpdate($token, $sourcePath = "") {
     $data["routes"][0]["src"] = "/(.*)";
     $data["routes"][0]["dest"] = "/api/index.php";
     $verceljson = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES);
-    $data["name"] = "OneManager";
+    $data["name"] = $name;
     $data["project"] = $appId;
     $data["target"] = "production";
     if (getcache("NodeRuntime")) {
@@ -454,7 +460,7 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     // 获取解压出的目录名
     $outPath = findIndexPath($tmppath);
 
-    if ($outPath == '') return '{"error":{"message":"no outpath"}}';
+    if ($outPath == '') return json_encode(["error"=>["message"=>'no outpath.']], JSON_UNESCAPED_SLASHES);
     $name = $project . 'CODE';
     mkdir($tmppath . "/" . $name, 0777, 1);
     rename($outPath, $tmppath . "/" . $name . '/api');
@@ -470,21 +476,20 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     return VercelUpdate(getConfig('APIKey'), $outPath);
 }
 
-function getProjectIDfromENV($token) {
+function getProjectInfofromDeployIDInENV($token) {
     if ($token == '') {
         error_log1("Not provide token when get projectID");
-        return "";
+        return [];
     }
     $header["Authorization"] = "Bearer " . $token;
     $header["Content-Type"] = "application/json";
     $url = "https://api.vercel.com/v13/deployments/" . $_ENV["VERCEL_DEPLOYMENT_ID"];
     $response = curl("GET", $url, "", $header);
     if ($response['stat'] == 200) {
-        $result = json_decode($response['body'], true);
-        return $result['projectId'];
+        return json_decode($response['body'], true);
     }
     error_log1($response['body']);
-    return "";
+    return [];
 }
 function WaitFunction($deployid = '') {
     if ($deployid == '1') {
