@@ -183,14 +183,14 @@ function main($path) {
     if (empty($_SERVER['sitename'])) $_SERVER['sitename'] = getconstStr('defaultSitename');
 
     if (isset($_GET['jsFile'])) {
-        if (substr($_GET['jsFile'], -3) != '.js') return output('', 403);
+        if (substr($_GET['jsFile'], -3) != '.js') return output('Only js files', 403);
         if (!($path == '' || $path == '/')) return output('', 308, ['Location' => path_format($_SERVER['base_path'] . '/?jsFile=' . $_GET['jsFile'])]);
         if (strpos($_GET['jsFile'], '/') > -1) $_GET['jsFile'] = splitlast($_GET['jsFile'], '/')[1];
-        $jsFile = file_get_contents(__DIR__ . '/js/' . $_GET['jsFile']);
-        if (!!$jsFile) {
-            return output(base64_encode($jsFile), 200, ['Content-Type' => 'text/javascript; charset=utf-8', 'Cache-Control' => 'max-age=' . 3 * 24 * 60 * 60], true);
+        $jsFile = file_get_contents(__DIR__ . $slash . 'js' . $slash . $_GET['jsFile']);
+        if (!$jsFile) {
+            return output('File ' . $_GET['jsFile'] . ' Not Found', 404);
         } else {
-            return output('', 404);
+            return output(base64_encode($jsFile), 200, ['Content-Type' => 'text/javascript; charset=utf-8', 'Cache-Control' => 'max-age=' . 3 * 24 * 60 * 60], true);
         }
     }
     if (isset($_GET['WaitFunction'])) {
@@ -683,15 +683,16 @@ function savecache($key, $value, $disktag = '', $exp = 1800) {
 }
 
 function filecache($disktag) {
+    global $slash;
     $dir = sys_get_temp_dir();
     if (!is_writable($dir)) {
-        $tmp = __DIR__ . '/tmp/';
+        $tmp = __DIR__ . $slash . 'tmp' . $slash;
         if (file_exists($tmp)) {
             if (is_writable($tmp)) $dir = $tmp;
         } elseif (mkdir($tmp)) $dir = $tmp;
     }
-    $tag = $_SERVER['HTTP_HOST'] . '/OneManager/' . $disktag;
-    while (strpos($tag, '/') > -1) $tag = str_replace('/', '_', $tag);
+    $tag = $_SERVER['HTTP_HOST'] . $slash . 'OneManager' . $slash . $disktag;
+    while (strpos($tag, $slash) > -1) $tag = str_replace($slash, '_', $tag);
     if (strpos($tag, ':') > -1) {
         $tag = str_replace(':', '_', $tag);
         $tag = str_replace('\\', '_', $tag);
