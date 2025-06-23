@@ -1,0 +1,1968 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><!--Title--></title>
+    <link rel="shortcut icon" href="<!--base_path-->favicon.ico" type="image/x-icon">
+    <script src="https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/jquery/2.2.4/jquery.min.js"></script>
+
+    <!--MdRequireStart-->
+    <link rel="stylesheet" href="https://unpkg.com/github-markdown-css@3.0.1/github-markdown.css">
+    <script type="text/javascript" src="?jsFile=marked.js"></script>
+    <!--MdRequireEnd-->
+    <!--IsFileStart-->
+    <!--IsvideoFileStart-->
+    <script src="https://cdn.jsdelivr.net/npm/artplayer/dist/artplayer.js"></script><!--IsvideoFileEnd-->
+    <!--IspdfFileStart-->
+    <script src="https://npm.onmicrosoft.cn/pdfjs-dist@2.4.456/build/pdf.min.js"></script><!--IspdfFileEnd-->
+    <!--IstxtFileStart-->
+    <script src="https://lf6-cdn-tos.bytecdntp.com/cdn/expire-1-M/monaco-editor/0.31.1/min/vs/loader.min.js"></script>
+    <script>
+        require.config({ paths: { 'vs': 'https://lf3-cdn-tos.bytecdntp.com/cdn/expire-1-M/monaco-editor/0.31.1/min/vs' } });
+        require(['vs/editor/editor.main'], function () { editor_init() });
+    </script>
+    <!--IstxtFileEnd-->
+    <!--IsFileEnd-->
+    <!--https://p.sfx.ms/images/favicon.ico-->
+    <!--GuestUploadStart-->
+    <script type="text/javascript" src="?jsFile=spark-md5.min.js"></script><!--GuestUploadEnd-->
+    <!--AliyundriveUploadJsStart-->
+    <script src="https://npm.onmicrosoft.cn/bignumber.js@9.0.2/bignumber.js"></script>
+    <script src="?jsFile=sha1.min.js"></script><!--AliyundriveUploadJsEnd-->
+
+    <style>
+        /* 通用样式 */
+        /* 用于消除默认自带样式 */
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            color: #333;
+            font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+            overflow: hidden;
+        }
+
+        a {
+            text-decoration: none;
+            font-weight: 400;
+            color: rgb(97, 97, 97);
+            transition: 0.5s;
+        }
+
+        a:hover {
+            color: rgb(36, 36, 36);
+        }
+
+        ul {
+            list-style: none;
+        }
+
+        /* 兼容样式 */
+        body {
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            position: relative;
+        }
+
+        select:-moz-focusring {
+            color: transparent;
+            text-shadow: 0 0 0 #000;
+        }
+
+        /* 自定义样式 */
+        .container {
+            margin-left: auto;
+            margin-right: auto;
+            max-width: 1100px;
+        }
+
+        nav svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        nav div {
+            min-width: 48px;
+            height: 48px;
+            transition: 0.5s;
+        }
+
+        .expand {
+            transform: rotate(0deg);
+        }
+
+        .expand_on {
+            transform: rotate(-90deg);
+        }
+
+        nav a {
+            padding: 0 20px;
+        }
+
+        nav div:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .pull-left {
+            float: left;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pull-right {
+            float: right;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* 字体外部引用 */
+        @font-face {
+            font-family: 'iconfont';
+            /* project id 1634400 */
+            src: url('//at.alicdn.com/t/font_1634400_9yg8f5s278.eot');
+            src: url('//at.alicdn.com/t/font_1634400_9yg8f5s278.eot?#iefix') format('embedded-opentype'),
+                url('//at.alicdn.com/t/font_1634400_9yg8f5s278.woff2') format('woff2'),
+                url('//at.alicdn.com/t/font_1634400_9yg8f5s278.woff') format('woff'),
+                url('//at.alicdn.com/t/font_1634400_9yg8f5s278.ttf') format('truetype'),
+                url('//at.alicdn.com/t/font_1634400_9yg8f5s278.svg#iconfont') format('svg');
+        }
+
+        .iconfont {
+            font-family: "iconfont" !important;
+            font-size: 16px;
+            font-style: normal;
+            -webkit-font-smoothing: antialiased;
+            -webkit-text-stroke-width: 0.2px;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* header */
+        header {
+            width: 100%;
+            line-height: 48px;
+            background-color: rgba(255, 255, 255, 0.5);
+            position: fixed;
+            z-index: 1;
+            backdrop-filter: blur(10px);
+        }
+
+        header nav a {
+            color: rgb(36, 36, 36);
+            font-weight: 600;
+            transition: 0.5s;
+        }
+
+        header nav .lang .language {
+            outline: none;
+        }
+
+        header .control {
+            height: 40px;
+            line-height: 40px;
+            background-color: #f4f4f4;
+        }
+
+        header .control .control-item {
+            padding-left: 10px;
+            padding-right: 10px;
+        }
+
+        /* main */
+        main {
+            position: relative;
+            height: 100%;
+            background: #f0f0f4;
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-attachment: fixed;
+        }
+
+
+        main .scroll {
+            position: absolute;
+        }
+
+        .scroll {
+            overflow-y: auto;
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            padding: 48px 0 100px 0;
+        }
+
+        main .main-item-list {
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            background: rgba(255, 255, 255, 0.8);
+            margin: 20px;
+            line-height: 32px;
+            font-size: 14px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            border: #e0e0e0 solid 1px;
+            padding: 12px 0;
+            backdrop-filter: blur(20px);
+        }
+
+        main .main-title h1 {
+            margin: 0;
+            padding: 32px 32px 10px 32px;
+            font-size: 19px;
+            font-weight: 600;
+        }
+
+        div.main-title>h1>a:last-of-type {
+            font-weight: 600;
+            color: rgb(36, 36, 36);
+        }
+
+
+        main .main-items:hover {
+            background-color: #F4F4F4;
+            transform: scale(0.980);
+            border-radius: 10px;
+        }
+
+        main .main-item-list .inner-container {
+            display: flex;
+            justify-content: flex-start;
+            width: 100%;
+            height: auto;
+            box-sizing: border-box;
+
+        }
+
+        main .main-item-list .inner-container>div {
+            padding-left: 12px;
+            padding-right: 8px;
+            box-sizing: border-box;
+            text-wrap: nowrap;
+            font-weight: 600;
+        }
+
+        div.main-items.main-item-title>div>div.main-items-icon {
+            display: none;
+        }
+
+        main .main-item-list .main-item-title {
+            border-bottom: 1px solid #EAEAEA;
+        }
+
+        main .main-item-list .main-items-radio-box {
+            width: 48px;
+            height: 32px;
+            line-height: 40px;
+            text-align: center;
+        }
+
+        main .main-item-list .main-items-radio-box .main-items-radio {
+            display: none;
+            width: 18px;
+            height: 18px;
+        }
+
+        main .main-item-list .main-items-radio-box .main-items-radio[currstatus=true] {
+            display: block;
+        }
+
+        main .main-item-list .main-items-icon {
+            min-width: 38px;
+            height: 32px;
+            line-height: 32px;
+            text-align: center;
+        }
+
+        main .main-item-title .main-items-icon {
+            height: 32px !important;
+            line-height: 9px !important;
+        }
+
+        main .main-item-title .main-items-icon:hover,
+        main .main-item-list .main-items-displayName:hover,
+        main .main-item-list .main-items-dateModified:hover,
+        main .main-item-list .main-items-size:hover {
+            background-color: #EAEAEA;
+        }
+
+        main .main-item-list .main-items-icon .iconfont {
+            font-size: 20px;
+        }
+
+        main .main-item-list .main-items-icon img {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+        }
+
+        main .main-items {
+            display: flex;
+            justify-content: flex-start;
+            box-sizing: border-box;
+            padding: 0 20px;
+            overflow: hidden;
+            transition: 0.5s;
+            margin-top: 2.5px;
+            margin-bottom: 2.5px;
+        }
+
+        main .main-item-list .main-items-displayName,
+        main .main-item-list .main-items-fileName {
+            width: 520px;
+            flex: 1;
+        }
+
+        main .main-item-list .main-items-dateModified,
+        main .main-item-list .main-items-dateTime {
+            width: 140px;
+            text-align: center;
+            flex: 1;
+        }
+
+        main .main-item-list .main-items-size,
+        main .main-item-list .main-items-fileSize {
+            width: 100px;
+            text-align: right;
+        }
+
+        main .main-item-list .main-items-radio-box,
+        main .main-item-list .main-items-icon,
+        main .main-item-list .main-items-fileName,
+        main .main-item-list .main-items-dateTime,
+        main .main-item-list .main-items-fileSize {
+            padding: 11px 8px 11px 12px;
+            height: 42px;
+            line-height: 22px;
+            font-family: "Microsoft Yahei UI", Verdana, Simsun, "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+            white-space: nowrap;
+            box-sizing: border-box;
+            overflow: hidden;
+        }
+
+        main .main-item-list .main-items-radio-box,
+        main .main-item-list .main-items-icon {
+            overflow: initial;
+        }
+
+        main .main-item-list .main-items-fileName a {
+            overflow-x: auto;
+            overflow-y: hidden;
+            display: flex;
+            color: inherit;
+        }
+
+        main .main-item-list .main-items-fileName a:hover {
+            text-decoration: underline;
+        }
+
+        .more-disk {
+            vertical-align: middle;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            max-width: 100px;
+        }
+
+        .more-disk div {
+            list-style: none;
+            position: absolute;
+            display: none;
+            background: #ffffff;
+            border-radius: 5px;
+            margin: 0 0 0 -10px;
+            /*padding:0 7px;*/
+            color: #205D67;
+            z-index: 1;
+            box-shadow: 0 0.5em 3em rgba(161, 177, 204, .4);
+        }
+
+        .more-disk:hover div {
+            display: block
+        }
+
+        .more-disk div li {
+            line-height: normal;
+            padding: 3px 10px;
+        }
+
+        .more-disk div li a {
+            text-decoration: none;
+            color: rgba(0, 0, 0, .3);
+        }
+
+        .more-disk div li a:hover {
+            color: rgba(0, 0, 0, .87);
+        }
+
+        .more-disk div li a[now] {
+            color: rgba(0, 0, 0, 1);
+        }
+
+        #download {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 20px 10px 20px;
+        }
+
+        #download_bu {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        #download_bu button {
+            display: flex;
+            align-items: center;
+            width: auto;
+            font-size: 15px;
+            margin-left: 20px;
+            border-radius: 8px;
+            border: 2px solid #0078d4;
+            padding: 6px 15px 6px 15px;
+            transition: 0.5s;
+            text-wrap: nowrap;
+        }
+
+        #download_bu svg {
+            width: 35px;
+            height: 25px;
+        }
+
+        #download_bu button:active {
+            transform: scale(0.9);
+        }
+
+        #download_1 {
+            background: white;
+            color: #0078d4;
+        }
+
+        #download_2 {
+            background: #0078d4;
+            color: white;
+        }
+
+        #download_1:hover {
+            background: rgb(233, 233, 233);
+        }
+
+        #download_2:hover {
+            background: #006cbe;
+        }
+
+        textarea {
+            padding: 10px;
+            resize: none;
+            border: 1px solid #c8c6c4;
+            border-bottom: 2px solid #3b3a39;
+            border-radius: 8px;
+            outline: none;
+            overflow: hidden;
+            transition: 0.5s;
+            font-family: "Microsoft Yahei UI", Verdana, Simsun, "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+        }
+
+        textarea:hover {
+            border-bottom: 2px solid #0078d4;
+        }
+
+        #pdf-d {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .scroll::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .scroll::-webkit-scrollbar-thumb {
+            background: #a8a8a8;
+        }
+
+        .scroll::-webkit-scrollbar-button {
+            display: none;
+        }
+
+        .main-items-fileName a::-webkit-scrollbar {
+            height: 0;
+        }
+
+        .main-items-fileName a::-webkit-scrollbar-button {
+            display: none;
+        }
+
+        #upload_div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .list-table {
+            margin-top: 20px;
+        }
+
+        #upload_div select,
+        #upload_div input,
+        #upload_div div {
+            font-size: 15px;
+            transition: 0.5s;
+            border-radius: 8px;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+
+
+        #upload_div select {
+            border: 2px solid #c7c7c7;
+            padding: 10px 10px 6px 20px;
+            outline: none;
+        }
+
+        #upload_div select:hover {
+            border: 2px solid #0078d4;
+        }
+
+        #upload_submit {
+            border: 2px solid #0078d4;
+            padding: 6px 40px 6px 40px;
+            background-color: #0078d4;
+            color: #ffffff;
+        }
+
+        #upload_submit:hover {
+            background: #006cbe;
+        }
+
+        #upload_submit:active,
+        #upload_file_bu:active {
+            transform: scale(0.9);
+        }
+
+        #upload_file {
+            opacity: 0;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+
+        }
+
+        #upload_file_bu {
+            border: 2px solid #0078d4;
+            background-color: #ffffff;
+            font-weight: 400;
+            color: #0078d4;
+            position: relative;
+            padding: 6px 20px 6px 20px;
+            text-align: center;
+        }
+
+        #upload_btns {
+            display: flex;
+            justify-content: space-evenly;
+            text-align: center;
+            flex-wrap: wrap;
+        }
+
+        #need—pw-div input {
+            border: 1px solid #0078d4;
+            font-size: 16px;
+            background-color: #0078d4;
+            outline: none;
+            border-radius: 8px;
+            color: white;
+            padding: 10px 20px 10px 20px;
+        }
+
+        input#password1 {
+            border: 2px solid #0078d4;
+            background-color: white;
+            padding: 10px 10px 10px 10px;
+            margin-bottom: 40px;
+            color: #000;
+        }
+
+        .view-line {
+            font-family: "Microsoft Yahei UI", Verdana, Simsun, "Segoe UI", -apple-system, BlinkMacSystemFont, "Roboto", "Helvetica Neue", sans-serif;
+        }
+
+        @media screen and (max-width: 600px) {
+            .main-items-dateTime {
+                display: none;
+            }
+
+            .main-items-dateModified {
+                display: none;
+            }
+        }
+
+        #nextpageform {
+            display: flex;
+            flex-direction: row;
+            margin: 0 20px;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pagenum_div {
+            background: rgba(255, 255, 255, 0.8);
+            font-size: 14px;
+            box-sizing: border-box;
+            border-radius: 12px;
+            border: #e0e0e0 solid 1px;
+            backdrop-filter: blur(20px);
+            padding: 10px;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.5s;
+        }
+
+        .pagenum_div:hover {
+            transform: scale(0.9);
+        }
+    </style>
+
+    <!-- 附加样式与脚本 -->
+    <!--customCss-->
+    <!--customScript-->
+</head>
+
+<body>
+    <!--MultiDiskAreaStart-->
+    <div id="sidebar">
+        <!--MultiDisksStart-->
+        <div id="multidisk">
+            <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path
+                    d="M8.207 4c.46 0 .908.141 1.284.402l.156.12L12.022 6.5h7.728a2.25 2.25 0 0 1 2.229 1.938l.016.158.005.154v9a2.25 2.25 0 0 1-2.096 2.245L19.75 20H4.25a2.25 2.25 0 0 1-2.245-2.096L2 17.75V6.25a2.25 2.25 0 0 1 2.096-2.245L4.25 4h3.957Zm1.44 5.979a2.25 2.25 0 0 1-1.244.512l-.196.009-4.707-.001v7.251c0 .38.282.694.648.743l.102.007h15.5a.75.75 0 0 0 .743-.648l.007-.102v-9a.75.75 0 0 0-.648-.743L19.75 8h-7.729L9.647 9.979ZM8.207 5.5H4.25a.75.75 0 0 0-.743.648L3.5 6.25v2.749L8.207 9a.75.75 0 0 0 .395-.113l.085-.06 1.891-1.578-1.89-1.575a.75.75 0 0 0-.377-.167L8.207 5.5Z"
+                    fill="#000000" />
+            </svg>
+            <a href="<!--MultiDisksUrl-->" <!--MultiDisksNow-->><!--MultiDisksName--></a>
+        </div>
+        <!--MultiDisksEnd-->
+    </div>
+    <!--MultiDiskAreaEnd-->
+
+    <!--MultiDiskAreaStart-->
+    <style>
+        #sidebar {
+            position: fixed;
+            background: white;
+            height: 100%;
+            padding: 20px;
+            padding-top: 60px;
+            width: 200px;
+            transition: 0.5s;
+            display: flex;
+            flex-direction: column;
+            z-index: 1;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            transform: translateX(-240px);
+            overflow-y: auto;
+        }
+
+        #sidebar svg {
+            min-width: 24px;
+            height: 24px;
+            padding-right: 15px;
+        }
+
+        #multidisk {
+            display: flex;
+            font-size: 16px;
+            padding: 10px;
+            transition: 0.5s;
+            margin: 10px 0;
+            align-items: center;
+            justify-content: flex-start;
+        }
+
+        #multidisk:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+    <script>
+        var curr_tab = 1
+
+        function change_tab() {
+            var icon = document.querySelector("#expand")
+            var sidebar = document.querySelector("#sidebar")
+            if (curr_tab == 0) {
+                sidebar.style.transform = "translateX(-240px)"
+                icon.className = "pull-left expand"
+                curr_tab = 1
+            } else {
+                sidebar.style.transform = "translateX(0px)"
+                icon.className = "pull-left expand_on"
+                curr_tab = 0
+            }
+        }
+    </script>
+    <!--MultiDiskAreaEnd-->
+
+    <header>
+        <nav class="header_container">
+            <!--MultiDiskAreaStart-->
+            <div class="pull-left expand" id="expand" onclick="change_tab()">
+                <svg width="24" height="24" fill="none" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M12 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM5 17a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7-7a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM5 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7-7a2 2 0 1 1 0 4 2 2 0 0 1 0-4Zm7 0a2 2 0 1 1 0 4 2 2 0 0 1 0-4ZM5 3a2 2 0 1 1 0 4 2 2 0 0 1 0-4Z"
+                        fill="#040303" />
+                </svg>
+            </div>
+            <!--MultiDiskAreaEnd-->
+            <div class="pull-left">
+                <a href="<!--base_path-->"><!--Sitename--></a>
+            </div>
+            <!--LoginStart-->
+            <div class="pull-right" onclick="window.location.href = '/?login=admin'">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path
+                        d="M6.22176 13.9567C3.55468 13.653 2 11.8026 2 10V9.5C2 8.67157 2.67157 8 3.5 8H5.59971C5.43777 8.31679 5.30564 8.65136 5.20703 9H3.5C3.22386 9 3 9.22386 3 9.5V10C3 11.1281 3.88187 12.333 5.50235 12.7996C5.69426 13.216 5.93668 13.6043 6.22176 13.9567ZM9.62596 5.06907C9.70657 4.81036 9.75 4.53525 9.75 4.25C9.75 2.73122 8.51878 1.5 7 1.5C5.48122 1.5 4.25 2.73122 4.25 4.25C4.25 5.53662 5.13357 6.61687 6.32704 6.91706C6.64202 6.55055 7.00446 6.226 7.40482 5.95294C7.27488 5.98371 7.13934 6 7 6C6.0335 6 5.25 5.2165 5.25 4.25C5.25 3.2835 6.0335 2.5 7 2.5C7.9665 2.5 8.75 3.2835 8.75 4.25C8.75 4.73141 8.55561 5.16743 8.24104 5.48382C8.67558 5.28783 9.14016 5.14664 9.62596 5.06907ZM6.63459 9.91995C7.72254 9.64203 8.36854 8.52312 8.06525 7.44197L7.90905 6.88518C8.16313 6.68988 8.43852 6.52258 8.73094 6.3877L9.06831 6.74567C9.85725 7.58279 11.188 7.58349 11.9778 6.7472L12.3025 6.40341C12.6003 6.54393 12.8801 6.7182 13.1373 6.92148L13.0111 7.34378C12.6818 8.44593 13.3478 9.59805 14.4672 9.86273L14.8162 9.94525C14.8378 10.127 14.8489 10.3121 14.8489 10.4999C14.8489 10.6559 14.8412 10.81 14.8263 10.9619L14.3657 11.0796C13.2778 11.3575 12.6318 12.4764 12.9351 13.5575L13.0912 14.1142C12.8372 14.3095 12.5618 14.4769 12.2694 14.6118L11.932 14.2538C11.1431 13.4167 9.81231 13.416 9.02249 14.2523L8.69751 14.5964C8.39978 14.4559 8.12004 14.2817 7.86285 14.0785L7.98919 13.6557C8.31853 12.5536 7.65254 11.4015 6.53311 11.1368L6.18354 11.0541C6.16198 10.8725 6.15088 10.6875 6.15088 10.4999C6.15088 10.3438 6.15855 10.1897 6.17353 10.0377L6.63459 9.91995ZM11.4999 10.4999C11.4999 9.94757 11.0522 9.49985 10.4999 9.49985C9.94761 9.49985 9.4999 9.94757 9.4999 10.4999C9.4999 11.0521 9.94761 11.4999 10.4999 11.4999C11.0522 11.4999 11.4999 11.0521 11.4999 10.4999Z"
+                        fill="currentColor" />
+                </svg>
+
+            </div>
+            <!--LoginEnd-->
+        </nav>
+    </header>
+
+    <main>
+        <!--ListStart-->
+        <div class="scroll">
+            <div class="container">
+                <div class="main-title">
+                    <h1 class="main-title-path">
+                        <a href="<!--base_path-->"><!--constStr@Home--></a>
+                        <!--DiskPathArrayStart-->
+                        >
+                        <a href="<!--PathArrayLink-->"><!--PathArrayName--></a>
+                        <!--DiskPathArrayEnd-->
+                    </h1>
+                </div>
+                <!--HeadomfStart-->
+                <div class="main-item-list" id="head-div">
+                    <div class="list-container" style="padding: 10px 20px;">
+                        <div class="list-header-container">
+                            <div class="readme">
+                                <div class="markdown-body" id="head">
+                                    <!--HeadomfContent-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--HeadomfEnd-->
+                <!--HeadmdStart-->
+                <div class="main-item-list" id="head-div">
+                    <div class="list-container" style="padding: 10px 20px;">
+                        <div class="list-header-container">
+                            <div class="readme">
+                                <div class="markdown-body" id="head">
+                                    <textarea id="head-md" style="display:none;"><!--HeadmdContent--></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--HeadmdEnd-->
+
+                <!--EncryptedStart-->
+                <!-- 加密文件夹 -->
+                <div class="main-item-list" id="imgFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    加密文件夹
+                </div>
+                <div class="main-item-list" id="need—pw-div"
+                    style="padding: 50px 30px; font-size: larger; font-weight: bold;">
+                    <center>
+                        <form id="encryptedFile" action="" method="post">
+                            <input id="password1" name="password1" type="password" placeholder="请输入文件夹密码">
+                            <br>
+                            <input type="submit" value="确认">
+                        </form>
+                    </center>
+                </div>
+                <!-- 密码自动填充 -->
+                <script>
+                    function getQueryVariable(variable) {
+                        var query = window.location.search.substring(1);
+                        var vars = query.split("&");
+                        for (var i = 0; i < vars.length; i++) {
+                            var pair = vars[i].split("=");
+                            if (pair[0] == variable) { return pair[1]; }
+                        }
+                        return (false);
+                    }
+                    enterPw = getQueryVariable('pw')
+                    if (enterPw) { document.querySelector('#password1').value = enterPw }
+                    autoIn = getQueryVariable('ai')
+                    if (autoIn) { document.getElementById('encryptedFile').submit(); }
+                </script>
+                <!--EncryptedEnd-->
+
+                <!--GuestUploadStart-->
+                <!-- 游客上传 -->
+                <div class="main-item-list" id="imgFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    文件上传
+                </div>
+
+                <div class="main-item-list" id="imgFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    <div id="upload_div">
+                        <div id="upload_btns" align="center">
+                            <select onchange="document.getElementById('upload_file').webkitdirectory=this.value;">
+                                <option value="">文件</option>
+                                <option value="1">文件夹</option>
+                            </select>
+                            <div id="upload_file_bu">上传文件<input id="upload_file" type="file" name="upload_filename"
+                                    multiple="multiple"></div>
+                            <input id="upload_submit" onclick="preup();" value="上传" type="button">
+                        </div>
+                    </div>
+                </div>
+                <!--GuestUploadEnd-->
+
+                <!--IsFileStart-->
+                <!-- 文件预览 -->
+                <!--IsimgFileStart-->
+                <div class="main-item-list" id="imgFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    图片预览
+                </div>
+                <div class="main-item-list" id="imgFil-div" style="padding: 0;overflow: hidden;">
+                    <img src="<!--FileDownUrl-->" alt="<!--FileName-->"
+                        onload="if (this.offsetWidth>document.getElementById('url').offsetWidth) this.style.width='100%';" />
+                </div>
+                <!--IsimgFileEnd-->
+
+                <!--IsvideoFileStart-->
+                <div class="main-item-list" id="videoFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    视频预览
+                </div>
+                <div class="main-item-list" id="videoFil-div" style="padding: 0;overflow: hidden;">
+                    <div id="video-a0" style="aspect-ratio: 16/9;"></div>
+                </div>
+                <!--IsvideoFileEnd-->
+
+                <!--IspdfFileStart-->
+                <div class="main-item-list" id="pdfFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    文档预览
+                </div>
+                <div class="main-item-list" id="pdfFil-div" style="padding: 20px;overflow: hidden;">
+                    <div id="pdf-d">少女折寿中 ... ...</div>
+                </div>
+                <!--IspdfFileEnd-->
+
+                <!--IsmusicFileStart-->
+                <div class="main-item-list" id="musFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    音频预览
+                </div>
+                <div class="main-item-list" id="musFil-div" style="padding: 15px;overflow: hidden;">
+                    <audio src="<!--FileDownUrl-->" controls="controls" style="width: 100%"></audio>
+                </div>
+                <!--IsmusicFileEnd-->
+
+                <!--IstxtFileStart-->
+                <div class="main-item-list" id="txtFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    文本预览
+                </div>
+                <div class="main-item-list" id="txtFil-div" style="padding: 0px;overflow: hidden;">
+                    <div id="txt-a" style="height: 400px"></div>
+                </div>
+                <!--IstxtFileEnd-->
+                <!--IsFileEnd-->
+
+                <!--IsFileStart-->
+                <!-- 文件下载 -->
+                <div class="main-item-list" id="videoFil-div"
+                    style="padding: 15px 30px; font-size: larger; font-weight: bold;">
+                    文件下载
+                </div>
+                <div class="main-item-list">
+                    <div id="download">
+                        <textarea id="url" title="url" rows="5" cols="33" readonly></textarea>
+                        <div id="download_tip">拥有链接的人员都可查看.</div>
+                        <div id="download_bu">
+                            <button id="download_1" onclick="copyLink()">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M10.307 2.10533C10.1562 1.98809 9.95188 1.96694 9.78034 2.05085C9.60879 2.13475 9.50001 2.30904 9.50001 2.5V4.49274C9.45712 4.49456 9.41219 4.49701 9.36537 4.5002C8.96247 4.52766 8.41128 4.61105 7.82119 4.83704C7.11343 5.10809 6.34877 5.58508 5.72601 6.41126C5.10338 7.23727 4.64499 8.38259 4.50206 9.95474C4.48301 10.1644 4.5973 10.3635 4.78793 10.4528C4.97857 10.5421 5.20471 10.5024 5.35356 10.3536C6.54248 9.16464 7.72298 8.57773 8.59562 8.28685C8.9558 8.16679 9.2643 8.09693 9.50001 8.0563V10C9.50001 10.1969 9.61557 10.3755 9.79518 10.4561C9.9748 10.5368 10.185 10.5045 10.3322 10.3737L14.8322 6.37371C14.9432 6.27502 15.0046 6.13207 14.9997 5.98361C14.9949 5.83514 14.9242 5.69653 14.807 5.60533L10.307 2.10533ZM9.94293 5.49679L9.94571 5.49705C10.0865 5.51223 10.2279 5.46706 10.3335 5.37257C10.4394 5.27772 10.5 5.14223 10.5 5V3.52232L13.7186 6.02564L10.5 8.88658V7.5C10.5 7.22386 10.2762 7 10 7L9.99892 7L9.99759 7.00001L9.99425 7.00003L9.98483 7.00014L9.9552 7.00087C9.93074 7.00166 9.89695 7.00316 9.85445 7.00599C9.76945 7.01166 9.64951 7.02268 9.49961 7.04409C9.1999 7.08691 8.77971 7.17139 8.2794 7.33816C7.55493 7.57965 6.66479 7.99299 5.7319 8.69863C5.9264 7.98158 6.2077 7.43355 6.52456 7.01319C7.01593 6.36132 7.61523 5.98675 8.17883 5.7709C8.65371 5.58903 9.10252 5.52044 9.43338 5.49788C9.59809 5.48666 9.73137 5.48699 9.82114 5.48988C9.86596 5.49133 9.89972 5.49341 9.92089 5.49498L9.94293 5.49679ZM4.5 3C3.11929 3 2 4.11929 2 5.5V11.5C2 12.8807 3.11929 14 4.5 14H10.5C11.8807 14 13 12.8807 13 11.5V10.5C13 10.2239 12.7761 10 12.5 10C12.2239 10 12 10.2239 12 10.5V11.5C12 12.3284 11.3284 13 10.5 13H4.5C3.67157 13 3 12.3284 3 11.5V5.5C3 4.67157 3.67157 4 4.5 4H6.5C6.77614 4 7 3.77614 7 3.5C7 3.22386 6.77614 3 6.5 3H4.5Z"
+                                        fill="currentColor" />
+                                </svg>
+                                &nbsp&nbsp复制链接
+                            </button>
+                            <button id="download_2" onclick="window.location.href = '<!--FileEncodeUrl-->'">
+                                <svg width="16" height="16" viewBox="0 0 16 16" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3.5 13H12.5C12.7761 13 13 13.2239 13 13.5C13 13.7455 12.8231 13.9496 12.5899 13.9919L12.5 14H3.5C3.22386 14 3 13.7761 3 13.5C3 13.2545 3.17688 13.0504 3.41012 13.0081L3.5 13H12.5H3.5ZM7.91012 1.00806L8 1C8.24546 1 8.44961 1.17688 8.49194 1.41012L8.5 1.5V10.292L11.182 7.61091C11.3555 7.43735 11.625 7.41806 11.8198 7.55306L11.8891 7.61091C12.0627 7.78448 12.0819 8.0539 11.9469 8.24877L11.8891 8.31802L8.35355 11.8536C8.17999 12.0271 7.91056 12.0464 7.71569 11.9114L7.64645 11.8536L4.11091 8.31802C3.91565 8.12276 3.91565 7.80617 4.11091 7.61091C4.28448 7.43735 4.5539 7.41806 4.74877 7.55306L4.81802 7.61091L7.5 10.292V1.5C7.5 1.25454 7.67688 1.05039 7.91012 1.00806L8 1L7.91012 1.00806Z"
+                                        fill="currentColor" />
+                                </svg>
+                                &nbsp&nbsp点击下载
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!--IsFileEnd-->
+
+                <!--IsFolderStart-->
+                <!-- 文件列表 -->
+                <div class="main-item-list">
+                    <div class="main-items main-item-title">
+                        <div class="inner-container">
+                            <div class="main-items-icon">
+                                <i class="iconfont">&#xe746;</i>
+                            </div>
+                            <div class="main-items-displayName"><!--constStr@File--></div>
+                            <div class="main-items-dateModified"><!--constStr@EditTime--></div>
+                            <div class="main-items-size"><!--constStr@Size--></div>
+                        </div>
+                    </div>
+                    <!--FolderListStart-->
+                    <div class="main-items">
+                        <div class="main-items-icon">
+                            <img src="https://spoprod-a.akamaihd.net/files/fabric/assets/item-types-fluent/20/folder.svg"
+                                alt="folder icon">
+                        </div>
+                        <div class="main-items-fileName">
+                            <a href="<!--FileEncodeReplaceUrl-->/"><!--FileEncodeReplaceName--></a>
+                        </div>
+                        <div class="main-items-dateTime"><!--lastModifiedDateTime--></div>
+                        <div class="main-items-fileSize"><!--size--></div>
+                    </div>
+                    <!--FolderListEnd-->
+                    <!--FileListStart-->
+                    <div class="main-items">
+                        <div class="main-items-icon">
+                            <i class="iconfont">&#xe746;</i>
+                        </div>
+                        <div class="main-items-fileName">
+                            <a href="<!--FileEncodeReplaceUrl-->?preview"
+                                target="_blank"><!--FileEncodeReplaceName--></a>
+                        </div>
+                        <div class="main-items-dateTime"><!--lastModifiedDateTime--></div>
+                        <div class="main-items-fileSize"><!--size--></div>
+                    </div>
+                    <!--FileListEnd-->
+                </div>
+
+                <!--MorePageStart-->
+                <script>
+                    function nextpage(num) {
+                        document.getElementById('pagenum').value = num;
+                        document.getElementById('nextpageform').submit();
+                    }
+                </script>
+                <form action="" method="POST" id="nextpageform">
+                    <input type="hidden" id="pagenum" name="pagenum" value="">
+                    <!--PrePageStart-->
+                    <div class="pagenum_div" onclick="nextpage('<!--PrePageNum-->');">
+                        <a><!--constStr@PrePage--></a>
+                    </div>
+                    <!--PrePageEnd-->
+                    <!--MorePageListStart-->
+                    <div class="pagenum_div" onclick="nextpage('<!--PageNum-->');">
+                        <a><!--PageNum--></a>
+                    </div>
+                    <!--MorePageListEnd-->
+                    <!--MorePageListNowStart-->
+                    <div class="pagenum_div" onclick="showToast('翻页失败!','你就在这页哦')">
+                        <a>⌂</a>
+                    </div>
+                    <!--MorePageListNowEnd-->
+                    <!--NextPageStart-->
+                    <div class="pagenum_div" onclick="nextpage('<!--NextPageNum-->');">
+                        <a><!--constStr@NextPage--></a>
+                    </div>
+                </form>
+                <!--MorePageEnd-->
+                <!--IsFolderEnd-->
+
+                <!--ReadmemdStart-->
+                <div class="main-item-list" id="readme-div" style="padding: 20px;">
+                    <div class="list-header-container">
+                        <div class="readme">
+                            <div class="markdown-body" id="readme">
+                                <textarea id="readme-md" style="display:none;"><!--ReadmemdContent--></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--ReadmemdEnd-->
+
+                <!--FootomfStart-->
+                <div class="main-item-list" id="readme-div" style="padding: 20px;">
+                    <div class="list-header-container">
+                        <div class="readme">
+                            <div class="markdown-body" id="readme">
+                                <!--FootomfContent-->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--FootomfEnd-->
+                <!-- 页脚 -->
+                <div style="text-align: center; margin-top: 100px;">
+                    <div id="foot_info">
+                    </div>
+                    <script>
+                        let year = new Date().getFullYear()
+                        document.querySelector("#foot_info").innerHTML = 'Copyright © ' + year + ' | Powered by <a href="https://github.com/qkqpttgf/OneManager-php/">Onemanager</a> |   <a href="https://github.com/lswlc33/Onemanager_theme_new_onedrive/">Theme</a> by <a href="https://github.com/lswlc33/">雪中明月</a>'
+                    </script>
+                </div>
+            </div>
+            <!--ListEnd-->
+    </main>
+
+    <!-- 下面是js脚本 -->
+    <!-- 下面是js脚本 -->
+
+    <!-- 背景设置 -->
+    <script>
+        var BackgroundUrl = ''
+        var BackgroundUrlM = ''
+        function setBackground() {
+            var width = window.innerWidth;
+            if (width <= 600) {
+                if (BackgroundUrlM) {
+                    document.querySelector('main').style.backgroundImage = `url(${BackgroundUrlM})`
+                }
+            } else {
+                if (BackgroundUrl) {
+                    document.querySelector('main').style.backgroundImage = `url(${BackgroundUrl})`
+                }
+            }
+        }
+    </script>
+
+    <!--BackgroundStart-->
+    <script>
+        BackgroundUrl = "<!--BackgroundUrl-->"
+    </script>
+    <!--BackgroundEnd-->
+
+    <!--BackgroundMStart-->
+    <script>
+        BackgroundUrlM = "<!--BackgroundMUrl-->"    
+    </script>
+    <!--BackgroundMEnd-->
+
+    <script>
+        setBackground()
+        window.addEventListener("resize", () => {
+            setBackground()
+        })
+    </script>
+
+    <!--ListStart-->
+
+    <!--IsFileStart-->
+    <script>
+        document.querySelector('#url').innerText = decodeURI(window.location.href.replace("?preview", ""))
+    </script>
+
+
+    <!-- 复制链接 -->
+    <script>
+        function copyLink() {
+            navigator.clipboard.writeText(document.querySelector('#url').innerHTML).then(
+                function () {
+                    showToast('复制成功！', '链接已经保存到剪贴板')
+                },
+                function () {
+                    showToast('复制失败！', '不要着急！你可以手动复制')
+                },
+            );
+        }
+    </script>
+
+    <!--IsvideoFileStart-->
+    <script>
+        var art = new Artplayer({
+            container: '#video-a0',
+            url: '<!--FileDownUrl-->',
+            theme: '#ffffff',
+            autoplay: false,
+            screenshot: true,
+            pip: true,
+            flip: true,
+            playbackRate: true,
+            setting: true,
+            fullscreen: true,
+            miniProgressBar: true,
+        });
+        addVideos(['']);
+    </script>
+    <!--IsvideoFileEnd-->
+
+    <!--IspdfFileStart-->
+    <script>
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://unpkg.com/pdfjs-dist@2.4.456/build/pdf.worker.min.js';
+        var loadingTask = pdfjsLib.getDocument({
+            url: "<!--FileDownUrl-->",
+            cMapUrl: "https://unpkg.com/pdfjs-dist@2.4.456/cmaps/",
+            cMapPacked: true,
+            disableStream: true,
+            disableAutoFetch: true,
+            rangeChunkSize: 65535
+        });
+        /*loadingTask.onProgress = (e) => {
+            //console.log(e);
+            var p = document.getElementById('p');
+            if (p==null) {
+                p = document.createElement('div');
+                p.id = 'p';
+                p.setAttribute('onclick', "this.style.display = 'none';");
+                p.style = 'left: 10px; top: 30%; position: fixed;';
+                document.body.appendChild(p);
+            }
+            p.innerHTML = 'Loaded: ' + ((e.loaded/e.total)*100).toFixed(2) + '%<br>(' + size_format(e.loaded) + ' / ' + size_format(e.total) + ')';
+            p.style.display = '';
+            if (e.loaded==e.total) p.style.display = 'none';
+            
+        }*/
+        loadingTask.promise.then(function (pdf) {
+            var pagenum = pdf.numPages;
+            var pdfContainer = document.getElementById('pdf-d');
+            pdfContainer.innerHTML = '';
+            var pagepos = 1;
+            var pdfnextpagebutton = document.createElement('button');
+            pdfnextpagebutton.id = 'pdfnextpagebutton';
+            pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+            pdfnextpagebutton.setAttribute('onclick', "this.style.display = 'none';");
+            pdfnextpagebutton.style.display = 'none';
+            pdfContainer.appendChild(pdfnextpagebutton);
+            var pdfWaitNextPage = setInterval(function () {
+                //console.log(document.documentElement.scrollTop + ", " + document.body.scrollHeight);
+                if (pdfnextpagebutton.style.display == 'none') {
+                    for (var i = pagepos; i <= (pagepos + 4 < pagenum ? pagepos + 4 : pagenum); i++) {
+                        var canvasNew = document.createElement('canvas');
+                        canvasNew.id = 'pdf-c' + i;
+                        pdfContainer.appendChild(canvasNew);
+                        renderpage(pdf, i);
+                    }
+                    pagepos = i;
+                    if (pagepos < pagenum) {
+                        console.log("next page: " + pagepos + " / " + pagenum);
+                        pdfnextpagebutton.innerText = 'Load page ' + pagepos + '-' + (pagepos + 4 < pagenum ? pagepos + 4 : pagenum) + ' (' + pagenum + ')';
+                        pdfnextpagebutton.style.display = '';
+                        pdfContainer.appendChild(pdfnextpagebutton);
+                    } else {
+                        console.log("end of pdf");
+                        clearInterval(pdfWaitNextPage);
+                    }
+                }
+            }, 1000);
+        });
+        function renderpage(pdf, i) {
+            pdf.getPage(i).then(function (page) {
+                var scale = 1.5;
+                var viewport = page.getViewport({ scale: scale, });
+                var canvas = document.getElementById('pdf-c' + i);
+                var context = canvas.getContext("2d");
+                canvas.height = viewport.height;
+                canvas.width = viewport.width;
+                var renderContext = {
+                    canvasContext: context,
+                    viewport: viewport,
+                };
+                page.render(renderContext);
+            });
+        }
+        function size_format(num) {
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' B';
+            }
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' KB';
+            }
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' MB';
+            }
+            return num.toFixed(2) + ' GB';
+        }
+    </script>
+    <!--IspdfFileEnd-->
+
+    <!--IstxtFileStart-->
+    <script>
+        let value = `<!--TxtContent-->`
+        function editor_init() {
+            window.monaco.editor.create(document.getElementById("txt-a"), {
+                value,
+                readonly: true
+            })
+        }
+    </script>
+    <!--IstxtFileEnd-->
+
+    <!--IsFileEnd-->
+    <!--ListEnd-->
+
+    <!--HeadmdStart-->
+    <script>
+        var $head = document.getElementById('head');
+        if ($head) {
+            //document.getElementById('head-div').parentNode.insertBefore(document.getElementById('head-div'),document.getElementById('list-div'));
+            $head.innerHTML = marked(document.getElementById('head-md').innerText);
+        }
+    </script>
+    <!--HeadmdEnd-->
+    <!--ReadmemdStart-->
+    <script>
+        var $readme = document.getElementById('readme');
+        if ($readme) {
+            $readme.innerHTML = marked(document.getElementById('readme-md').innerText);
+        }
+    </script>
+    <!--ReadmemdEnd-->
+
+    <!--UploadJsStart-->
+    <script>
+        function size_format(num) {
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' B';
+            }
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' KB';
+            }
+            if (num > 1024) {
+                num = num / 1024;
+            } else {
+                return num.toFixed(2) + ' MB';
+            }
+            return num.toFixed(2) + ' GB';
+        }
+        function seconds2hour(seconds) {
+            let h, m, s;
+            if (parseFloat(seconds) < 60) {
+                return seconds + 's';
+            } else {
+                s = (seconds % 60).toFixed(0);
+                m = parseInt(seconds / 60);
+                if (parseInt(m) < 60) {
+                    return m + 'm' + s + 's';
+                } else {
+                    h = parseInt(m / 60);
+                    m = m % 60;
+                    return h + 'h' + m + 'm' + s + 's';
+                }
+            }
+        }
+        function uploadbuttonhide() {
+            document.getElementById('upload_btns').style.display = 'none';
+            /*document.getElementById('upload_submit').disabled='disabled';
+            document.getElementById('upload_file').disabled='disabled';
+            document.getElementById('upload_submit').style.display='none';
+            document.getElementById('upload_file').style.display='none';*/
+        }
+        function uploadbuttonshow() {
+            document.getElementById('upload_btns').style.display = '';
+            /*document.getElementById('upload_file').disabled='';
+            document.getElementById('upload_submit').disabled='';
+            document.getElementById('upload_submit').style.display='';
+            document.getElementById('upload_file').style.display='';*/
+        }
+        var uploading = new Object();
+    </script>
+    <!--UploadJsEnd-->
+
+    <!--OnedriveUploadJsStart-->
+    <script>
+        function preup() {
+            uploadbuttonhide();
+            var files = document.getElementById('upload_file').files;
+            if (files.length < 1) {
+                uploadbuttonshow();
+                return;
+            };
+            var table1 = document.createElement('table');
+            document.getElementById('upload_div').appendChild(table1);
+            table1.setAttribute('class', 'list-table');
+            var timea = new Date().getTime();
+            var i = 0;
+            var uploadList = setInterval(function () {
+                if (i < files.length) {
+                    if (Object.keys(uploading).length < 5) {
+                        getuplink(i);
+                        i++;
+                    }// else console.log(Object.keys(uploading).length);
+                } else clearInterval(uploadList);
+            }, 1000);
+            //getuplink(i);
+            function getuplink(i, r = 0) {
+                var file = files[i];
+                var td1;
+                var td2;
+                if (r == 0) {
+                    var tr1 = document.createElement('tr');
+                    table1.appendChild(tr1);
+                    tr1.setAttribute('data-to', 1);
+                    td1 = document.createElement('td');
+                    tr1.appendChild(td1);
+                    td1.setAttribute('style', 'width:30%;word-break:break-word;');
+                    td1.setAttribute('id', 'upfile_td1_' + timea + '_' + i);
+                    td1.innerHTML = (file.webkitRelativePath || file.name) + '<br>' + size_format(file.size) + ' (' + (i + 1) + '/' + files.length + ')';
+                    td2 = document.createElement('td');
+                    tr1.appendChild(td2);
+                    td2.setAttribute('id', 'upfile_td2_' + timea + '_' + i);
+                }
+                var tdnum = timea + '_' + i;
+                td1 = document.getElementById('upfile_td1_' + tdnum);
+                td2 = document.getElementById('upfile_td2_' + tdnum);
+                if (file.size > 100 * 1024 * 1024 * 1024) {
+                    td2.innerHTML = '<font color="red"><!--constStr@UpFileTooLarge--></font>';
+                    uploadbuttonshow();
+                    return;
+                }
+                var upbigfilename = encodeURIComponent((file.webkitRelativePath || file.name));
+                uploading[upbigfilename] = i;
+                var filemd5 = '';
+                function getext(str) {
+                    strarry = str.split('.');
+                    if (strarry.length == 1) return '';
+                    ext = strarry[strarry.length - 1].toLowerCase();
+                    var reg = new RegExp(".", "g");
+                    var a = str.replace(reg, "");
+                    if (a == ext) ext = "";
+                    else ext = "." + ext;
+                    return ext;
+                }
+                var ext = getext(file.webkitRelativePath || file.name);
+                var spark = new SparkMD5.ArrayBuffer();
+                var reader = new FileReader();
+                var chunksize = 10 * 1024 * 1024;
+                var asize = 0;
+                function readblob(start) {
+                    var end = start + chunksize;
+                    var blob = file.slice(start, end);
+                    reader.readAsArrayBuffer(blob);
+                }
+                readblob(asize);
+
+                reader.onload = function (e) {
+                    td2.innerHTML = '<!--constStr@Calculate--> md5: ' + (asize * 100 / file.size).toFixed(2) + '%';
+                    var binary = this.result;
+                    spark.append(binary);
+                    asize += chunksize;
+                    if (asize < file.size) {
+                        readblob(asize);
+                    } else {
+                        filemd5 = spark.end();
+                        td2.innerHTML = 'md5: ' + filemd5;
+                        delete uploading[upbigfilename];
+                        upbigfilename = filemd5 + ext;
+                        uploading[upbigfilename] = i;
+                        td2.innerHTML = '<!--constStr@GetUploadLink--> ...';
+                        var xhr1 = new XMLHttpRequest();
+                        xhr1.open("POST", '?action=upbigfile');
+                        //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                        xhr1.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                        xhr1.onprogress = function (e) {
+                            td2.innerHTML += '.';
+                        }
+                        xhr1.onload = function (e) {
+                            //console.log(xhr1.status+xhr1.responseText);
+                            td2.innerHTML = '<font color="red">' + xhr1.responseText + '</font>';
+                            if (xhr1.status == 200) {
+                                if (xhr1.responseText == '') {
+                                    getuplink(i, 1);
+                                    return;
+                                }
+                                var html = JSON.parse(xhr1.responseText);
+                                if (!html['uploadUrl']) {
+                                    td2.innerHTML = '<font color="red">' + xhr1.responseText + '</font><br>';
+                                } else {
+                                    td2.innerHTML = '<!--constStr@UploadStart--> ...';
+                                    binupfile(file, html['uploadUrl'], timea + '_' + i, upbigfilename);
+                                }
+                            } else {
+                                if (xhr1.status == 409) {
+                                    // td2.innerHTML='nameAlreadyExists';
+                                    var html = JSON.parse(xhr1.responseText);
+                                    td2.innerHTML = html['error']['code'] + ': ' + html['error']['message'];
+
+                                    td2.innerHTML = 'md5: ' + filemd5;
+                                    td1.innerHTML = '<div><a href="<!--base_disk_path--><!--Path-->' + upbigfilename + '?preview" id="upfile_a_' + tdnum + '" target="_blank">' + td1.innerHTML + '</a><br><a href="<!--base_disk_path--><!--Path-->' + upbigfilename + '" id="upfile_a1_' + tdnum + '"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_' + tdnum + '\');" id="upfile_cpbt_' + tdnum + '"><!--constStr@CopyUrl--></button></div>';
+
+                                }
+                                /*if (i<files.length-1) {
+                                    i++;
+                                    getuplink(i);
+                                }*/
+                                delete uploading[upbigfilename];
+                            }
+                        }
+                        xhr1.send('upbigfilename=' + upbigfilename + '&filesize=' + file.size + '&filelastModified=' + file.lastModified + '&filemd5=' + filemd5 + '&_admin=' + localStorage.getItem("admin"));
+
+                    }
+                }
+
+            }
+            uploadbuttonshow();
+        }
+
+        function binupfile(file, url, tdnum, filename) {
+            var label = document.getElementById('upfile_td2_' + tdnum);
+            var reader = new FileReader();
+            var StartStr = '';
+            var MiddleStr = '';
+            var StartTime;
+            var EndTime;
+            var newstartsize = 0;
+            if (!!file) {
+                var asize = 0;
+                var chunksize = 10 * 1024 * 1024; // chunk size, max 60M. 每小块上传大小，最大60M，微软建议10M
+                var totalsize = file.size;
+                var xhr2 = new XMLHttpRequest();
+                xhr2.open("GET", url);
+                //xhr2.setRequestHeader('x-requested-with','XMLHttpRequest');
+                xhr2.send(null);
+                xhr2.onload = function (e) {
+                    if (xhr2.status == 200) {
+                        var html = JSON.parse(xhr2.responseText);
+                        var a = html['nextExpectedRanges'][0];
+                        newstartsize = Number(a.slice(0, a.indexOf("-")));
+                        StartTime = new Date();
+                        asize = newstartsize;
+                        if (newstartsize == 0) {
+                            StartStr = '<!--constStr@UploadStartAt-->:' + StartTime.toLocaleString() + '<br>';
+                        } else {
+                            StartStr = '<!--constStr@LastUpload-->' + size_format(newstartsize) + '<br><!--constStr@ThisTime--><!--constStr@UploadStartAt-->:' + StartTime.toLocaleString() + '<br>';
+                        }
+                        function readblob(start) {
+                            var end = start + chunksize;
+                            var blob = file.slice(start, end);
+                            reader.readAsArrayBuffer(blob);
+                        }
+                        readblob(asize);
+
+                        reader.onload = function (e) {
+                            var binary = this.result;
+                            var lastCurrentSpeed;
+                            var xhr = new XMLHttpRequest();
+                            xhr.open("PUT", url, true);
+                            //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+                            bsize = asize + e.loaded - 1;
+                            xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize + '/' + totalsize);
+                            xhr.upload.onprogress = function (e) {
+                                if (e.lengthComputable) {
+                                    let tmptime = new Date();
+                                    let tmpspeed = e.loaded * 1000 / (tmptime.getTime() - C_starttime.getTime());
+                                    lastCurrentSpeed = tmpspeed;
+                                    let remaintime = (totalsize - asize - e.loaded) / tmpspeed;
+                                    let percent = ((asize + e.loaded) * 100 / totalsize).toFixed(2);
+                                    label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                                    label.innerHTML = StartStr + '<!--constStr@Upload--> ' + size_format(asize + e.loaded) + ' / ' + size_format(totalsize) + ' = ' + percent + '% <!--constStr@AverageSpeed-->:' + size_format((asize + e.loaded - newstartsize) * 1000 / (tmptime.getTime() - StartTime.getTime())) + '/s<br><!--constStr@CurrentSpeed--> ' + size_format(tmpspeed) + '/s <!--constStr@Expect--> ' + seconds2hour(remaintime.toFixed(1));
+                                }
+                            }
+                            var C_starttime = new Date();
+                            xhr.onload = function (e) {
+                                if (xhr.status < 500) {
+                                    var response = JSON.parse(xhr.responseText);
+                                    if (response['size'] > 0) {
+                                        // contain size, upload finish. 有size说明是最终返回，上传结束
+                                        if (totalsize > 10 * 1024 * 1024) {
+                                            var xhr3 = new XMLHttpRequest();
+                                            xhr3.open("GET", '?action=del_upload_cache&filelastModified=' + file.lastModified + '&filesize=' + file.size + '&filename=' + filename);
+                                            xhr3.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                                            xhr3.send(null);
+                                            xhr3.onload = function (e) {
+                                                console.log(xhr3.responseText + ',' + xhr3.status);
+                                            }
+                                        }
+                                        EndTime = new Date();
+                                        MiddleStr = '<!--constStr@EndAt-->:' + EndTime.toLocaleString() + '<br>';
+                                        if (newstartsize == 0) {
+                                            MiddleStr += '<!--constStr@AverageSpeed-->:' + size_format(totalsize * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                        } else {
+                                            MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:' + size_format((totalsize - newstartsize) * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                        }
+                                        delete uploading[filename];
+                                        while (filename.indexOf('%2F') > 0) filename = filename.replace('%2F', '/');
+                                        document.getElementById('upfile_td1_' + tdnum).innerHTML = '<div><a href="<!--base_disk_path--><!--Path-->' + filename + '?preview" id="upfile_a_' + tdnum + '" target="_blank">' + document.getElementById('upfile_td1_' + tdnum).innerHTML + '</a><br><a href="<!--base_disk_path--><!--Path-->' + filename + '" id="upfile_a1_' + tdnum + '"></a><!--constStr@UploadComplete--></div>';
+                                        label.innerHTML = StartStr + MiddleStr;
+                                        label.parentNode.style.background = 'rgba(0,80,0,25%)';
+
+                                        // uploadbuttonshow();
+                                    } else {
+                                        if (!response['nextExpectedRanges']) {
+                                            label.innerHTML = '<font color="red">' + xhr.responseText + '</font><br>';
+                                            delete uploading[filename];
+                                        } else {
+                                            var a = response['nextExpectedRanges'][0];
+                                            asize = Number(a.slice(0, a.indexOf("-")));
+                                            chunksize = 10 * 1024 * 1024;
+                                            if (lastCurrentSpeed > 5 * 1024 * 1024) chunksize = 20 * 1024 * 1024;
+                                            if (lastCurrentSpeed > 10 * 1024 * 1024) chunksize = 50 * 1024 * 1024;
+                                            readblob(asize);
+                                        }
+                                    }
+                                } else readblob(asize);
+                            }
+                            xhr.send(binary);
+                        }
+                    } else {
+                        if (window.location.pathname.indexOf('%23') > 0 || filename.indexOf('%23') > 0) {
+                            label.innerHTML = '<font color="red"><!--constStr@UploadFail23--></font>';
+                        } else {
+                            label.innerHTML = '<font color="red">' + xhr2.responseText + '</font>';
+                        }
+                        delete uploading[filename];
+                        // uploadbuttonshow();
+                    }
+                }
+            }
+        }
+    </script>
+    <!--OnedriveUploadJsEnd-->
+
+    <!--AliyundriveUploadJsStart-->
+    <script>
+        function preup() {
+            uploadbuttonhide();
+            var files = document.getElementById('upload_file').files;
+            if (files.length < 1) {
+                uploadbuttonshow();
+                return;
+            };
+            var table1 = document.createElement('table');
+            document.getElementById('upload_div').appendChild(table1);
+            table1.setAttribute('class', 'list-table');
+            var timea = new Date().getTime();
+            var i = 0;
+            var uploadList = setInterval(function () {
+                if (i < files.length) {
+                    if (Object.keys(uploading).length < 5) {
+                        getuplink(i);
+                        i++;
+                    }// else console.log(Object.keys(uploading).length);
+                } else clearInterval(uploadList);
+            }, 1000);
+            function CalcProof(file) {
+                return new Promise(function (resolve, reject) {
+                    var xhr = new XMLHttpRequest();
+                    xhr.open("POST", '?action=upbigfile');
+                    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+                    xhr.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                    xhr.onload = function (e) {
+                        var html;
+                        if (xhr.status == 200) {
+                            //console.log(xhr.responseText);
+                            var r = new BigNumber("0x".concat(xhr.responseText));
+                            var i = new BigNumber(file.size);
+                            var o = i ? r.mod(i) : 0;
+                            var reader1 = new FileReader();
+                            var start = o.toNumber();
+                            var end = start + 8;
+                            //if (file.size<end) end = file.size;
+                            console.log(start + " ~ " + end);
+                            //reader1.readAsBinaryString(file.slice(start,end));
+                            reader1.readAsDataURL(file.slice(start, end));
+                            reader1.onload = function (e) {
+                                var proof = this.result;
+                                proof = proof.substr(proof.indexOf('base64,') + 7);
+                                resolve(proof);
+                            }
+                        } else {
+                            //console.log(xhr.status+'calc proof code\n'+xhr.responseText);
+                            reject(xhr.status + "\ncalc proof code\n" + xhr.responseText);
+                        }
+                    }
+                    xhr.send('CalcProof=1');
+                });
+            }
+            function getuplink(i, r = 0) {
+                var file = files[i];
+                var td1;
+                var td2;
+                if (r == 0) {
+                    var tr1 = document.createElement('tr');
+                    table1.appendChild(tr1);
+                    tr1.setAttribute('data-to', 1);
+                    td1 = document.createElement('td');
+                    tr1.appendChild(td1);
+                    td1.setAttribute('style', 'width:30%;word-break:break-word;');
+                    td1.setAttribute('id', 'upfile_td1_' + timea + '_' + i);
+                    td1.innerHTML = (file.webkitRelativePath || file.name) + '<br>' + size_format(file.size) + ' (' + (i + 1) + '/' + files.length + ')';
+                    td2 = document.createElement('td');
+                    tr1.appendChild(td2);
+                    td2.setAttribute('id', 'upfile_td2_' + timea + '_' + i);
+                }
+                var tdnum = timea + '_' + i;
+                td1 = document.getElementById('upfile_td1_' + tdnum);
+                td2 = document.getElementById('upfile_td2_' + tdnum);
+                var chunksize = 10 * 1024 * 1024; // 分块大小
+
+                var upbigfilename = encodeURIComponent((file.webkitRelativePath || file.name));
+                uploading[upbigfilename] = [i];
+                var spark = sha1.create();
+                var reader = new FileReader();
+                var asize = 0;
+                var filesha1;
+                function readblob(start) {
+                    var end = start + chunksize;
+                    var blob = file.slice(start, end);
+                    reader.readAsArrayBuffer(blob);
+                }
+                var proof_code = '';
+                CalcProof(file).then(a => {
+                    proof_code = a;
+                    console.log('proof: ' + proof_code);
+                    readblob(asize);
+                }, e => {
+                    td2.innerHTML = e;
+                });
+
+                reader.onload = function (e) {
+                    md5_as = (asize * 100 / file.size).toFixed(2)
+                    td2.innerHTML = `<!--constStr@Calculate--> md5: ${md5_as} %`;
+                    var binary = this.result;
+                    spark.update(binary);
+                    asize += chunksize;
+                    if (asize < file.size) {
+                        readblob(asize);
+                    } else {
+                        filesha1 = spark.hex();
+                        td2.innerHTML = 'SHA1: ' + filesha1;
+                        function getext(str) {
+                            let p = str.lastIndexOf('.');
+                            if (p === -1) return '';
+                            if (p === 0) return '';
+                            return str.substr(p);
+                        }
+                        var ext = getext(file.webkitRelativePath || file.name);
+                        upbigfilename = filesha1 + ext;
+                        //while (upbigfilename.indexOf('%2F')>0) upbigfilename = upbigfilename.replace('%2F', '/');
+                        td2.innerHTML = '<!--constStr@GetUploadLink--> ...';
+                        var html = JSON.parse(localStorage.getItem(filesha1));
+                        //console.log(html);
+                        if (html !== null && ('part_info_list' in html)) {
+                            td2.innerHTML = '<!--constStr@UploadStart--> ...';
+                            binupfile(file, html, timea + '_' + i, upbigfilename, filesha1, chunksize);
+                        } else {
+                            var xhr1 = new XMLHttpRequest();
+                            xhr1.open("POST", '?action=upbigfile');
+                            //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                            xhr1.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                            xhr1.onload = function (e) {
+                                //console.log(xhr1.status+xhr1.responseText);
+                                td2.innerHTML = '<font color="red">' + xhr1.responseText + '</font>';
+                                if (xhr1.status == 201) {
+                                    if (xhr1.responseText == '') {
+                                        getuplink(i, 1);
+                                        return;
+                                    }
+                                    var html = JSON.parse(xhr1.responseText);
+                                    //console.log(html);
+                                    if (!html['part_info_list']) {
+                                        if (html.name != '') {
+                                            if (html.exist == true) td2.innerHTML = html.name + ' 文件名已有';
+                                            else if (html.rapid_upload == true) td2.innerHTML = html.name + ' 秒传';
+                                            else td2.innerHTML = '<font color="red">' + xhr1.responseText + '</font><br>';
+                                            td1.innerHTML = '<div><a href="<!--base_disk_path--><!--Path-->' + upbigfilename + '?preview" id="upfile_a_' + tdnum + '" target="_blank">' + td1.innerHTML + '</a><br><a href="<!--base_disk_path--><!--Path-->' + upbigfilename + '" id="upfile_a1_' + tdnum + '"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_' + tdnum + '\');" id="upfile_cpbt_' + tdnum + '"  ><!--constStr@CopyUrl--></button></div>';
+                                        } else {
+                                            td2.innerHTML = '<font color="red">' + xhr1.responseText + '</font><br>';
+                                        }
+                                        delete uploading[upbigfilename];
+                                    } else {
+                                        td2.innerHTML = '<!--constStr@UploadStart--> ...';
+                                        //console.log(html);
+                                        localStorage.setItem(filesha1, JSON.stringify(html));
+                                        binupfile(file, html, timea + '_' + i, upbigfilename, filesha1, chunksize);
+                                    }
+                                } else {
+                                    delete uploading[upbigfilename];
+                                }
+                                /*if (i<files.length-1) {
+                                    i++;
+                                    getuplink(i);
+                                }*/
+                            }
+                            xhr1.send('upbigfilename=' + upbigfilename + '&filesize=' + file.size + '&filelastModified=' + file.lastModified + '&proof_code=' + proof_code + '&filesha1=' + filesha1 + '&chunksize=' + chunksize + '&_admin=' + localStorage.getItem("admin"));
+                        }
+                    }
+                }
+            }
+            uploadbuttonshow();
+        }
+        function binupfile(file, res, tdnum, filename, filesha1, chunksize) {
+            // xhr.getResponseHeader
+            if (!('ETag' in res)) res['ETag'] = new Array();
+            var fileid = res['file_id'];
+            var uploadid = res['upload_id'];
+            var label = document.getElementById('upfile_td2_' + tdnum);
+            var reader = new FileReader();
+            var StartStr = '';
+            var MiddleStr = '';
+            var StartTime;
+            var EndTime;
+            var newstartsize = 0;
+            if (!!file) {
+                var chunknum = 0;
+                var chunknumtotal = res['part_info_list'].length;
+                var asize = 0;
+                var totalsize = file.size;
+                var newstartsize = 0;
+                while (res['ETag'][chunknum] != null) {
+                    chunknum++;
+                    newstartsize += chunksize;
+                }
+                StartTime = new Date();
+                asize = newstartsize;
+                if (newstartsize == 0) {
+                    StartStr = '<!--constStr@UploadStartAt-->:' + StartTime.toLocaleString() + '<br>';
+                } else {
+                    StartStr = '<!--constStr@LastUpload-->' + size_format(newstartsize) + '<br><!--constStr@ThisTime--><!--constStr@UploadStartAt-->:' + StartTime.toLocaleString() + '<br>';
+                }
+                //var chunksize=5*1024*1024; // chunk size, max 60M. 每小块上传大小
+                //if (totalsize>200*1024*1024) chunksize=10*1024*1024;
+                function readblob(start) {
+                    var end = start + chunksize;
+                    var blob = file.slice(start, end);
+                    reader.readAsArrayBuffer(blob);
+                    //reader.readAsArrayBuffer(file);
+                }
+                readblob(asize);
+
+                reader.onload = function (e) {
+                    if (asize > totalsize) {
+                        var xhr1 = new XMLHttpRequest();
+                        xhr1.open("POST", '?action=upbigfile');
+                        //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                        xhr1.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                        xhr1.onload = function (e) {
+                            console.log(xhr1.responseText + ',' + xhr1.status);
+                            if (xhr1.status == 200) {
+                                localStorage.removeItem(filesha1);
+                                /*if (totalsize>10*1024*1024) {
+                                    var xhr3 = new XMLHttpRequest();
+                                    xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                                    xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                    xhr3.send(null);
+                                    xhr3.onload = function(e){
+                                        console.log(xhr3.responseText+','+xhr3.status);
+                                    }
+                                }*/
+                                EndTime = new Date();
+                                MiddleStr = '<!--constStr@EndAt-->:' + EndTime.toLocaleString() + '<br>';
+                                if (newstartsize == 0) {
+                                    MiddleStr += '<!--constStr@AverageSpeed-->:' + size_format(totalsize * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                } else {
+                                    MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:' + size_format((totalsize - newstartsize) * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                }
+                                document.getElementById('upfile_td1_' + tdnum).innerHTML = '<div><a href="<!--base_disk_path--><!--Path-->' + filename + '?preview" id="upfile_a_' + tdnum + '" target="_blank">' + document.getElementById('upfile_td1_' + tdnum).innerHTML + '</a><br><a href="<!--base_disk_path--><!--Path-->' + filename + '" id="upfile_a1_' + tdnum + '"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_' + tdnum + '\');" id="upfile_cpbt_' + tdnum + '"><!--constStr@CopyUrl--></button></div>';
+                                label.innerHTML = StartStr + MiddleStr;
+                                label.parentNode.style.background = 'rgba(0,80,0,25%)';
+                            } else {
+                                label.innerHTML = '<font color="red">' + xhr1.status + ',' + xhr1.responseText + '</font>';
+                                localStorage.removeItem(filesha1);
+                            }
+                            delete uploading[filename];
+                        }
+                        xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
+                    } else {
+                        var binary = this.result;
+                        var xhr = new XMLHttpRequest();
+                        xhr.open("PUT", res['part_info_list'][chunknum]['upload_url'], true);
+                        //xhr.setRequestHeader('x-requested-with','XMLHttpRequest');
+                        bsize = asize + e.loaded - 1;
+                        xhr.setRequestHeader('Content-Range', 'bytes ' + asize + '-' + bsize + '/' + totalsize);
+                        xhr.upload.onprogress = function (e) {
+                            if (e.lengthComputable) {
+                                var tmptime = new Date();
+                                var tmpspeed = e.loaded * 1000 / (tmptime.getTime() - C_starttime.getTime());
+                                var remaintime = (totalsize - asize - e.loaded) / tmpspeed;
+                                let percent = ((asize + e.loaded) * 100 / totalsize).toFixed(2);
+                                label.parentNode.style.background = "linear-gradient(to right, rgba(0,0,0,25%) " + percent + "%, rgba(0,0,0,0%) 0%)";
+                                label.innerHTML = StartStr + '<!--constStr@Upload--> ' + size_format(asize + e.loaded) + ' / ' + size_format(totalsize) + ' = ' + percent + '% <!--constStr@AverageSpeed-->:' + size_format((asize + e.loaded - newstartsize) * 1000 / (tmptime.getTime() - StartTime.getTime())) + '/s<br><!--constStr@CurrentSpeed--> ' + size_format(tmpspeed) + '/s <!--constStr@Expect--> ' + seconds2hour(remaintime.toFixed(1));
+                            }
+                        }
+                        var C_starttime = new Date();
+                        xhr.onload = function (e) {
+                            if (xhr.status < 500) {
+                                //console.log(xhr.responseText);
+                                //console.log(xhr.getResponseHeader('ETag'));
+                                //var response=JSON.parse(xhr.responseText);
+                                if (xhr.responseText == '' && xhr.getResponseHeader('ETag') != '') {
+                                    // 有ETag说明本段上传成功
+                                    let etag = xhr.getResponseHeader('ETag');
+                                    //if (etag.substr(0,1)=='"') etag = etag.substr(1);还就要引号！
+                                    //if (etag.substr(-1)=='"') etag = etag.substr(0, etag.length-1);
+                                    res['ETag'][chunknum] = etag;
+                                    localStorage.setItem(filesha1, JSON.stringify(res));
+                                    chunknum++;
+                                    asize = bsize + 1;
+                                    if (chunknum == chunknumtotal) {
+                                        // 上传结束
+                                        var xhr1 = new XMLHttpRequest();
+                                        xhr1.open("POST", '?action=upbigfile');
+                                        //xhr1.setRequestHeader("Content-Type","application/x-www-form-urlencoded;charset=utf-8");
+                                        xhr1.setRequestHeader('x-requested-with', 'XMLHttpRequest');
+                                        xhr1.onload = function (e) {
+                                            console.log(xhr1.responseText + ',' + xhr1.status);
+                                            if (xhr1.status == 200) {
+                                                localStorage.removeItem(filesha1);
+                                                /*if (totalsize>10*1024*1024) {
+                                                    var xhr3 = new XMLHttpRequest();
+                                                    xhr3.open("GET", '?action=del_upload_cache&filelastModified='+file.lastModified+'&filesize='+file.size+'&filename='+filename);
+                                                    xhr3.setRequestHeader('x-requested-with','XMLHttpRequest');
+                                                    xhr3.send(null);
+                                                    xhr3.onload = function(e){
+                                                        console.log(xhr3.responseText+','+xhr3.status);
+                                                    }
+                                                }*/
+                                                EndTime = new Date();
+                                                MiddleStr = '<!--constStr@EndAt-->:' + EndTime.toLocaleString() + '<br>';
+                                                if (newstartsize == 0) {
+                                                    MiddleStr += '<!--constStr@AverageSpeed-->:' + size_format(totalsize * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                                } else {
+                                                    MiddleStr += '<!--constStr@ThisTime--><!--constStr@AverageSpeed-->:' + size_format((totalsize - newstartsize) * 1000 / (EndTime.getTime() - StartTime.getTime())) + '/s<br>';
+                                                }
+                                                document.getElementById('upfile_td1_' + tdnum).innerHTML = '<div><a href="<!--base_disk_path--><!--Path-->' + filename + '?preview" id="upfile_a_' + tdnum + '" target="_blank">' + document.getElementById('upfile_td1_' + tdnum).innerHTML + '</a><br><a href="<!--base_disk_path--><!--Path-->' + filename + '" id="upfile_a1_' + tdnum + '"></a><!--constStr@UploadComplete--><button onclick="CopyAllDownloadUrl(\'#upfile_a1_' + tdnum + '\');" id="upfile_cpbt_' + tdnum + '"  ><!--constStr@CopyUrl--></button></div>';
+                                                label.innerHTML = StartStr + MiddleStr;
+                                                label.parentNode.style.background = 'rgba(0,80,0,25%)';
+                                            } else {
+                                                label.innerHTML = '<font color="red">' + xhr1.status + ',' + xhr1.responseText + '</font>';
+                                                localStorage.removeItem(filesha1);
+                                            }
+                                            delete uploading[filename];
+                                        }
+                                        xhr1.send('uploadid=' + uploadid + '&fileid=' + fileid + '&etag=' + JSON.stringify(res['ETag']) + '&_admin=' + localStorage.getItem("admin"));
+                                        // uploadbuttonshow();
+                                    } else {
+                                        readblob(asize);
+                                    }
+                                } else {
+                                    console.log(xhr.status + xhr.responseText);//<PartEtag>
+                                    if (xhr.status == 409) {
+                                        let str = xhr.responseText;
+                                        str = str.substr(str.indexOf('<PartEtag>') + 10);
+                                        str = str.substr(0, str.indexOf('</PartEtag>'));
+                                        res['ETag'][chunknum] = str;
+                                        localStorage.setItem(filesha1, JSON.stringify(res));
+                                        chunknum++;
+                                        asize += chunksize;
+                                        readblob(asize);
+                                    } else {
+                                        delete uploading[filename];
+                                    }
+                                    //label.innerHTML='<font color="red">'+xhr.responseText+'</font><br>';
+                                }
+                            } else readblob(asize);
+                        }
+                        xhr.send(binary);
+                    }
+                }
+            }
+        }
+    </script>
+    <!--AliyundriveUploadJsEnd-->
+
+      <!-- 自定义Toast -->
+      <script>
+        function showToast(title, text, sec = 3) {
+            if (!title) {
+                console.error('title is required');
+                return;
+            } else if (!text) {
+                console.error('text is required');
+                return;
+            }
+
+            var oldToast = document.querySelectorAll('.mToast');
+            if (oldToast.length > 0) {
+                oldToast[0].remove();
+            }
+
+            var toast = document.createElement('div');
+            var titleDiv = document.createElement('div');
+            var textDiv = document.createElement('div');
+
+            toast.className = 'mToast div';
+            titleDiv.className = 'mToast title';
+            textDiv.className = 'mToast text';
+
+            toast.style.cssText = `
+                position: fixed;
+                right: 0;
+                bottom: 0;
+                z-index: 9999;
+
+                background-color: rgba(0, 0, 0, 0.7);
+                border-radius: 14px;
+                color: white;
+                backdrop-filter: blur(10px);
+                box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+                width: 250px;
+                margin: 15px;
+                padding: 15px;
+
+                transition: 0.5s;
+                transform: translateX(150%);
+            `;
+            titleDiv.style.cssText = `
+                color: white;
+                padding-bottom: 5px;
+            `;
+            textDiv.style.cssText = `
+                color: rgb(213, 213, 213);
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 3;
+                overflow: hidden;
+            `;
+
+            titleDiv.textContent = title;
+            textDiv.textContent = text;
+
+            toast.appendChild(titleDiv);
+            toast.appendChild(textDiv);
+            document.body.appendChild(toast);
+
+            setTimeout(function () {
+                toast.style.transform = 'translateX(0)';
+            }, 100);
+
+
+            setTimeout(function () {
+                toast.style.transform = 'translateX(150%)';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 500);
+            }, sec * 1000);
+        }
+    </script>
+</body>
+
+</html>

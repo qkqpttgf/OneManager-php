@@ -1,81 +1,236 @@
-Install program first, then add onedrive in setup after login.  
-先安装程序，登录后在设置中添加onedrive。  
+[中文readme](readme_cn.md)  
 
-# Deploy to Heroku  
-Official: https://heroku.com  
-Demo: https://herooneindex.herokuapp.com/  
+# NOTICE: 
 
-How to Install: Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/qkqpttgf/OneManager-php) to Deploy a new app, or create an app then deploy via connect to your github fork.  
+  The Releases is used as archive, not newest code.  
+
+  Please read the descriptions of settings before raising an issue.  
+
+---
+
+# Deploy to Vercel  
+
+### Official
+
+  https://vercel.com/  
+
+### Demo
+
+  https://onemanager-php.vercel.app/  
+
+### Notice
+
+> 1. you must wait 30-50s to make sure deploy READY after change config;  
+>
+> 2. Vercel limit 100 deploy every day.  
+
+### How to Install
+
+> https://scfonedrive.github.io/Vercel/Deploy.html .  
+
+---
+
+# Deploy to Replit  
+
+### Official
+
+  https://repl.it/  
+  https://replit.com/  
+
+### Demo
+
+  https://onemanager.qkqpttgf.repl.co/  
+
+### How to Install
+A:
+> 1. Click the "+" or "Create Repl", click the `Import from Github`;  
+> 2. Input `https://github.com/qkqpttgf/OneManager-php` in "GitHub URL", then it will auto show "Language" - "PHP Web Server", Click the "Import from Github";  
+> 3. After done, click the green button "Run", it will show the web page on the right, you MUST open it in a new tab or window.
+
+B:
+> 1. Click the "+" or "Create Repl", find template "PHP Web Server" (via input "php"), input a name for your project in "Title" or left it default, Click the "+ Create Repl".  
+> 2. After done, input `git clone https://github.com/qkqpttgf/OneManager-php && mv -b OneManager-php/* ./ && mv -b OneManager-php/.[^.]* ./ && rm -rf *~ && rm -rf OneManager-php` to Console or Shell on the right, press "Enter" to run it.  
+> 3. Click the green button "Run", it will show the web page on the right, you MUST open it in a new tab or window.  
+
+---
+
+# ~~Deploy to Heroku~~  
+
+## Dyno will no longer free  
+
+### Official
+
+  https://heroku.com  
+
+### Demo
+
+  https://herooneindex.herokuapp.com/  
+
+### How to Install
+
+> ~~Click the button [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy) to Deploy a new app~~(`"We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy."`)  
+>
+> Star this project, then Fork, create an app in Heroku, then turn to the Deploy tab, "Deployment method" via "Connect GitHub", select your github fork.   
+
+---
+
+# Deploy to Glitch  
+
+### Official
+
+  https://glitch.com/  
+
+### Demo
+
+  https://onemanager.glitch.me/  
+
+### How to Install
+
+  [New Project] -> [Import form Github] -> paste "https://github.com/qkqpttgf/OneManager-php" , after done, [Show] -> [In a New Window].  
+
+---
+
+# ~~Deploy to Tencent Serverless Cloud Function (SCF)~~  
+
+## SCF no longer free
+
+### Official
+
+  https://cloud.tencent.com/product/scf  
+
+### DEMO
+
+  null  
+
+### How to Install
+
+  see CN readme.  
+
+----
 
 
-# Deploy to Tencent Serverless Cloud Function (SCF 腾讯无服务器云函数)  
-Official: https://cloud.tencent.com/product/scf  
-DEMO:  无  
-注意：SCF新增限制，环境变量整体最大4KB，所以最多添加4个盘。  
+# Deploy to Huawei cloud Function Graph (FG)  
 
-How to Install:  无  
-  
-添加网盘时，SCF反应不过来，会添加失败，请不要删除，再添加一次相同的就可以了。  
+### Official
 
+  https://console.huaweicloud.com/functiongraph/  
 
-# Deploy to Virtual Private Server (VPS 或空间)  
-DEMO:  无  
-How to Install:  
-    1.Start web service on your server (httpd or other), make sure you can visit it.  
-    启动web服务器，确保你能访问到。  
-    2.Make the rewrite works, the rule is in .htaccess file, make sure any query redirect to index.php.  
-    开启伪静态(重写)功能，规则在.htaccess文件中，ngnix从里面复制，我们的目的是不管访问什么都让index.php来处理。  
-    3.Upload code.  
-    上传好代码。  
-    4.Change the file config.php can be read&write (666 is suggested).  
-    让代码中的config.php文件程序可读写，推荐chmod 666 config.php。  
-    5.View the website in chrome or other.  
-    在浏览器中访问。  
+### DEMO
 
+  null
 
-# Deploy to Huawei cloud Function Graph (FG 华为云函数工作流)  
-Official: https://console.huaweicloud.com/functiongraph/  
-DEMO:  无  
-注意：FG中，环境变量整体大小为2KB，所以最多添加2个盘。  
+### How to Install
 
-How to Install:  
-1，在函数列表，点右边创建函数  
-2，输入名称，选择运行时语言为PHP7.3，点上传ZIP文件，选择文件，然后点右边的创建函数（这里的ZIP文件不能直接用从Github上下载的ZIP文件，要将它解压后，去掉外层文件夹后，再压缩为ZIP。）  
-3，创建触发器：选API网关，安全认证选None，后端超时（毫秒）将5000改成30000，上面创建分组一下，其它的点点点  
-4，访问触发器给的url，开始安装  
-5，在触发器界面点触发器名称，跳到API网关管理，右边更多URL，可以添加自定义域名，自定义域名后发现还是要 xxxx.com/函数名 来访问，点上方的编辑，第1页不用改，点下一步，请求Path改成/，注意匹配模式是前缀匹配，Method为ANY，然后不用点下一步了，点立即完成，然后去发布生效  
+  see CN readme.  
 
+----
 
-# Deploy to Aliyun Function Compute (FC 阿里云函数计算)  
-Official: https://fc.console.aliyun.com/  
-DEMO:  无  
+# Deploy to Aliyun Function Compute (FC)  
 
-How to Install:  
-1，新建函数 -- HTTP函数  
-2，运行环境选择php7.2  
-3，触发器认证方式选择anonymous，请求方式里面，点一下GET，再点一下POST，最终框框里面有这2个  
-4，上传代码  
-5，触发器中点进去，找到配置自定义域名，点击前往，创建，路径中填 /* ，其它下拉选择。  
-6，访问你的域名，开始安装  
+### Official: 
 
+  https://fc.console.aliyun.com/  
 
-# Features 特性  
-When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
-下载时，由程序解析出直链，浏览器直接从微软Onedrive服务器下载文件，服务器只消耗与微软通信的少量流量。  
-When uploading files, the program produce a direct url, visitor upload files to MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
-上传时，由程序生成上传url，浏览器直接向微软Onedrive的这个url上传文件，服务器只消耗与微软通信的少量流量。  
-The XXX_path in setting is the path in Onedrive, not in url, program will find the path in Onedrive.  
-设置中的 XXX_path 是Onedrive里面的路径，并不是你url里面的，程序会去你Onedrive里面找这个路径。  
-LOGO ICON: put your 'favicon.ico' in the path you showed, make sure xxxxx.com/favicon.ico can be visited.   
-网站图标：将favicon.ico文件放在你要展示的目录中，确保 xxxxx.com/favicon.ico 可以访问到。  
-Program will show content of 'readme.md' & 'head.md'.  
-可以在文件列表显示head.md跟readme.md文件的内容。  
-guest up path, is a folder that the guest can upload files, but can not be list (exclude admin).  
-游客上传目录（也叫图床目录），是指定一个目录，让游客可以上传文件，不限格式，不限大小。这个目录里面的内容不列清单（除非管理登录）。  
-If there is 'index.html' file, program will only show the content of 'index.html', not list the files.  
-如果目录中有index.html文件，只会输出显示html文件，不显示程序框架。  
-Click 'EditTime' or 'Size', the list will sort by time or size, Click 'File' can resume sort.  
-点击“时间”、“大小”，可以排序显示，点“文件”恢复原样。  
+### DEMO
 
-QQ Group: 943919989 (请看完上面的中英双语再加群，谢谢！)  
-Telegram Group: https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
+  null  
+
+### How to Install
+
+  see CN readme.  
+
+---
+
+# Deploy to Baidu Cloud Function Compute (CFC)  
+
+### Official
+
+  https://console.bce.baidu.com/cfc/#/cfc/functions  
+
+### DEMO
+
+  null
+
+### How to Install
+
+  see CN readme.  
+
+---
+
+# Deploy to Virtual Private Server (VPS) or php host  
+
+### DEMO
+
+  null
+
+### How to Install
+
+1. Start web service on your server (httpd or other), make sure you can visit it.  
+
+2. Install (or Enable) rewrite_module (or RewriteEngine, or URL_rewrite).  
+
+3. Upload code.  
+
+4. Make the rewrite works, the rule is in .htaccess file (IIS rule in web.config file), make sure any query redirect to index.php.  
+
+5. Change the file .data/config.php can be read&write (666 is suggested).  
+
+6. View the website in chrome or other.  
+
+----
+
+# Features  
+
+  When downloading files, the program produce a direct url, visitor download files from MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
+
+  When uploading files, the program produce a direct url, visitor upload files to MS OFFICE via the direct url, the server expend a few bandwidth in produce.  
+
+  The XXX_path in setting is the path in Onedrive, not in url, program will find the path in Onedrive.  
+
+  LOGO ICON: put your 'favicon.ico' in the path you showed, make sure xxxxx.com/favicon.ico can be visited.   
+
+  Program will show content of 'readme.md' & 'head.md'.  
+
+  guest upload path, is a folder that the guest can upload files, but can not be list (exclude admin).  
+
+  If there is 'index.html' file, program will only show the content of 'index.html', not list the files.  
+
+  Click 'EditTime' or 'Size', the list will sort by time or size, Click 'File' can resume sort.  
+
+----
+
+# Functional files
+
+### favicon.ico
+
+  put it in the showing home folder of FIRST disk (maybe not root of onedrive). 
+
+### index.html
+
+  show content of index.html as html. 
+
+### head.md
+
+### readme.md
+
+  it will showed at top or bottom as markdown.
+
+### head.omf
+
+### foot.omf
+
+  it will showed at top or bottom as html (javascript works!). 
+
+----
+
+# A cup of coffee
+
+  https://paypal.me/qkqpttgf  
+
+-----
+
+# Chat
+
+### Telegram Group
+
+  https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
