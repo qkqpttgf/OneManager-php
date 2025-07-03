@@ -43,10 +43,13 @@ class AliyundriveOpen extends Aliyundrive {
                     $files['file_id'] = $file['file_id'];
                     $files['type'] = 'folder';
                 } else {
-                    $file[$this->DownurlStrName] = $this->getDownloadUrl($file['file_id']);
                     $files = $file;
+                    if ($file['type'] == 'file') {
+                        $tmp = $this->getDownloadUrl($file['file_id']);
+                        if (isset($tmp['stat'])) $files = $tmp;
+                        else $files[$this->DownurlStrName] = $tmp;
+                    }
                 }
-                //echo $files['name'];
             }
             if ($files['type'] == 'file') {
                 if (in_array(strtolower(splitlast($files['name'], '.')[1]), $exts['txt'])) {
@@ -84,9 +87,9 @@ class AliyundriveOpen extends Aliyundrive {
                 }
             }
             if (!$files) {
+                $files['error']['stat'] = 404;
                 $files['error']['code'] = 'Not Found';
                 $files['error']['message'] = $path . ' Not Found';
-                $files['error']['stat'] = 404;
             } elseif (isset($files['stat'])) {
                 $files['error']['stat'] = $files['stat'];
                 $files['error']['code'] = 'Error';
