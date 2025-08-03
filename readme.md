@@ -8,6 +8,36 @@
 
 ---
 
+# Deploy with Docker
+
+### Quick Start
+
+Deploy OneManager quickly using Docker:
+
+```bash
+# Clone the project
+git clone https://github.com/qkqpttgf/OneManager-php.git
+cd OneManager-php
+
+# Start the service
+docker compose up -d
+```
+
+Access `http://localhost:8080` to configure.
+
+### Documentation
+
+For complete Docker deployment documentation, see: [docs/docker.md](docs/docker.md)
+
+Features include:
+- Environment variable configuration
+- Data persistence
+- Reverse proxy setup (Nginx/Traefik)
+- Production deployment
+- Troubleshooting
+
+---
+
 # Deploy to Vercel  
 
 ### Official

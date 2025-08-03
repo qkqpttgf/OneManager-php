@@ -1,13 +1,57 @@
+# OneManager Docker 环境变量配置示例
+# 创建 .env 文件并设置以下变量来自定义配置：
+# 
+# HTTP_PORT=8080
+# TZ=Asia/Shanghai
+# PHP_MEMORY_LIMIT=256M
+# PHP_UPLOAD_MAX_FILESIZE=64M
+# PHP_POST_MAX_SIZE=64M
+# ONEMANAGER_CONFIG_SAVE=file
+# FORCE_HTTPS=false
+
 version: '3.8'
 
 services:
   onemanager:
     build: .
     ports:
-      - "8080:80"
+      - "${HTTP_PORT:-8080}:80"
     volumes:
       - onemanager-data:/var/www/html/.data
+      # 可选：挂载本地配置文件
+      # - ./config:/var/www/html/.data:rw
+    environment:
+      # 时区设置
+      - TZ=${TZ:-UTC}
+      # PHP 配置
+      - PHP_MEMORY_LIMIT=${PHP_MEMORY_LIMIT:-256M}
+      - PHP_UPLOAD_MAX_FILESIZE=${PHP_UPLOAD_MAX_FILESIZE:-64M}
+      - PHP_POST_MAX_SIZE=${PHP_POST_MAX_SIZE:-64M}
+      # OneManager 配置
+      - ONEMANAGER_CONFIG_SAVE=${ONEMANAGER_CONFIG_SAVE:-file}
+      # 可选：强制 HTTPS（当在反向代理后时）
+      - FORCE_HTTPS=${FORCE_HTTPS:-false}
     restart: always
+    # 健康检查
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # 可选：Nginx 反向代理（取消注释以启用）
+  # nginx:
+  #   image: nginx:alpine
+  #   ports:
+  #     - "${HTTPS_PORT:-443}:443"
+  #     - "${HTTP_REDIRECT_PORT:-80}:80"
+  #   volumes:
+  #     - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  #     - ./ssl:/etc/nginx/ssl:ro
+  #   depends_on:
+  #     - onemanager
+  #   restart: always
 
 volumes:
   onemanager-data:
