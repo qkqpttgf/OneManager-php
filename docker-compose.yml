@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  onemanager:
+    build: .
+    ports:
+      - "8080:80"
+    volumes:
+      - onemanager-data:/var/www/html/.data
+    restart: always
+
+volumes:
+  onemanager-data:
