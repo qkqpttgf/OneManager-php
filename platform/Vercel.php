@@ -293,22 +293,23 @@ function setVercelConfig($envs, $token) {
 }
 
 function fetchVercelPHPVersion($token) {
-    if (!($vercelPHPversion = getcache("PHPRuntime")) || !($nodeVersion = getcache("NodeRuntime"))) {
+    //if (!($vercelPHPversion = getcache("PHPRuntime")) || !($nodeVersion = getcache("NodeRuntime"))) {
+    if (!($vercelPHPversion = getcache("PHPRuntime"))) {
         $url = "https://raw.githubusercontent.com/vercel-community/php/master/package.json";
         $response = curl("GET", $url);
         if ($response['stat'] == 200) {
             $res = json_decode($response['body'], true);
             if ($res) {
                 $phpVersion = $res['version'];
-                $nodeVersion = $res['devDependencies']['@types/node'];
-                $nodeVersion = splitfirst($nodeVersion, ".")[0] . ".x";
+                //$nodeVersion = $res['devDependencies']['@types/node'];
+                //$nodeVersion = splitfirst($nodeVersion, ".")[0] . ".x";
                 savecache("PHPRuntime", $phpVersion);
-                savecache("NodeRuntime", $nodeVersion);
+                //savecache("NodeRuntime", $nodeVersion);
                 $vercelPHPversion = $phpVersion;
             }
         }
     }
-    if ($token) {
+    /*if ($token) {
         $appId = getProjectInfofromDeployIDInENV($token)['projectId'];
         if ($appId) {
             if (!($vercelNodeVersion = getcache("VercelNodeRuntime"))) {
@@ -320,7 +321,7 @@ function fetchVercelPHPVersion($token) {
                 setNodeVersion($nodeVersion, $appId, $token);
             }
         }
-    }
+    }*/
     return $vercelPHPversion;
 }
 function fetchVercelNodeVersion($appId, $token) {
@@ -362,10 +363,10 @@ function VercelUpdate($token, $sourcePath = "") {
     $data["name"] = $name;
     $data["project"] = $appId;
     $data["target"] = "production";
-    if (getcache("NodeRuntime")) {
-        $data["projectSettings"]["nodeVersion"] = getcache("NodeRuntime");
-        $data["projectSettings"]["framework"] = null;
-    }
+    //if (getcache("NodeRuntime")) {
+    //    $data["projectSettings"]["nodeVersion"] = getcache("NodeRuntime");
+    //    $data["projectSettings"]["framework"] = null;
+    //}
     if ($sourcePath == "") $sourcePath = splitlast(splitlast(__DIR__, "/")[0], "/")[0];
     //echo $sourcePath . "<br>";
     getEachFiles($file, $sourcePath);
@@ -460,7 +461,7 @@ function OnekeyUpate($GitSource = 'Github', $auth = 'qkqpttgf', $project = 'OneM
     // 获取解压出的目录名
     $outPath = findIndexPath($tmppath);
 
-    if ($outPath == '') return json_encode(["error"=>["message"=>'no outpath.']], JSON_UNESCAPED_SLASHES);
+    if ($outPath == '') return json_encode(["error" => ["message" => 'no outpath.']], JSON_UNESCAPED_SLASHES);
     $name = $project . 'CODE';
     mkdir($tmppath . "/" . $name, 0777, 1);
     rename($outPath, $tmppath . "/" . $name . '/api');
