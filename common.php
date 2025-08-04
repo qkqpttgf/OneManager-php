@@ -143,8 +143,6 @@ function main($path) {
 
     if (!function_exists('curl_init')) return output('<font color="red">Need curl</font>, please install php-curl.', 500);
 
-    $slash = '/';
-    if (strpos(__DIR__, ':')) $slash = '\\';
     $drive = null;
     $_SERVER['php_starttime'] = microtime(true);
     $path = path_format($path);
