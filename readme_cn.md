@@ -74,20 +74,10 @@ B:
 
 ---
 
-# 部署到 Glitch  
-
-### 官网
-
-  https://glitch.com/  
-
-### Demo
-
-  https://onemanager.glitch.me/  
-
-### 安装
-
-  点 [New Project] -> 点 [Import form Github] -> 粘贴 "https://github.com/qkqpttgf/OneManager-php" ，结束后，左上角点 [Show] -> [In a New Window]。  
-
+# ~~部署到 Glitch~~  
+  
+停止服务了  
+  
 ---
 
 # ~~部署到腾讯无服务器云函数 Serverless Cloud Function (SCF)~~  
