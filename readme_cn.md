@@ -10,6 +10,36 @@
 
 ---
 
+# 使用 Docker 部署
+
+### 快速开始
+
+使用 Docker 可以快速在本地或服务器上部署 OneManager：
+
+```bash
+# 克隆项目
+git clone https://github.com/qkqpttgf/OneManager-php.git
+cd OneManager-php
+
+# 启动服务
+docker compose up -d
+```
+
+访问 `http://localhost:8080` 进行初始化配置。
+
+### 详细文档
+
+完整的 Docker 部署文档请参考：[docs/docker.md](docs/docker.md)
+
+包含以下内容：
+- 环境变量配置
+- 数据持久化
+- 反向代理设置（Nginx/Traefik）
+- 生产环境部署
+- 故障排除
+
+---
+
 # 部署到 Vercel  
 
 ### 官网
