@@ -74,20 +74,9 @@ B:
 
 ---
 
-# Deploy to Glitch  
+# ~~Deploy to Glitch~~  
 
-### Official
-
-  https://glitch.com/  
-
-### Demo
-
-  https://onemanager.glitch.me/  
-
-### How to Install
-
-  [New Project] -> [Import form Github] -> paste "https://github.com/qkqpttgf/OneManager-php" , after done, [Show] -> [In a New Window].  
-
+End service  
 ---
 
 # ~~Deploy to Tencent Serverless Cloud Function (SCF)~~  
@@ -234,3 +223,4 @@ B:
 ### Telegram Group
 
   https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
+
