@@ -23,6 +23,8 @@ $EnvConfigs = [
 
     'admin'             => 0b0000,
     'adminloginpage'    => 0b0010,
+    'capWorkerEnabled'  => 0b1010,
+    'capWorkerEndpoint' => 0b0011,
     'autoJumpFirstDisk' => 0b1010,
     'background'        => 0b0011,
     'backgroundm'       => 0b0011,
@@ -135,6 +137,26 @@ function isSwitchEnv($str) {
     else return null;
 }
 
+function str2bool($str) {
+    if (is_bool($str)) return $str;
+    $str = strtolower(strval($str));
+    return in_array($str, ['1', 'true', 'on', 'yes', 'y']);
+}
+
+function capWorkerEnabled() {
+    return str2bool(getConfig('capWorkerEnabled'));
+}
+
+function capWorkerEndpoint() {
+    $endpoint = trim(getConfig('capWorkerEndpoint'));
+    if ($endpoint == '') $endpoint = 'https://captcha.gurl.eu.org/api/';
+    return rtrim($endpoint, '/') . '/';
+}
+
+function capWorkerScriptUrl() {
+    return 'https://captcha.gurl.eu.org/cap.min.js';
+}
+
 function main($path) {
     global $exts;
     global $constStr;
@@ -215,6 +237,8 @@ function main($path) {
                 $url = path_format($_SERVER['PHP_SELF'] . '/');
             }*/
             if (isset($_POST['password1'])) {
+                $captchaError = validateCapWorkerToken($_POST['captchaToken'] ?? '');
+                if ($captchaError !== '') return adminform($captchaError);
                 $compareresult = compareadminsha1($_POST['password1'], $_POST['timestamp'], getConfig('admin'));
                 if ($compareresult == '') {
                     $timestamp = time() + 7 * 24 * 60 * 60;
@@ -912,6 +936,17 @@ function curl($method, $url, $data = '', $headers = [], $returnheader = 0, $loca
     return $response;
 }
 
+function validateCapWorkerToken($token) {
+    if (!capWorkerEnabled()) return '';
+    if ($token == '') return getconstStr('CompleteCaptcha');
+    $endpoint = capWorkerEndpoint() . 'validate';
+    $response = curl('POST', $endpoint, json_encode(['token' => $token, 'keepToken' => false]), ['Content-Type' => 'application/json']);
+    if ($response['stat'] != 200) return getconstStr('CaptchaNetworkError');
+    $body = json_decode($response['body'], true);
+    if (!is_array($body) || !isset($body['success']) || !$body['success']) return getconstStr('CaptchaVerifyFailed');
+    return '';
+}
+
 function clearbehindvalue($path, $page1, $maxpage, $pageinfocache) {
     for ($page = $page1 + 1; $page < $maxpage; $page++) {
         $pageinfocache['nextlink_' . $path . '_page_' . $page] = '';
@@ -1166,6 +1201,7 @@ function adminform($name = '', $pass = '', $storage = '', $path = '') {
         $statusCode = 201;
         date_default_timezone_set('UTC');
         $_SERVER['Set-Cookie'] = $name . '=' . $pass . '; path=' . $_SERVER['base_path'] . '; expires=' . date(DATE_COOKIE, strtotime('+7day'));
+        appendCapWorkerScript($html);
         return output($html, $statusCode);
     }
     $statusCode = 401;
@@ -1219,6 +1255,7 @@ function adminform($name = '', $pass = '', $storage = '', $path = '') {
 </script>
 <script src="?jsFile=sha1.min.js"></script>';
     $html .= '</html>';
+    appendCapWorkerScript($html);
     return output($html, $statusCode);
 }
 
@@ -2285,6 +2322,100 @@ function headandfoot(&$html, $target, $path, $files, $name, $globalUrl) {
         $html .= $content1 . $tmp[1];
     }
 }
+
+function appendCapWorkerScript(&$html) {
+    if (!capWorkerEnabled()) return;
+    $script = '
+<script>
+(function () {
+    var scriptUrl = ' . json_encode(capWorkerScriptUrl()) . ';
+    var endpoint = ' . json_encode(capWorkerEndpoint()) . ';
+    var requiredMsg = ' . json_encode(getconstStr('CompleteCaptcha')) . ';
+    function ready(fn) {
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", fn);
+        } else {
+            fn();
+        }
+    }
+    function loadScript(callback) {
+        if (window.capWorkerScriptLoaded) {
+            callback();
+            return;
+        }
+        if (!window.capWorkerScriptCallbacks) window.capWorkerScriptCallbacks = [];
+        window.capWorkerScriptCallbacks.push(callback);
+        if (window.capWorkerScriptLoading) return;
+        window.capWorkerScriptLoading = true;
+        var s = document.createElement("script");
+        s.src = scriptUrl;
+        s.onload = function () {
+            window.capWorkerScriptLoaded = true;
+            var queue = window.capWorkerScriptCallbacks || [];
+            queue.forEach(function (cb) {
+                try { cb(); } catch (e) { console.error(e); }
+            });
+            window.capWorkerScriptCallbacks = [];
+        };
+        s.onerror = function () {
+            window.capWorkerScriptCallbacks = [];
+        };
+        document.head.appendChild(s);
+    }
+    function mountCaptcha() {
+        var forms = Array.prototype.filter.call(document.querySelectorAll("form"), function (form) {
+            return form.querySelector(\'input[name="password1"]\') && form.querySelector(\'input[name="timestamp"]\');
+        });
+        if (!forms.length) return;
+        forms.forEach(function (form) {
+            if (form.dataset.capWorkerBound === "1") return;
+            form.dataset.capWorkerBound = "1";
+            var tokenInput = form.querySelector(\'input[name="captchaToken"]\');
+            if (!tokenInput) {
+                tokenInput = document.createElement("input");
+                tokenInput.type = "hidden";
+                tokenInput.name = "captchaToken";
+                form.appendChild(tokenInput);
+            }
+            var widgetWrap = document.createElement("div");
+            widgetWrap.className = "cap-worker-widget";
+            widgetWrap.style.margin = "10px 0";
+            var widget = document.createElement("cap-widget");
+            widget.setAttribute("data-cap-api-endpoint", endpoint);
+            widgetWrap.appendChild(widget);
+            var submitBtn = form.querySelector(\'input[type="submit"],button[type="submit"]\');
+            if (submitBtn && submitBtn.parentNode) submitBtn.parentNode.insertBefore(widgetWrap, submitBtn);
+            else form.appendChild(widgetWrap);
+            var message = document.createElement("div");
+            message.style.color = "red";
+            message.style.fontSize = "14px";
+            message.style.marginTop = "6px";
+            form.appendChild(message);
+            widget.addEventListener("solve", function (e) {
+                tokenInput.value = (e.detail && e.detail.token) || "";
+                message.textContent = "";
+            });
+            form.addEventListener("submit", function (ev) {
+                if (!tokenInput.value) {
+                    ev.preventDefault();
+                    ev.stopImmediatePropagation();
+                    message.textContent = requiredMsg;
+                    return false;
+                }
+                return true;
+            });
+        });
+    }
+    ready(function () {
+        loadScript(mountCaptcha);
+    });
+})();
+</script>';
+    $tmp = splitfirst($html, '</body>');
+    if ($tmp[1] != '') $html = $tmp[0] . $script . '</body>' . $tmp[1];
+    else $html .= $script;
+}
+
 function render_list($path = '', $files = []) {
     global $exts;
     global $constStr;
@@ -2973,10 +3104,11 @@ function render_list($path = '', $files = []) {
 </script>';
         $tmp = splitfirst($html, '</body>');
         $html = $tmp[0] . $selecttheme . '</body>' . $selectthemescript . $tmp[1];
-    }*/
+    }*/ 
 
     $tmp = splitfirst($html, '</title>');
     $html = $tmp[0] . '</title>' . $authinfo . $tmp[1];
+    appendCapWorkerScript($html);
     //if (isset($_SERVER['Set-Cookie'])) return output($html, $statusCode, [ 'Set-Cookie' => $_SERVER['Set-Cookie'], 'Content-Type' => 'text/html' ]);
     return output($html, $statusCode);
 }

@@ -89,6 +89,8 @@ $constStr = [
         'en-us' => [
             'admin' => 'The admin password, Login button will not show when empty',
             'adminloginpage' => 'if set, the Login button will not display, and the login page no longer \'?login=admin\', it is \'?login={this value}\'.',
+            'capWorkerEnabled' => 'Enable CAP Worker CAPTCHA on admin login.',
+            'capWorkerEndpoint' => 'CAP Worker API endpoint, default https://captcha.gurl.eu.org/api/.',
             'autoJumpFirstDisk' => 'a switch used in multy disks, if 1, auto jump to first disk',
             'customScript' => '<script> in all pages, e.g. http turn to https',
             'customCss' => '<style> in <head>',
@@ -123,6 +125,8 @@ $constStr = [
         'zh-cn' => [
             'admin' => '管理密码，不添加时不显示登录页面且无法登录。',
             'adminloginpage' => '如果设置，登录按钮及页面隐藏。管理登录的页面不再是\'?login=admin\'，而是\'?login=此设置的值\'。',
+            'capWorkerEnabled' => '开启后管理登录需要通过CAP Worker验证码。',
+            'capWorkerEndpoint' => 'CAP Worker 的 API 地址，默认 https://captcha.gurl.eu.org/api/。',
             'autoJumpFirstDisk' => '一个开关，用于多个磁盘，如果为1，则自动跳转到第一个磁盘',
             'customScript' => '<script>，在所有页都会存在,例如放一个http跳转https',
             'customCss' => '<style>，在<head>最后面',
@@ -157,6 +161,8 @@ $constStr = [
         'zh-tw' => [
             'admin' => '管理密碼，不設定密碼將不顯示登入頁面且無法登入。',
             'adminloginpage' => '如果設定，登入按鈕及頁面隱藏。管理登入的頁面不再是\'?login=admin\'，而是\'?login=此設置的值\'。',
+            'capWorkerEnabled' => '啟用後，管理登入需要通過 CAP Worker 驗證碼。',
+            'capWorkerEndpoint' => 'CAP Worker 的 API 位址，預設 https://captcha.gurl.eu.org/api/。',
             'autoJumpFirstDisk' => '用於多盤，如果設1，將會自動跳到第一個盤。',
             'customScript' => '<script>，在所有頁都會存在,例如放一個http跳轉https',
             'customCss' => '<style>，在<head>最後面',
@@ -182,6 +188,8 @@ $constStr = [
         'ja' => [
             'admin' => 'パスワードを管理する、追加しない場合、ログインページは表示されず、ログインできません。',
             'adminloginpage' => '設定すると、ログインボタンとページが非表示になります。ログインを管理するためのページは\'?login=admin \'ではなく、\'?login=この設定の値\'。',
+            'capWorkerEnabled' => '有効にすると、管理者ログインでCAP WorkerのCAPTCHAが必要になります。',
+            'capWorkerEndpoint' => 'CAP Worker の API エンドポイント。デフォルトは https://captcha.gurl.eu.org/api/。',
             'autoJumpFirstDisk' => '複数のディスクを使って、1を設定すると、自動的に最初のディスクにジャンプします。',
             'customScript' => '＜script＞は、すべてのページに存在します。例えば、httpを置いてhttpsをジャンプします。',
             'customCss' => '＜style＞は、＜head＞の一番後ろにあります。',
@@ -207,6 +215,8 @@ $constStr = [
         'ko-kr' => [
             'admin' => '비밀번호를 관리하고 로그인 페이지를 표시하지 않으며 추가하지 않으면 로그인 할 수 없습니다.',
             'adminloginpage' => '설정하면 로그인 버튼과 페이지가 숨겨집니다. 로그인 관리 페이지는 더 이상 \ ?login=admin\'이 아니라 \ ?login=이 설정의 값 \'입니다.',
+            'capWorkerEnabled' => '설정 시 관리자 로그인에 CAP Worker CAPTCHA가 필요합니다.',
+            'capWorkerEndpoint' => 'CAP Worker API 엔드포인트, 기본값 https://captcha.gurl.eu.org/api/.',
             'autoJumpFirstDisk' => '여러 개의 디스크 에 사용 되 며, 1 이 되면 첫 번 째 디스크 로 자동 으로 이동 합 니 다.',
             'customScript' => '< script > 은 모든 페이지 에 존재 합 니 다. 예 를 들 어 http 을 하나 넣 고 https 로 이동 합 니 다.',
             'customCss' => '< 스타일 >, < 헤드 > 맨 뒤에',
@@ -232,6 +242,8 @@ $constStr = [
         'fa' => [
             'admin' => 'رمز عبور ادمین، در صورت خالی بودن دکمه لاگین به نمایش در نمی‌آید',
             'adminloginpage' => 'در صورت تنظیم ، دکمه ورود نمایش داده نمی شود و صفحه ورود دیگر \?login=admin\ نیست بلکه \?login={مقدار ورودی شما}\ است.',
+            'capWorkerEnabled' => 'فعال‌سازی CAPTCHA سرویس CAP Worker برای ورود ادمین.',
+            'capWorkerEndpoint' => 'آدرس API سرویس CAP Worker، پیش‌فرض https://captcha.gurl.eu.org/api/.',
             'referrer' => '',
             'domain_path' => 'تنظیم دامنه سفارشی، به صورت a1.com:/dirto/path1|b2.com:/path2',
             'diskname' => 'نام دیسک که می‌خواهید نشان دهید.',
@@ -246,6 +258,8 @@ $constStr = [
         'ar-sa' => [
             'admin' => ' إدارة كلمة السر ، لا يمكنك عرض صفحة تسجيل الدخول دون إضافة',
             'adminloginpage' => 'إذا كان الإعداد ، زر تسجيل الدخول و الصفحة المخفية   إدارة صفحة تسجيل الدخول لم تعد قيمة هذا الإعداد ؟',
+            'capWorkerEnabled' => 'تفعيل رمز التحقق CAP Worker لتسجيل دخول الإدارة.',
+            'capWorkerEndpoint' => 'نقطة نهاية واجهة CAP Worker الافتراضية https://captcha.gurl.eu.org/api/.',
             'autoJumpFirstDisk' => 'على أقراص متعددة ، إذا كان واحد ، ثم الانتقال تلقائيا إلى القرص الأول',
             'customScript' => 'في جميع الصفحات ، على سبيل المثال ، وضع النص المتشعب القفز HTTPS',
             'customCss' => '<style>，في الجزء الخلفي من',
@@ -322,6 +336,33 @@ $constStr = [
         'ko-kr' => '로그인',
         'fa' => 'ورود',
         'ar-sa' => 'تسجيل الدخول',
+    ],
+    'CompleteCaptcha' => [
+        'en-us' => 'Please complete the CAPTCHA to continue.',
+        'zh-cn' => '请完成人机验证后再继续。',
+        'zh-tw' => '請完成驗證碼後再繼續。',
+        'ja' => '続行するには CAPTCHA を完了してください。',
+        'ko-kr' => '계속하려면 CAPTCHA를 완료하세요.',
+        'fa' => 'لطفاً کپچا را تکمیل کنید.',
+        'ar-sa' => 'يرجى إكمال اختبار CAPTCHA للمتابعة.',
+    ],
+    'CaptchaVerifyFailed' => [
+        'en-us' => 'CAPTCHA verification failed, please try again.',
+        'zh-cn' => '验证码校验失败，请重试。',
+        'zh-tw' => '驗證碼驗證失敗，請重試。',
+        'ja' => 'CAPTCHA の検証に失敗しました。もう一度お試しください。',
+        'ko-kr' => 'CAPTCHA 확인에 실패했습니다. 다시 시도하세요.',
+        'fa' => 'تأیید کپچا انجام نشد، دوباره تلاش کنید.',
+        'ar-sa' => 'فشل التحقق من CAPTCHA، يرجى المحاولة مرة أخرى.',
+    ],
+    'CaptchaNetworkError' => [
+        'en-us' => 'CAPTCHA service request failed, please retry shortly.',
+        'zh-cn' => '验证码服务请求失败，请稍后重试。',
+        'zh-tw' => '驗證碼服務請求失敗，請稍後重試。',
+        'ja' => 'CAPTCHA サービスの要求に失敗しました。しばらくしてから再試行してください。',
+        'ko-kr' => 'CAPTCHA 서비스 요청에 실패했습니다. 잠시 후 다시 시도하세요.',
+        'fa' => 'درخواست سرویس کپچا ناموفق بود، کمی بعد دوباره تلاش کنید.',
+        'ar-sa' => 'فشل طلب خدمة CAPTCHA، يرجى المحاولة لاحقاً.',
     ],
     'Encrypt' => [
         'en-us' => 'Encrypt',
