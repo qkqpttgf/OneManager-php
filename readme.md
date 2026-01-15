@@ -30,7 +30,9 @@
 
 ---
 
-# Deploy to Replit  
+# ~~Deploy to Replit~~  
+
+## the old data_url can not modify, the new postgresql URI can not connected.
 
 ### Official
 
@@ -223,4 +225,5 @@ End service
 ### Telegram Group
 
   https://t.me/joinchat/I_RVc0bqxuxlT-d0cO7ozw  
+
 
