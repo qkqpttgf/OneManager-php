@@ -94,9 +94,12 @@ class Onedrive {
                 $url .= ':' . $path;
                 if (substr($url, -1) == '/') $url = substr($url, 0, -1);
             }
-            $url .= '?expand=children(select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName . ')';
-            $arr = $this->MSAPI('GET', $url);
+            $url1 = $url . '?expand=children(select=id,name,size,file,folder,parentReference,lastModifiedDateTime,' . $this->DownurlStrName . ')';
+            $arr = $this->MSAPI('GET', $url1);
             //echo $url . '<br><pre>' . json_encode($arr, JSON_PRETTY_PRINT) . '</pre>';
+            if ($arr['stat'] == 422 && strpos($arr['body'], "getChildrenOnNonFolder") > -1) {
+                $arr = $this->MSAPI('GET', $url);
+            }
             if ($arr['stat'] < 500) {
                 $files = json_decode($arr['body'], true);
                 //echo '<pre>' . json_encode($files, JSON_PRETTY_PRINT) . '</pre>';
