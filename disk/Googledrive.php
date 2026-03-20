@@ -730,8 +730,8 @@ class Googledrive {
         }
     </script>';
         //$title = 'Select Account Type';
-        $title = 'Do not use this';
-        return message($html, $title, 201);
+        //return message($html, $title, 201);
+        return message('', 'Do not use this', 201);
     }
 
     protected function get_access_token($refresh_token) {
